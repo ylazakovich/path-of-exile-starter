@@ -34,10 +34,10 @@ public class SendEventFromCache {
     private void afterStart() {
         List<EventCashEntity> list = eventCashDAO.findAllEventCash();
 
-        SendMessage sendMessage = new SendMessage();
-        sendMessage.setChatId(String.valueOf(admin_id));
-        sendMessage.setText("Произошла перезагрузка!");
         try {
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.setChatId(String.valueOf(admin_id));
+            sendMessage.setText("Произошла перезагрузка!");
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
             throw new RuntimeException(e);
