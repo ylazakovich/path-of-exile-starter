@@ -33,7 +33,6 @@ public class SendEvent extends Thread {
         return this;
     }
 
-    //    @SneakyThrows
     @Override
     public void run() {
         TelegramBot telegramBot = ApplicationContextProvider.getApplicationContext().getBean(TelegramBot.class);
