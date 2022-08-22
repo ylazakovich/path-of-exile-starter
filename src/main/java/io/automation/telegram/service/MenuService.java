@@ -104,7 +104,7 @@ public class MenuService {
         InlineKeyboardButton buttonEdit = new InlineKeyboardButton();
         buttonEdit.setText("Редактировать");
         InlineKeyboardButton buttonHour = new InlineKeyboardButton();
-        buttonHour.setText("Изенить часовой пояс");
+        buttonHour.setText("Изменить часовой пояс");
 
         buttonDel.setCallbackData("buttonDel");
         buttonEdit.setCallbackData("buttonEdit");
