@@ -1,6 +1,6 @@
 package io.automation.telegram.model.handler;
 
-import io.automation.telegram.model.BotState;
+import io.automation.telegram.model.State;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -29,7 +29,7 @@ public class MessageHandler {
         this.eventCash = eventCash;
     }
 
-    public BotApiMethod<?> handle(Message message, BotState botState) {
+    public BotApiMethod<?> handle(Message message, State state) {
         long userId = message.getFrom().getId();
         long chatId = message.getChatId();
         SendMessage sendMessage = new SendMessage();
@@ -39,9 +39,9 @@ public class MessageHandler {
             return eventHandler.saveNewUser(message, userId, sendMessage);
         }
         //save state in to cache
-        botStateCash.saveBotState(userId, botState);
+        botStateCash.saveBotState(userId, state);
         //if state =...
-        switch (botState.name()) {
+        switch (state.name()) {
             case ("START"):
                 return menuService.getMainMenuMessage(message.getChatId(),
                         "Воспользуйтесь главным меню", userId);
@@ -62,7 +62,7 @@ public class MessageHandler {
                 return eventHandler.enterDateHandler(message, userId);
             case ("CREATE"):
                 //start create event, set state to next step
-                botStateCash.saveBotState(userId, BotState.ENTERDESCRIPTION);
+                botStateCash.saveBotState(userId, State.ENTER_DESCRIPTION);
                 //set new event to cache
                 eventCash.saveEventCash(userId, new Event());
                 sendMessage.setText("Введите описание события");
@@ -89,7 +89,7 @@ public class MessageHandler {
                 //only admin
                 return eventHandler.removeUserHandler(message, userId);
             default:
-                throw new IllegalStateException("Unexpected value: " + botState);
+                throw new IllegalStateException("Unexpected value: " + state);
         }
     }
 }

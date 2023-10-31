@@ -20,83 +20,85 @@ import java.util.stream.Collectors;
 @EnableScheduling
 @Service
 public class EventService {
-    private final EventDAO eventDAO;
-    private final EventCashDAO eventCashDAO;
 
-    @Autowired
-    public EventService(EventDAO eventDAO, EventCashDAO eventCashDAO) {
-        this.eventDAO = eventDAO;
-        this.eventCashDAO = eventCashDAO;
-    }
+  private final EventDAO eventDAO;
+  private final EventCashDAO eventCashDAO;
 
-    //start service in 0:00 every day
-    @Scheduled(cron = "0 0 0 * * *")
-    // @Scheduled(fixedRateString = "${eventservice.period}")
-    private void eventService() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        int month = calendar.get(Calendar.MONTH);
-        int year = calendar.get(Calendar.YEAR);
+  @Autowired
+  public EventService(EventDAO eventDAO, EventCashDAO eventCashDAO) {
+    this.eventDAO = eventDAO;
+    this.eventCashDAO = eventCashDAO;
+  }
 
-        //get event list is now date
-        List<Event> list = eventDAO.findAllEvent().stream().filter(event -> {
-            if (event.getUser().isOn()) {
-                EventFreq eventFreq = event.getFreq();
+  //start service in 0:00 every day
+  @Scheduled(cron = "0 0 0 * * *")
+  // @Scheduled(fixedRateString = "${eventservice.period}")
+  private void eventService() {
+    Calendar calendar = Calendar.getInstance();
+    calendar.setTime(new Date());
+    int day = calendar.get(Calendar.DAY_OF_MONTH);
+    int month = calendar.get(Calendar.MONTH);
+    int year = calendar.get(Calendar.YEAR);
 
-                //set user event time
-                Calendar calendarUserTime = getDateUserTimeZone(event);
-
-                int day1 = calendarUserTime.get(Calendar.DAY_OF_MONTH);
-                int month1 = calendarUserTime.get(Calendar.MONTH);
-                int year1 = calendarUserTime.get(Calendar.YEAR);
-                switch (eventFreq.name()) {
-                    case "TIME": //if one time - remove event
-                        if (day == day1 && month == month1 && year == year1) {
-                            eventDAO.remove(event);
-                            return true;
-                        }else
-                            return false;
-                    case "EVERYDAY":
-                        return true;
-                    case "MONTH":
-                        return day == day1;
-                    case "YEAR":
-                        return day == day1 && month == month1;
-                    default: return false;
-                }
-            } else return false;
-        }).collect(Collectors.toList());
-
-        for (Event event : list) {
-            //set user event time
-            Calendar calendarUserTime = getDateUserTimeZone(event);
-            int hour1 = calendarUserTime.get(Calendar.HOUR_OF_DAY);
-            calendarUserTime.set(year, month, day, hour1, 0, 0);
-
-            String description = event.getDescription();
-            String userId = String.valueOf(event.getUser().getId());
-
-            //save the event to the database in case the server reboots.
-            EventCashEntity eventCashEntity = EventCashEntity.eventTo(calendarUserTime.getTime(), event.getDescription(), event.getUser().getId());
-            eventCashDAO.save(eventCashEntity);
-
-            //create a thread for the upcoming event with the launch at a specific time
-            SendEvent sendEvent = new SendEvent();
-            sendEvent.setSendMessage(new SendMessage(userId, description));
-            sendEvent.setEventCashId(eventCashEntity.getId());
-
-            new Timer().schedule(new SimpleTask(sendEvent), calendarUserTime.getTime());
+    //get event list is now date
+    List<Event> list = eventDAO.findAllEvent().stream().filter(event -> {
+      if (event.user.on) {
+        //set user event time
+        Calendar calendarUserTime = getDateUserTimeZone(event);
+        int day1 = calendarUserTime.get(Calendar.DAY_OF_MONTH);
+        int month1 = calendarUserTime.get(Calendar.MONTH);
+        int year1 = calendarUserTime.get(Calendar.YEAR);
+        switch (event.freq.name()) {
+          case "TIME": //if one time - remove event
+            if (day == day1 && month == month1 && year == year1) {
+              eventDAO.remove(event);
+              return true;
+            } else {
+              return false;
+            }
+          case "EVERYDAY":
+            return true;
+          case "MONTH":
+            return day == day1;
+          case "YEAR":
+            return day == day1 && month == month1;
+          default:
+            return false;
         }
-    }
+      } else {
+        return false;
+      }
+    }).collect(Collectors.toList());
 
-    private Calendar getDateUserTimeZone(Event event) {
-        Calendar calendarUserTime = Calendar.getInstance();
-        calendarUserTime.setTime(event.getDate());
-        int timeZone = event.getUser().getTimeZone();
-
-        //set correct event time with user timezone
-        calendarUserTime.add(Calendar.HOUR_OF_DAY, -timeZone);
-        return calendarUserTime;
+    for (Event event : list) {
+      //set user event time
+      Calendar calendarUserTime = getDateUserTimeZone(event);
+      int hour1 = calendarUserTime.get(Calendar.HOUR_OF_DAY);
+      calendarUserTime.set(year, month, day, hour1, 0, 0);
+      String description = event.description;
+      String userId = String.valueOf(event.user.id);
+      //save the event to the database in case the server reboots.
+      EventCashEntity eventCashEntity = EventCashEntity
+          .eventTo(
+              calendarUserTime.getTime(),
+              event.description,
+              event.user.id
+      );
+      eventCashDAO.save(eventCashEntity);
+      //create a thread for the upcoming event with the launch at a specific time
+      SendEvent sendEvent = new SendEvent();
+      sendEvent.setSendMessage(new SendMessage(userId, description));
+      sendEvent.setEventCashId(eventCashEntity.id);
+      new Timer().schedule(new SimpleTask(sendEvent), calendarUserTime.getTime());
     }
+  }
+
+  private Calendar getDateUserTimeZone(Event event) {
+    Calendar calendarUserTime = Calendar.getInstance();
+    calendarUserTime.setTime(event.date);
+    int timeZone = event.user.timeZone;
+    //set correct event time with user timezone
+    calendarUserTime.add(Calendar.HOUR_OF_DAY, -timeZone);
+    return calendarUserTime;
+  }
 }

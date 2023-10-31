@@ -5,5 +5,5 @@ import io.automation.telegram.entity.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findById(long id);
+  User findById(long id);
 }

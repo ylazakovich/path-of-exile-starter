@@ -4,28 +4,29 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import io.automation.telegram.botconfig.TelegramBotConfig;
-import io.automation.telegram.model.TelegramBot;
+import io.automation.telegram.model.Telegram;
 import io.automation.telegram.model.TelegramFacade;
 
 @Configuration
 public class AppConfig {
-    private final TelegramBotConfig botConfig;
 
-    public AppConfig(TelegramBotConfig botConfig) {
-        this.botConfig = botConfig;
-    }
+  private final TelegramBotConfig TELEGRAM_CONFIG;
 
-    @Bean
-    public SetWebhook setWebhookInstance() {
-        return SetWebhook.builder().url(botConfig.getWebHookPath()).build();
-    }
+  public AppConfig(TelegramBotConfig TELEGRAM_CONFIG) {
+    this.TELEGRAM_CONFIG = TELEGRAM_CONFIG;
+  }
 
-    @Bean
-    public TelegramBot springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
-        TelegramBot bot = new TelegramBot(telegramFacade, setWebhook);
-        bot.setBotToken(botConfig.getBotToken());
-        bot.setBotUsername(botConfig.getUserName());
-        bot.setBotPath(botConfig.getWebHookPath());
-        return bot;
-    }
+  @Bean
+  public SetWebhook setWebhookInstance() {
+    return SetWebhook.builder().url(TELEGRAM_CONFIG.webHookPath).build();
+  }
+
+  @Bean
+  public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
+    Telegram bot = new Telegram(telegramFacade, setWebhook);
+    bot.setBotToken(TELEGRAM_CONFIG.botToken);
+    bot.setBotUsername(TELEGRAM_CONFIG.userName);
+    bot.setBotPath(TELEGRAM_CONFIG.webHookPath);
+    return bot;
+  }
 }

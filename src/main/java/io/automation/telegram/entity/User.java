@@ -11,69 +11,24 @@ import java.util.List;
 @Table(name = "users")
 public class User {
 
-    @Id
-    @Column(name = "id")
-    private long id;
+  @Id
+  @Column(name = "id")
+  public long id;
 
-    @Column(name = "name")
-    private String name;
+  @Column(name = "name")
+  public String name;
 
-    @Column(name = "time_zone", columnDefinition = "default 0")
-    //sets the broadcast time of events for your time zone
-    private int timeZone;
+  @Column(name = "time_zone", columnDefinition = "default 0")
+  //sets the broadcast time of events for your time zone
+  public int timeZone;
 
-    @OneToMany(mappedBy="user")
-    private List<Event> events;
+  @OneToMany(mappedBy = "user")
+  public List<Event> events;
 
-    @Column(name = "on_off")
-    // on/off send event
-    private boolean on;
+  @Column(name = "on_off")
+  // on/off send event
+  public boolean on;
 
-    public User() {
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public User setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public User setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public int getTimeZone() {
-        return timeZone;
-    }
-
-    public User setTimeZone(int timeZone) {
-        this.timeZone = timeZone;
-        return this;
-    }
-
-    public List<Event> getEvents() {
-        return events;
-    }
-
-    public User setEvents(List<Event> events) {
-        this.events = events;
-        return this;
-    }
-
-    public boolean isOn() {
-        return on;
-    }
-
-    public User setOn(boolean on) {
-        this.on = on;
-        return this;
-    }
+  public User() {
+  }
 }

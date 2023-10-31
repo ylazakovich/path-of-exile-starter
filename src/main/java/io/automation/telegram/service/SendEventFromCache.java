@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import io.automation.telegram.DAO.EventCashDAO;
 import io.automation.telegram.entity.EventCashEntity;
-import io.automation.telegram.model.TelegramBot;
+import io.automation.telegram.model.Telegram;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
@@ -17,41 +17,42 @@ import java.util.Timer;
 @Component
 public class SendEventFromCache {
 
-    private final EventCashDAO eventCashDAO;
-    private final TelegramBot telegramBot;
+  private final EventCashDAO eventCashDAO;
+  private final Telegram telegram;
 
-    @Value("${telegrambot.adminId}")
-    private int admin_id;
+  @Value("${telegrambot.adminId}")
+  private int admin_id;
 
-    @Autowired
-    public SendEventFromCache(EventCashDAO eventCashDAO, TelegramBot telegramBot) {
-        this.eventCashDAO = eventCashDAO;
-        this.telegramBot = telegramBot;
+  @Autowired
+  public SendEventFromCache(EventCashDAO eventCashDAO, Telegram telegram) {
+    this.eventCashDAO = eventCashDAO;
+    this.telegram = telegram;
+  }
+
+  @PostConstruct
+  //after every restart app  - check unspent events
+  private void afterStart() {
+    List<EventCashEntity> list = eventCashDAO.findAllEventCash();
+
+    try {
+      SendMessage sendMessage = new SendMessage();
+      sendMessage.setChatId(String.valueOf(admin_id));
+      sendMessage.setText("Произошла перезагрузка!");
+      telegram.execute(sendMessage);
+    } catch (TelegramApiException e) {
+      throw new RuntimeException(e);
     }
 
-    @PostConstruct
-    //after every restart app  - check unspent events
-    private void afterStart() {
-        List<EventCashEntity> list = eventCashDAO.findAllEventCash();
-
-        try {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.setChatId(String.valueOf(admin_id));
-            sendMessage.setText("Произошла перезагрузка!");
-            telegramBot.execute(sendMessage);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-
-        if (!list.isEmpty()) {
-            for (EventCashEntity eventCashEntity : list) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(eventCashEntity.getDate());
-                SendEvent sendEvent = new SendEvent();
-                sendEvent.setSendMessage(new SendMessage(String.valueOf(eventCashEntity.getUserId()), eventCashEntity.getDescription()));
-                sendEvent.setEventCashId(eventCashEntity.getId());
-                new Timer().schedule(new SimpleTask(sendEvent), calendar.getTime());
-            }
-        }
+    if (!list.isEmpty()) {
+      for (EventCashEntity eventCashEntity : list) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(eventCashEntity.date);
+        SendEvent sendEvent = new SendEvent();
+        sendEvent.setSendMessage(
+            new SendMessage(String.valueOf(eventCashEntity.userId), eventCashEntity.description));
+        sendEvent.setEventCashId(eventCashEntity.id);
+        new Timer().schedule(new SimpleTask(sendEvent), calendar.getTime());
+      }
     }
+  }
 }

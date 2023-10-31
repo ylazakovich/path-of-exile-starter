@@ -11,22 +11,22 @@ import java.util.List;
 //handles events not dispatched after reboot heroku
 public class EventCashDAO {
 
-    private EventCashRepository eventCashRepository;
+  private EventCashRepository eventCashRepository;
 
-    @Autowired
-    public void setEventCashRepository(EventCashRepository eventCashRepository) {
-        this.eventCashRepository = eventCashRepository;
-    }
+  @Autowired
+  public void setEventCashRepository(EventCashRepository eventCashRepository) {
+    this.eventCashRepository = eventCashRepository;
+  }
 
-    public List<EventCashEntity> findAllEventCash() {
-        return eventCashRepository.findAll();
-    }
+  public List<EventCashEntity> findAllEventCash() {
+    return eventCashRepository.findAll();
+  }
 
-    public void save(EventCashEntity eventCashEntity) {
-        eventCashRepository.save(eventCashEntity);
-    }
+  public void save(EventCashEntity eventCashEntity) {
+    eventCashRepository.save(eventCashEntity);
+  }
 
-    public void delete(long id) {
-        eventCashRepository.deleteById(id);
-    }
+  public void delete(long id) {
+    eventCashRepository.deleteById(id);
+  }
 }

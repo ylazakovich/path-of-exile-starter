@@ -43,41 +43,41 @@ public class TelegramFacade {
     }
 
     private BotApiMethod<?> handleInputMessage(Message message) {
-        BotState botState;
+        State state;
         String inputMsg = message.getText();
         //we process messages of the main menu and any other messages
         //set state
         switch (inputMsg) {
             case "/start":
-                botState = BotState.START;
+                state = State.START;
                 break;
             case "Мои напоминания":
-                botState = BotState.MYEVENTS;
+                state = State.MY_EVENTS;
                 break;
             case "Создать напоминание":
-                botState = BotState.CREATE;
+                state = State.CREATE_EVENT;
                 break;
             case "Отключить напоминания":
             case "Включить напоминания":
-                botState = BotState.ONEVENT;
+                state = State.ON_EVENT;
                 break;
             case "All users":
                 if (message.getFrom().getId() == adminId)
-                    botState = BotState.ALLUSERS;
-                else botState = BotState.START;
+                    state = State.ALL_USERS;
+                else state = State.START;
                 break;
             case "All events":
                 if (message.getFrom().getId() == adminId)
-                    botState = BotState.ALLEVENTS;
-                else botState = BotState.START;
+                    state = State.ALL_EVENTS;
+                else state = State.START;
                 break;
             default:
-                botState = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null?
-                        BotState.START: botStateCash.getBotStateMap().get(message.getFrom().getId());
+                state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null?
+                        State.START: botStateCash.getBotStateMap().get(message.getFrom().getId());
         }
         //we pass the corresponding state to the handler
         //the corresponding method will be called
-        return messageHandler.handle(message, botState);
+        return messageHandler.handle(message, state);
 
     }
 }

@@ -13,64 +13,30 @@ import java.util.Date;
 //serves to save unhandled events after rebooting heroku
 public class EventCashEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column( name = "id", columnDefinition = "serial")
-    private long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", columnDefinition = "serial")
+  public long id;
 
-    @Column(name = "time")
-    private Date date;
+  @Column(name = "time")
+  public Date date;
 
-    @Column(name = "description")
-    private String description;
+  @Column(name = "description")
+  public String description;
 
-    @Column(name = "user_id")
-    private long userId;
+  @Column(name = "user_id")
+  public long userId;
 
-    public EventCashEntity() {
-    }
+  public EventCashEntity() {
+  }
 
-    public static EventCashEntity eventTo(Date date, String description, long userId) {
-        EventCashEntity eventCashEntity = new EventCashEntity();
-        eventCashEntity.setDate(date);
-        eventCashEntity.setDescription(description);
-        eventCashEntity.setUserId(userId);
-        return eventCashEntity;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public EventCashEntity setId(long id) {
-        this.id = id;
-        return this;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public EventCashEntity setDate(Date date) {
-        this.date = date;
-        return this;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public EventCashEntity setDescription(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public EventCashEntity setUserId(long userId) {
-        this.userId = userId;
-        return this;
-    }
+  public static EventCashEntity eventTo(Date date,
+                                        String description,
+                                        long userId) {
+    EventCashEntity eventCashEntity = new EventCashEntity();
+    eventCashEntity.date = date;
+    eventCashEntity.description = description;
+    eventCashEntity.userId = userId;
+    return eventCashEntity;
+  }
 }

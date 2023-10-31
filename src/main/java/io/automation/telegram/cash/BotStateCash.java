@@ -1,6 +1,6 @@
 package io.automation.telegram.cash;
 
-import io.automation.telegram.model.BotState;
+import io.automation.telegram.model.State;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -9,13 +9,14 @@ import java.util.Map;
 @Service
 //Used to save state bot.
 public class BotStateCash {
-    private final Map<Long, BotState> botStateMap = new HashMap<>();
 
-    public Map<Long, BotState> getBotStateMap() {
-        return botStateMap;
-    }
+  private final Map<Long, State> botStateMap = new HashMap<>();
 
-    public void saveBotState(long userId, BotState botState) {
-        botStateMap.put(userId, botState);
-    }
+  public Map<Long, State> getBotStateMap() {
+    return botStateMap;
+  }
+
+  public void saveBotState(long userId, State state) {
+    botStateMap.put(userId, state);
+  }
 }

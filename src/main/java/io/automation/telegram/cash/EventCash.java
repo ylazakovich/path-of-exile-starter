@@ -10,13 +10,13 @@ import java.util.Map;
 // used to save entered event data per session
 public class EventCash {
 
-    private final Map<Long, Event> eventMap = new HashMap<>();
+  private final Map<Long, Event> eventMap = new HashMap<>();
 
-    public Map<Long, Event> getEventMap() {
-        return eventMap;
-    }
+  public Map<Long, Event> getEventMap() {
+    return eventMap;
+  }
 
-    public void saveEventCash(long userId, Event event) {
-        eventMap.put(userId, event);
-    }
+  public void saveEventCash(long userId, Event event) {
+    eventMap.put(userId, event);
+  }
 }
