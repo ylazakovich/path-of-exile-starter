@@ -1,1 +1,3 @@
 rootProject.name = 'path-of-exile-sniffer'
+include 'service'
+
