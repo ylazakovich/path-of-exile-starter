@@ -1,4 +1,4 @@
-package io.automation.model;
+package io.automation.client.model;
 
 public record Gem(
     String name,
