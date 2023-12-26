@@ -1,8 +1,10 @@
 package io.automation.dto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.automation.entity.GemEntity;
 
 public class GemDTO implements DTO {
 
@@ -11,6 +13,18 @@ public class GemDTO implements DTO {
 
   public List<Gem> getLines() {
     return lines;
+  }
+
+  public static List<GemEntity> convertToEntity(List<Gem> data) {;
+    return data.stream()
+        .map(gem -> new GemEntity(
+            gem.getName(),
+            gem.getVariant(),
+            gem.isCorrupted(),
+            gem.getGemLevel(),
+            gem.getGemQuality(),
+            gem.getChaosValue()))
+        .collect(Collectors.toList());
   }
 
   public static class Gem {

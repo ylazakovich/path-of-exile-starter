@@ -1,16 +1,18 @@
-package io.automation.client;
+package io.automation.service;
 
 import io.automation.dto.GemDTO;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-public class PoeNinjaClient {
+@Service
+public class PoeNinjaService {
 
   private final WebClient webClient;
 
-  public PoeNinjaClient() {
+  public PoeNinjaService() {
     this.webClient = WebClient.builder()
         .baseUrl("https://poe.ninja")
         .exchangeStrategies(ExchangeStrategies
@@ -29,5 +31,10 @@ public class PoeNinjaClient {
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(GemDTO.class);
+  }
+
+  public static void main(String[] args) {
+    PoeNinjaService client = new PoeNinjaService();
+    System.err.println();
   }
 }

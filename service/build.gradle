@@ -16,7 +16,8 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-//    implementation 'org.flywaydb:flyway-core:9.22.0'
-//    implementation 'org.flywaydb:flyway-mysql:9.22.0'
+    implementation 'org.flywaydb:flyway-core:9.22.0'
+    implementation 'org.flywaydb:flyway-mysql:9.22.0'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.104.Final:osx-aarch_64'
 }

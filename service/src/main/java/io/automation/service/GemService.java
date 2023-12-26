@@ -2,6 +2,7 @@ package io.automation.service;
 
 import java.util.List;
 
+import io.automation.dto.GemDTO;
 import io.automation.entity.GemEntity;
 import io.automation.ex.GemNotFoundException;
 import io.automation.repo.GemRepo;
@@ -28,6 +29,11 @@ public class GemService {
 
   public GemEntity updateGem(GemEntity gemEntity) {
     return gemRepo.save(gemEntity);
+  }
+
+  public void saveAll(GemDTO data) {
+    List<GemEntity> entityList = GemDTO.convertToEntity(data.getLines());
+    gemRepo.saveAll(entityList);
   }
 
   public GemEntity findGemById(Long id) {

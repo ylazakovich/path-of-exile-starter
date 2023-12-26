@@ -2,7 +2,8 @@ package io.automation.controller;
 
 import java.util.List;
 
-import io.automation.client.PoeNinjaClient;
+import io.automation.service.PoeNinjaService;
+import io.automation.dto.GemDTO;
 import io.automation.entity.GemEntity;
 import io.automation.service.GemService;
 import org.springframework.http.HttpStatus;
@@ -13,24 +14,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/gem")
 public class GemResource {
 
-  private final PoeNinjaClient poeNinjaClient = new PoeNinjaClient();
   private final GemService gemService;
+  private final PoeNinjaService poeNinjaService;
 
-  public GemResource(GemService gemService) {
+  public GemResource(GemService gemService, PoeNinjaService client) {
     this.gemService = gemService;
+    this.poeNinjaService = client;
   }
 
   @GetMapping("/load")
-  @ResponseStatus(HttpStatus.CREATED)
   public void loadDataToDatabase() {
-
+    Mono<GemDTO> dataWithGems = poeNinjaService.getDataWithGems();
+    dataWithGems.subscribe(body -> gemService.saveAll(body));
   }
 
   @GetMapping("/all")

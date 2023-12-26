@@ -15,7 +15,7 @@ import jakarta.persistence.Table;
 public class GemEntity implements Serializable, io.automation.entity.Entity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
   private Long id;
   private String name;
@@ -28,14 +28,12 @@ public class GemEntity implements Serializable, io.automation.entity.Entity {
   public GemEntity() {
   }
 
-  public GemEntity(long id,
-                   String name,
+  public GemEntity(String name,
                    String variant,
                    boolean corrupted,
                    int gemLevel,
                    int gemQuality,
                    double chaosValue) {
-    this.id = id;
     this.name = name;
     this.variant = variant;
     this.corrupted = corrupted;
