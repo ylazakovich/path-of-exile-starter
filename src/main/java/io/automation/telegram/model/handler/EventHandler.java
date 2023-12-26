@@ -312,7 +312,7 @@ public class EventHandler {
   //return event from database
   private Event enterNumberEvent(String message,
                                  long userId)
-      throws NumberFormatException, NullPointerException, EntityNotFoundException {
+      throws NumberFormatException, NullPointerException {
     List<Event> list;
     if (userId == admin_id) {
       // =))

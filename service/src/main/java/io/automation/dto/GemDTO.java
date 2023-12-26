@@ -1,0 +1,85 @@
+package io.automation.dto;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class GemDTO implements DTO {
+
+  @JsonProperty("lines")
+  private List<Gem> lines;
+
+  public List<Gem> getLines() {
+    return lines;
+  }
+
+  public static class Gem {
+
+    @JsonProperty("name")
+    private String name;
+    @JsonProperty("variant")
+    private String variant;
+    @JsonProperty("corrupted")
+    private boolean corrupted;
+    @JsonProperty("gemLevel")
+    private int gemLevel;
+    @JsonProperty("gemQuality")
+    private int gemQuality;
+    @JsonProperty("chaosValue")
+    private double chaosValue;
+
+    public String getName() {
+      return name;
+    }
+
+    public Gem setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public String getVariant() {
+      return variant;
+    }
+
+    public Gem setVariant(String variant) {
+      this.variant = variant;
+      return this;
+    }
+
+    public boolean isCorrupted() {
+      return corrupted;
+    }
+
+    public Gem setCorrupted(boolean corrupted) {
+      this.corrupted = corrupted;
+      return this;
+    }
+
+    public int getGemLevel() {
+      return gemLevel;
+    }
+
+    public Gem setGemLevel(int gemLevel) {
+      this.gemLevel = gemLevel;
+      return this;
+    }
+
+    public int getGemQuality() {
+      return gemQuality;
+    }
+
+    public Gem setGemQuality(int gemQuality) {
+      this.gemQuality = gemQuality;
+      return this;
+    }
+
+    public double getChaosValue() {
+      return chaosValue;
+    }
+
+    public Gem setChaosValue(double chaosValue) {
+      this.chaosValue = chaosValue;
+      return this;
+    }
+  }
+}

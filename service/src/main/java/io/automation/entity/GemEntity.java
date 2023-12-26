@@ -11,7 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-public class Gem implements Serializable {
+@Table(name = "gems")
+public class GemEntity implements Serializable, io.automation.entity.Entity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,16 +25,16 @@ public class Gem implements Serializable {
   private int gemQuality;
   private double chaosValue;
 
-  public Gem() {
+  public GemEntity() {
   }
 
-  public Gem(long id,
-             String name,
-             String variant,
-             boolean corrupted,
-             int gemLevel,
-             int gemQuality,
-             double chaosValue) {
+  public GemEntity(long id,
+                   String name,
+                   String variant,
+                   boolean corrupted,
+                   int gemLevel,
+                   int gemQuality,
+                   double chaosValue) {
     this.id = id;
     this.name = name;
     this.variant = variant;
@@ -47,7 +48,7 @@ public class Gem implements Serializable {
     return id;
   }
 
-  public Gem setId(long id) {
+  public GemEntity setId(long id) {
     this.id = id;
     return this;
   }
@@ -56,7 +57,7 @@ public class Gem implements Serializable {
     return name;
   }
 
-  public Gem setName(String name) {
+  public GemEntity setName(String name) {
     this.name = name;
     return this;
   }
@@ -65,7 +66,7 @@ public class Gem implements Serializable {
     return variant;
   }
 
-  public Gem setVariant(String variant) {
+  public GemEntity setVariant(String variant) {
     this.variant = variant;
     return this;
   }
@@ -74,7 +75,7 @@ public class Gem implements Serializable {
     return corrupted;
   }
 
-  public Gem setCorrupted(boolean corrupted) {
+  public GemEntity setCorrupted(boolean corrupted) {
     this.corrupted = corrupted;
     return this;
   }
@@ -83,7 +84,7 @@ public class Gem implements Serializable {
     return gemLevel;
   }
 
-  public Gem setGemLevel(int gemLevel) {
+  public GemEntity setGemLevel(int gemLevel) {
     this.gemLevel = gemLevel;
     return this;
   }
@@ -92,7 +93,7 @@ public class Gem implements Serializable {
     return gemQuality;
   }
 
-  public Gem setGemQuality(int gemQuality) {
+  public GemEntity setGemQuality(int gemQuality) {
     this.gemQuality = gemQuality;
     return this;
   }
@@ -101,7 +102,7 @@ public class Gem implements Serializable {
     return chaosValue;
   }
 
-  public Gem setChaosValue(double chaosValue) {
+  public GemEntity setChaosValue(double chaosValue) {
     this.chaosValue = chaosValue;
     return this;
   }
@@ -110,10 +111,10 @@ public class Gem implements Serializable {
   public boolean equals(Object object) {
     if (this == object) return true;
     if (object == null || getClass() != object.getClass()) return false;
-    Gem gem = (Gem) object;
-    return id == gem.id && corrupted == gem.corrupted && gemLevel == gem.gemLevel && gemQuality == gem.gemQuality &&
-        Double.compare(chaosValue, gem.chaosValue) == 0 && Objects.equals(name, gem.name) &&
-        Objects.equals(variant, gem.variant);
+    GemEntity gemEntity = (GemEntity) object;
+    return id == gemEntity.id && corrupted == gemEntity.corrupted && gemLevel == gemEntity.gemLevel && gemQuality == gemEntity.gemQuality &&
+        Double.compare(chaosValue, gemEntity.chaosValue) == 0 && Objects.equals(name, gemEntity.name) &&
+        Objects.equals(variant, gemEntity.variant);
   }
 
   @Override
@@ -132,5 +133,10 @@ public class Gem implements Serializable {
         ", gemQuality=" + gemQuality +
         ", chaosValue=" + chaosValue +
         '}';
+  }
+
+  @Override
+  public io.automation.entity.Entity getEntity() {
+    return this;
   }
 }

@@ -2,7 +2,7 @@ package io.automation.service;
 
 import java.util.List;
 
-import io.automation.entity.Gem;
+import io.automation.entity.GemEntity;
 import io.automation.ex.GemNotFoundException;
 import io.automation.repo.GemRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +18,19 @@ public class GemService {
     this.gemRepo = gemRepo;
   }
 
-  public Gem addGem(Gem gem) {
-    return gemRepo.save(gem);
+  public GemEntity addGem(GemEntity gemEntity) {
+    return gemRepo.save(gemEntity);
   }
 
-  public List<Gem> findAllGems() {
+  public List<GemEntity> findAllGems() {
     return gemRepo.findAll();
   }
 
-  public Gem updateGem(Gem gem) {
-    return gemRepo.save(gem);
+  public GemEntity updateGem(GemEntity gemEntity) {
+    return gemRepo.save(gemEntity);
   }
 
-  public Gem findGemById(Long id) {
+  public GemEntity findGemById(Long id) {
     return gemRepo.findGemById(id).orElseThrow(() -> new GemNotFoundException("Gem by id " + id + "was not found"));
   }
 
