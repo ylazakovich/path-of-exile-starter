@@ -52,7 +52,8 @@ public class GemResource {
 
   @PutMapping("/update")
   public ResponseEntity<GemEntity> updateGem(@RequestBody GemEntity gemEntity) {
-    return new ResponseEntity<>(gemService.updateGem(gemEntity), HttpStatus.OK);
+    gemService.updateGem(gemEntity);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PutMapping("/delete/{id}")
