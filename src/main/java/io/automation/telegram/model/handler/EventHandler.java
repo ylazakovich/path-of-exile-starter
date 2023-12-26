@@ -16,7 +16,6 @@ import io.automation.telegram.entity.Event;
 import io.automation.telegram.entity.User;
 import io.automation.telegram.service.MenuService;
 
-import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
