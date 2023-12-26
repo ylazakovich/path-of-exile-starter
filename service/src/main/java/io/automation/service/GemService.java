@@ -27,8 +27,8 @@ public class GemService {
     return gemRepo.findAll();
   }
 
-  public GemEntity updateGem(GemEntity gemEntity) {
-    return gemRepo.save(gemEntity);
+  public void updateGem(GemEntity gemEntity) {
+    gemRepo.save(gemEntity);
   }
 
   public void saveAll(GemDTO data) {

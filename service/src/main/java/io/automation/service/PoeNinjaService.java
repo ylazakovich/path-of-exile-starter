@@ -32,9 +32,4 @@ public class PoeNinjaService {
         .retrieve()
         .bodyToMono(GemDTO.class);
   }
-
-  public static void main(String[] args) {
-    PoeNinjaService client = new PoeNinjaService();
-    System.err.println();
-  }
 }
