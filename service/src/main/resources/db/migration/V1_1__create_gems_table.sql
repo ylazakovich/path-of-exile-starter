@@ -1,6 +1,6 @@
 CREATE TABLE gems
 (
-    id         INTEGER PRIMARY KEY,
+    id         BIGINT PRIMARY KEY AUTO_INCREMENT,
     name       VARCHAR(255) NOT NULL,
     variant    VARCHAR(255) NOT NULL,
     corrupted  BOOLEAN      NOT NULL,
