@@ -1,5 +1,6 @@
 package io.automation.service;
 
+import io.automation.config.PoeNinjaConfig;
 import io.automation.dto.GemDTO;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -10,11 +11,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class PoeNinjaService {
 
-  private final WebClient webClient;
+  private final PoeNinjaConfig CONFIG;
+  private final WebClient CLIENT;
 
   public PoeNinjaService() {
-    this.webClient = WebClient.builder()
-        .baseUrl("https://poe.ninja")
+    this.CONFIG = new PoeNinjaConfig();
+    this.CLIENT = WebClient.builder()
+        .baseUrl(CONFIG.BASE_URL)
         .exchangeStrategies(ExchangeStrategies
             .builder()
             .codecs(
@@ -26,8 +29,8 @@ public class PoeNinjaService {
   }
 
   public Mono<GemDTO> getDataWithGems() {
-    return webClient.get()
-        .uri("/api/data/itemoverview?league=Ancestor&type=SkillGem")
+    return CLIENT.get()
+        .uri("%s?%s".formatted(CONFIG.ROUTE, "league=Ancestor&type=SkillGem"))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(GemDTO.class);

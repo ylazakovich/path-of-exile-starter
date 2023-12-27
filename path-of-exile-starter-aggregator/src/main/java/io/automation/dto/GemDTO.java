@@ -15,6 +15,23 @@ public class GemDTO implements DTO {
     return lines;
   }
 
+  public GemDTO(List<GemEntity> entities) {
+    this.lines = entities.stream()
+        .map(entity -> new Gem()
+            .setName(entity.getName())
+            .setVariant(entity.getVariant())
+            .setGemLevel(entity.getGemLevel())
+            .setGemQuality(entity.getGemQuality())
+            .setCorrupted(entity.isCorrupted())
+            .setChaosValue(entity.getChaosValue()))
+        .collect(Collectors.toList());
+  }
+
+  public GemDTO setLines(List<Gem> lines) {
+    this.lines = lines;
+    return this;
+  }
+
   public static List<GemEntity> convertToEntity(List<Gem> data) {;
     return data.stream()
         .map(gem -> new GemEntity(
