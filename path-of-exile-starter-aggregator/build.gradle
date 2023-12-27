@@ -20,4 +20,6 @@ dependencies {
     implementation 'org.flywaydb:flyway-mysql:9.22.0'
     implementation 'org.mariadb.jdbc:mariadb-java-client'
     runtimeOnly 'io.netty:netty-resolver-dns-native-macos:4.1.104.Final:osx-aarch_64'
+    compileOnly 'org.projectlombok:lombok:1.18.30'
+    annotationProcessor 'org.projectlombok:lombok:1.18.30'
 }

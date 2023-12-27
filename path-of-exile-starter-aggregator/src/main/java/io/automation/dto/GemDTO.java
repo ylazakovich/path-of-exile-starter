@@ -5,31 +5,32 @@ import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.automation.entity.GemEntity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@Data
+@EqualsAndHashCode
+@NoArgsConstructor
+@ToString
 public class GemDTO {
 
   @JsonProperty("lines")
   private List<Gem> lines;
 
-  public List<Gem> getLines() {
-    return lines;
-  }
-
   public GemDTO(List<GemEntity> entities) {
     this.lines = entities.stream()
-        .map(entity -> new Gem()
-            .setName(entity.getName())
-            .setVariant(entity.getVariant())
-            .setGemLevel(entity.getGemLevel())
-            .setGemQuality(entity.getGemQuality())
-            .setCorrupted(entity.isCorrupted())
-            .setChaosValue(entity.getChaosValue()))
+        .map(entity -> new Gem(
+            entity.getName(),
+            entity.getVariant(),
+            entity.isCorrupted(),
+            entity.getGemLevel(),
+            entity.getGemQuality(),
+            entity.getChaosValue()
+        ))
         .collect(Collectors.toList());
-  }
-
-  public GemDTO setLines(List<Gem> lines) {
-    this.lines = lines;
-    return this;
   }
 
   public static List<GemEntity> convertToEntity(List<Gem> data) {;
@@ -44,6 +45,11 @@ public class GemDTO {
         .collect(Collectors.toList());
   }
 
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  @EqualsAndHashCode
+  @ToString
   public static class Gem {
 
     @JsonProperty("name")
@@ -58,59 +64,5 @@ public class GemDTO {
     private int gemQuality;
     @JsonProperty("chaosValue")
     private double chaosValue;
-
-    public String getName() {
-      return name;
-    }
-
-    public Gem setName(String name) {
-      this.name = name;
-      return this;
-    }
-
-    public String getVariant() {
-      return variant;
-    }
-
-    public Gem setVariant(String variant) {
-      this.variant = variant;
-      return this;
-    }
-
-    public boolean isCorrupted() {
-      return corrupted;
-    }
-
-    public Gem setCorrupted(boolean corrupted) {
-      this.corrupted = corrupted;
-      return this;
-    }
-
-    public int getGemLevel() {
-      return gemLevel;
-    }
-
-    public Gem setGemLevel(int gemLevel) {
-      this.gemLevel = gemLevel;
-      return this;
-    }
-
-    public int getGemQuality() {
-      return gemQuality;
-    }
-
-    public Gem setGemQuality(int gemQuality) {
-      this.gemQuality = gemQuality;
-      return this;
-    }
-
-    public double getChaosValue() {
-      return chaosValue;
-    }
-
-    public Gem setChaosValue(double chaosValue) {
-      this.chaosValue = chaosValue;
-      return this;
-    }
   }
 }
