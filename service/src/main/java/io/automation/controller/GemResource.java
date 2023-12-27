@@ -31,6 +31,7 @@ public class GemResource {
 
   @GetMapping("/load")
   public void loadDataToDatabase() {
+    gemService.deleteAll();
     Mono<GemDTO> dataWithGems = poeNinjaService.getDataWithGems();
     dataWithGems.subscribe(body -> gemService.saveAll(body));
   }

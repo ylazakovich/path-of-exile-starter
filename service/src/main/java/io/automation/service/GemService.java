@@ -43,4 +43,8 @@ public class GemService {
   public void deleteGem(Long id) {
     gemRepo.deleteGemById(id);
   }
+
+  public void deleteAll() {
+    gemRepo.deleteAll();
+  }
 }
