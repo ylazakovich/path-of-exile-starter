@@ -6,5 +6,5 @@ CREATE TABLE gems
     corrupted  BOOLEAN      NOT NULL,
     gemLevel   INTEGER      NOT NULL,
     gemQuality INTEGER      NOT NULL,
-    chaosValue DOUBLE NOT NULL
+    chaosValue DOUBLE       NOT NULL
 );
