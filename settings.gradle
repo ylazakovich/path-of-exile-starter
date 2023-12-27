@@ -1,1 +1,3 @@
-rootProject.name = 'path-of-exile-sniffer'
+rootProject.name = 'path-of-exile-starter-telegram-trader'
+include 'path-of-exile-starter-aggregator'
+

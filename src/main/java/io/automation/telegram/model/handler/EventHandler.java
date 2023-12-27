@@ -16,7 +16,6 @@ import io.automation.telegram.entity.Event;
 import io.automation.telegram.entity.User;
 import io.automation.telegram.service.MenuService;
 
-import javax.persistence.EntityNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -312,7 +311,7 @@ public class EventHandler {
   //return event from database
   private Event enterNumberEvent(String message,
                                  long userId)
-      throws NumberFormatException, NullPointerException, EntityNotFoundException {
+      throws NumberFormatException, NullPointerException {
     List<Event> list;
     if (userId == admin_id) {
       // =))

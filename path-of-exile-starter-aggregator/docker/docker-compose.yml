@@ -1,0 +1,19 @@
+# Use root/root as user/password credentials
+version: '3.4'
+
+services:
+
+  db:
+    image: mariadb:10.10
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: poe
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
