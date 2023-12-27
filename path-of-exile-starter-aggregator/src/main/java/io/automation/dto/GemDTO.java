@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.automation.entity.GemEntity;
 
-public class GemDTO implements DTO {
+public class GemDTO {
 
   @JsonProperty("lines")
   private List<Gem> lines;

@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "gems")
-public class GemEntity implements Serializable, io.automation.entity.Entity {
+public class GemEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -110,7 +110,8 @@ public class GemEntity implements Serializable, io.automation.entity.Entity {
     if (this == object) return true;
     if (object == null || getClass() != object.getClass()) return false;
     GemEntity gemEntity = (GemEntity) object;
-    return id == gemEntity.id && corrupted == gemEntity.corrupted && gemLevel == gemEntity.gemLevel && gemQuality == gemEntity.gemQuality &&
+    return id == gemEntity.id && corrupted == gemEntity.corrupted && gemLevel == gemEntity.gemLevel &&
+        gemQuality == gemEntity.gemQuality &&
         Double.compare(chaosValue, gemEntity.chaosValue) == 0 && Objects.equals(name, gemEntity.name) &&
         Objects.equals(variant, gemEntity.variant);
   }
@@ -131,10 +132,5 @@ public class GemEntity implements Serializable, io.automation.entity.Entity {
         ", gemQuality=" + gemQuality +
         ", chaosValue=" + chaosValue +
         '}';
-  }
-
-  @Override
-  public io.automation.entity.Entity getEntity() {
-    return this;
   }
 }
