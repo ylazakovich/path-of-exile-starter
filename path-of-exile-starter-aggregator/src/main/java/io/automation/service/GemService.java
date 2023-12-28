@@ -45,7 +45,6 @@ public class GemService {
   }
 
   public void deleteAll() {
-    gemRepo.deleteAll();
     gemRepo.truncateTable();
   }
 }
