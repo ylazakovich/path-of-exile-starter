@@ -1,0 +1,24 @@
+subprojects {
+  ext {
+    encoding = 'UTF-8'
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    options.encoding = encoding
+    options.debug = true
+    sourceCompatibility = 17
+    options.debugOptions.debugLevel = "source,lines,vars"
+  }
+
+  sourceCompatibility = '17'
+
+  java {
+    toolchain {
+      languageVersion = JavaLanguageVersion.of(17)
+    }
+  }
+
+  tasks.withType(Javadoc).configureEach {
+    failOnError = false
+  }
+}
