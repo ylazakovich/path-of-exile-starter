@@ -11,13 +11,13 @@ import reactor.core.publisher.Mono;
 @Service
 public class PoeNinjaService {
 
-  private final PoeNinjaConfig CONFIG;
-  private final WebClient CLIENT;
+  private final PoeNinjaConfig config;
+  private final WebClient client;
 
   public PoeNinjaService() {
-    this.CONFIG = new PoeNinjaConfig();
-    this.CLIENT = WebClient.builder()
-        .baseUrl(CONFIG.BASE_URL)
+    this.config = new PoeNinjaConfig();
+    this.client = WebClient.builder()
+        .baseUrl(config.baseUrl)
         .exchangeStrategies(ExchangeStrategies
             .builder()
             .codecs(
@@ -29,8 +29,8 @@ public class PoeNinjaService {
   }
 
   public Mono<GemDTO> getDataWithGems() {
-    return CLIENT.get()
-        .uri("%s?%s".formatted(CONFIG.ROUTE, "league=Ancestor&type=SkillGem"))
+    return client.get()
+        .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(GemDTO.class);
