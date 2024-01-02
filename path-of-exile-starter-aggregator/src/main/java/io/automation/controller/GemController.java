@@ -22,6 +22,6 @@ public class GemController {
   @GetMapping("/findAll")
   public List<GemDTO.Gem> findAll() {
     List<GemEntity> entities = gemService.findAllGems();
-    return new GemDTO(entities).getLines();
+    return GemDTO.convertToGem(entities);
   }
 }

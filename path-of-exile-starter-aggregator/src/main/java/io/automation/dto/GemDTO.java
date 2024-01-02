@@ -20,8 +20,8 @@ public class GemDTO {
   @JsonProperty("lines")
   private List<Gem> lines;
 
-  public GemDTO(List<GemEntity> entities) {
-    this.lines = entities.stream()
+  public static List<Gem> convertToGem(List<GemEntity> entities) {
+    return entities.stream()
         .map(entity -> new Gem(
             entity.getName(),
             entity.getVariant(),
@@ -33,7 +33,7 @@ public class GemDTO {
         .collect(Collectors.toList());
   }
 
-  public static List<GemEntity> convertToEntity(List<Gem> data) {;
+  public static List<GemEntity> convertToEntity(List<Gem> data) {
     return data.stream()
         .map(gem -> new GemEntity(
             gem.getName(),
