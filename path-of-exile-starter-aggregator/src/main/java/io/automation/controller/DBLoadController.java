@@ -1,10 +1,6 @@
 package io.automation.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import io.automation.dto.GemDTO;
-import io.automation.entity.GemEntity;
 import io.automation.service.GemService;
 import io.automation.service.PoeNinjaService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,27 +9,23 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/gem")
-public class GemResource {
+@RequestMapping("/database")
+public class DBLoadController {
 
   private final GemService gemService;
   private final PoeNinjaService poeNinjaService;
 
-  public GemResource(GemService gemService, PoeNinjaService client) {
+  public DBLoadController(GemService gemService, PoeNinjaService poeNinjaService) {
     this.gemService = gemService;
-    this.poeNinjaService = client;
+    this.poeNinjaService = poeNinjaService;
   }
 
-  @GetMapping("/load")
-  public void loadDataToDatabase() {
+  @GetMapping("/load/gems")
+  public void loadGems() {
     gemService.deleteAll();
     Mono<GemDTO> dataWithGems = poeNinjaService.getDataWithGems();
-    dataWithGems.subscribe(body -> gemService.saveAll(body));
+    dataWithGems.subscribe(gemService::saveAll);
   }
 
-  @GetMapping("/all")
-  public List<GemDTO.Gem> getAllGems() {
-    List<GemEntity> entities = gemService.findAllGems();
-    return new GemDTO(entities).getLines();
-  }
+  // TODO: refresh endpoint here;
 }
