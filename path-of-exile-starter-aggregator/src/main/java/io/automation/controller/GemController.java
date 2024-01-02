@@ -42,4 +42,6 @@ public class GemController {
                 && (quality.getChaosValue() - gem.getChaosValue() >= value)))
         .toList();
   }
+
+  // TODO: endpoint with sorted gems here
 }
