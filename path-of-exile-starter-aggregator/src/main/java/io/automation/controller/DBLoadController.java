@@ -1,8 +1,12 @@
 package io.automation.controller;
 
+import java.util.List;
+
 import io.automation.dto.GemDTO;
+import io.automation.entity.GemEntity;
 import io.automation.service.GemService;
 import io.automation.service.PoeNinjaService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,5 +31,18 @@ public class DBLoadController {
     dataWithGems.subscribe(gemService::saveAll);
   }
 
-  // TODO: refresh endpoint here;
+  @GetMapping("/update/gems/prices")
+  @Scheduled(cron = "*/30 * * * *")
+  public void updatePricesGems() {
+    List<GemEntity> pastState = gemService.findAllGems();
+    Mono<GemDTO> currentState = poeNinjaService.getDataWithGems();
+    currentState.subscribe(dto -> {
+      pastState
+          .forEach(pastPrice -> GemDTO.convertToEntity(dto.getLines()).stream()
+              .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName())
+                  && currentPrice.getVariant().equals(pastPrice.getVariant()))
+              .findFirst().ifPresent(matchedEntity -> pastPrice.setChaosValue(matchedEntity.getChaosValue())));
+      gemService.saveAll(pastState);
+    });
+  }
 }
