@@ -1,5 +1,6 @@
 package io.automation.telegram.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -9,7 +10,6 @@ import io.automation.telegram.entity.EventCashEntity;
 import io.automation.telegram.model.Telegram;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;

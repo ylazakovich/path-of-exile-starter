@@ -31,6 +31,10 @@ public class GemService {
     gemRepo.save(gemEntity);
   }
 
+  public void saveAll(List<GemEntity> gemEntities) {
+    gemRepo.saveAll(gemEntities);
+  }
+
   public void saveAll(GemDTO data) {
     List<GemEntity> entityList = GemDTO.convertToEntity(data.getLines());
     gemRepo.saveAll(entityList);
