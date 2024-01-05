@@ -31,8 +31,8 @@ public class DBLoadController {
     dataWithGems.subscribe(gemService::saveAll);
   }
 
+  @Scheduled(cron = "* */30 * * * *")
   @GetMapping("/update/gems/prices")
-  @Scheduled(cron = "*/30 * * * *")
   public void updatePricesGems() {
     List<GemEntity> pastState = gemService.findAllGems();
     Mono<GemDTO> currentState = poeNinjaService.getDataWithGems();
