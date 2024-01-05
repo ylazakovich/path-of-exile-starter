@@ -27,7 +27,6 @@ public class GemController {
   }
 
   @GetMapping("/findAll/{value}")
-  // TODO: find the way how to optimize method;
   public List<GemDTO.Gem> findAllWithProfitMoreThan(@PathVariable("value") long value) {
     List<GemDTO.Gem> data = GemDTO.convertToGem(gemService.findAllGems());
     List<GemDTO.Gem> maxLevelGems = data.stream()
@@ -42,6 +41,4 @@ public class GemController {
                 && (quality.getChaosValue() - gem.getChaosValue() >= value)))
         .toList();
   }
-
-  // TODO: endpoint with sorted gems here
 }
