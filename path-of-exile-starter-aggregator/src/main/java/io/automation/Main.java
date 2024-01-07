@@ -1,6 +1,6 @@
 package io.automation;
 
-import io.automation.service.DBService;
+import io.automation.service.DatabaseService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,6 +12,6 @@ public class Main {
 
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-    context.getBean(DBService.class).loadGems();
+    context.getBean(DatabaseService.class).loadGems();
   }
 }

@@ -6,13 +6,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class DBService {
+public class DatabaseService {
 
   private final GemService gemService;
   private final PoeNinjaService poeNinjaService;
 
   @Autowired
-  public DBService(GemService gemService, PoeNinjaService poeNinjaService) {
+  public DatabaseService(GemService gemService, PoeNinjaService poeNinjaService) {
     this.gemService = gemService;
     this.poeNinjaService = poeNinjaService;
   }
