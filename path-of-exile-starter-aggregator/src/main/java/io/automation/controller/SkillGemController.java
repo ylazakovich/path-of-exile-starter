@@ -2,7 +2,7 @@ package io.automation.controller;
 
 import java.util.List;
 
-import io.automation.dto.SellSkillGemDTO;
+import io.automation.dto.TradeSkillGemDTO;
 import io.automation.dto.SkillGemDTO;
 import io.automation.entity.SkillGemEntity;
 import io.automation.service.SkillGemService;
@@ -28,12 +28,12 @@ public class SkillGemController {
   }
 
   @GetMapping("/trade/{value}")
-  public List<SellSkillGemDTO> findAllForTrade(@PathVariable("value") long value) {
+  public List<TradeSkillGemDTO> findAllForTrade(@PathVariable("value") long value) {
     return analyze().stream().filter(skill -> skill.getProfit() >= value).toList();
   }
 
   // TODO: move to Service
-  public List<SellSkillGemDTO> analyze() {
+  public List<TradeSkillGemDTO> analyze() {
     List<SkillGemDTO> data = findAll();
     List<SkillGemDTO> maxQualitySkills = data.stream()
         .filter(skillGemDTO -> skillGemDTO.getVariant().equals("1/20") && !skillGemDTO.isCorrupted())
@@ -44,7 +44,7 @@ public class SkillGemController {
     return subtract(maxQualitySkills, maxLevelSkills);
   }
 
-  private static List<SellSkillGemDTO> subtract(List<SkillGemDTO> quality, List<SkillGemDTO> level) {
+  private static List<TradeSkillGemDTO> subtract(List<SkillGemDTO> quality, List<SkillGemDTO> level) {
     return quality.stream()
         .filter(q -> level.stream().anyMatch(l -> l.getName().equals(q.getName())))
         .map(q -> {
@@ -56,7 +56,7 @@ public class SkillGemController {
             String name = q.getName();
             double maxQualityPrice = q.getChaosValue();
             double maxLevelPrice = matchingLevelGem.getChaosValue();
-            return new SellSkillGemDTO(name, 1.0, maxQualityPrice - maxLevelPrice);
+            return new TradeSkillGemDTO(name, 1.0, maxQualityPrice - maxLevelPrice);
           }
           return null;
         })

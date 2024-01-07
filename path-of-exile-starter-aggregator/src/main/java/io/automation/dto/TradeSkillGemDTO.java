@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SellSkillGemDTO {
+public class TradeSkillGemDTO {
 
   private String name;
   private double craftCost;
