@@ -1,40 +1,22 @@
-package io.automation.controller;
+package io.automation.service;
 
 import java.util.List;
 
-import io.automation.dto.TradeSkillGemDTO;
 import io.automation.dto.SkillGemDTO;
-import io.automation.entity.SkillGemEntity;
-import io.automation.service.SkillGemService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.automation.dto.TradeSkillGemDTO;
+import org.springframework.stereotype.Service;
 
-@RestController
-@RequestMapping("/gems")
-public class SkillGemController {
+@Service
+public class AnalyzerService {
 
   private final SkillGemService skillGemService;
 
-  public SkillGemController(SkillGemService skillGemService) {
+  public AnalyzerService(SkillGemService skillGemService) {
     this.skillGemService = skillGemService;
   }
 
-  @GetMapping("/all")
-  public List<SkillGemDTO> findAll() {
-    List<SkillGemEntity> entities = skillGemService.findAllGems();
-    return SkillGemDTO.convertToList(entities);
-  }
-
-  @GetMapping("/trade/{value}")
-  public List<TradeSkillGemDTO> findAllForTrade(@PathVariable("value") long value) {
-    return analyze().stream().filter(skill -> skill.getProfit() >= value).toList();
-  }
-
-  // TODO: move to Service
   public List<TradeSkillGemDTO> analyze() {
-    List<SkillGemDTO> data = findAll();
+    List<SkillGemDTO> data = SkillGemDTO.convertToList(skillGemService.findAllGems());
     List<SkillGemDTO> maxQualitySkills = data.stream()
         .filter(skillGemDTO -> skillGemDTO.getVariant().equals("1/20") && !skillGemDTO.isCorrupted())
         .toList();
