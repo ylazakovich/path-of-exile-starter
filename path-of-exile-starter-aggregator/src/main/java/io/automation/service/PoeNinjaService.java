@@ -32,7 +32,7 @@ public class PoeNinjaService {
         .build();
   }
 
-  public Mono<ResponseEntity<Lines<SkillGemDTO>>> getDataWithGems() {
+  public Mono<ResponseEntity<Lines<SkillGem>>> getDataWithGems() {
     return client.get()
         .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)

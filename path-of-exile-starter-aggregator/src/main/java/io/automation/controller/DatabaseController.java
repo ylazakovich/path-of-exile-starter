@@ -31,7 +31,7 @@ public class DatabaseController {
   @GetMapping("/load/gems")
   public void loadGems() {
     gemService.deleteAll();
-    Mono<ResponseEntity<Lines<SkillGemDTO>>> dataWithGems = poeNinjaService.getDataWithGems();
+    Mono<ResponseEntity<Lines<SkillGem>>> dataWithGems = poeNinjaService.getDataWithGems();
     dataWithGems.subscribe(data -> gemService.saveAll(data.getBody()));
   }
 
