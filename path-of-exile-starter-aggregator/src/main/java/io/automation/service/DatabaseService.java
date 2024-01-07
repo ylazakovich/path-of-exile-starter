@@ -1,7 +1,9 @@
 package io.automation.service;
 
-import io.automation.dto.GemDTO;
+import io.automation.model.Lines;
+import io.automation.model.SkillGem;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -19,7 +21,7 @@ public class DatabaseService {
 
   public void loadGems() {
     gemService.deleteAll();
-    Mono<GemDTO> dataWithGems = poeNinjaService.getDataWithGems();
-    dataWithGems.subscribe(gemService::saveAll);
+    Mono<ResponseEntity<Lines<SkillGem>>> mono = poeNinjaService.getDataWithGems();
+    mono.subscribe(data -> gemService.saveAll(data.getBody()));
   }
 }

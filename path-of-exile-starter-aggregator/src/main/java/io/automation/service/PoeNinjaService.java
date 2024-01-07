@@ -1,8 +1,11 @@
 package io.automation.service;
 
 import io.automation.config.PoeNinjaConfig;
-import io.automation.dto.GemDTO;
+import io.automation.model.Lines;
+import io.automation.model.SkillGem;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,11 +31,11 @@ public class PoeNinjaService {
         .build();
   }
 
-  public Mono<GemDTO> getDataWithGems() {
+  public Mono<ResponseEntity<Lines<SkillGem>>> getDataWithGems() {
     return client.get()
         .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .bodyToMono(GemDTO.class);
+        .toEntity(new ParameterizedTypeReference<>() {});
   }
 }

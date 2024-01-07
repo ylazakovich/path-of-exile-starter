@@ -2,8 +2,10 @@ package io.automation.service;
 
 import java.util.List;
 
-import io.automation.dto.GemDTO;
-import io.automation.entity.GemEntity;
+import io.automation.entity.SkillGemEntity;
+import io.automation.mapper.SkillGemEntityMapper;
+import io.automation.model.Lines;
+import io.automation.model.SkillGem;
 import io.automation.repo.GemRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,22 +14,20 @@ import org.springframework.stereotype.Service;
 public class GemService {
 
   private final GemRepo gemRepo;
+  private final SkillGemEntityMapper entityMapper;
 
   @Autowired
-  public GemService(GemRepo gemRepo) {
+  public GemService(GemRepo gemRepo, SkillGemEntityMapper entityMapper) {
     this.gemRepo = gemRepo;
+    this.entityMapper = entityMapper;
   }
 
-  public List<GemEntity> findAllGems() {
+  public List<SkillGemEntity> findAllGems() {
     return gemRepo.findAll();
   }
 
-  public void saveAll(List<GemEntity> gemEntities) {
-    gemRepo.saveAll(gemEntities);
-  }
-
-  public void saveAll(GemDTO data) {
-    List<GemEntity> entityList = GemDTO.convertToEntity(data.getLines());
+  public void saveAll(Lines<SkillGem> data) {
+    List<SkillGemEntity> entityList = entityMapper.apply(data);
     gemRepo.saveAll(entityList);
   }
 
