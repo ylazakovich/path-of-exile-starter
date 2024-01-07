@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class SkillGemService {
 
   private final GemRepo gemRepo;
+  // TODO: need parametrized entity
   private final SkillGemEntityMapper entityMapper;
 
   @Autowired
