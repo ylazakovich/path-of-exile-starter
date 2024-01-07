@@ -29,16 +29,15 @@ public class SkillGemController {
   @GetMapping("/findAll/{value}")
   public List<SkillGemDTO> findAllWithProfitMoreThan(@PathVariable("value") long value) {
     List<SkillGemDTO> data = findAll();
-    List<SkillGemDTO> maxLevelSkillGemDTOS = data.stream()
-        .filter(skillGemDTO -> skillGemDTO.getVariant().equals("20") && !skillGemDTO.isCorrupted())
-        .toList();
-    List<SkillGemDTO> maxQualitySkillGemDTOS = data.stream()
-        .filter(skillGemDTO -> skillGemDTO.getVariant().equals("1/20") && !skillGemDTO.isCorrupted())
-        .toList();
-    return maxLevelSkillGemDTOS.stream()
-        .filter(skillGemDTO -> maxQualitySkillGemDTOS.stream()
-            .anyMatch(quality -> skillGemDTO.getName().equals(quality.getName())
-                && (quality.getChaosValue() - skillGemDTO.getChaosValue() >= value)))
+    List<SkillGemDTO> maxLevelSkillGemDTOS =
+        data.stream().filter(skillGemDTO -> skillGemDTO.getVariant().equals("20") && !skillGemDTO.isCorrupted())
+            .toList();
+    List<SkillGemDTO> maxQualitySkillGemDTOS =
+        data.stream().filter(skillGemDTO -> skillGemDTO.getVariant().equals("1/20") && !skillGemDTO.isCorrupted())
+            .toList();
+    return maxLevelSkillGemDTOS.stream().filter(skillGemDTO -> maxQualitySkillGemDTOS.stream().anyMatch(
+            quality -> skillGemDTO.getName().equals(quality.getName()) &&
+                (quality.getChaosValue() - skillGemDTO.getChaosValue() >= value)))
         .toList();
   }
 }

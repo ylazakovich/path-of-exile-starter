@@ -32,6 +32,10 @@ public class SkillGemService {
     gemRepo.saveAll(entityList);
   }
 
+  public void saveAll(List<SkillGemEntity> entities) {
+    gemRepo.saveAll(entities);
+  }
+
   public void deleteAll() {
     gemRepo.truncateTable();
   }
