@@ -14,12 +14,12 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/database")
-public class DBLoadController {
+public class DatabaseController {
 
   private final GemService gemService;
   private final PoeNinjaService poeNinjaService;
 
-  public DBLoadController(GemService gemService, PoeNinjaService poeNinjaService) {
+  public DatabaseController(GemService gemService, PoeNinjaService poeNinjaService) {
     this.gemService = gemService;
     this.poeNinjaService = poeNinjaService;
   }
@@ -35,13 +35,11 @@ public class DBLoadController {
   @GetMapping("/update/gems/prices")
   public void updatePricesGems() {
     List<GemEntity> pastState = gemService.findAllGems();
-    Mono<GemDTO> currentState = poeNinjaService.getDataWithGems();
-    currentState.subscribe(dto -> {
-      pastState
-          .forEach(pastPrice -> GemDTO.convertToEntity(dto.getLines()).stream()
-              .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName())
-                  && currentPrice.getVariant().equals(pastPrice.getVariant()))
-              .findFirst().ifPresent(matchedEntity -> pastPrice.setChaosValue(matchedEntity.getChaosValue())));
+    poeNinjaService.getDataWithGems().subscribe(data -> {
+      pastState.forEach(pastPrice -> GemDTO.convertToEntity(data.getLines()).stream()
+          .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName())
+              && currentPrice.getVariant().equals(pastPrice.getVariant()))
+          .findFirst().ifPresent(matchedEntity -> pastPrice.setChaosValue(matchedEntity.getChaosValue())));
       gemService.saveAll(pastState);
     });
   }
