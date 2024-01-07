@@ -1,5 +1,6 @@
 package io.automation.service;
 
+import io.automation.dto.SkillGemDTO;
 import io.automation.model.Lines;
 import io.automation.model.SkillGem;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class DatabaseService {
 
   public void loadGems() {
     gemService.deleteAll();
-    Mono<ResponseEntity<Lines<SkillGem>>> mono = poeNinjaService.getDataWithGems();
+    Mono<ResponseEntity<Lines<SkillGemDTO>>> mono = poeNinjaService.getDataWithGems();
     mono.subscribe(data -> gemService.saveAll(data.getBody()));
   }
 }

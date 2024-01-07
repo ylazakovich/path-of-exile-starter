@@ -2,6 +2,7 @@ package io.automation.controller;
 
 import java.util.List;
 
+import io.automation.dto.SkillGemDTO;
 import io.automation.dto.SkillGemLinesDTO;
 import io.automation.entity.SkillGemEntity;
 import io.automation.model.Lines;
@@ -30,7 +31,7 @@ public class DatabaseController {
   @GetMapping("/load/gems")
   public void loadGems() {
     gemService.deleteAll();
-    Mono<ResponseEntity<Lines<SkillGem>>> dataWithGems = poeNinjaService.getDataWithGems();
+    Mono<ResponseEntity<Lines<SkillGemDTO>>> dataWithGems = poeNinjaService.getDataWithGems();
     dataWithGems.subscribe(data -> gemService.saveAll(data.getBody()));
   }
 

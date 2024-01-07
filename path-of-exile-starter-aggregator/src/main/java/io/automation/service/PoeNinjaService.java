@@ -1,6 +1,7 @@
 package io.automation.service;
 
 import io.automation.config.PoeNinjaConfig;
+import io.automation.dto.SkillGemDTO;
 import io.automation.model.Lines;
 import io.automation.model.SkillGem;
 import org.springframework.core.ParameterizedTypeReference;
@@ -31,7 +32,7 @@ public class PoeNinjaService {
         .build();
   }
 
-  public Mono<ResponseEntity<Lines<SkillGem>>> getDataWithGems() {
+  public Mono<ResponseEntity<Lines<SkillGemDTO>>> getDataWithGems() {
     return client.get()
         .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)
