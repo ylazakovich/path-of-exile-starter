@@ -1,13 +1,6 @@
 package io.automation.controller;
 
-import java.util.List;
-
-import io.automation.dto.SkillGemLinesDTO;
-import io.automation.entity.SkillGemEntity;
-import io.automation.model.SkillGem;
-import io.automation.service.GemService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import io.automation.service.SkillGemService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/gems")
 public class GemController {
 
-  private final GemService gemService;
+  private final SkillGemService skillGemService;
 
-  public GemController(GemService gemService) {
-    this.gemService = gemService;
+  public GemController(SkillGemService skillGemService) {
+    this.skillGemService = skillGemService;
   }
 
 //  @GetMapping("/findAll")

@@ -1,16 +1,10 @@
 package io.automation.controller;
 
-import java.util.List;
-
-import io.automation.dto.SkillGemDTO;
-import io.automation.dto.SkillGemLinesDTO;
-import io.automation.entity.SkillGemEntity;
 import io.automation.model.Lines;
 import io.automation.model.SkillGem;
-import io.automation.service.GemService;
+import io.automation.service.SkillGemService;
 import io.automation.service.PoeNinjaService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,19 +14,19 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/database")
 public class DatabaseController {
 
-  private final GemService gemService;
+  private final SkillGemService skillGemService;
   private final PoeNinjaService poeNinjaService;
 
-  public DatabaseController(GemService gemService, PoeNinjaService poeNinjaService) {
-    this.gemService = gemService;
+  public DatabaseController(SkillGemService skillGemService, PoeNinjaService poeNinjaService) {
+    this.skillGemService = skillGemService;
     this.poeNinjaService = poeNinjaService;
   }
 
   @GetMapping("/load/gems")
   public void loadGems() {
-    gemService.deleteAll();
+    skillGemService.deleteAll();
     Mono<ResponseEntity<Lines<SkillGem>>> dataWithGems = poeNinjaService.getDataWithGems();
-    dataWithGems.subscribe(data -> gemService.saveAll(data.getBody()));
+    dataWithGems.subscribe(data -> skillGemService.saveAll(data.getBody()));
   }
 
 //  @Scheduled(cron = "* */30 * * * *")

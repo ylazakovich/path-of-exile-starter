@@ -1,6 +1,6 @@
 package io.automation.controller;
 
-import io.automation.service.GemService;
+import io.automation.service.SkillGemService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/message")
 public class MessageController {
 
-  private final GemService gemService;
+  private final SkillGemService skillGemService;
 
-  public MessageController(GemService gemService) {
-    this.gemService = gemService;
+  public MessageController(SkillGemService skillGemService) {
+    this.skillGemService = skillGemService;
   }
 
   @GetMapping("/gems")

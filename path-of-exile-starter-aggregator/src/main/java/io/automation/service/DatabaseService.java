@@ -10,18 +10,18 @@ import reactor.core.publisher.Mono;
 @Service
 public class DatabaseService {
 
-  private final GemService gemService;
+  private final SkillGemService skillGemService;
   private final PoeNinjaService poeNinjaService;
 
   @Autowired
-  public DatabaseService(GemService gemService, PoeNinjaService poeNinjaService) {
-    this.gemService = gemService;
+  public DatabaseService(SkillGemService skillGemService, PoeNinjaService poeNinjaService) {
+    this.skillGemService = skillGemService;
     this.poeNinjaService = poeNinjaService;
   }
 
   public void loadGems() {
-    gemService.deleteAll();
+    skillGemService.deleteAll();
     Mono<ResponseEntity<Lines<SkillGem>>> mono = poeNinjaService.getDataWithGems();
-    mono.subscribe(data -> gemService.saveAll(data.getBody()));
+    mono.subscribe(data -> skillGemService.saveAll(data.getBody()));
   }
 }

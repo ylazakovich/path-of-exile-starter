@@ -11,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GemService {
+public class SkillGemService {
 
   private final GemRepo gemRepo;
   private final SkillGemEntityMapper entityMapper;
 
   @Autowired
-  public GemService(GemRepo gemRepo, SkillGemEntityMapper entityMapper) {
+  public SkillGemService(GemRepo gemRepo, SkillGemEntityMapper entityMapper) {
     this.gemRepo = gemRepo;
     this.entityMapper = entityMapper;
   }
