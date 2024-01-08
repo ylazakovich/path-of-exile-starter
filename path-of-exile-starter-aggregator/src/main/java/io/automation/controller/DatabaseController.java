@@ -4,34 +4,33 @@ import java.util.List;
 import java.util.Objects;
 
 import io.automation.entity.SkillGemEntity;
-import io.automation.model.Lines;
-import io.automation.model.SkillGem;
+import io.automation.service.DatabaseService;
 import io.automation.service.PoeNinjaService;
 import io.automation.service.SkillGemService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/database")
 public class DatabaseController {
 
+  private final DatabaseService databaseService;
   private final SkillGemService skillGemService;
   private final PoeNinjaService poeNinjaService;
 
-  public DatabaseController(SkillGemService skillGemService, PoeNinjaService poeNinjaService) {
+  public DatabaseController(DatabaseService databaseService,
+                            SkillGemService skillGemService,
+                            PoeNinjaService poeNinjaService) {
+    this.databaseService = databaseService;
     this.skillGemService = skillGemService;
     this.poeNinjaService = poeNinjaService;
   }
 
   @GetMapping("/load/gems")
   public void loadGems() {
-    skillGemService.deleteAll();
-    Mono<ResponseEntity<Lines<SkillGem>>> dataWithGems = poeNinjaService.getDataWithGems();
-    dataWithGems.subscribe(data -> skillGemService.saveAll(data.getBody()));
+    databaseService.loadGems();
   }
 
   @Scheduled(cron = "* */30 * * * *")

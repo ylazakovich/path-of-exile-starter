@@ -18,7 +18,8 @@ public class SkillGemService {
   private final SkillGemEntityMapper entityMapper;
 
   @Autowired
-  public SkillGemService(GemRepo gemRepo, SkillGemEntityMapper entityMapper) {
+  public SkillGemService(GemRepo gemRepo,
+                         SkillGemEntityMapper entityMapper) {
     this.gemRepo = gemRepo;
     this.entityMapper = entityMapper;
   }
