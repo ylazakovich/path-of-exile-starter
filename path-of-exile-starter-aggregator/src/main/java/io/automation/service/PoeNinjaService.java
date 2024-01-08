@@ -1,7 +1,6 @@
 package io.automation.service;
 
 import io.automation.config.PoeNinjaConfig;
-import io.automation.dto.SkillGemDTO;
 import io.automation.model.Lines;
 import io.automation.model.SkillGem;
 import org.springframework.core.ParameterizedTypeReference;

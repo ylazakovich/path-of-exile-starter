@@ -3,12 +3,11 @@ package io.automation.controller;
 import java.util.List;
 import java.util.Objects;
 
-import io.automation.dto.SkillGemDTO;
 import io.automation.entity.SkillGemEntity;
 import io.automation.model.Lines;
 import io.automation.model.SkillGem;
-import io.automation.service.SkillGemService;
 import io.automation.service.PoeNinjaService;
+import io.automation.service.SkillGemService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
