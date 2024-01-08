@@ -38,6 +38,7 @@ public class AnalyzerService {
             String name = q.getName();
             double maxQualityPrice = q.getChaosValue();
             double maxLevelPrice = matchingLevelGem.getChaosValue();
+            // TODO: craftCost should read from currency table
             return new TradeSkillGemDTO(name, 1.0, maxQualityPrice - maxLevelPrice);
           }
           return null;
