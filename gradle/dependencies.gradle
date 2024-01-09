@@ -10,6 +10,7 @@ ext {
     mockito = '5.8.0'
     assertJ = '3.25.1'
     testng = '7.9.0'
+    faker = '2.0.2'
 }
 
 subprojects {
@@ -33,5 +34,6 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:${lombok}")
         testImplementation ("org.assertj:assertj-core:${assertJ}")
         testImplementation ("org.testng:testng:${testng}")
+        implementation ("net.datafaker:datafaker:${faker}")
     }
 }
