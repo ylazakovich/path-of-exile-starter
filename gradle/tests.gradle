@@ -1,0 +1,13 @@
+subprojects {
+    tasks.withType(Test).configureEach {
+        useTestNG()
+        jvmArgs = ['-ea', '-Xmx512m']
+        systemProperties['file.encoding'] = encoding
+
+        testLogging {
+            events "passed", "skipped", "failed"
+            showExceptions true
+            exceptionFormat 'full'
+        }
+    }
+}

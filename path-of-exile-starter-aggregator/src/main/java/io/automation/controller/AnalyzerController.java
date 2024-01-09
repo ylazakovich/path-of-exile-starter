@@ -2,7 +2,7 @@ package io.automation.controller;
 
 import java.util.List;
 
-import io.automation.dto.TradeSkillGemDTO;
+import io.automation.dto.AnalyzedSkillDTO;
 import io.automation.service.AnalyzerService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,12 +20,12 @@ public class AnalyzerController {
   }
 
   @GetMapping("/analyze/gems")
-  public List<TradeSkillGemDTO> findAllForTrade() {
+  public List<AnalyzedSkillDTO> findAllForTrade() {
     return findAllForTrade(20);
   }
 
   @GetMapping("analyze/gems/{takeProfit}")
-  public List<TradeSkillGemDTO> findAllForTrade(@PathVariable("takeProfit") long value) {
+  public List<AnalyzedSkillDTO> findAllForTrade(@PathVariable("takeProfit") long value) {
     return analyzerService.analyze().stream().filter(skill -> skill.getProfit() >= value).toList();
   }
 }

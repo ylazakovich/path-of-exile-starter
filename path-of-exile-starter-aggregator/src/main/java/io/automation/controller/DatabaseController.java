@@ -3,7 +3,7 @@ package io.automation.controller;
 import java.util.List;
 import java.util.Objects;
 
-import io.automation.entity.SkillGemEntity;
+import io.automation.entity.SkillEntity;
 import io.automation.service.DatabaseService;
 import io.automation.service.PoeNinjaService;
 import io.automation.service.SkillGemService;
@@ -36,7 +36,8 @@ public class DatabaseController {
   @Scheduled(cron = "* */30 * * * *")
   @GetMapping("/update/gems/prices")
   public void updatePricesGems() {
-    List<SkillGemEntity> pastState = skillGemService.findAllGems();
+    // TODO: need to move it to Service;
+    List<SkillEntity> pastState = skillGemService.findAllSkills();
     poeNinjaService.getDataWithGems().subscribe(data -> {
       pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
           .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName()) &&
