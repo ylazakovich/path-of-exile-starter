@@ -16,4 +16,9 @@ public class Lines<T> {
 
   @JsonProperty("lines")
   private List<T> lines;
+
+  public Lines<T> setLines(List<T> lines) {
+    this.lines = lines;
+    return this;
+  }
 }

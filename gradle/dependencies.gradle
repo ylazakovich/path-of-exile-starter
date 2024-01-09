@@ -1,5 +1,5 @@
 ext {
-    os = "mac"
+    os = "macos"
     mac_os_arch = 'osx-aarch_64'
     netty = '4.1.104.Final'
     flyway = '9.22.0'
