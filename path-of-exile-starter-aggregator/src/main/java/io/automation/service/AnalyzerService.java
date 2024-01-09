@@ -16,7 +16,7 @@ public class AnalyzerService {
   }
 
   public List<AnalyzedSkillDTO> analyze() {
-    List<SkillDTO> data = SkillDTO.convertToList(skillGemService.findAllGems());
+    List<SkillDTO> data = SkillDTO.convertToList(skillGemService.findAllSkills());
     List<SkillDTO> maxQualitySkills = data.stream()
         .filter(skillDTO -> skillDTO.getVariant().equals("1/20") && !skillDTO.isCorrupted())
         .toList();

@@ -37,7 +37,7 @@ public class DatabaseController {
   @GetMapping("/update/gems/prices")
   public void updatePricesGems() {
     // TODO: need to move it to Service;
-    List<SkillEntity> pastState = skillGemService.findAllGems();
+    List<SkillEntity> pastState = skillGemService.findAllSkills();
     poeNinjaService.getDataWithGems().subscribe(data -> {
       pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
           .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName()) &&

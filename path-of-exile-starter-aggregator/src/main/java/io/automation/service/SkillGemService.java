@@ -24,7 +24,7 @@ public class SkillGemService {
     this.entityMapper = entityMapper;
   }
 
-  public List<SkillEntity> findAllGems() {
+  public List<SkillEntity> findAllSkills() {
     return skillRepo.findAll();
   }
 

@@ -10,12 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface SkillRepo extends JpaRepository<SkillEntity, Long> {
 
-  void deleteGemById(Long id);
-
-  Optional<SkillEntity> findGemById(Long id);
+  Optional<SkillEntity> findSkillById(Long id);
 
   @Transactional
   @Modifying
-  @Query(value = "TRUNCATE TABLE gems", nativeQuery = true)
+  @Query(value = "TRUNCATE TABLE skills", nativeQuery = true)
   void truncateTable();
 }

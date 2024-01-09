@@ -21,7 +21,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "gems")
+@Table(name = "skills")
 public class SkillEntity implements Serializable {
 
   @Id
