@@ -2,7 +2,7 @@ package io.automation.service;
 
 import io.automation.config.PoeNinjaConfig;
 import io.automation.model.Lines;
-import io.automation.model.SkillGem;
+import io.automation.model.Skill;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +31,7 @@ public class PoeNinjaService {
         .build();
   }
 
-  public Mono<ResponseEntity<Lines<SkillGem>>> getDataWithGems() {
+  public Mono<ResponseEntity<Lines<Skill>>> getDataWithGems() {
     return client.get()
         .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)

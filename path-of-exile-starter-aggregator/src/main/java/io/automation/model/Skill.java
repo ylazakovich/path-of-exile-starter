@@ -14,7 +14,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SkillGem {
+public class Skill {
 
   @JsonProperty("name")
   private String name;

@@ -3,7 +3,7 @@ package io.automation.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import io.automation.entity.SkillGemEntity;
+import io.automation.entity.SkillEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +17,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SkillGemDTO {
+public class SkillDTO {
 
   private String name;
   private String variant;
@@ -26,9 +26,9 @@ public class SkillGemDTO {
   private int gemQuality;
   private double chaosValue;
 
-  public static List<SkillGemDTO> convertToList(List<SkillGemEntity> entities) {
+  public static List<SkillDTO> convertToList(List<SkillEntity> entities) {
     return entities.stream()
-        .map(entity -> new SkillGemDTO(
+        .map(entity -> new SkillDTO(
             entity.getName(),
             entity.getVariant(),
             entity.isCorrupted(),
@@ -39,15 +39,15 @@ public class SkillGemDTO {
         .collect(Collectors.toList());
   }
 
-  public static List<SkillGemEntity> convertToEntity(List<SkillGemDTO> data) {
+  public static List<SkillEntity> convertToEntity(List<SkillDTO> data) {
     return data.stream()
-        .map(skillGemDTO -> new SkillGemEntity(
-            skillGemDTO.getName(),
-            skillGemDTO.getVariant(),
-            skillGemDTO.isCorrupted(),
-            skillGemDTO.getGemLevel(),
-            skillGemDTO.getGemQuality(),
-            skillGemDTO.getChaosValue()))
+        .map(skillDTO -> new SkillEntity(
+            skillDTO.getName(),
+            skillDTO.getVariant(),
+            skillDTO.isCorrupted(),
+            skillDTO.getGemLevel(),
+            skillDTO.getGemQuality(),
+            skillDTO.getChaosValue()))
         .collect(Collectors.toList());
   }
 }

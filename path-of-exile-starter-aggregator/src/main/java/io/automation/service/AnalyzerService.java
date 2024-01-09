@@ -2,8 +2,8 @@ package io.automation.service;
 
 import java.util.List;
 
-import io.automation.dto.SkillGemDTO;
-import io.automation.dto.TradeSkillGemDTO;
+import io.automation.dto.SkillDTO;
+import io.automation.dto.AnalyzedSkillDTO;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,22 +15,22 @@ public class AnalyzerService {
     this.skillGemService = skillGemService;
   }
 
-  public List<TradeSkillGemDTO> analyze() {
-    List<SkillGemDTO> data = SkillGemDTO.convertToList(skillGemService.findAllGems());
-    List<SkillGemDTO> maxQualitySkills = data.stream()
-        .filter(skillGemDTO -> skillGemDTO.getVariant().equals("1/20") && !skillGemDTO.isCorrupted())
+  public List<AnalyzedSkillDTO> analyze() {
+    List<SkillDTO> data = SkillDTO.convertToList(skillGemService.findAllGems());
+    List<SkillDTO> maxQualitySkills = data.stream()
+        .filter(skillDTO -> skillDTO.getVariant().equals("1/20") && !skillDTO.isCorrupted())
         .toList();
-    List<SkillGemDTO> maxLevelSkills = data.stream()
-        .filter(skillGemDTO -> skillGemDTO.getVariant().equals("20") && !skillGemDTO.isCorrupted())
+    List<SkillDTO> maxLevelSkills = data.stream()
+        .filter(skillDTO -> skillDTO.getVariant().equals("20") && !skillDTO.isCorrupted())
         .toList();
     return subtract(maxQualitySkills, maxLevelSkills);
   }
 
-  private static List<TradeSkillGemDTO> subtract(List<SkillGemDTO> quality, List<SkillGemDTO> level) {
+  private static List<AnalyzedSkillDTO> subtract(List<SkillDTO> quality, List<SkillDTO> level) {
     return quality.stream()
         .filter(q -> level.stream().anyMatch(l -> l.getName().equals(q.getName())))
         .map(q -> {
-          SkillGemDTO matchingLevelGem = level.stream()
+          SkillDTO matchingLevelGem = level.stream()
               .filter(l -> l.getName().equals(q.getName()))
               .findFirst()
               .orElse(null);
@@ -39,7 +39,7 @@ public class AnalyzerService {
             double maxQualityPrice = q.getChaosValue();
             double maxLevelPrice = matchingLevelGem.getChaosValue();
             // TODO: craftCost should read from currency table
-            return new TradeSkillGemDTO(name, 1.0, maxQualityPrice - maxLevelPrice);
+            return new AnalyzedSkillDTO(name, 1.0, maxQualityPrice - maxLevelPrice);
           }
           return null;
         })
