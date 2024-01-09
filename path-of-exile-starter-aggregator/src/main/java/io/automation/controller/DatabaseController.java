@@ -36,6 +36,7 @@ public class DatabaseController {
   @Scheduled(cron = "* */30 * * * *")
   @GetMapping("/update/gems/prices")
   public void updatePricesGems() {
+    // TODO: need to move it to Service;
     List<SkillEntity> pastState = skillGemService.findAllGems();
     poeNinjaService.getDataWithGems().subscribe(data -> {
       pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
