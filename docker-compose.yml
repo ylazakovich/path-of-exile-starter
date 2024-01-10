@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  db:
+  database:
     image: mariadb:10.10
     restart: always
     ports:
@@ -10,9 +10,3 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: poe
-
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
