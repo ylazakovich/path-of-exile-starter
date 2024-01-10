@@ -33,3 +33,9 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
+      - uses: dorny/test-reporter@v1
+        with:
+          artifact: /test-report-(.*)-(.*)/
+          name: 'Test report: $1 $2'
+          path: '**/build/test-results/**/TEST-*.xml'
+          reporter: java-junit
