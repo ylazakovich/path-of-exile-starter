@@ -10,7 +10,7 @@ ext {
     mockito = '5.8.0'
     assertJ = '3.25.1'
     testng = '7.9.0'
-    faker = '2.0.2'
+    faker = '2.1.0'
 }
 
 subprojects {
