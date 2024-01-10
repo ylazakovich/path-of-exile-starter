@@ -6,18 +6,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatabaseService {
 
-  private final SkillGemService skillGemService;
+  private final SkillsService skillsService;
   private final PoeNinjaService poeNinjaService;
 
   @Autowired
-  public DatabaseService(SkillGemService skillGemService,
+  public DatabaseService(SkillsService skillsService,
                          PoeNinjaService poeNinjaService) {
-    this.skillGemService = skillGemService;
+    this.skillsService = skillsService;
     this.poeNinjaService = poeNinjaService;
   }
 
   public void loadGems() {
-    skillGemService.clearTable();
-    poeNinjaService.getSkills().subscribe(data -> skillGemService.saveAll(data.getBody()));
+    skillsService.clearTable();
+    poeNinjaService.getSkills().subscribe(data -> skillsService.saveAll(data.getBody()));
   }
 }

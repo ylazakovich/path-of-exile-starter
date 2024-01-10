@@ -9,14 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class AnalyzerService {
 
-  private final SkillGemService skillGemService;
+  private final SkillsService skillsService;
 
-  public AnalyzerService(SkillGemService skillGemService) {
-    this.skillGemService = skillGemService;
+  public AnalyzerService(SkillsService skillsService) {
+    this.skillsService = skillsService;
   }
 
   public List<AnalyzedSkillDTO> analyze() {
-    List<SkillDTO> data = SkillDTO.convertToList(skillGemService.findAllSkills());
+    List<SkillDTO> data = SkillDTO.convertToList(skillsService.findAllSkills());
     List<SkillDTO> maxQualitySkills = data.stream()
         .filter(skillDTO -> skillDTO.getVariant().equals("1/20") && !skillDTO.isCorrupted())
         .toList();

@@ -11,15 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillGemService {
+public class SkillsService {
 
   private final SkillRepo skillRepo;
   // TODO: need parametrized entity
   private final SkillEntityMapper entityMapper;
 
   @Autowired
-  public SkillGemService(SkillRepo skillRepo,
-                         SkillEntityMapper entityMapper) {
+  public SkillsService(SkillRepo skillRepo,
+                       SkillEntityMapper entityMapper) {
     this.skillRepo = skillRepo;
     this.entityMapper = entityMapper;
   }
