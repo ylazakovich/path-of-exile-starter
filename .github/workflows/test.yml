@@ -25,7 +25,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: test-report-linux-${{matrix.gradle-task}}
