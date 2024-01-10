@@ -17,7 +17,7 @@ public class DatabaseService {
   }
 
   public void loadGems() {
-    skillGemService.deleteAll();
+    skillGemService.clearTable();
     poeNinjaService.getSkills().subscribe(data -> skillGemService.saveAll(data.getBody()));
   }
 }

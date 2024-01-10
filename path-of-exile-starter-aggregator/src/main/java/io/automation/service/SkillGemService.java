@@ -37,7 +37,7 @@ public class SkillGemService {
     skillRepo.saveAll(entities);
   }
 
-  public void deleteAll() {
+  public void clearTable() {
     skillRepo.truncateTable();
   }
 }
