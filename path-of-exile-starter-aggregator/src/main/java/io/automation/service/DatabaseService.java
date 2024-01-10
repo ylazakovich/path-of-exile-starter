@@ -18,6 +18,6 @@ public class DatabaseService {
 
   public void loadGems() {
     skillGemService.deleteAll();
-    poeNinjaService.getDataWithGems().subscribe(data -> skillGemService.saveAll(data.getBody()));
+    poeNinjaService.getSkills().subscribe(data -> skillGemService.saveAll(data.getBody()));
   }
 }
