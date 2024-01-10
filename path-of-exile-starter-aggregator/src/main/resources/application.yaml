@@ -7,7 +7,7 @@ spring:
     baseline-version: 0
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/path-of-exile
+    url: jdbc:mariadb://localhost:3306/poe
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
