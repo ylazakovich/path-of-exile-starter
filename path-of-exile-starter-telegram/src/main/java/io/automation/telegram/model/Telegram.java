@@ -8,11 +8,10 @@ import org.telegram.telegrambots.starter.SpringWebhookBot;
 
 public class Telegram extends SpringWebhookBot {
 
+  private final TelegramFacade FACADE;
   private String botPath;
   private String botUsername;
   private String botToken;
-
-  private final TelegramFacade FACADE;
 
   public Telegram(TelegramFacade facade, DefaultBotOptions options, SetWebhook webhook) {
     super(options, webhook);
@@ -34,24 +33,24 @@ public class Telegram extends SpringWebhookBot {
     return botPath;
   }
 
-  @Override
-  public String getBotUsername() {
-    return botUsername;
-  }
-
-  @Override
-  public String getBotToken() {
-    return botToken;
-  }
-
   public Telegram setBotPath(String botPath) {
     this.botPath = botPath;
     return this;
   }
 
+  @Override
+  public String getBotUsername() {
+    return botUsername;
+  }
+
   public Telegram setBotUsername(String botUsername) {
     this.botUsername = botUsername;
     return this;
+  }
+
+  @Override
+  public String getBotToken() {
+    return botToken;
   }
 
   public Telegram setBotToken(String botToken) {

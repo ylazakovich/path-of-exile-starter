@@ -1,5 +1,10 @@
 package io.automation.telegram.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.automation.telegram.dao.UserDAO;
+import io.automation.telegram.entity.User;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -9,11 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMar
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import io.automation.telegram.DAO.UserDAO;
-import io.automation.telegram.entity.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 // TODO: need to make a private methods
@@ -36,7 +36,6 @@ public class MenuService {
     return createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
   }
 
-  //Main menu
   private ReplyKeyboardMarkup getMainMenuKeyboard(long userId) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     replyKeyboardMarkup.setSelective(true);
@@ -52,7 +51,7 @@ public class MenuService {
     KeyboardRow row3 = new KeyboardRow();
     row1.add(new KeyboardButton("Создать напоминание"));
     row2.add(new KeyboardButton("Мои напоминания"));
-    row3.add((new KeyboardButton(text)));
+    row3.add(new KeyboardButton(text));
     keyboard.add(row1);
     keyboard.add(row2);
     keyboard.add(row3);
@@ -79,7 +78,6 @@ public class MenuService {
     return sendMessage;
   }
 
-  //set calbackquery keyboard for list event
   public InlineKeyboardMarkup getInlineMessageButtons() {
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     InlineKeyboardButton buttonDel = new InlineKeyboardButton();
@@ -103,7 +101,6 @@ public class MenuService {
     return inlineKeyboardMarkup;
   }
 
-  //set callbackquery keyboard for chang freq
   public InlineKeyboardMarkup getInlineMessageButtonsForEnterDate() {
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     InlineKeyboardButton buttonOneTime = new InlineKeyboardButton();

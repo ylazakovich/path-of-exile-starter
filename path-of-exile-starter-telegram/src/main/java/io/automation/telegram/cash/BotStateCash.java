@@ -1,10 +1,10 @@
 package io.automation.telegram.cash;
 
-import io.automation.telegram.model.State;
-import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import io.automation.telegram.model.State;
+import org.springframework.stereotype.Service;
 
 @Service
 //Used to save state bot.

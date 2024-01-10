@@ -1,9 +1,9 @@
 package io.automation.telegram.service;
 
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import io.automation.telegram.DAO.EventCashDAO;
+import io.automation.telegram.dao.EventCashDAO;
 import io.automation.telegram.config.ApplicationContextProvider;
 import io.automation.telegram.model.Telegram;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 //thread with event

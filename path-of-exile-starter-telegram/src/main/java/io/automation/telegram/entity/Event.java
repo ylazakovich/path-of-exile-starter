@@ -1,5 +1,7 @@
 package io.automation.telegram.entity;
 
+import java.util.Date;
+
 import io.automation.telegram.model.EventFreq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,8 +18,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.Date;
 
 @Entity
 @Table(name = "user_events")

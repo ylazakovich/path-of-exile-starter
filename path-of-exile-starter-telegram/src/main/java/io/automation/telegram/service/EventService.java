@@ -1,21 +1,20 @@
 package io.automation.telegram.service;
 
-import io.automation.telegram.model.EventFreq;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import io.automation.telegram.DAO.EventCashDAO;
-import io.automation.telegram.DAO.EventDAO;
-import io.automation.telegram.entity.Event;
-import io.automation.telegram.entity.EventCashEntity;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.stream.Collectors;
+
+import io.automation.telegram.dao.EventCashDAO;
+import io.automation.telegram.dao.EventDAO;
+import io.automation.telegram.entity.Event;
+import io.automation.telegram.entity.EventCashEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 
 @EnableScheduling
 @Service
@@ -83,7 +82,7 @@ public class EventService {
               calendarUserTime.getTime(),
               event.description,
               event.user.id
-      );
+          );
       eventCashDAO.save(eventCashEntity);
       //create a thread for the upcoming event with the launch at a specific time
       SendEvent sendEvent = new SendEvent();
