@@ -1,4 +1,4 @@
-# PATH-OF-EXILE-STARTER = EASY TRADE + BE IN TREND + TELEGRAM NOTIFICATIONS
+# SERVICE = EASY TRADE + ANALYZE TREND + TELEGRAM
 
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
 
