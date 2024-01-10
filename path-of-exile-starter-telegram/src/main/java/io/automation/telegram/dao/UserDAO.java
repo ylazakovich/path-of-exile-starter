@@ -1,11 +1,11 @@
-package io.automation.telegram.DAO;
+package io.automation.telegram.dao;
 
+import java.util.List;
+
+import io.automation.telegram.entity.User;
 import io.automation.telegram.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import io.automation.telegram.entity.User;
-
-import java.util.List;
 
 @Service
 public class UserDAO {

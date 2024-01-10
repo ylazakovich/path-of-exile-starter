@@ -1,26 +1,26 @@
 package io.automation.telegram.model.handler;
 
-import io.automation.telegram.model.State;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+
+import io.automation.telegram.dao.EventDAO;
+import io.automation.telegram.dao.UserDAO;
+import io.automation.telegram.cash.BotStateCash;
+import io.automation.telegram.cash.EventCash;
+import io.automation.telegram.entity.Event;
+import io.automation.telegram.entity.User;
 import io.automation.telegram.model.EventFreq;
+import io.automation.telegram.model.State;
+import io.automation.telegram.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import io.automation.telegram.DAO.EventDAO;
-import io.automation.telegram.DAO.UserDAO;
-import io.automation.telegram.cash.BotStateCash;
-import io.automation.telegram.cash.EventCash;
-import io.automation.telegram.entity.Event;
-import io.automation.telegram.entity.User;
-import io.automation.telegram.service.MenuService;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 @Component
 //basic event handling logic
@@ -356,23 +356,13 @@ public class EventHandler {
     String dateFormat = simpleDateFormat.format(event.date);
 
     EventFreq freq = event.freq;
-    String freqEvent;
-    switch (freq.name()) {
-      case ("TIME"):
-        freqEvent = "Единоразово";
-        break;
-      case ("EVERYDAY"):
-        freqEvent = "Ежедневно";
-        break;
-      case ("MONTH"):
-        freqEvent = "Один раз в месяц";
-        break;
-      case ("YEAR"):
-        freqEvent = "Один раз в год";
-        break;
-      default:
-        throw new IllegalStateException("Unexpected value: " + freq.name());
-    }
+    String freqEvent = switch (freq.name()) {
+      case "TIME" -> "Единоразово";
+      case "EVERYDAY" -> "Ежедневно";
+      case "MONTH" -> "Один раз в месяц";
+      case "YEAR" -> "Один раз в год";
+      default -> throw new IllegalStateException("Unexpected value: " + freq.name());
+    };
     builder.append(event.eventId).append(". ").append(dateFormat).append(": ")
         .append(event.description).append(": ").append(freqEvent).append("\n");
     return builder;

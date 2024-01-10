@@ -1,11 +1,11 @@
 package io.automation.telegram.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 import io.automation.telegram.botconfig.TelegramBotConfig;
 import io.automation.telegram.model.Telegram;
 import io.automation.telegram.model.TelegramFacade;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 @Configuration
 public class AppConfig {

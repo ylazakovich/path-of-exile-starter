@@ -36,6 +36,7 @@ public class PoeNinjaService {
         .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .toEntity(new ParameterizedTypeReference<>() {});
+        .toEntity(new ParameterizedTypeReference<>() {
+        });
   }
 }

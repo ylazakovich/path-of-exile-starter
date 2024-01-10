@@ -1,6 +1,7 @@
 plugins {
     id 'io.spring.dependency-management' version '1.1.4'
     id 'org.springframework.boot' version '3.2.1'
+    id 'checkstyle'
 }
 
 allprojects {
@@ -10,10 +11,12 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'checkstyle'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
 }
 
+apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/tests.gradle'

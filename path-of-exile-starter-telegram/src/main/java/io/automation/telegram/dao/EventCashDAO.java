@@ -1,11 +1,11 @@
-package io.automation.telegram.DAO;
+package io.automation.telegram.dao;
+
+import java.util.List;
 
 import io.automation.telegram.entity.EventCashEntity;
 import io.automation.telegram.repo.EventCashRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 //handles events not dispatched after reboot heroku

@@ -1,10 +1,10 @@
 package io.automation.telegram.cash;
 
-import org.springframework.stereotype.Service;
-import io.automation.telegram.entity.Event;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import io.automation.telegram.entity.Event;
+import org.springframework.stereotype.Service;
 
 @Service
 // used to save entered event data per session

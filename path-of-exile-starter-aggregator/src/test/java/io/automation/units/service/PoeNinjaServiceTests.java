@@ -22,7 +22,8 @@ public class PoeNinjaServiceTests {
     Lines<Skill> expected = Generator.generateLineWithSkills();
     when(poeNinjaService.getSkills()).thenReturn(Mono.just(ResponseEntity.ok(expected)));
 
-    poeNinjaService.getSkills().subscribe(actual -> {
+    poeNinjaService.getSkills().subscribe(
+        actual -> {
           assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
           assertThat(actual.getBody()).isEqualTo(expected);
         }
