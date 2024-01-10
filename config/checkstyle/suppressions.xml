@@ -5,27 +5,7 @@
         "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <suppress checks="JavadocMethod" files=".*[/\\]impl[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]commands[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]ex[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]logevents[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]junit[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]junit5[/\\].*.java"/>
     <suppress checks="JavadocMethod" files=".*[/\\]testng[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]collections[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]conditions[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]webdriver[/\\].*.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]Command.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]Selectors.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]Screenshots.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]Selectors.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]Condition.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]ElementsCollection.java"/>
-    <suppress checks="JavadocMethod" files=".*[/\\]CollectionCondition.java"/>
     <suppress checks="JavadocMethod" files="src[/\\]test[/\\]java[/\\].*"/>
     <suppress checks="AvoidStarImport" files="src[/\\]test[/\\]java[/\\].*"/>
-    <suppress checks="ClassFanOutComplexity" files=".*[/\\]Commands.java|.*[/\\]DownloadFileWithHttpRequest.java"/>
-    <suppress checks="ClassFanOutComplexity" files=".*[/\\]SelenideDriver.java"/>
-    <suppress checks="RedundantModifier" files=".*[/\\]Browsers.java"/>
-    <suppress checks="NPathComplexity" files=".*[/\\]ScreenShotLaboratory.java"/>
 </suppressions>
