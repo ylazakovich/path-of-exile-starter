@@ -55,8 +55,7 @@ public class EventHandler {
     user.name = userName;
     user.on = Boolean.TRUE;
     userDAO.save(user);
-    sendMessage.setText("В первый сеанс необходимо ввести местное время в формате HH, например, " +
-        "если сейчас 21:45, то введите 21, это необходимо для корректнрого оповещения в соответсвии с вашим часовым поясом.");
+    sendMessage.setText("Welcome to path of exile aggregator service");
     botStateCash.saveBotState(userId, State.ENTER_TIME);
     return sendMessage;
   }
@@ -69,7 +68,7 @@ public class EventHandler {
     userDAO.save(user);
     botStateCash.saveBotState(message.getFrom().getId(), State.START);
     return menuService.getMainMenuMessage(message.getChatId(),
-        "Изменения сохранены", message.getFrom().getId());
+        "Handled your message", message.getFrom().getId());
   }
 
   public BotApiMethod<?> enterLocalTimeUser(Message message) {
@@ -102,13 +101,11 @@ public class EventHandler {
     calendar1.setTime(userHour);
     int serverHour = calendar.get(Calendar.HOUR_OF_DAY);
     int clientHour = calendar1.get(Calendar.HOUR_OF_DAY);
-    // calculate the time zone
     int timeZone = clientHour - serverHour;
     sendMessage.setText("Ваш часовой пояс: " + "+" + timeZone);
     User user = userDAO.findByUserId(userId);
     user.timeZone = timeZone;
     userDAO.save(user);
-    //time zone is set, reset state
     botStateCash.saveBotState(userId, State.START);
     return sendMessage;
   }
@@ -192,42 +189,32 @@ public class EventHandler {
       sendMessage.setText("Не удается распознать указанную дату и время, попробуйте еще раз");
       return sendMessage;
     }
-    //get data of the previous set
     Event event = eventCash.getEventMap().get(userId);
     event.date = date;
     eventCash.saveEventCash(userId, event);
-    //event input is expected to complete, changes must be saved
     return editEvent(message.getChatId(), userId);
   }
 
-  //processes the entered description
   public BotApiMethod<?> editDescription(Message message) {
     String description = message.getText();
     long userId = message.getFrom().getId();
-    //should be not empty, less then 4, no more 200
     if (description.length() < 4 || description.length() > 200) {
       SendMessage sendMessage = new SendMessage();
       sendMessage.setChatId(String.valueOf(message.getChatId()));
       sendMessage.setText("Описание должно быть минимум 4 символа, но не более 200");
       return sendMessage;
     }
-    //get data of the previous set
     Event event = eventCash.getEventMap().get(userId);
     event.description = description;
-    //save to cash
     eventCash.saveEventCash(userId, event);
-    //event input is expected to complete, changes must be saved
     return editEvent(message.getChatId(), userId);
   }
 
-  //reaction to callbackquery buttonEdit
   public BotApiMethod<?> editHandler(Message message, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));
-
     Event eventRes;
     try {
-      //awaiting entered eventId, get event from base
       eventRes = enterNumberEvent(message.getText(), userId);
     } catch (NumberFormatException e) {
       sendMessage.setText("Введенная строка не является числом, попробуйте снова!");
@@ -237,17 +224,13 @@ public class EventHandler {
       sendMessage.setText("Введенное число отсутсвует в списке, попробуйте снова!");
       return sendMessage;
     }
-    //the received event is saved in the cache
     eventCash.saveEventCash(userId, eventRes);
-    //the received event show to user
     StringBuilder builder = buildEvent(eventRes);
     sendMessage.setText(builder.toString());
-    //show to user menu for edit event
     sendMessage.setReplyMarkup(menuService.getInlineMessageForEdit());
     return sendMessage;
   }
 
-  //process the date input
   public BotApiMethod<?> enterDateHandler(Message message, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));
@@ -258,20 +241,16 @@ public class EventHandler {
       sendMessage.setText("Не удается распознать указанную дату и время, попробуйте еще раз");
       return sendMessage;
     }
-    //get data of the previous set
     Event event = eventCash.getEventMap().get(userId);
     event.date = date;
-    //save data to cache
     eventCash.saveEventCash(userId, event);
     sendMessage.setText("Выберите период повторения(Единоразово(сработает один раз и удалится), " +
         "Ежедневно в указанный час, " +
         "1 раз в месяц в указанную дату, 1 раз в год в указанное число)");
-    //show to user menu to select the frequency
     sendMessage.setReplyMarkup(menuService.getInlineMessageButtonsForEnterDate());
     return sendMessage;
   }
 
-  //process the description input
   public BotApiMethod<?> enterDescriptionHandler(Message message, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));
@@ -281,42 +260,30 @@ public class EventHandler {
       sendMessage.setText("Описание должно быть минимум 4 символа, но не более 200");
       return sendMessage;
     }
-    //switch th state to enter the date
     botStateCash.saveBotState(userId, State.ENTER_DATE);
-    //get the previous set of event from the cash
     Event event = eventCash.getEventMap().get(userId);
     event.description = description;
-    //save to cache
     eventCash.saveEventCash(userId, event);
     sendMessage.setText(
         "Введите дату предстоящего события в формате DD.MM.YYYY HH:MM, например - 02.06.2021 21:24, либо 02.06.2021");
     return sendMessage;
   }
 
-  //return event from database
   private Event enterNumberEvent(String message,
                                  long userId)
       throws NumberFormatException, NullPointerException {
-    List<Event> list;
-    if (userId == admin_id) {
-      // =))
-      list = eventDAO.findAll();
-    } else {
-      // =((
-      list = eventDAO.findByUserId(userId);
-    }
+    List<Event> list = userId == admin_id
+        ? eventDAO.findAll()
+        : eventDAO.findByUserId(userId);
     int i = Integer.parseInt(message);
     return list.stream().filter(event -> event.eventId == i).findFirst().orElseThrow(null);
   }
 
-  //remove event from database
   public BotApiMethod<?> removeEventHandler(Message message, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));
-
     Event eventRes;
     try {
-      //get event from the database
       eventRes = enterNumberEvent(message.getText(), userId);
     } catch (NumberFormatException e) {
       sendMessage.setText("Введенная строка не является числом, попробуйте снова!");
@@ -326,20 +293,16 @@ public class EventHandler {
       sendMessage.setText("Введенное число отсутсвует в списке, попробуйте снова!");
       return sendMessage;
     }
-
     eventDAO.remove(eventRes);
-    //reset state
     botStateCash.saveBotState(userId, State.START);
     sendMessage.setText("Удаление прошло успешно");
     return sendMessage;
   }
 
-  //build events for show user
   private StringBuilder buildEvent(Event event) {
     StringBuilder builder = new StringBuilder();
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
     String dateFormat = simpleDateFormat.format(event.date);
-
     EventFreq freq = event.freq;
     String freqEvent = switch (freq.name()) {
       case "TIME" -> "Единоразово";
@@ -353,25 +316,20 @@ public class EventHandler {
     return builder;
   }
 
-  //save event from cache(for edit operation)
   public SendMessage editEvent(long chatId, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(chatId));
-    //get event from cache
     Event event = eventCash.getEventMap().get(userId);
-    //in case something went wrong
     if (event.eventId == 0) {
       sendMessage.setText("Не удалось сохранить пользователя, нарушена последовательность действий");
       return sendMessage;
     }
     eventDAO.save(event);
     sendMessage.setText("Изменение сохранено");
-    //reset cache
     eventCash.saveEventCash(userId, new Event());
     return sendMessage;
   }
 
-  //save event from cache(for create operation)
   public SendMessage saveEvent(EventFreq freq, long userId, long chatId) {
     Event event = eventCash.getEventMap().get(userId);
     event.freq = freq;
@@ -379,10 +337,8 @@ public class EventHandler {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(chatId));
     eventDAO.save(event);
-    //reset cache
     eventCash.saveEventCash(userId, new Event());
     sendMessage.setText("Напоминание успешно сохранено");
-    //reset cache
     botStateCash.saveBotState(userId, State.START);
     return sendMessage;
   }

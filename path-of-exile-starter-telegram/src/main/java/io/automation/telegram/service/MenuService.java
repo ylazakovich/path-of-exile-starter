@@ -31,7 +31,6 @@ public class MenuService {
                                         final String textMessage,
                                         final long userId) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(userId);
-
     return createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
   }
 

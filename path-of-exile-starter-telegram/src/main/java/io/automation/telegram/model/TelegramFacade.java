@@ -28,12 +28,10 @@ public class TelegramFacade {
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
-
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
     } else {
-
       Message message = update.getMessage();
       if (message != null && message.hasText()) {
         return handleInputMessage(message);
@@ -48,6 +46,7 @@ public class TelegramFacade {
     switch (inputMsg) {
       case "/start":
         state = State.START;
+        botStateCash.saveBotState(message.getFrom().getId(), State.START);
         break;
       case "":
         break;
