@@ -1,6 +1,7 @@
 package io.automation.telegram.model;
 
 public enum State {
+  NO_COMMAND,
   START,
   ENTER_DESCRIPTION, //the bot will wait for the description to be entered.
   EDIT_DESCRIPTION, //the bot will wait for the description to be entered

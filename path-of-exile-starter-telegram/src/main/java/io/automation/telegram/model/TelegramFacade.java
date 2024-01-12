@@ -44,45 +44,19 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    State state;
+    State state = State.NO_COMMAND;
     String inputMsg = message.getText();
-    //we process messages of the main menu and any other messages
-    //set state
     switch (inputMsg) {
       case "/start":
         state = State.START;
         break;
-      case "Мои напоминания":
-        state = State.MY_EVENTS;
-        break;
-      case "Создать напоминание":
-        state = State.CREATE_EVENT;
-        break;
-      case "Отключить напоминания":
-      case "Включить напоминания":
-        state = State.ON_EVENT;
-        break;
-      case "All users":
-        if (message.getFrom().getId() == adminId) {
-          state = State.ALL_USERS;
-        } else {
-          state = State.START;
-        }
-        break;
-      case "All events":
-        if (message.getFrom().getId() == adminId) {
-          state = State.ALL_EVENTS;
-        } else {
-          state = State.START;
-        }
+      case "":
         break;
       default:
-        state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
-            State.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
+        state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null
+            ? State.START
+            : botStateCash.getBotStateMap().get(message.getFrom().getId());
     }
-    //we pass the corresponding state to the handler
-    //the corresponding method will be called
     return messageHandler.handle(message, state);
-
   }
 }
