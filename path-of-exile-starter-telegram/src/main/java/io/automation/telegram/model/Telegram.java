@@ -16,8 +16,8 @@ public class Telegram extends SpringWebhookBot {
   @Setter
   private String botToken;
 
-  public Telegram(TelegramFacade facade, SetWebhook webhook) {
-    super(webhook);
+  public Telegram(TelegramFacade facade, SetWebhook webhook, String botToken) {
+    super(webhook, botToken);
     this.FACADE = facade;
   }
 

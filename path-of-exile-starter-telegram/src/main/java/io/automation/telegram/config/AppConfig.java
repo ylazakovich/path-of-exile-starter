@@ -9,23 +9,22 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 @Configuration
 public class AppConfig {
 
-  private final TelegramConfig TELEGRAM_CONFIG;
+  private final TelegramConfig config;
 
-  public AppConfig(TelegramConfig TELEGRAM_CONFIG) {
-    this.TELEGRAM_CONFIG = TELEGRAM_CONFIG;
+  public AppConfig(TelegramConfig config) {
+    this.config = config;
   }
 
   @Bean
   public SetWebhook setWebhookInstance() {
-    return SetWebhook.builder().url(TELEGRAM_CONFIG.webHookPath).build();
+    return SetWebhook.builder().url(config.webHookPath).build();
   }
 
   @Bean
   public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
-    Telegram bot = new Telegram(telegramFacade, setWebhook);
-    bot.setBotToken(TELEGRAM_CONFIG.botToken);
-    bot.setBotUsername(TELEGRAM_CONFIG.userName);
-    bot.setBotPath(TELEGRAM_CONFIG.webHookPath);
+    Telegram bot = new Telegram(telegramFacade, setWebhook, config.botToken);
+    bot.setBotUsername(config.userName);
+    bot.setBotPath(config.webHookPath);
     return bot;
   }
 }
