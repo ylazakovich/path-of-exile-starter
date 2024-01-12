@@ -30,10 +30,8 @@ public class SendEventFromCache {
   }
 
   @PostConstruct
-  //after every restart app  - check unspent events
   private void afterStart() {
     List<EventCashEntity> list = eventCashDAO.findAll();
-
     try {
       SendMessage sendMessage = new SendMessage();
       sendMessage.setChatId(String.valueOf(admin_id));
@@ -42,14 +40,14 @@ public class SendEventFromCache {
     } catch (TelegramApiException e) {
       throw new RuntimeException(e);
     }
-
     if (!list.isEmpty()) {
       for (EventCashEntity eventCashEntity : list) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(eventCashEntity.date);
         SendEvent sendEvent = new SendEvent();
-        sendEvent.setSendMessage(
-            new SendMessage(String.valueOf(eventCashEntity.userId), eventCashEntity.description));
+        sendEvent.setSendMessage(new SendMessage(
+            String.valueOf(eventCashEntity.userId), eventCashEntity.description)
+        );
         sendEvent.setEventCashId(eventCashEntity.id);
         new Timer().schedule(new SimpleTask(sendEvent), calendar.getTime());
       }

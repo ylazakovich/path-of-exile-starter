@@ -2,7 +2,6 @@ package io.automation.telegram.service;
 
 import java.util.TimerTask;
 
-//task wrapper
 public class SimpleTask extends TimerTask {
 
   private final SendEvent sendEvent;

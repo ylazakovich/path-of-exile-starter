@@ -23,13 +23,10 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-//basic event handling logic
 public class EventHandler {
 
-  //for save state bot
   private final BotStateCash botStateCash;
 
-  //for saving stages of creating events
   private final EventCash eventCash;
 
   private final UserDAO userDAO;
@@ -49,7 +46,6 @@ public class EventHandler {
     this.menuService = menuService;
   }
 
-  //create new user, if first time
   public SendMessage saveNewUser(Message message,
                                  long userId,
                                  SendMessage sendMessage) {
@@ -65,7 +61,6 @@ public class EventHandler {
     return sendMessage;
   }
 
-  //changing the state of the mailing
   public BotApiMethod<?> onEvent(Message message) {
     User user = userDAO.findByUserId(message.getFrom().getId());
     boolean on = user.on;
@@ -77,7 +72,6 @@ public class EventHandler {
         "Изменения сохранены", message.getFrom().getId());
   }
 
-  //set time zone
   public BotApiMethod<?> enterLocalTimeUser(Message message) {
     long userId = message.getFrom().getId();
     SendMessage sendMessage = new SendMessage();
@@ -119,11 +113,9 @@ public class EventHandler {
     return sendMessage;
   }
 
-  //remove user(only admin)
   public BotApiMethod<?> removeUserHandler(Message message, long userId) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));
-
     User user;
     try {
       long i = Long.parseLong(message.getText());
@@ -136,27 +128,23 @@ public class EventHandler {
       sendMessage.setText("Введенное число отсутсвует в списке, попробуйте снова!");
       return sendMessage;
     }
-
     userDAO.removeUser(user);
     botStateCash.saveBotState(userId, State.START);
     sendMessage.setText("Удаление прошло успешно");
     return sendMessage;
   }
 
-  //get a list of all events(only admin)
   public BotApiMethod<?> allEvents(long userId) {
     List<Event> list = eventDAO.findAll();
     botStateCash.saveBotState(userId, State.START);
     return eventListBuilder(userId, list);
   }
 
-  //get a list of all events(for user)
   public BotApiMethod<?> myEventHandler(long userId) {
     List<Event> list = eventDAO.findByUserId(userId);
     return eventListBuilder(userId, list);
   }
 
-  //returns a compiled list of events
   public BotApiMethod<?> eventListBuilder(long userId, List<Event> list) {
     SendMessage replyMessage = new SendMessage();
     replyMessage.setChatId(String.valueOf(userId));
@@ -173,7 +161,6 @@ public class EventHandler {
     return replyMessage;
   }
 
-  //only admin ))
   public BotApiMethod<?> allUsers(long userId) {
     SendMessage replyMessage = new SendMessage();
     replyMessage.setChatId(String.valueOf(userId));
@@ -188,14 +175,12 @@ public class EventHandler {
     return replyMessage;
   }
 
-  //compiled list users
   private StringBuilder buildUser(User user) {
     StringBuilder builder = new StringBuilder();
     builder.append(user.id).append(". ").append(user.name).append("\n");
     return builder;
   }
 
-  //processes the entered date
   public BotApiMethod<?> editDate(Message message) {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(message.getChatId()));

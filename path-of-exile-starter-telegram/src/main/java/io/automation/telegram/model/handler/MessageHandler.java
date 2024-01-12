@@ -12,7 +12,6 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
-//processes incoming text message
 public class MessageHandler {
 
   private final UserDAO userDAO;

@@ -67,7 +67,7 @@ public class EventService {
       } else {
         return false;
       }
-    }).collect(Collectors.toList());
+    }).toList();
 
     for (Event event : list) {
       //set user event time

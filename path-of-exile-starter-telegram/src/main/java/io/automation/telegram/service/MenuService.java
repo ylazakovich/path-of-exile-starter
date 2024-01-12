@@ -16,10 +16,9 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 @Service
-// TODO: need to make a private methods
 public class MenuService {
 
-  private UserDAO userDAO;
+  private final UserDAO userDAO;
 
   @Value("${telegram.adminId}")
   private int admin_id;
@@ -152,7 +151,6 @@ public class MenuService {
     return inlineKeyboardMarkup;
   }
 
-  //set calbackquery keyboard for users list
   public ReplyKeyboard getInlineMessageButtonsAllUser() {
     InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
     InlineKeyboardButton buttonDelUser = new InlineKeyboardButton();
