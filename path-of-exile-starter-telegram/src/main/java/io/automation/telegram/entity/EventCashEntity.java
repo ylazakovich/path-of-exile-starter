@@ -8,8 +8,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
+@EqualsAndHashCode
 @Table(name = "event_cash")
 //serves to save unhandled events after rebooting heroku
 public class EventCashEntity {
@@ -17,19 +24,14 @@ public class EventCashEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", columnDefinition = "serial")
-  public long id;
-
+  public Long id;
+  @NotNull
   @Column(name = "time")
   public Date date;
-
-  @Column(name = "description")
+  @NotNull
   public String description;
-
-  @Column(name = "user_id")
+  @NotNull
   public long userId;
-
-  public EventCashEntity() {
-  }
 
   public static EventCashEntity eventTo(Date date,
                                         String description,

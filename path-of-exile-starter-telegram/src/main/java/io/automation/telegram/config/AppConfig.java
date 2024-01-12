@@ -1,6 +1,5 @@
 package io.automation.telegram.config;
 
-import io.automation.telegram.botconfig.TelegramBotConfig;
 import io.automation.telegram.model.Telegram;
 import io.automation.telegram.model.TelegramFacade;
 import org.springframework.context.annotation.Bean;
@@ -10,9 +9,9 @@ import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 @Configuration
 public class AppConfig {
 
-  private final TelegramBotConfig TELEGRAM_CONFIG;
+  private final TelegramConfig TELEGRAM_CONFIG;
 
-  public AppConfig(TelegramBotConfig TELEGRAM_CONFIG) {
+  public AppConfig(TelegramConfig TELEGRAM_CONFIG) {
     this.TELEGRAM_CONFIG = TELEGRAM_CONFIG;
   }
 

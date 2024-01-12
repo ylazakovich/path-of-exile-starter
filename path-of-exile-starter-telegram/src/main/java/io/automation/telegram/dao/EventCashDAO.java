@@ -18,7 +18,7 @@ public class EventCashDAO {
     this.eventCashRepository = eventCashRepository;
   }
 
-  public List<EventCashEntity> findAllEventCash() {
+  public List<EventCashEntity> findAll() {
     return eventCashRepository.findAll();
   }
 

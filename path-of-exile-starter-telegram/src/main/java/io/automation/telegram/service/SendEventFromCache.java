@@ -20,7 +20,7 @@ public class SendEventFromCache {
   private final EventCashDAO eventCashDAO;
   private final Telegram telegram;
 
-  @Value("${telegrambot.adminId}")
+  @Value("${telegram.adminId}")
   private int admin_id;
 
   @Autowired
@@ -32,7 +32,7 @@ public class SendEventFromCache {
   @PostConstruct
   //after every restart app  - check unspent events
   private void afterStart() {
-    List<EventCashEntity> list = eventCashDAO.findAllEventCash();
+    List<EventCashEntity> list = eventCashDAO.findAll();
 
     try {
       SendMessage sendMessage = new SendMessage();

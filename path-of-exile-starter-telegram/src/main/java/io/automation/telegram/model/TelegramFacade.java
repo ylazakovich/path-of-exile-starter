@@ -17,7 +17,7 @@ public class TelegramFacade {
   private final CallbackQueryHandler callbackQueryHandler;
   private final BotStateCash botStateCash;
 
-  @Value("${telegrambot.adminId}")
+  @Value("${telegram.adminId}")
   private int adminId;
 
 

@@ -27,12 +27,8 @@ public class EventDAO {
     return user.events;
   }
 
-  public List<Event> findAllEvent() {
+  public List<Event> findAll() {
     return eventRepository.findAll();
-  }
-
-  public Event findByEventId(long eventId) {
-    return eventRepository.findByEventId(eventId);
   }
 
   public void remove(Event event) {

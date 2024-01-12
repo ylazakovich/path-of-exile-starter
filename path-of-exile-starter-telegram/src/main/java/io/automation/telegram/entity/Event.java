@@ -16,27 +16,30 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
+@NoArgsConstructor
+@RequiredArgsConstructor
+@EqualsAndHashCode
 @Table(name = "user_events")
 public class Event {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "event_id", columnDefinition = "serial")
-  public int eventId;
+  public Long eventId;
 
-  @Column(name = "time")
   @NotNull(message = "Need date!")
+  @Column(name = "time")
   public Date date;
 
-  @Column(name = "description")
   @Size(min = 4, max = 200, message = "Description must be between 0 and 200 chars!")
   public String description;
 
-  @Column(name = "event_freq", columnDefinition = "TIME")
   @Enumerated(EnumType.STRING)
   public EventFreq freq;
 
@@ -45,18 +48,4 @@ public class Event {
   @OnDelete(action = OnDeleteAction.CASCADE)
   public User user;
 
-  public Event() {
-  }
-
-  public Event(int eventId,
-               @NotNull(message = "Need date!") Date date,
-               @Size(min = 4, max = 200, message = "Description must be between 0 and 200 chars!")
-               String description,
-               EventFreq freq, User user) {
-    this.eventId = eventId;
-    this.date = date;
-    this.description = description;
-    this.freq = freq;
-    this.user = user;
-  }
 }

@@ -31,7 +31,7 @@ public class EventService {
 
   //start service in 0:00 every day
   @Scheduled(cron = "0 0 0 * * *")
-  // @Scheduled(fixedRateString = "${eventservice.period}")
+  // @Scheduled(fixedRateString = "${telegram.event-service.period}")
   private void eventService() {
     Calendar calendar = Calendar.getInstance();
     calendar.setTime(new Date());
@@ -40,7 +40,7 @@ public class EventService {
     int year = calendar.get(Calendar.YEAR);
 
     //get event list is now date
-    List<Event> list = eventDAO.findAllEvent().stream().filter(event -> {
+    List<Event> list = eventDAO.findAll().stream().filter(event -> {
       if (event.user.on) {
         //set user event time
         Calendar calendarUserTime = getDateUserTimeZone(event);

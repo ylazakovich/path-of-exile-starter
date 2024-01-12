@@ -36,7 +36,7 @@ public class EventHandler {
   private final EventDAO eventDAO;
   private final MenuService menuService;
 
-  @Value("${telegrambot.adminId}")
+  @Value("${telegram.adminId}")
   private int admin_id;
 
   @Autowired
@@ -145,7 +145,7 @@ public class EventHandler {
 
   //get a list of all events(only admin)
   public BotApiMethod<?> allEvents(long userId) {
-    List<Event> list = eventDAO.findAllEvent();
+    List<Event> list = eventDAO.findAll();
     botStateCash.saveBotState(userId, State.START);
     return eventListBuilder(userId, list);
   }
@@ -178,7 +178,7 @@ public class EventHandler {
     SendMessage replyMessage = new SendMessage();
     replyMessage.setChatId(String.valueOf(userId));
     StringBuilder builder = new StringBuilder();
-    List<User> list = userDAO.findAllUsers();
+    List<User> list = userDAO.findAll();
     for (User user : list) {
       builder.append(buildUser(user));
     }
@@ -315,7 +315,7 @@ public class EventHandler {
     List<Event> list;
     if (userId == admin_id) {
       // =))
-      list = eventDAO.findAllEvent();
+      list = eventDAO.findAll();
     } else {
       // =((
       list = eventDAO.findByUserId(userId);

@@ -21,7 +21,7 @@ public class UserDAO {
     return userRepository.findById(id);
   }
 
-  public List<User> findAllUsers() {
+  public List<User> findAll() {
     return userRepository.findAll();
   }
 

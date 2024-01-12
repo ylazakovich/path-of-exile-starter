@@ -1,15 +1,15 @@
-package io.automation.telegram.botconfig;
+package io.automation.telegram.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TelegramBotConfig {
+public class TelegramConfig {
 
-  @Value("${telegrambot.webHookPath}")
+  @Value("${telegram.webhook}")
   public String webHookPath;
-  @Value("${telegrambot.userName}")
+  @Value("${telegram.userName}")
   public String userName;
-  @Value("${telegrambot.botToken}")
+  @Value("${telegram.token}")
   public String botToken;
 }
