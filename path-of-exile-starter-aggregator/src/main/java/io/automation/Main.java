@@ -12,6 +12,6 @@ public class Main {
 
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-    context.getBean(DatabaseService.class).loadGems();
+    context.getBean(DatabaseService.class).loadSkills();
   }
 }

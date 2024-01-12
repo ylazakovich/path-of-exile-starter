@@ -16,7 +16,7 @@ public class DatabaseService {
     this.poeNinjaService = poeNinjaService;
   }
 
-  public void loadGems() {
+  public void loadSkills() {
     skillsService.clearTable();
     poeNinjaService.getSkills().subscribe(data -> skillsService.saveAll(data.getBody()));
   }

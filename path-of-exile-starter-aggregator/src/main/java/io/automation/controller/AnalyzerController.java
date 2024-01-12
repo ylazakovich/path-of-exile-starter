@@ -19,12 +19,12 @@ public class AnalyzerController {
     this.analyzerService = analyzerService;
   }
 
-  @GetMapping("/analyze/gems")
+  @GetMapping("/analyze/skills")
   public List<AnalyzedSkillDTO> findAllForTrade() {
     return findAllForTrade(20);
   }
 
-  @GetMapping("analyze/gems/{takeProfit}")
+  @GetMapping("analyze/skills/{takeProfit}")
   public List<AnalyzedSkillDTO> findAllForTrade(@PathVariable("takeProfit") long value) {
     return analyzerService.analyze().stream().filter(skill -> skill.getProfit() >= value).toList();
   }

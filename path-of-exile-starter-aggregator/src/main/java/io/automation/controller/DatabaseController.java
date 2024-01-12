@@ -28,16 +28,16 @@ public class DatabaseController {
     this.poeNinjaService = poeNinjaService;
   }
 
-  @GetMapping("/load/gems")
-  public void loadGems() {
-    databaseService.loadGems();
+  @GetMapping("/load/skills")
+  public void loadSkills() {
+    databaseService.loadSkills();
   }
 
   @Scheduled(cron = "* */30 * * * *")
-  @GetMapping("/update/gems/prices")
+  @GetMapping("/update/skills/prices")
   public void updatePricesGems() {
     // TODO: need to move it to Service;
-    List<SkillEntity> pastState = skillsService.findAllSkills();
+    List<SkillEntity> pastState = skillsService.findAll();
     poeNinjaService.getSkills().subscribe(data -> {
       pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
           .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName()) &&

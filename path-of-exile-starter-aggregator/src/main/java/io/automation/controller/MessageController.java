@@ -15,7 +15,7 @@ public class MessageController {
     this.skillsService = skillsService;
   }
 
-  @GetMapping("/gems")
+  @GetMapping("/skills")
   public String buildMessageWithGems() {
     // TODO: continue
     return null;
