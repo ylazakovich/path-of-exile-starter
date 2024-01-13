@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.automation.telegram.dao.UserDAO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;

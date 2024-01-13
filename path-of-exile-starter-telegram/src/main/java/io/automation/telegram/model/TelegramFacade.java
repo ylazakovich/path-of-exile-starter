@@ -4,7 +4,6 @@ import io.automation.telegram.cash.BotStateCash;
 import io.automation.telegram.model.handler.CallbackQueryHandler;
 import io.automation.telegram.model.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
