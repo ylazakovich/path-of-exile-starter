@@ -3,6 +3,7 @@ package io.automation.telegram.model;
 import io.automation.telegram.cash.BotStateCash;
 import io.automation.telegram.model.handler.CallbackQueryHandler;
 import io.automation.telegram.model.handler.MessageHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
+@Slf4j
 public class TelegramFacade {
 
   private final MessageHandler messageHandler;
@@ -28,6 +30,7 @@ public class TelegramFacade {
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
+    log.info("Getting command");
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       return callbackQueryHandler.processCallbackQuery(callbackQuery);

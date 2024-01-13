@@ -2,11 +2,13 @@ package io.automation.telegram.config;
 
 import io.automation.telegram.model.Telegram;
 import io.automation.telegram.model.TelegramFacade;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
 
 @Configuration
+@Slf4j
 public class AppConfig {
 
   private final TelegramConfig config;
@@ -24,8 +26,10 @@ public class AppConfig {
   // TODO: SetWebhook may be is not needed in constructor
   public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
     Telegram bot = new Telegram(telegramFacade, setWebhook, config.botToken);
-    bot.setBotUsername(config.userName);
+    bot.setBotUsername("@" + config.userName);
+    bot.setBotToken(config.botToken);
     bot.setBotPath(config.webHookPath);
+    log.info("Bot settings: {}", bot);
     return bot;
   }
 }

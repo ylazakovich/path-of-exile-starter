@@ -2,10 +2,10 @@ server:
   port: 5000
 
 telegram:
-  userName: poe_consult_light_bot
-  token: AAGu7SSMgtIjaevHU9Zwqcdg9ksDbvwSNU0
-  webhook: https://2d0a-89-73-4-11.ngrok-free.app
-  adminId: 6983431014
+  userName: TODO
+  token: TODO
+  webhook: TODO
+#  adminId: TODO
 
 spring:
   flyway:

@@ -3,12 +3,14 @@ package io.automation.telegram.model.handler;
 import io.automation.telegram.cash.BotStateCash;
 import io.automation.telegram.model.State;
 import io.automation.telegram.service.MenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 @Component
+@Slf4j
 public class MessageHandler {
 
   private final MenuService menuService;
@@ -21,13 +23,14 @@ public class MessageHandler {
   }
 
   public BotApiMethod<?> handle(Message message, State state) {
+    log.info("Handling message");
     long userId = message.getFrom().getId();
     long chatId = message.getChatId();
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(chatId));
     botStateCash.saveBotState(userId, state);
-    switch (state.name()) {
-      case "START":
+    switch (state) {
+      case START:
         return menuService.getMainMenuMessage(message.getChatId(), "Select COMMAND from MENU", userId);
       default:
         throw new IllegalStateException("Unexpected value: " + state);
