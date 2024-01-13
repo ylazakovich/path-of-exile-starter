@@ -14,15 +14,12 @@ public class CallbackQueryHandler {
 
   private final BotStateCash botStateCash;
   private final MenuService menuService;
-  private final EventHandler eventHandler;
 
   @Autowired
   public CallbackQueryHandler(BotStateCash botStateCash,
-                              MenuService menuService,
-                              EventHandler eventHandler) {
+                              MenuService menuService) {
     this.botStateCash = botStateCash;
     this.menuService = menuService;
-    this.eventHandler = eventHandler;
   }
 
   public BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery) {
@@ -32,7 +29,7 @@ public class CallbackQueryHandler {
     String data = buttonQuery.getData();
     switch (data) {
       case "Skills":
-        callBackAnswer = new SendMessage(String.valueOf(chatId), "Введите номер напоминания из списка.");
+        callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
         botStateCash.saveBotState(userId, State.SKILL_EVENT);
         break;
       case "TODO":
