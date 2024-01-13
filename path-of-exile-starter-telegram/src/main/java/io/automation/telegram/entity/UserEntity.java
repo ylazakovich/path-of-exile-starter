@@ -11,9 +11,9 @@ import jakarta.persistence.Table;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-@Entity
 @NoArgsConstructor
 @EqualsAndHashCode
+@Entity
 @Table(name = "users")
 public class UserEntity implements Serializable {
 

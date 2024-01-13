@@ -1,4 +1,7 @@
 dependencies {
+    implementation 'javax.xml.bind:jaxb-api:2.3.1'
+    implementation("org.flywaydb:flyway-core:${flyway}")
+    implementation("org.flywaydb:flyway-mysql:${flyway}")
     implementation("org.telegram:telegrambots-spring-boot-starter:${telegram}")
     // TODO: not sure that it is needed
     developmentOnly("org.springframework.boot:spring-boot-devtools:${spring}")

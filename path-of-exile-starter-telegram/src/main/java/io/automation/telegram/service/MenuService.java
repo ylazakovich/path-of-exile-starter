@@ -16,8 +16,9 @@ public class MenuService {
 
   private final UserDAO userDAO;
 
-  @Value("${telegram.adminId}")
-  private int admin_id;
+  // TODO: how to convert admin id;
+//  @Value("#{new Integer('${telegram.adminId}')}")
+//  private Integer adminId;
 
   public MenuService(UserDAO userDAO) {
     this.userDAO = userDAO;
