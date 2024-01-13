@@ -18,9 +18,6 @@ public class TelegramFacade {
   private final CallbackQueryHandler callbackQueryHandler;
   private final BotStateCash botStateCash;
 
-//  @Value("${telegram.adminId}")
-//  private Integer adminId;
-
   public TelegramFacade(MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler,
                         BotStateCash botStateCash) {
     this.messageHandler = messageHandler;

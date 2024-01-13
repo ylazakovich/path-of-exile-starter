@@ -5,7 +5,6 @@ telegram:
   userName: TODO
   token: TODO
   webhook: TODO
-#  adminId: TODO
 
 spring:
   flyway:
