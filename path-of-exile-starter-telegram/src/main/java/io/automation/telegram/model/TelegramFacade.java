@@ -3,7 +3,7 @@ package io.automation.telegram.model;
 import io.automation.telegram.cash.BotStateCash;
 import io.automation.telegram.model.handler.CallbackQueryHandler;
 import io.automation.telegram.model.handler.MessageHandler;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -11,15 +11,12 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 @Component
+@Slf4j
 public class TelegramFacade {
 
   private final MessageHandler messageHandler;
   private final CallbackQueryHandler callbackQueryHandler;
   private final BotStateCash botStateCash;
-
-  @Value("${telegrambot.adminId}")
-  private int adminId;
-
 
   public TelegramFacade(MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler,
                         BotStateCash botStateCash) {
@@ -29,12 +26,11 @@ public class TelegramFacade {
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
-
+    log.info("Getting command");
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
     } else {
-
       Message message = update.getMessage();
       if (message != null && message.hasText()) {
         return handleInputMessage(message);
@@ -44,45 +40,20 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    State state;
+    State state = State.NO_COMMAND;
     String inputMsg = message.getText();
-    //we process messages of the main menu and any other messages
-    //set state
     switch (inputMsg) {
       case "/start":
         state = State.START;
+        botStateCash.saveBotState(message.getFrom().getId(), State.START);
         break;
-      case "Мои напоминания":
-        state = State.MY_EVENTS;
-        break;
-      case "Создать напоминание":
-        state = State.CREATE_EVENT;
-        break;
-      case "Отключить напоминания":
-      case "Включить напоминания":
-        state = State.ON_EVENT;
-        break;
-      case "All users":
-        if (message.getFrom().getId() == adminId) {
-          state = State.ALL_USERS;
-        } else {
-          state = State.START;
-        }
-        break;
-      case "All events":
-        if (message.getFrom().getId() == adminId) {
-          state = State.ALL_EVENTS;
-        } else {
-          state = State.START;
-        }
+      case "":
         break;
       default:
-        state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null ?
-            State.START : botStateCash.getBotStateMap().get(message.getFrom().getId());
+        state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null
+            ? State.START
+            : botStateCash.getBotStateMap().get(message.getFrom().getId());
     }
-    //we pass the corresponding state to the handler
-    //the corresponding method will be called
     return messageHandler.handle(message, state);
-
   }
 }

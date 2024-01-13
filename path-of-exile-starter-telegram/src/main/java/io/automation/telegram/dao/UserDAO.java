@@ -2,7 +2,7 @@ package io.automation.telegram.dao;
 
 import java.util.List;
 
-import io.automation.telegram.entity.User;
+import io.automation.telegram.entity.UserEntity;
 import io.automation.telegram.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,25 +17,24 @@ public class UserDAO {
     this.userRepository = userRepository;
   }
 
-  public User findByUserId(long id) {
+  public UserEntity findByUserId(long id) {
     return userRepository.findById(id);
   }
 
-  public List<User> findAllUsers() {
+  public List<UserEntity> findAll() {
     return userRepository.findAll();
   }
 
-  public void removeUser(User user) {
-    userRepository.delete(user);
+  public void removeUser(UserEntity userEntity) {
+    userRepository.delete(userEntity);
   }
 
-
-  public void save(User user) {
-    userRepository.save(user);
+  public void save(UserEntity userEntity) {
+    userRepository.save(userEntity);
   }
 
   public boolean isExist(long id) {
-    User user = findByUserId(id);
-    return user != null;
+    UserEntity userEntity = findByUserId(id);
+    return userEntity != null;
   }
 }
