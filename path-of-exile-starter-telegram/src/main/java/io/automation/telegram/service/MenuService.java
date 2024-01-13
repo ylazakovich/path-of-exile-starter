@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.automation.telegram.dao.UserDAO;
-import io.automation.telegram.entity.User;
+import io.automation.telegram.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -39,8 +39,8 @@ public class MenuService {
     replyKeyboardMarkup.setSelective(true);
     replyKeyboardMarkup.setResizeKeyboard(true);
     replyKeyboardMarkup.setOneTimeKeyboard(false);
-    User user = userDAO.findByUserId(userId);
-    String text = user.on
+    UserEntity userEntity = userDAO.findByUserId(userId);
+    String text = userEntity.on
         ? "Отключить напоминания"
         : "Включить напоминания";
     List<KeyboardRow> keyboard = new ArrayList<>();

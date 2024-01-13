@@ -3,6 +3,7 @@ package io.automation.telegram.model;
 public enum State {
   NO_COMMAND,
   START,
+  SKILL_EVENT,
   ENTER_DESCRIPTION, //the bot will wait for the description to be entered.
   EDIT_DESCRIPTION, //the bot will wait for the description to be entered
   CREATE_EVENT, //the bot run created event
