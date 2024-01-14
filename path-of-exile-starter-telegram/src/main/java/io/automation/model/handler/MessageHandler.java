@@ -23,7 +23,6 @@ public class MessageHandler {
   }
 
   public BotApiMethod<?> handle(Message message, State state) {
-    log.info("Handling message");
     long userId = message.getFrom().getId();
     long chatId = message.getChatId();
     SendMessage sendMessage = new SendMessage();

@@ -26,7 +26,6 @@ public class TelegramFacade {
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
-    log.info("Getting command");
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       return callbackQueryHandler.processCallbackQuery(callbackQuery);

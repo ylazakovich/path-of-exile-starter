@@ -23,13 +23,12 @@ public class AppConfig {
   }
 
   @Bean
-  // TODO: SetWebhook may be is not needed in constructor
   public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
     Telegram bot = new Telegram(telegramFacade, setWebhook, config.botToken);
+    // TODO: need to check, might be not need to set these values below
     bot.setBotUsername("@" + config.userName);
     bot.setBotToken(config.botToken);
     bot.setBotPath(config.webHookPath);
-    log.info("Bot settings: {}", bot);
     return bot;
   }
 }
