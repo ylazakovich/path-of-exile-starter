@@ -1,3 +1,4 @@
 rootProject.name = 'path-of-exile-starter'
 include 'path-of-exile-starter-aggregator'
 include 'path-of-exile-starter-telegram'
+include 'path-of-exile-starter-integration-tests'
