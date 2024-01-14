@@ -31,10 +31,10 @@ subprojects {
         implementation("org.mariadb.jdbc:mariadb-java-client:${mariadb}")
         implementation("org.mockito:mockito-core:${mockito}")
         implementation("net.datafaker:datafaker:${faker}")
-        runtimeOnly("io.netty:netty-resolver-dns-native-${os}:${netty}:${mac_os_arch}")
-        compileOnly("org.projectlombok:lombok:${lombok}")
-        annotationProcessor("org.projectlombok:lombok:${lombok}")
         testImplementation("org.assertj:assertj-core:${assertJ}")
         testImplementation("org.testng:testng:${testng}")
+        annotationProcessor("org.projectlombok:lombok:${lombok}")
+        compileOnly("org.projectlombok:lombok:${lombok}")
+        runtimeOnly("io.netty:netty-resolver-dns-native-${os}:${netty}:${mac_os_arch}")
     }
 }
