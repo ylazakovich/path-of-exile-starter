@@ -1,8 +1,8 @@
-package io.automation.telegram.model;
+package io.automation.model;
 
-import io.automation.telegram.cash.BotStateCash;
-import io.automation.telegram.model.handler.CallbackQueryHandler;
-import io.automation.telegram.model.handler.MessageHandler;
+import io.automation.cash.BotStateCash;
+import io.automation.model.handler.CallbackQueryHandler;
+import io.automation.model.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

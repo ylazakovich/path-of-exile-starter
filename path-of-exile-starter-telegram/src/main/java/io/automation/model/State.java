@@ -1,4 +1,4 @@
-package io.automation.telegram.model;
+package io.automation.model;
 
 public enum State {
   NO_COMMAND,

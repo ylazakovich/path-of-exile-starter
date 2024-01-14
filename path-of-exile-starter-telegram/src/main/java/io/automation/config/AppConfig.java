@@ -1,7 +1,7 @@
-package io.automation.telegram.config;
+package io.automation.config;
 
-import io.automation.telegram.model.Telegram;
-import io.automation.telegram.model.TelegramFacade;
+import io.automation.model.Telegram;
+import io.automation.model.TelegramFacade;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,9 +1,9 @@
-package io.automation.telegram.service;
+package io.automation.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.automation.telegram.dao.UserDAO;
+import io.automation.dao.UserDAO;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;

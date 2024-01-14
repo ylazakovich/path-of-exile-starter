@@ -1,8 +1,8 @@
-package io.automation.telegram.model.handler;
+package io.automation.model.handler;
 
-import io.automation.telegram.cash.BotStateCash;
-import io.automation.telegram.model.State;
-import io.automation.telegram.service.MenuService;
+import io.automation.service.MenuService;
+import io.automation.cash.BotStateCash;
+import io.automation.model.State;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

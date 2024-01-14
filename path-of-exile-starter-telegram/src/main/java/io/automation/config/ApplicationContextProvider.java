@@ -1,4 +1,4 @@
-package io.automation.telegram.config;
+package io.automation.config;
 
 import lombok.Getter;
 import org.springframework.beans.BeansException;

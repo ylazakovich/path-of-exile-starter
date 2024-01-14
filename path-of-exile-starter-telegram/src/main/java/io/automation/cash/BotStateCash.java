@@ -1,9 +1,9 @@
-package io.automation.telegram.cash;
+package io.automation.cash;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import io.automation.telegram.model.State;
+import io.automation.model.State;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 

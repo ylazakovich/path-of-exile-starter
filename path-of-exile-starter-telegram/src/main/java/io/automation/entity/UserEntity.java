@@ -1,4 +1,4 @@
-package io.automation.telegram.entity;
+package io.automation.entity;
 
 import java.io.Serializable;
 
