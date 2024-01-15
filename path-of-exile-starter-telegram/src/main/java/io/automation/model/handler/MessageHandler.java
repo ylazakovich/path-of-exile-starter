@@ -30,11 +30,11 @@ public class MessageHandler {
     botStateCash.saveBotState(userId, state);
     return switch (state) {
       case START -> menuService.getMainMenuMessage(
-          message.getFrom().getId(),
+          message.getFrom(),
           message.getChatId(),
           "Select ANY command");
       case SKILLS_EVENT -> menuService.getSkillsMenu(
-          message.getFrom().getId(),
+          message.getFrom(),
           message.getChatId(),
           "Select ANY Skill's command");
       // TODO: wait for implementation
