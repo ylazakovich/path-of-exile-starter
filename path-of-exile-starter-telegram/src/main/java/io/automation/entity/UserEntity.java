@@ -11,9 +11,12 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@RequiredArgsConstructor
 @EqualsAndHashCode
 @Entity
 @Table(name = "users")
@@ -23,6 +26,8 @@ public class UserEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
   public long id;
+  @NonNull
   public long userId;
+  @NonNull
   public String name;
 }

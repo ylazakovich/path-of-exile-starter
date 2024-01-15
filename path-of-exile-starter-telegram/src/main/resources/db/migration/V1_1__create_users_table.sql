@@ -1,6 +1,6 @@
 CREATE TABLE users
 (
-    id   BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT NOT NULL,
-    name VARCHAR(255) NOT NULL
+    id      BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT       NOT NULL,
+    name    VARCHAR(255) NOT NULL
 );

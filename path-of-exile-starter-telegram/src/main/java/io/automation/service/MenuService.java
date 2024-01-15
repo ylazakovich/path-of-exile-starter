@@ -2,6 +2,7 @@ package io.automation.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.automation.cash.BotStateCash;
 import io.automation.dao.UserDAO;
@@ -54,6 +55,14 @@ public class MenuService {
     return sendMessage;
   }
 
+  private void addIfNotExist(final User user) {
+    UserEntity userEntity = userDAO.findByUserId(user.getId());
+    if (Objects.isNull(userEntity)) {
+      userEntity = new UserEntity(user.getId(), user.getUserName());
+      userDAO.save(userEntity);
+    }
+  }
+
   private ReplyKeyboardMarkup getMainMenuKeyboard(final User user) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = configure();
     List<KeyboardRow> keyboard = new ArrayList<>();
@@ -62,10 +71,7 @@ public class MenuService {
     keyboard.add(skillsRow);
     replyKeyboardMarkup.setKeyboard(keyboard);
     stateCash.saveBotState(user.getId(), State.SKILLS_EVENT);
-    UserEntity userEntity = new UserEntity();
-    userEntity.setUserId(user.getId());
-    userEntity.setName(user.getUserName());
-    userDAO.save(userEntity);
+    addIfNotExist(user);
     return replyKeyboardMarkup;
   }
 
