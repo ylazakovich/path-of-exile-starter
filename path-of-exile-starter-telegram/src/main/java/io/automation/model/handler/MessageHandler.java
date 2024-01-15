@@ -28,11 +28,18 @@ public class MessageHandler {
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(String.valueOf(chatId));
     botStateCash.saveBotState(userId, state);
-    switch (state) {
-      case START:
-        return menuService.getMainMenuMessage(message.getChatId(), "Select COMMAND from MENU", userId);
-      default:
-        throw new IllegalStateException("Unexpected value: " + state);
-    }
+    return switch (state) {
+      case START -> menuService.getMainMenuMessage(
+          message.getFrom().getId(),
+          message.getChatId(),
+          "Select ANY command");
+      case SKILLS_EVENT -> menuService.getSkillsMenu(
+          message.getFrom().getId(),
+          message.getChatId(),
+          "Select ANY Skill's command");
+      // TODO: wait for implementation
+      case SKILLS_WAIT_COMMNAND_EVENT -> new SendMessage();
+      default -> throw new IllegalStateException("Unexpected value: " + state);
+    };
   }
 }

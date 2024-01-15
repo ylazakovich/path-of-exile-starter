@@ -30,7 +30,7 @@ public class CallbackQueryHandler {
     switch (data) {
       case "Skills":
         callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
-        botStateCash.saveBotState(userId, State.SKILL_EVENT);
+        botStateCash.saveBotState(userId, State.SKILLS_EVENT);
         break;
       case "TODO":
         break;
