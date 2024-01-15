@@ -29,5 +29,5 @@ public class UserEntity implements Serializable {
   @NonNull
   public long userId;
   @NonNull
-  public String name;
+  public String username;
 }
