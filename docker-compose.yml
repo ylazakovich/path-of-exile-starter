@@ -2,11 +2,20 @@ version: '3.8'
 
 services:
 
-  database:
+  aggregator-database:
     image: mariadb:10.10
     restart: always
     ports:
       - 3306:3306
     environment:
       MARIADB_ROOT_PASSWORD: root
-      MARIADB_DATABASE: poe
+      MARIADB_DATABASE: aggregator
+
+  telegram-database:
+    image: mariadb:10.10
+    restart: always
+    ports:
+      - 3307:3306
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: telegram

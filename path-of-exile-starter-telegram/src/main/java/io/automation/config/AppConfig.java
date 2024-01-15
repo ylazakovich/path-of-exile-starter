@@ -24,11 +24,6 @@ public class AppConfig {
 
   @Bean
   public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
-    Telegram bot = new Telegram(telegramFacade, setWebhook, config.botToken);
-    // TODO: need to check, might be not need to set these values below
-    bot.setBotUsername("@" + config.userName);
-    bot.setBotToken(config.botToken);
-    bot.setBotPath(config.webHookPath);
-    return bot;
+    return new Telegram(telegramFacade, setWebhook, config.botToken);
   }
 }

@@ -2,9 +2,8 @@ server:
   port: 5000
 
 telegram:
-  userName: TODO
-  token: TODO
-  webhook: TODO
+  token: 6983431014:AAGu7SSMgtIjaevHU9Zwqcdg9ksDbvwSNU0
+  webhook: https://74a1-89-73-4-11.ngrok-free.app
 
 spring:
   flyway:
@@ -12,7 +11,7 @@ spring:
     baseline-version: 0
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/poe
+    url: jdbc:mariadb://localhost:3307/telegram
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
