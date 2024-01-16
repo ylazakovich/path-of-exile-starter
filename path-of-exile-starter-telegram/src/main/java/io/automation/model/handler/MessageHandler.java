@@ -31,12 +31,7 @@ public class MessageHandler {
     // TODO: might be it can be moved to higher level;
     final User user = message.getFrom();
     userRepo.addIfNotExist(user);
-    long userId = user.getId();
-    long chatId = message.getChatId();
-    SendMessage sendMessage = new SendMessage();
-    sendMessage.setChatId(String.valueOf(chatId));
-    sendMessage.setText("Welcome to service: 'Path of Exile Starter'");
-    botStateCash.saveState(userId, state);
+    botStateCash.saveState(user.getId(), state);
     return switch (state) {
       case START -> menuService.getMainMenuMessage(message, "Select ANY command");
       case SKILLS_WAIT_EVENT -> menuService.getSkillsMenu(message, "Select ANY Skill's command");
