@@ -25,9 +25,7 @@ public class UserEntity implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  public long id;
-  @NonNull
-  public long userId;
-  @NonNull
-  public String username;
+  public Long id;
+  public @NonNull Long userId;
+  public @NonNull String username;
 }

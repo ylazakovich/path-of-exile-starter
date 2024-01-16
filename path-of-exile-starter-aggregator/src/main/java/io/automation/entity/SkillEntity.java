@@ -28,16 +28,10 @@ public class SkillEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
   private Long id;
-  @NonNull
-  private String name;
-  @NonNull
-  private String variant;
-  @NonNull
-  private boolean corrupted;
-  @NonNull
-  private int gemLevel;
-  @NonNull
-  private int gemQuality;
-  @NonNull
-  private double chaosValue;
+  private @NonNull String name;
+  private @NonNull String variant;
+  private @NonNull Boolean corrupted;
+  private @NonNull Integer gemLevel;
+  private @NonNull Integer gemQuality;
+  private @NonNull Double chaosValue;
 }
