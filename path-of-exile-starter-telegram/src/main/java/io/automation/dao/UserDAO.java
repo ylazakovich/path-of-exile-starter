@@ -1,11 +1,13 @@
 package io.automation.dao;
 
 import java.util.List;
+import java.util.Objects;
 
 import io.automation.entity.UserEntity;
 import io.automation.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
 public class UserDAO {
@@ -33,8 +35,11 @@ public class UserDAO {
     userRepository.save(userEntity);
   }
 
-  public boolean isExist(long id) {
-    UserEntity userEntity = findByUserId(id);
-    return userEntity != null;
+  public void addIfNotExist(final User user) {
+    UserEntity userEntity = findByUserId(user.getId());
+    if (Objects.isNull(userEntity)) {
+      userEntity = new UserEntity(user.getId(), user.getUserName());
+      save(userEntity);
+    }
   }
 }

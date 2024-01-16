@@ -2,14 +2,10 @@ package io.automation.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-import io.automation.cash.BotStateCash;
-import io.automation.dao.UserDAO;
-import io.automation.entity.UserEntity;
-import io.automation.model.State;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
@@ -18,27 +14,16 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 @Service
 public class MenuService {
 
-  private final UserDAO userDAO;
-  private final BotStateCash stateCash;
-
-  public MenuService(UserDAO userDAO,
-                     BotStateCash stateCash) {
-    this.userDAO = userDAO;
-    this.stateCash = stateCash;
-  }
-
-  public SendMessage getMainMenuMessage(final User user,
-                                        final long chatId,
+  public SendMessage getMainMenuMessage(final Message message,
                                         final String textMessage) {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(user);
-    return createMessageWithKeyboard(chatId, textMessage, replyKeyboardMarkup);
+    final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(message.getFrom());
+    return createMessageWithKeyboard(message.getChatId(), textMessage, replyKeyboardMarkup);
   }
 
-  public SendMessage getSkillsMenu(final User user,
-                                   final long chatId,
+  public SendMessage getSkillsMenu(final Message message,
                                    final String selectAnyCommand) {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = getSkillsSubMenu(user);
-    return createMessageWithKeyboard(chatId, selectAnyCommand, replyKeyboardMarkup);
+    final ReplyKeyboardMarkup replyKeyboardMarkup = getSkillsSubMenu(message.getFrom());
+    return createMessageWithKeyboard(message.getChatId(), selectAnyCommand, replyKeyboardMarkup);
   }
 
   private SendMessage createMessageWithKeyboard(final long chatId,
@@ -54,28 +39,19 @@ public class MenuService {
     return sendMessage;
   }
 
-  private void addIfNotExist(final User user) {
-    UserEntity userEntity = userDAO.findByUserId(user.getId());
-    if (Objects.isNull(userEntity)) {
-      userEntity = new UserEntity(user.getId(), user.getUserName());
-      userDAO.save(userEntity);
-    }
-  }
-
   private ReplyKeyboardMarkup getMainMenuKeyboard(final User user) {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = configure();
+    final ReplyKeyboardMarkup replyKeyboardMarkup = buildReplyKeyboard();
     List<KeyboardRow> keyboard = new ArrayList<>();
     KeyboardRow skillsRow = new KeyboardRow();
     skillsRow.add(new KeyboardButton("Skills"));
     keyboard.add(skillsRow);
     replyKeyboardMarkup.setKeyboard(keyboard);
-    stateCash.saveBotState(user.getId(), State.SKILLS_EVENT);
-    addIfNotExist(user);
+//    stateCash.saveBotState(user.getId(), State.SKILLS_EVENT);
     return replyKeyboardMarkup;
   }
 
   private ReplyKeyboardMarkup getSkillsSubMenu(final User user) {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = configure();
+    final ReplyKeyboardMarkup replyKeyboardMarkup = buildReplyKeyboard();
     List<KeyboardRow> keyboard = new ArrayList<>();
     KeyboardRow row = new KeyboardRow();
     row.add(new KeyboardButton("ALL"));
@@ -83,11 +59,11 @@ public class MenuService {
     row.add(new KeyboardButton("TODO SPECIFIC"));
     keyboard.add(row);
     replyKeyboardMarkup.setKeyboard(keyboard);
-    stateCash.saveBotState(user.getId(), State.SKILLS_WAIT_COMMNAND_EVENT);
+//    stateCash.saveBotState(user.getId(), State.WAIT_FOR_COMMAND);
     return replyKeyboardMarkup;
   }
 
-  private ReplyKeyboardMarkup configure() {
+  private ReplyKeyboardMarkup buildReplyKeyboard() {
     final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
     replyKeyboardMarkup.setSelective(true);
     replyKeyboardMarkup.setResizeKeyboard(true);
