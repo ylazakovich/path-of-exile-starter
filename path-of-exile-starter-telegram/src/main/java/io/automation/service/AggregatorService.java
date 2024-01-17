@@ -16,15 +16,15 @@ public class AggregatorService {
   private final WebClient client;
 
   public AggregatorService() {
-    this.client = WebClient.builder().build();
+    this.client = WebClient.builder().baseUrl("http://localhost:8080").build();
   }
 
-  public Mono<ResponseEntity<List<Skill>>> getAnalyzedSkills() {
+  public Mono<List<Skill>> getAnalyzedSkills() {
     return client.get()
         .uri("/analyzer/analyze/skills")
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .toEntity(new ParameterizedTypeReference<>() {
+        .bodyToMono(new ParameterizedTypeReference<>() {
         });
   }
 }
