@@ -1,4 +1,5 @@
 #!/bin/bash
+# TODO: need to adjust this script
 docker compose up -d database
 gradle :path-of-exile-starter-aggregator:bootRun &
 

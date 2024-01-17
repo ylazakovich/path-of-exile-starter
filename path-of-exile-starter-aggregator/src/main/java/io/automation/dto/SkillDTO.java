@@ -31,7 +31,7 @@ public class SkillDTO {
         .map(entity -> new SkillDTO(
             entity.getName(),
             entity.getVariant(),
-            entity.isCorrupted(),
+            entity.getCorrupted(),
             entity.getGemLevel(),
             entity.getGemQuality(),
             entity.getChaosValue()

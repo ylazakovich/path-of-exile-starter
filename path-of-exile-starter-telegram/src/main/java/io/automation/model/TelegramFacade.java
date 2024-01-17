@@ -27,9 +27,12 @@ public class TelegramFacade {
 
   public BotApiMethod<?> handleUpdate(Update update) {
     if (update.hasCallbackQuery()) {
+      log.info("Received callback");
+      // TODO: need to have a look at guide about callbacks
       CallbackQuery callbackQuery = update.getCallbackQuery();
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
     } else {
+      log.info("Received message");
       Message message = update.getMessage();
       if (message != null && message.hasText()) {
         return handleInputMessage(message);
@@ -39,20 +42,20 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    State state = State.NO_COMMAND;
-    String inputMsg = message.getText();
-    switch (inputMsg) {
+    switch (message.getText()) {
       case "/start":
-        state = State.START;
-        botStateCash.saveBotState(message.getFrom().getId(), State.START);
+        botStateCash.saveState(message.getFrom().getId(), State.START);
         break;
-      case "":
+      case "Skills":
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_WAIT_EVENT);
         break;
-      default:
-        state = botStateCash.getBotStateMap().get(message.getFrom().getId()) == null
-            ? State.START
-            : botStateCash.getBotStateMap().get(message.getFrom().getId());
+      case "ALL":
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ALL_EVENT);
+        break;
+      case "ANY":
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ANY_EVENT);
+        break;
     }
-    return messageHandler.handle(message, state);
+    return messageHandler.handle(message, botStateCash.getCurrentState(message.getFrom()));
   }
 }

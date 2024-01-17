@@ -8,10 +8,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class Main {
+public class AggregatorApplication {
 
   public static void main(String[] args) {
-    ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
+    ConfigurableApplicationContext context = SpringApplication.run(AggregatorApplication.class, args);
     context.getBean(DatabaseService.class).loadSkills();
   }
 }

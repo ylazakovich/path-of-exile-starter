@@ -1,8 +1,8 @@
 package io.automation.model.handler;
 
-import io.automation.service.MenuService;
 import io.automation.cash.BotStateCash;
 import io.automation.model.State;
+import io.automation.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -30,7 +30,7 @@ public class CallbackQueryHandler {
     switch (data) {
       case "Skills":
         callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
-        botStateCash.saveBotState(userId, State.SKILL_EVENT);
+        botStateCash.saveState(userId, State.SKILLS_WAIT_EVENT);
         break;
       case "TODO":
         break;

@@ -1,7 +1,5 @@
 package io.automation.entity;
 
-import java.io.Serializable;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,25 +11,20 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @RequiredArgsConstructor
 @EqualsAndHashCode
-@ToString
 @Entity
-@Table(name = "skills")
-public class SkillEntity implements Serializable {
+@Table(name = "analyzed_skills")
+public class AnalyzedSkillEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
-  private Long id;
-  private @NonNull String name;
-  private @NonNull String variant;
-  private @NonNull Boolean corrupted;
-  private @NonNull Integer gemLevel;
-  private @NonNull Integer gemQuality;
-  private @NonNull Double chaosValue;
+  public Long id;
+  public @NonNull String name;
+  public @NonNull Double profit;
+  public @NonNull Double craftCost;
 }

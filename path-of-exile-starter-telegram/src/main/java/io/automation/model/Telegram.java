@@ -39,9 +39,4 @@ public class Telegram extends SpringWebhookBot {
   public String getBotUsername() {
     return botUsername;
   }
-
-  @Override
-  public String getBotToken() {
-    return botToken;
-  }
 }
