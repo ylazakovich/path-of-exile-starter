@@ -6,7 +6,7 @@ services:
     image: mariadb:10.11
     restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: aggregator
@@ -15,7 +15,7 @@ services:
     image: mariadb:10.11
     restart: always
     ports:
-      - 3307:3306
+      - "3307:3306"
     environment:
       MARIADB_ROOT_PASSWORD: root
       MARIADB_DATABASE: telegram
