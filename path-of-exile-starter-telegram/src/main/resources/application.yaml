@@ -3,8 +3,8 @@ server:
 
 telegram:
   # TODO: Will be updated after finishing
-  token: TODO
-  webhook: TODO
+  token: 6983431014:AAGu7SSMgtIjaevHU9Zwqcdg9ksDbvwSNU0
+  webhook: https://5dc4-94-75-96-58.ngrok-free.app
 
 spring:
   flyway:
