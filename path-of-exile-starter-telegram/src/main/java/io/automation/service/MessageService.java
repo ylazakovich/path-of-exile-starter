@@ -1,6 +1,5 @@
 package io.automation.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.automation.aggregator.model.Skill;
