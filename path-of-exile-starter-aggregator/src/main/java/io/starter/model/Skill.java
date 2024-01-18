@@ -1,0 +1,31 @@
+package io.starter.model;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class Skill {
+
+  @JsonProperty("name")
+  private String name;
+  @JsonProperty("variant")
+  private String variant;
+  @JsonProperty("corrupted")
+  private boolean corrupted;
+  @JsonProperty("gemLevel")
+  private int gemLevel;
+  @JsonProperty("gemQuality")
+  private int gemQuality;
+  @JsonProperty("chaosValue")
+  private double chaosValue;
+}
