@@ -22,7 +22,7 @@ public class MessageService {
   }
 
   @SneakyThrows
-  public SendMessage getAnalyzedSkills(Message message) {
+  public SendMessage messageWithReadySkillsForTrade(Message message) {
     aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::updateAll);
     final List<Skill> skills = analyzedSkillsDAO.findAll();
     // TODO: need to add AWAITILITY + simplify out put message

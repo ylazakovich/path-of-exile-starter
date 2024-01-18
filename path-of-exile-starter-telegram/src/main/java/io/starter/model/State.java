@@ -2,9 +2,9 @@ package io.starter.model;
 
 public enum State {
   START,
-  NO_COMMAND,
-  WAIT_FOR_COMMAND,
-  SKILLS_WAIT_EVENT,
-  SKILLS_ALL_EVENT,
-  SKILLS_ANY_EVENT
+  NO_CMD,
+  WAIT_FOR_CMD,
+  SKILLS_WAIT_FOR_CMD,
+  SKILLS_ALL,
+  SKILLS_ANY
 }
