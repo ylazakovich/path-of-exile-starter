@@ -19,11 +19,11 @@ public class AppConfig {
 
   @Bean
   public SetWebhook setWebhookInstance() {
-    return SetWebhook.builder().url(config.webHookPath).build();
+    return SetWebhook.builder().url(config.webHook).build();
   }
 
   @Bean
   public Telegram springWebhookBot(SetWebhook setWebhook, TelegramFacade telegramFacade) {
-    return new Telegram(telegramFacade, setWebhook, config.botToken);
+    return new Telegram(telegramFacade, setWebhook, config.token);
   }
 }

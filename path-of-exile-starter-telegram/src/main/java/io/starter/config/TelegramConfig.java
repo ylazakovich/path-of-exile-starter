@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 public class TelegramConfig {
 
   @Value("${telegram.webhook}")
-  public String webHookPath;
+  public String webHook;
   @Value("${telegram.token}")
-  public String botToken;
+  public String token;
 }
