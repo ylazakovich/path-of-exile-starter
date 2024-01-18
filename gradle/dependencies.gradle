@@ -1,6 +1,7 @@
 ext {
     os = "macos"
     mac_os_arch = 'osx-aarch_64'
+    awaitility = '4.2.0'
     netty = '4.1.104.Final'
     flyway = '10.6.0'
     lombok = '1.18.30'
@@ -31,6 +32,7 @@ subprojects {
         implementation("org.mariadb.jdbc:mariadb-java-client:${mariadb}")
         implementation("org.mockito:mockito-core:${mockito}")
         implementation("net.datafaker:datafaker:${faker}")
+        implementation("org.awaitility:awaitility:${awaitility}")
         testImplementation("org.assertj:assertj-core:${assertJ}")
         testImplementation("org.testng:testng:${testng}")
         annotationProcessor("org.projectlombok:lombok:${lombok}")
