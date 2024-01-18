@@ -16,7 +16,9 @@
 
 ## Quick start
 
-// TODO: Later will be added
+![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/config/demo.jpg)
+
+// TODO: Later will be updated
 
 ## FAQ
 

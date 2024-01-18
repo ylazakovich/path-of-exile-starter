@@ -21,10 +21,19 @@ public class MessageService {
   @SneakyThrows
   public SendMessage messageWithReadySkillsForTrade(Message message) {
     final List<Skill> skills = analyzedSkillsDAO.findAll();
-    // TODO: simplify output message
     SendMessage sendMessage = new SendMessage();
     sendMessage.setChatId(message.getChatId());
-    sendMessage.setText(skills.toString());
+    sendMessage.setText(initBuilder(skills).toString());
     return sendMessage;
+  }
+
+  private StringBuilder initBuilder(List<Skill> skills) {
+    final StringBuilder builder = new StringBuilder();
+    skills.forEach(skill -> builder
+        .append(skill.getName())
+        .append(" : ")
+        .append(Math.round(skill.getProfit()))
+        .append("\n"));
+    return builder;
   }
 }
