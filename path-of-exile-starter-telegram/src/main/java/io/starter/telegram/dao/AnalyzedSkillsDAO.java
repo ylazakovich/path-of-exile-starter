@@ -1,10 +1,10 @@
-package io.starter.dao;
+package io.starter.telegram.dao;
 
 import java.util.List;
 
 import io.starter.aggregator.model.Skill;
-import io.starter.entity.AnalyzedSkillEntity;
-import io.starter.repo.AnalyzedSkillsRepository;
+import io.starter.telegram.entity.AnalyzedSkillEntity;
+import io.starter.telegram.repo.AnalyzedSkillsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

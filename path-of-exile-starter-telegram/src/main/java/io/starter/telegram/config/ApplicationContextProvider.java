@@ -1,4 +1,4 @@
-package io.starter.config;
+package io.starter.telegram.config;
 
 import lombok.Getter;
 import org.springframework.beans.BeansException;

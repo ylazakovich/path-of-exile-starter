@@ -1,8 +1,8 @@
-package io.starter.model;
+package io.starter.telegram.model;
 
-import io.starter.cash.BotStateCash;
-import io.starter.model.handler.CallbackQueryHandler;
-import io.starter.model.handler.MessageHandler;
+import io.starter.telegram.cash.BotStateCash;
+import io.starter.telegram.handler.CallbackQueryHandler;
+import io.starter.telegram.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -47,13 +47,13 @@ public class TelegramFacade {
         botStateCash.saveState(message.getFrom().getId(), State.START);
         break;
       case "Skills":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_WAIT_EVENT);
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_WAIT_FOR_CMD);
         break;
       case "ALL":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ALL_EVENT);
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ALL);
         break;
       case "ANY":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ANY_EVENT);
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ANY);
         break;
     }
     return messageHandler.handle(message, botStateCash.getCurrentState(message.getFrom()));

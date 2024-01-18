@@ -1,10 +1,10 @@
-package io.starter.dao;
+package io.starter.telegram.dao;
 
 import java.util.List;
 import java.util.Objects;
 
-import io.starter.entity.UserEntity;
-import io.starter.repo.UserRepository;
+import io.starter.telegram.entity.UserEntity;
+import io.starter.telegram.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;

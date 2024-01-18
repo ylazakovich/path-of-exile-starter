@@ -1,7 +1,8 @@
-package io.starter.service;
+package io.starter.telegram.service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,25 +15,22 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 @Service
 public class MenuService {
 
-  public SendMessage getMainMenuMessage(final Message message,
-                                        final String textMessage) {
+  public SendMessage startMenu(final Message message) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = getMainMenuKeyboard(message.getFrom());
-    return createMessageWithKeyboard(message.getChatId(), textMessage, replyKeyboardMarkup);
+    return createMessageWithKeyboard(message.getChatId(), replyKeyboardMarkup);
   }
 
-  public SendMessage getSkillsMenu(final Message message,
-                                   final String selectAnyCommand) {
+  public SendMessage menuWithSkills(final Message message) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = getSkillsSubMenu(message.getFrom());
-    return createMessageWithKeyboard(message.getChatId(), selectAnyCommand, replyKeyboardMarkup);
+    return createMessageWithKeyboard(message.getChatId(), replyKeyboardMarkup);
   }
 
   private SendMessage createMessageWithKeyboard(final long chatId,
-                                                String textMessage,
                                                 final ReplyKeyboardMarkup replyKeyboardMarkup) {
     final SendMessage sendMessage = new SendMessage();
     sendMessage.enableMarkdown(true);
     sendMessage.setChatId(String.valueOf(chatId));
-    sendMessage.setText(textMessage);
+    sendMessage.setText("What options do you want to choose ?");
     if (replyKeyboardMarkup != null) {
       sendMessage.setReplyMarkup(replyKeyboardMarkup);
     }
@@ -46,7 +44,6 @@ public class MenuService {
     skillsRow.add(new KeyboardButton("Skills"));
     keyboard.add(skillsRow);
     replyKeyboardMarkup.setKeyboard(keyboard);
-//    stateCash.saveBotState(user.getId(), State.SKILLS_EVENT);
     return replyKeyboardMarkup;
   }
 
@@ -59,7 +56,6 @@ public class MenuService {
     row.add(new KeyboardButton("TODO SPECIFIC"));
     keyboard.add(row);
     replyKeyboardMarkup.setKeyboard(keyboard);
-//    stateCash.saveBotState(user.getId(), State.WAIT_FOR_COMMAND);
     return replyKeyboardMarkup;
   }
 
