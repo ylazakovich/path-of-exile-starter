@@ -1,4 +1,4 @@
-package io.starter.model;
+package io.starter.telegram.model;
 
 public enum State {
   START,

@@ -1,4 +1,4 @@
-package io.starter.config;
+package io.starter.telegram.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

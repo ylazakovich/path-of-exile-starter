@@ -1,11 +1,9 @@
-package io.starter.service;
+package io.starter.telegram.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-import io.starter.cash.BotStateCash;
-import io.starter.model.State;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -46,7 +44,6 @@ public class MenuService {
     skillsRow.add(new KeyboardButton("Skills"));
     keyboard.add(skillsRow);
     replyKeyboardMarkup.setKeyboard(keyboard);
-//    stateCash.saveBotState(user.getId(), State.SKILLS_EVENT);
     return replyKeyboardMarkup;
   }
 
@@ -59,7 +56,6 @@ public class MenuService {
     row.add(new KeyboardButton("TODO SPECIFIC"));
     keyboard.add(row);
     replyKeyboardMarkup.setKeyboard(keyboard);
-//    stateCash.saveBotState(user.getId(), State.WAIT_FOR_COMMAND);
     return replyKeyboardMarkup;
   }
 

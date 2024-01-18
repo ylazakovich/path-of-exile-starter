@@ -1,6 +1,4 @@
-package io.starter.entity;
-
-import java.io.Serializable;
+package io.starter.telegram.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,13 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "users")
-public class UserEntity implements Serializable {
+@Table(name = "analyzed_skills")
+public class AnalyzedSkillEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
   public Long id;
-  public @NonNull Long userId;
-  public @NonNull String username;
+  public @NonNull String name;
+  public @NonNull Double profit;
+  public @NonNull Double craftCost;
 }

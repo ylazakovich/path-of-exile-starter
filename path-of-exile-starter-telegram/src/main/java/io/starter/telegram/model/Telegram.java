@@ -1,4 +1,4 @@
-package io.starter.model;
+package io.starter.telegram.model;
 
 import lombok.Setter;
 import lombok.ToString;

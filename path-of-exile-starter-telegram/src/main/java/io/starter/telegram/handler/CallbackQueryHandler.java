@@ -1,8 +1,8 @@
-package io.starter.model.handler;
+package io.starter.telegram.handler;
 
-import io.starter.cash.BotStateCash;
-import io.starter.model.State;
-import io.starter.service.MenuService;
+import io.starter.telegram.cash.BotStateCash;
+import io.starter.telegram.model.State;
+import io.starter.telegram.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;

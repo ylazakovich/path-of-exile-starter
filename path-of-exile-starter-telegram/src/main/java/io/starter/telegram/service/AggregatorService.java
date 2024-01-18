@@ -1,4 +1,4 @@
-package io.starter.service;
+package io.starter.telegram.service;
 
 import java.util.List;
 

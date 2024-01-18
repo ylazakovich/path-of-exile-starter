@@ -1,10 +1,10 @@
-package io.starter.cash;
+package io.starter.telegram.cash;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.starter.model.State;
+import io.starter.telegram.model.State;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.User;

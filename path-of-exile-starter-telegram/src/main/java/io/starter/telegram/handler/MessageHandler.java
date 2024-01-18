@@ -1,9 +1,9 @@
-package io.starter.model.handler;
+package io.starter.telegram.handler;
 
-import io.starter.dao.UserDAO;
-import io.starter.model.State;
-import io.starter.service.MenuService;
-import io.starter.service.MessageService;
+import io.starter.telegram.dao.UserDAO;
+import io.starter.telegram.model.State;
+import io.starter.telegram.service.MenuService;
+import io.starter.telegram.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
