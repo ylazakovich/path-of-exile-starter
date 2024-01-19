@@ -33,7 +33,7 @@ public class DatabaseController {
     databaseService.loadSkills();
   }
 
-  @Scheduled(cron = "* */30 * * * *")
+  @Scheduled(cron = "* */10 * * * *")
   @GetMapping("/update/skills/prices")
   public void updatePricesGems() {
     // TODO: need to move it to Service;

@@ -1,6 +1,7 @@
 package io.starter.telegram.service;
 
 import io.starter.telegram.dao.AnalyzedSkillsDAO;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,7 @@ public class DatabaseService {
     this.analyzedSkillsDAO = analyzedSkillsDAO;
   }
 
+  @Scheduled(cron = "* */10 * * * *")
   public void loadSkills() {
     aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::updateAll);
   }
