@@ -7,7 +7,7 @@ ext {
     telegram = '6.9.7.0'
     spring = '3.2.2'
     mariadb = '3.3.2'
-    mockito = '5.9.0'
+    mockito = '5.10.0'
     assertJ = '3.25.1'
     testng = '7.9.0'
     faker = '2.1.0'
