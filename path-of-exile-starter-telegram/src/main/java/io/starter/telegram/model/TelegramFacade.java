@@ -1,5 +1,7 @@
 package io.starter.telegram.model;
 
+import java.util.Objects;
+
 import io.starter.telegram.cash.BotStateCash;
 import io.starter.telegram.handler.CallbackQueryHandler;
 import io.starter.telegram.handler.MessageHandler;
@@ -27,14 +29,14 @@ public class TelegramFacade {
 
   public BotApiMethod<?> handleUpdate(Update update) {
     if (update.hasCallbackQuery()) {
-      log.info("Received callback");
       // TODO: need to have a look at guide about callbacks
       CallbackQuery callbackQuery = update.getCallbackQuery();
+      log.info("Received callback");
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
     } else {
-      log.info("Received message");
       Message message = update.getMessage();
-      if (message != null && message.hasText()) {
+      log.info("Received {}", message);
+      if (message.hasText()) {
         return handleInputMessage(message);
       }
     }
@@ -42,18 +44,13 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    switch (message.getText()) {
-      case "/start":
+    final State state = Objects.requireNonNull(State.byText(message.getText()));
+    switch (state) {
+      case START:
         botStateCash.saveState(message.getFrom().getId(), State.START);
         break;
-      case "Skills":
+      case SKILLS:
         botStateCash.saveState(message.getFrom().getId(), State.SKILLS);
-        break;
-      case "ALL":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ALL);
-        break;
-      case "ANY":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ANY);
         break;
     }
     return messageHandler.handle(message, botStateCash.getCurrentState(message.getFrom()));
