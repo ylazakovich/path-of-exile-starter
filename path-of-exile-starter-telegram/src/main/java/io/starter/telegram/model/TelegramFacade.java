@@ -47,7 +47,7 @@ public class TelegramFacade {
         botStateCash.saveState(message.getFrom().getId(), State.START);
         break;
       case "Skills":
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS_WAIT_FOR_CMD);
+        botStateCash.saveState(message.getFrom().getId(), State.SKILLS);
         break;
       case "ALL":
         botStateCash.saveState(message.getFrom().getId(), State.SKILLS_ALL);

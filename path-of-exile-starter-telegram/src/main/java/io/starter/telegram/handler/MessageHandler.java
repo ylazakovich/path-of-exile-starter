@@ -15,14 +15,14 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 public class MessageHandler {
 
   private final UserDAO userRepo;
-  private final MenuService menuService;
+  private final MenuService menu;
   private final MessageService messageService;
 
   public MessageHandler(UserDAO userRepo,
-                        MenuService menuService,
+                        MenuService menu,
                         MessageService messageService) {
     this.userRepo = userRepo;
-    this.menuService = menuService;
+    this.menu = menu;
     this.messageService = messageService;
   }
 
@@ -30,10 +30,11 @@ public class MessageHandler {
     // TODO: might be it can be moved to higher level;
     userRepo.addIfNotExist(message.getFrom());
     return switch (state) {
-      case START -> menuService.startMenu(message);
-      case SKILLS_WAIT_FOR_CMD -> menuService.menuWithSkills(message);
-      case SKILLS_ALL -> messageService.messageWithReadySkillsForTrade(message);
+      case START -> menu.getStart(message);
+      case SKILLS -> menu.getSkills(message);
       // TODO: wait for implementation
+      case SKILLS_ALL -> new SendMessage();
+      case SKILLS_WAIT_FOR_CMD -> new SendMessage();
       case WAIT_FOR_CMD -> new SendMessage();
       case SKILLS_ANY -> new SendMessage();
       case NO_CMD -> new SendMessage();

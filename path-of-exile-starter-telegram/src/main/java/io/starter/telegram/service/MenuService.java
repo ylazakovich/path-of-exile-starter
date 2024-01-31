@@ -8,19 +8,31 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
 @Service
 public class MenuService {
 
-  public SendMessage startMenu(final Message message) {
-    final InlineKeyboardMarkup keyboard = getMainMenuKeyboard(message.getFrom());
+  public SendMessage getStart(final Message message) {
+    final ReplyKeyboardMarkup keyboard = getReplyMenu(message.getFrom());
     return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
   }
 
-  public SendMessage menuWithSkills(final Message message) {
-    final InlineKeyboardMarkup keyboard = getSkillsSubMenu(message.getFrom());
+  public SendMessage getSkills(final Message message) {
+    final InlineKeyboardMarkup keyboard = getSubMenuWithSkills(message.getFrom());
     return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
+  }
+
+  private SendMessage createMessageWithInlineKeyboard(final long chatId,
+                                                      final ReplyKeyboardMarkup keyboard) {
+    final SendMessage sendMessage = buildDefault("What options do you want to choose ?", chatId);
+    if (keyboard != null) {
+      sendMessage.setReplyMarkup(keyboard);
+    }
+    return sendMessage;
   }
 
   private SendMessage createMessageWithInlineKeyboard(final long chatId,
@@ -32,11 +44,31 @@ public class MenuService {
     return sendMessage;
   }
 
-  private InlineKeyboardMarkup getMainMenuKeyboard(final User user) {
+  private ReplyKeyboardMarkup getReplyMenu(final User user) {
+    final ReplyKeyboardMarkup replyKeyboardMarkup = buildReplyKeyboard();
+    List<KeyboardRow> keyboard = new ArrayList<>();
+    KeyboardRow skillsRow = new KeyboardRow();
+    skillsRow.add(new KeyboardButton("Skills"));
+    skillsRow.add(new KeyboardButton("Settings"));
+    skillsRow.add(new KeyboardButton("Feedback"));
+    keyboard.add(skillsRow);
+    replyKeyboardMarkup.setKeyboard(keyboard);
+    return replyKeyboardMarkup;
+  }
+
+  private ReplyKeyboardMarkup buildReplyKeyboard() {
+    final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    replyKeyboardMarkup.setSelective(true);
+    replyKeyboardMarkup.setResizeKeyboard(true);
+    replyKeyboardMarkup.setOneTimeKeyboard(false);
+    return replyKeyboardMarkup;
+  }
+
+  private InlineKeyboardMarkup getInlineMenu(final User user) {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton serviceBtn = new InlineKeyboardButton("Service menu");
-    InlineKeyboardButton profileBtn = new InlineKeyboardButton("Profile settings");
+    InlineKeyboardButton profileBtn = new InlineKeyboardButton("Settings");
     InlineKeyboardButton feedbackBtn = new InlineKeyboardButton("Feedback");
     serviceBtn.setCallbackData("service_call");
     profileBtn.setCallbackData("profile_settings_call");
@@ -47,11 +79,13 @@ public class MenuService {
     return markupInline;
   }
 
-  private InlineKeyboardMarkup getSkillsSubMenu(final User user) {
+  private InlineKeyboardMarkup getSubMenuWithSkills(final User user) {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("ALL");
     InlineKeyboardButton anyBtn = new InlineKeyboardButton("ANY");
+    allBtn.setCallbackData("skills_all_pressed");
+    anyBtn.setCallbackData("skills_any_pressed");
     List<InlineKeyboardButton> buttons = List.of(allBtn, anyBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);
@@ -63,6 +97,6 @@ public class MenuService {
     message.enableMarkdown(true);
     message.setText(text);
     message.setChatId(chatId);
-    return null;
+    return message;
   }
 }
