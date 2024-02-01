@@ -4,9 +4,11 @@ import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.dao.UserDAO;
 import io.starter.telegram.service.MenuService;
+import io.starter.telegram.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
@@ -14,11 +16,14 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 @Slf4j
 public class UpdateHandler {
 
-  private final UserDAO userRepo;
+  private final MessageService messageService;
   private final MenuService menu;
+  private final UserDAO userRepo;
 
-  public UpdateHandler(UserDAO userRepo,
-                       MenuService menu) {
+  public UpdateHandler(MessageService messageService,
+                       MenuService menu,
+                       UserDAO userRepo) {
+    this.messageService = messageService;
     this.userRepo = userRepo;
     this.menu = menu;
   }
@@ -35,7 +40,7 @@ public class UpdateHandler {
   public BotApiMethod<?> handle(CallbackQuery query, CallbackState state) {
     userRepo.addIfNotExist(query.getFrom());
     return switch (state) {
-      case SKILL_ALL -> null;
+      case SKILL_ALL -> messageService.messageWithReadySkillsForTrade(query);
       case SKILLS_ANY -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };

@@ -7,7 +7,7 @@ import io.starter.telegram.dao.AnalyzedSkillsDAO;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 
 @Service
 public class MessageService {
@@ -19,10 +19,10 @@ public class MessageService {
   }
 
   @SneakyThrows
-  public SendMessage messageWithReadySkillsForTrade(Message message) {
+  public SendMessage messageWithReadySkillsForTrade(CallbackQuery query) {
     final List<Skill> skills = analyzedSkillsDAO.findAll();
     SendMessage sendMessage = new SendMessage();
-    sendMessage.setChatId(message.getChatId());
+    sendMessage.setChatId(query.getMessage().getChatId());
     sendMessage.setText(initBuilder(skills).toString());
     return sendMessage;
   }

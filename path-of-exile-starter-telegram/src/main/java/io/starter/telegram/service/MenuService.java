@@ -64,21 +64,6 @@ public class MenuService {
     return replyKeyboardMarkup;
   }
 
-  private InlineKeyboardMarkup getInlineMenu(final User user) {
-    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-    InlineKeyboardButton serviceBtn = new InlineKeyboardButton("Service menu");
-    InlineKeyboardButton profileBtn = new InlineKeyboardButton("Settings");
-    InlineKeyboardButton feedbackBtn = new InlineKeyboardButton("Feedback");
-    serviceBtn.setCallbackData("service_call");
-    profileBtn.setCallbackData("profile_settings_call");
-    feedbackBtn.setCallbackData("feedback_call");
-    List<InlineKeyboardButton> buttons = List.of(serviceBtn, profileBtn, feedbackBtn);
-    keyboard.add(buttons);
-    markupInline.setKeyboard(keyboard);
-    return markupInline;
-  }
-
   private InlineKeyboardMarkup getSubMenuWithSkills(final User user) {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
