@@ -16,20 +16,20 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 public class TelegramFacade {
 
-  private final MessageHandler messageHandler;
   private final CallbackQueryHandler callbackQueryHandler;
+  private final MessageHandler messageHandler;
   private final BotStateCash botStateCash;
 
-  public TelegramFacade(MessageHandler messageHandler, CallbackQueryHandler callbackQueryHandler,
+  public TelegramFacade(CallbackQueryHandler callbackQueryHandler,
+                        MessageHandler messageHandler,
                         BotStateCash botStateCash) {
-    this.messageHandler = messageHandler;
     this.callbackQueryHandler = callbackQueryHandler;
+    this.messageHandler = messageHandler;
     this.botStateCash = botStateCash;
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
     if (update.hasCallbackQuery()) {
-      // TODO: need to have a look at guide about callbacks
       CallbackQuery callbackQuery = update.getCallbackQuery();
       log.info("Received {}", callbackQuery);
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
@@ -47,10 +47,10 @@ public class TelegramFacade {
     final State state = Objects.requireNonNull(State.byText(message.getText()));
     switch (state) {
       case START:
-        botStateCash.saveState(message.getFrom().getId(), State.START);
+        botStateCash.saveState(message, State.START);
         break;
       case SKILLS:
-        botStateCash.saveState(message.getFrom().getId(), State.SKILLS);
+        botStateCash.saveState(message, State.SKILLS);
         break;
     }
     return messageHandler.handle(message, botStateCash.getCurrentState(message.getFrom()));
