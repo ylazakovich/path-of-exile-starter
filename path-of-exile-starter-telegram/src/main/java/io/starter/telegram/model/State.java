@@ -1,28 +1,51 @@
 package io.starter.telegram.model;
 
-public enum State {
-  START("/start"),
-  SKILLS("Skills"),
-  SETTINGS("Settings"),
-  FEEDBACK("Feedback"),
-  NO_CMD(""),
-  WAIT_FOR_CMD(""),
-  SKILLS_WAIT_FOR_CMD(""),
-  SKILLS_ALL(""),
-  SKILLS_ANY("");
+import io.starter.aggregator.model.Skill;
+import lombok.experimental.UtilityClass;
 
-  public final String value;
+@UtilityClass
+public class State {
 
-  State(String value) {
-    this.value = value;
+  public enum Message {
+    START("/start"),
+    SKILLS("Skills"),
+    SETTINGS("Settings"),
+    FEEDBACK("Feedback");
+
+    public final String value;
+
+    Message(String value) {
+      this.value = value;
+    }
+
+    public static Message byText(String text) {
+      for (Message state : Message.values()) {
+        if (state.value.equalsIgnoreCase(text)) {
+          return state;
+        }
+      }
+      return null;
+    }
   }
 
-  public static State byText(String text) {
-    for (State state : State.values()) {
-      if (state.value.equalsIgnoreCase(text)) {
-        return state;
-      }
+  public enum Callback {
+    NO_CMD(""),
+    SKILL_ALL("skills_all_pressed"),
+    SKILLS_ANY("skills_any_pressed");
+
+    public final String value;
+
+    Callback(String value) {
+      this.value = value;
     }
-    return null;
+
+    public static Callback byData(String text) {
+      for (Callback state : Callback.values()) {
+        if (state.value.equalsIgnoreCase(text)) {
+          return state;
+        }
+      }
+      return null;
+    }
   }
 }

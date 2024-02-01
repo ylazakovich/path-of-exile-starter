@@ -1,6 +1,6 @@
 package io.starter.telegram.handler;
 
-import io.starter.telegram.cash.BotStateCash;
+import io.starter.telegram.cash.BotCallbackStateCash;
 import io.starter.telegram.model.State;
 import io.starter.telegram.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +12,13 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 @Component
 public class CallbackQueryHandler {
 
-  private final BotStateCash botStateCash;
+  private final BotCallbackStateCash cash;
   private final MenuService menuService;
 
   @Autowired
-  public CallbackQueryHandler(BotStateCash botStateCash,
+  public CallbackQueryHandler(BotCallbackStateCash cash,
                               MenuService menuService) {
-    this.botStateCash = botStateCash;
+    this.cash = cash;
     this.menuService = menuService;
   }
 
@@ -26,13 +26,15 @@ public class CallbackQueryHandler {
     final long chatId = buttonQuery.getMessage().getChatId();
     final long userId = buttonQuery.getFrom().getId();
     BotApiMethod<?> callBackAnswer = null;
-    String data = buttonQuery.getData();
-    switch (data) {
-      case "Skills":
-        callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
-        botStateCash.saveState(userId, State.SKILLS_WAIT_FOR_CMD);
+    State.Callback state = State.Callback.byData(buttonQuery.getData());
+    switch (state) {
+      case SKILL_ALL:
         break;
-      case "TODO":
+      case SKILLS_ANY:
+        break;
+      default:
+        callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
+        cash.saveState(userId, State.Callback.NO_CMD);
         break;
     }
     return callBackAnswer;

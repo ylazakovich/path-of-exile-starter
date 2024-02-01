@@ -2,7 +2,7 @@ package io.starter.telegram.model;
 
 import java.util.Objects;
 
-import io.starter.telegram.cash.BotStateCash;
+import io.starter.telegram.cash.BotMessageStateCash;
 import io.starter.telegram.handler.CallbackQueryHandler;
 import io.starter.telegram.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ public class TelegramFacade {
 
   private final CallbackQueryHandler callbackQueryHandler;
   private final MessageHandler messageHandler;
-  private final BotStateCash botStateCash;
+  private final BotMessageStateCash botMessageStateCash;
 
   public TelegramFacade(CallbackQueryHandler callbackQueryHandler,
                         MessageHandler messageHandler,
-                        BotStateCash botStateCash) {
+                        BotMessageStateCash botMessageStateCash) {
     this.callbackQueryHandler = callbackQueryHandler;
     this.messageHandler = messageHandler;
-    this.botStateCash = botStateCash;
+    this.botMessageStateCash = botMessageStateCash;
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
@@ -44,15 +44,15 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    final State state = Objects.requireNonNull(State.byText(message.getText()));
+    final State.Message state = Objects.requireNonNull(State.Message.byText(message.getText()));
     switch (state) {
       case START:
-        botStateCash.saveState(message, State.START);
+        botMessageStateCash.saveState(message, State.Message.START);
         break;
       case SKILLS:
-        botStateCash.saveState(message, State.SKILLS);
+        botMessageStateCash.saveState(message, State.Message.SKILLS);
         break;
     }
-    return messageHandler.handle(message, botStateCash.getCurrentState(message.getFrom()));
+    return messageHandler.handle(message, botMessageStateCash.getCurrentState(message.getFrom()));
   }
 }
