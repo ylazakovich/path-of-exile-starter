@@ -1,7 +1,7 @@
 package io.starter.telegram.handler;
 
+import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.dao.UserDAO;
-import io.starter.telegram.model.State;
 import io.starter.telegram.service.MenuService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class MessageHandler {
     this.menu = menu;
   }
 
-  public BotApiMethod<?> handle(Message message, State.Message state) {
+  public BotApiMethod<?> handle(Message message, MessageState state) {
     // TODO: might be it can be moved to higher level;
     userRepo.addIfNotExist(message.getFrom());
     return switch (state) {

@@ -2,7 +2,8 @@ package io.starter.telegram.model;
 
 import java.util.Objects;
 
-import io.starter.telegram.cash.BotMessageStateCash;
+import io.starter.telegram.cash.MessageCash;
+import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.handler.CallbackQueryHandler;
 import io.starter.telegram.handler.MessageHandler;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +18,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class TelegramFacade {
 
   private final CallbackQueryHandler callbackQueryHandler;
+  private final MessageCash messageCash;
   private final MessageHandler messageHandler;
-  private final BotMessageStateCash botMessageStateCash;
 
   public TelegramFacade(CallbackQueryHandler callbackQueryHandler,
-                        MessageHandler messageHandler,
-                        BotMessageStateCash botMessageStateCash) {
+                        MessageCash messageCash,
+                        MessageHandler messageHandler) {
     this.callbackQueryHandler = callbackQueryHandler;
+    this.messageCash = messageCash;
     this.messageHandler = messageHandler;
-    this.botMessageStateCash = botMessageStateCash;
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
@@ -44,15 +45,15 @@ public class TelegramFacade {
   }
 
   private BotApiMethod<?> handleInputMessage(Message message) {
-    final State.Message state = Objects.requireNonNull(State.Message.byText(message.getText()));
+    final MessageState state = Objects.requireNonNull(MessageState.byText(message.getText()));
     switch (state) {
       case START:
-        botMessageStateCash.saveState(message, State.Message.START);
+        messageCash.saveState(message, MessageState.START);
         break;
       case SKILLS:
-        botMessageStateCash.saveState(message, State.Message.SKILLS);
+        messageCash.saveState(message, MessageState.SKILLS);
         break;
     }
-    return messageHandler.handle(message, botMessageStateCash.getCurrentState(message.getFrom()));
+    return messageHandler.handle(message, messageCash.getCurrentState(message.getFrom()));
   }
 }

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.starter.telegram.model.State;
+import io.starter.telegram.cash.state.CallbackState;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -12,21 +12,21 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 @Getter
 @Service
-public class BotMessageStateCash {
+public class CallbackCash {
 
-  private final Map<Long, State.Message> botStateMap = new HashMap<>();
+  private final Map<Long, CallbackState> botStateMap = new HashMap<>();
 
-  public void saveState(Message message, State.Message state) {
+  public void saveState(Message message, CallbackState state) {
     saveState(message.getFrom().getId(), state);
   }
 
-  public void saveState(long userId, State.Message state) {
+  public void saveState(long userId, CallbackState state) {
     botStateMap.put(userId, state);
   }
 
-  public State.Message getCurrentState(User user) {
+  public CallbackState getCurrentState(User user) {
     return Objects.nonNull(botStateMap.get(user.getId()))
         ? botStateMap.get(user.getId())
-        : State.Message.START;
+        : CallbackState.NO_CMD;
   }
 }
