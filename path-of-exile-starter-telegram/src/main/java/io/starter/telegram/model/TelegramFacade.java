@@ -31,7 +31,7 @@ public class TelegramFacade {
     if (update.hasCallbackQuery()) {
       // TODO: need to have a look at guide about callbacks
       CallbackQuery callbackQuery = update.getCallbackQuery();
-      log.info("Received callback");
+      log.info("Received {}", callbackQuery);
       return callbackQueryHandler.processCallbackQuery(callbackQuery);
     } else {
       Message message = update.getMessage();
