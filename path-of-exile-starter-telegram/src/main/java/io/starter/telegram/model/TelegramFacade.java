@@ -2,10 +2,11 @@ package io.starter.telegram.model;
 
 import java.util.Objects;
 
+import io.starter.telegram.cash.CallbackCash;
 import io.starter.telegram.cash.MessageCash;
+import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
-import io.starter.telegram.handler.CallbackQueryHandler;
-import io.starter.telegram.handler.MessageHandler;
+import io.starter.telegram.handler.UpdateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -17,23 +18,23 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Slf4j
 public class TelegramFacade {
 
-  private final CallbackQueryHandler callbackQueryHandler;
+  private final UpdateHandler updateHandler;
+  private final CallbackCash callbackCash;
   private final MessageCash messageCash;
-  private final MessageHandler messageHandler;
 
-  public TelegramFacade(CallbackQueryHandler callbackQueryHandler,
-                        MessageCash messageCash,
-                        MessageHandler messageHandler) {
-    this.callbackQueryHandler = callbackQueryHandler;
+  public TelegramFacade(UpdateHandler updateHandler,
+                        CallbackCash callbackCash,
+                        MessageCash messageCash) {
+    this.updateHandler = updateHandler;
+    this.callbackCash = callbackCash;
     this.messageCash = messageCash;
-    this.messageHandler = messageHandler;
   }
 
   public BotApiMethod<?> handleUpdate(Update update) {
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       log.info("Received {}", callbackQuery);
-      return callbackQueryHandler.processCallbackQuery(callbackQuery);
+      return handleCallbackQuery(callbackQuery);
     } else {
       Message message = update.getMessage();
       log.info("Received {}", message);
@@ -54,6 +55,22 @@ public class TelegramFacade {
         messageCash.saveState(message, MessageState.SKILLS);
         break;
     }
-    return messageHandler.handle(message, messageCash.getCurrentState(message.getFrom()));
+    return updateHandler.handle(message, messageCash.getCurrentState(message.getFrom()));
+  }
+
+  public BotApiMethod<?> handleCallbackQuery(CallbackQuery query) {
+    final CallbackState state = Objects.requireNonNull(CallbackState.byData(query.getData()));
+    switch (state) {
+      case SKILL_ALL:
+        callbackCash.saveState(query, CallbackState.SKILL_ALL);
+        break;
+      case SKILLS_ANY:
+        callbackCash.saveState(query, CallbackState.SKILLS_ANY);
+        break;
+      default:
+        callbackCash.saveState(query, CallbackState.NO_CMD);
+        break;
+    }
+    return updateHandler.handle(query, callbackCash.getCurrentState(query.getFrom()));
   }
 }

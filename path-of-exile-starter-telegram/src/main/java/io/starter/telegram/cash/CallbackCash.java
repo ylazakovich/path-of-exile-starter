@@ -7,7 +7,7 @@ import java.util.Objects;
 import io.starter.telegram.cash.state.CallbackState;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Getter
@@ -16,8 +16,8 @@ public class CallbackCash {
 
   private final Map<Long, CallbackState> botStateMap = new HashMap<>();
 
-  public void saveState(Message message, CallbackState state) {
-    saveState(message.getFrom().getId(), state);
+  public void saveState(CallbackQuery query, CallbackState state) {
+    saveState(query.getFrom().getId(), state);
   }
 
   public void saveState(long userId, CallbackState state) {

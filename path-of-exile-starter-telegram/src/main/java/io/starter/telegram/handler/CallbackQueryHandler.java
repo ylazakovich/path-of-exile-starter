@@ -23,22 +23,4 @@ public class CallbackQueryHandler {
     this.cash = cash;
     this.menuService = menuService;
   }
-
-  public BotApiMethod<?> processCallbackQuery(CallbackQuery buttonQuery) {
-    final long chatId = buttonQuery.getMessage().getChatId();
-    final long userId = buttonQuery.getFrom().getId();
-    BotApiMethod<?> callBackAnswer = null;
-    CallbackState state = Objects.requireNonNull(CallbackState.byData(buttonQuery.getData()));
-    switch (state) {
-      case SKILL_ALL:
-        break;
-      case SKILLS_ANY:
-        break;
-      default:
-        callBackAnswer = new SendMessage(String.valueOf(chatId), "TODO...");
-        cash.saveState(userId, CallbackState.NO_CMD);
-        break;
-    }
-    return callBackAnswer;
-  }
 }
