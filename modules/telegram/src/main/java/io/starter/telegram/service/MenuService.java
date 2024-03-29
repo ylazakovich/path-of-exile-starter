@@ -32,7 +32,7 @@ public class MenuService {
         """
             \uD83D\uDC4B\
                 
-            Hello, my little trader **%s**!
+            Greetings, Exile **%s**!
             I will tell you the most profitable ways to earn money.
             """.formatted(message.getFrom().getFirstName()),
         message.getChatId());
