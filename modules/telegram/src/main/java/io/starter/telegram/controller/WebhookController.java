@@ -27,11 +27,9 @@ public class WebhookController {
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       log.info("Telegram has catch update with {}", callbackQuery);
-
     } else {
       Message message = update.getMessage();
       log.info("Telegram has catch update with {}", message);
-
     }
     return telegram.onWebhookUpdateReceived(update);
   }
