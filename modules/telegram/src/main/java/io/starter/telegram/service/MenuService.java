@@ -54,12 +54,18 @@ public class MenuService {
   private ReplyKeyboardMarkup getReplyMenu(final User user) {
     final ReplyKeyboardMarkup replyKeyboardMarkup = buildReplyKeyboard();
     List<KeyboardRow> keyboard = new ArrayList<>();
-    KeyboardRow skillsRow = new KeyboardRow();
-    skillsRow.add(new KeyboardButton("Skills"));
-    skillsRow.add(new KeyboardButton("Settings"));
-    skillsRow.add(new KeyboardButton("Feedback"));
-    keyboard.add(skillsRow);
+    KeyboardRow line1 = new KeyboardRow();
+    KeyboardRow line2 = new KeyboardRow();
+    KeyboardRow line3 = new KeyboardRow();
+    line1.add(new KeyboardButton("\uD83C\uDF97 Skills"));
+    line1.add(new KeyboardButton("⚙\uFE0F Settings"));
+    line2.add(new KeyboardButton("\uD83C\uDFB2 Clean"));
+    line3.add(new KeyboardButton("\uD83C\uDFAD Feedback"));
+    keyboard.add(line1);
+    keyboard.add(line2);
+    keyboard.add(line3);
     replyKeyboardMarkup.setKeyboard(keyboard);
+    replyKeyboardMarkup.setResizeKeyboard(true);
     return replyKeyboardMarkup;
   }
 
