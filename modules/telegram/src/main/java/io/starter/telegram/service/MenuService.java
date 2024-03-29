@@ -18,7 +18,7 @@ public class MenuService {
 
   public SendMessage getStart(final Message message) {
     final ReplyKeyboardMarkup keyboard = getReplyMenu(message.getFrom());
-    return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
+    return createMessageWithInlineKeyboard(message, keyboard);
   }
 
   public SendMessage getSkills(final Message message) {
@@ -26,9 +26,16 @@ public class MenuService {
     return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
   }
 
-  private SendMessage createMessageWithInlineKeyboard(final long chatId,
+  private SendMessage createMessageWithInlineKeyboard(final Message message,
                                                       final ReplyKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = buildDefault("What options do you want to choose ?", chatId);
+    final SendMessage sendMessage = buildDefault(
+        """
+            \uD83D\uDC4B\
+                
+            Hello, my little trader **%s**!
+            I will tell you the most profitable ways to earn money.
+            """.formatted(message.getFrom().getFirstName()),
+        message.getChatId());
     if (keyboard != null) {
       sendMessage.setReplyMarkup(keyboard);
     }

@@ -1,10 +1,10 @@
 server:
-  port: 5000
+  port: 5050
 
 telegram:
   # TODO: Will be updated after finishing
-  token: 6983431014:AAGu7SSMgtIjaevHU9Zwqcdg9ksDbvwSNU0
-  webhook: https://eddf-116-202-83-178.ngrok-free.app
+  token: TODO
+  webhook: TODO
 
 spring:
   flyway:
