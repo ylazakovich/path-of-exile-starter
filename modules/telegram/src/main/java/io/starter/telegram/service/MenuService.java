@@ -33,7 +33,7 @@ public class MenuService {
             \uD83D\uDC4B\
                 
             Greetings, Exile **%s**!
-            I will tell you the most profitable ways to earn money.
+            I will tell you the most profitable ways to earn your first Divine.
             """.formatted(message.getFrom().getFirstName()),
         message.getChatId());
     if (keyboard != null) {
