@@ -37,6 +37,8 @@ Realized Telegram bot over implementation with Spring Webhook
 | Functionality for button Settings                        |                    |           |                       |
 | Functionality for button Feedback                        |                    |           |                       |
 | Telegram channel with <br/>Updates/News/Market positions |                    |           |                       |
+| Admin keyboard management                                |                    |           |                       |
+| User keyboard management                                 |                    |           |                       |
 
 ### Aggregator
 
