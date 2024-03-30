@@ -9,7 +9,6 @@ jobs:
   auto-merge-dependabot:
     name: 🤖 Auto merge dependabot PR
     timeout-minutes: 10
-    needs: [ run-tests-on-linux ]
     if: ${{ github.actor == 'dependabot[bot]' }} && ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     permissions:
