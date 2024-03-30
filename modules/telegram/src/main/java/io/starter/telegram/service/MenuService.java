@@ -3,6 +3,7 @@ package io.starter.telegram.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -23,8 +24,7 @@ public class MenuService {
   }
 
   public SendMessage getStart(final Message message) {
-    final InlineKeyboardMarkup keyboard = getSubMenuWithSkills(message.getFrom());
-    return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
+    return createMessageWithInlineKeyboard(message.getChatId(), getStartSubMenu());
   }
 
   private SendMessage createMessageWithInlineKeyboard(final Message message,
@@ -78,13 +78,26 @@ public class MenuService {
     return replyKeyboardMarkup;
   }
 
-  private InlineKeyboardMarkup getSubMenuWithSkills(final User user) {
+  private InlineKeyboardMarkup getStartSubMenu() {
+    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
+    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardButton skillsBtn = new InlineKeyboardButton("Skills");
+    InlineKeyboardButton blessingBtn = new InlineKeyboardButton("Blessing Items");
+    skillsBtn.setCallbackData(CallbackState.SKILLS.value);
+    blessingBtn.setCallbackData(CallbackState.BLESSING_ITEMS.value);
+    List<InlineKeyboardButton> buttons = List.of(skillsBtn, blessingBtn);
+    keyboard.add(buttons);
+    markupInline.setKeyboard(keyboard);
+    return markupInline;
+  }
+
+  private InlineKeyboardMarkup getSubMenuWithSkills() {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("ALL");
     InlineKeyboardButton anyBtn = new InlineKeyboardButton("ANY");
-    allBtn.setCallbackData("skills_all_pressed");
-    anyBtn.setCallbackData("skills_any_pressed");
+    allBtn.setCallbackData(CallbackState.SKILLS_ALL.value);
+    anyBtn.setCallbackData(CallbackState.SKILLS_ANY.value);
     List<InlineKeyboardButton> buttons = List.of(allBtn, anyBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);

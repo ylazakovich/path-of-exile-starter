@@ -39,8 +39,10 @@ public class UpdateHandler {
   public BotApiMethod<?> handle(CallbackQuery query, CallbackState state) {
     userRepo.addIfNotExist(query.getFrom());
     return switch (state) {
-      case SKILL_ALL -> messageService.messageWithReadySkillsForTrade(query);
+      case SKILLS -> messageService.messageWithSkillGuide(query);
+      case SKILLS_ALL -> messageService.messageWithReadySkillsForTrade(query);
       case SKILLS_ANY -> null;
+      case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
   }

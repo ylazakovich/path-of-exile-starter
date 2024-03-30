@@ -20,6 +20,6 @@ public enum MessageState {
         return state;
       }
     }
-    return null;
+    return FIRST_START;
   }
 }

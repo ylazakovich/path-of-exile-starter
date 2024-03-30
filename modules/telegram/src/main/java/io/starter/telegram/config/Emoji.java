@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum Emoji {
+  WARNING(	"⚠️"),
   YELLOW_RIBBON("🎗"),
   GEAR("⚙️"),
   GAME_DIE("🎲"),

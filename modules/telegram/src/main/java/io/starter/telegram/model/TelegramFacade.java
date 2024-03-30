@@ -48,11 +48,11 @@ public class TelegramFacade {
   private BotApiMethod<?> handleInputMessage(Message message) {
     final MessageState state = Objects.requireNonNull(MessageState.byText(message.getText()));
     switch (state) {
-      case FIRST_START:
-        messageCash.saveState(message, MessageState.FIRST_START);
-        break;
       case START:
         messageCash.saveState(message, MessageState.START);
+        break;
+      default:
+        messageCash.saveState(message, MessageState.FIRST_START);
         break;
     }
     return updateHandler.handle(message, messageCash.getCurrentState(message.getFrom()));
@@ -61,8 +61,11 @@ public class TelegramFacade {
   public BotApiMethod<?> handleCallbackQuery(CallbackQuery query) {
     final CallbackState state = Objects.requireNonNull(CallbackState.byData(query.getData()));
     switch (state) {
-      case SKILL_ALL:
-        callbackCash.saveState(query, CallbackState.SKILL_ALL);
+      case SKILLS:
+        callbackCash.saveState(query, CallbackState.SKILLS);
+        break;
+      case SKILLS_ALL:
+        callbackCash.saveState(query, CallbackState.SKILLS_ALL);
         break;
       case SKILLS_ANY:
         callbackCash.saveState(query, CallbackState.SKILLS_ANY);
