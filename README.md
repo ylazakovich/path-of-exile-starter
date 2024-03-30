@@ -27,10 +27,13 @@
 | Subscribe Webhook after application Start                | :white_check_mark: |           |                       |
 | Save user info in Database                               | :white_check_mark: |           |                       |
 | Integration with Aggregator                              | :white_check_mark: |           |                       |
-| Button with Skills                                       | :white_check_mark: |           |                       |
-| Button with Blessing Items                               |                    |           |                       |
-| Button with Settings                                     |                    |           |                       |
-| Button with Feedback                                     |                    |           |                       |
+| Menu with buttons: Start, Settings, Feedback             | :white_check_mark: |           |                       |
+| Submenu for Start: Skills, Blessing items                | :white_check_mark: |           |                       |
+| Functionality for button Start                           | :white_check_mark: |           |                       |
+| Functionality for button Skills                          | :white_check_mark: |           |                       |
+| Functionality for button Blessing Items                  |                    |           |                       |
+| Functionality for button Settings                        |                    |           |                       |
+| Functionality for button Feedback                        |                    |           |                       |
 | Telegram channel with <br/>Updates/News/Market positions |                    |           |                       |
 
 ### Aggregator
@@ -45,7 +48,7 @@ Service which aggregate data from the 3rd party places
 | Integration with PoeNinja                     | :white_check_mark: | :white_check_mark: |                       |
 | Analyzer                                      | :white_check_mark: | :white_check_mark: |                       |
 | Analyze skill positions                       | :white_check_mark: | :white_check_mark: |                       |
-| Analyze blessing positions                    | :white_check_mark: |                    |                       |
+| Analyze blessing positions                    |                    |                    |                       |
 
 ## Quick start
 
