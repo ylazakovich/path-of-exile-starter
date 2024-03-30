@@ -9,7 +9,6 @@ import io.starter.telegram.config.Emoji;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -20,8 +19,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 public class MenuService {
 
   public SendMessage getMain(final Message message) {
-    final ReplyKeyboardMarkup keyboard = getReplyMenu(message.getFrom());
-    return createMessageWithInlineKeyboard(message, keyboard);
+    return createMessageWithInlineKeyboard(message, getReplyMenu());
   }
 
   public SendMessage getStart(final Message message) {
@@ -46,7 +44,7 @@ public class MenuService {
   private SendMessage createMessageWithInlineKeyboard(final Message message,
                                                       final ReplyKeyboardMarkup keyboard) {
     final SendMessage sendMessage = build("""
-            %s  
+            %s
             Greetings, Exile **%s**!
             I will tell you the most profitable ways to earn your first Divine.
             """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName()),
@@ -76,19 +74,16 @@ public class MenuService {
     return sendMessage;
   }
 
-  private ReplyKeyboardMarkup getReplyMenu(final User user) {
+  private ReplyKeyboardMarkup getReplyMenu() {
     final ReplyKeyboardMarkup replyKeyboardMarkup = buildReplyKeyboard();
     List<KeyboardRow> keyboard = new ArrayList<>();
     KeyboardRow line1 = new KeyboardRow();
     KeyboardRow line2 = new KeyboardRow();
-    KeyboardRow line3 = new KeyboardRow();
     line1.add(new KeyboardButton(MessageState.START.value));
     line1.add(new KeyboardButton(MessageState.SETTINGS.value));
-    line2.add(new KeyboardButton(MessageState.CLEAN.value));
-    line3.add(new KeyboardButton(MessageState.FEEDBACK.value));
+    line2.add(new KeyboardButton(MessageState.FEEDBACK.value));
     keyboard.add(line1);
     keyboard.add(line2);
-    keyboard.add(line3);
     replyKeyboardMarkup.setKeyboard(keyboard);
     replyKeyboardMarkup.setResizeKeyboard(true);
     return replyKeyboardMarkup;
