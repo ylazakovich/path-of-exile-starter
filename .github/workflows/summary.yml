@@ -8,12 +8,10 @@ jobs:
   report:
     runs-on: ubuntu-latest
     steps:
-      - name: Reporting
-        uses: dorny/test-reporter@v1
+      - uses: actions/checkout@v4
+      - uses: dorny/test-reporter@v1
         with:
           artifact: /test-report-(.*)-(.*)/
           name: 'Test report: $1 $2'
           path: '**/build/test-results/**/TEST-*.xml'
           reporter: java-junit
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
