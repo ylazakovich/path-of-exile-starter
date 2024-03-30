@@ -6,6 +6,7 @@ import io.starter.aggregator.model.Skill;
 import io.starter.telegram.entity.AnalyzedSkillEntity;
 import io.starter.telegram.repo.AnalyzedSkillsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,7 +20,7 @@ public class AnalyzedSkillsDAO {
   }
 
   public List<Skill> findAll() {
-    List<AnalyzedSkillEntity> all = analyzedSkillsRepository.findAll();
+    List<AnalyzedSkillEntity> all = analyzedSkillsRepository.findAll(Sort.by(Sort.Direction.DESC, "profit"));
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getName());
