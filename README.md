@@ -49,7 +49,7 @@ Spring service which aggregate data from the 3rd party places
 | Update data in Database by CRON               | :white_check_mark: |                    |
 | Integration with PoeNinja                     | :white_check_mark: | :white_check_mark: |
 | Swagger                                       |                    |                    |
-| Analyzer                                      | :white_check_mark: | :white_check_mark: |
+| Analyzer                                      | :white_check_mark: |                    |
 | Analyze skill positions                       | :white_check_mark: | :white_check_mark: |
 | Analyze blessing positions                    |                    |                    |
 
