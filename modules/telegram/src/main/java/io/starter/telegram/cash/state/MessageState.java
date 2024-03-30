@@ -1,17 +1,17 @@
 package io.starter.telegram.cash.state;
 
+import io.starter.telegram.config.Emoji;
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public enum MessageState {
 
-  START("/start"),
-  SKILLS("Skills"),
-  SETTINGS("Settings"),
-  FEEDBACK("Feedback");
+  FIRST_START("/start"),
+  START("%s Start".formatted(Emoji.YELLOW_RIBBON)),
+  SETTINGS("%s Settings".formatted(Emoji.GEAR)),
+  FEEDBACK("%s Feedback".formatted(Emoji.PERFORMING_ARTS));
 
   public final String value;
-
-  MessageState(String value) {
-    this.value = value;
-  }
 
   public static MessageState byText(String text) {
     for (MessageState state : MessageState.values()) {
@@ -19,6 +19,6 @@ public enum MessageState {
         return state;
       }
     }
-    return null;
+    return FIRST_START;
   }
 }

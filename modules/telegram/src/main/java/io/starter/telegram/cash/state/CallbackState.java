@@ -1,15 +1,16 @@
 package io.starter.telegram.cash.state;
 
+import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+
+@AllArgsConstructor
 public enum CallbackState {
-  NO_CMD(""),
-  SKILL_ALL("skills_all_pressed"),
-  SKILLS_ANY("skills_any_pressed");
+  NO_CMD(StringUtils.EMPTY),
+  SKILLS("Pressing button with Skills"),
+  SKILLS_ALL("Pressing button with ALL SKILLS"),
+  BLESSING_ITEMS("Pressing button with Blessing Items");
 
   public final String value;
-
-  CallbackState(String value) {
-    this.value = value;
-  }
 
   public static CallbackState byData(String text) {
     for (CallbackState state : CallbackState.values()) {
