@@ -27,23 +27,6 @@ public class MessageService {
     return sendMessage;
   }
 
-  public SendMessage messageWithSkillGuide(CallbackQuery query) {
-    SendMessage sendMessage = new SendMessage();
-    sendMessage.setChatId(query.getMessage().getChatId());
-    sendMessage.setText("""
-        GUIDE
-
-        1. Looking for Skill gem      = 20 lvl / no quality
-        2. #1 + Gemcutter's Prism =   1  lvl / 20% quality
-
-        Example:
-        Faster Attack Support 10
-        1. Faster Attack Support - Skill Gem which you can craft and trade on market
-        2. 10 - Your expected profit value in Chaos
-        """);
-    return sendMessage;
-  }
-
   private StringBuilder initBuilder(List<Skill> skills) {
     final StringBuilder builder = new StringBuilder();
     skills.forEach(skill -> builder

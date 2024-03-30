@@ -5,6 +5,7 @@ import java.util.List;
 
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.config.Emoji;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -27,16 +28,40 @@ public class MenuService {
     return createMessageWithInlineKeyboard(message.getChatId(), getStartSubMenu());
   }
 
+  public SendMessage getMenuWithSkills(final long chatId) {
+    final String text = """
+        GUIDE
+
+        1. Looking for Skill gem      = 20 lvl / no quality
+        2. #1 + Gemcutter's Prism =   1  lvl / 20% quality
+
+        Example:
+        Faster Attack Support 10
+        1. Faster Attack Support - Skill Gem which you can craft and trade on market
+        2. 10 - Your expected profit value in Chaos
+        """;
+    return createMessageWithInlineKeyboard(text, chatId, getSubMenuWithSkills());
+  }
+
   private SendMessage createMessageWithInlineKeyboard(final Message message,
                                                       final ReplyKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = build(
-        """
-            \uD83D\uDC4B\
+    final SendMessage sendMessage = build("""
+            %s
                 
             Greetings, Exile **%s**!
             I will tell you the most profitable ways to earn your first Divine.
-            """.formatted(message.getFrom().getFirstName()),
+            """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName()),
         message.getChatId());
+    if (keyboard != null) {
+      sendMessage.setReplyMarkup(keyboard);
+    }
+    return sendMessage;
+  }
+
+  private SendMessage createMessageWithInlineKeyboard(final String text,
+                                                      final long chatId,
+                                                      final InlineKeyboardMarkup keyboard) {
+    final SendMessage sendMessage = build(text, chatId);
     if (keyboard != null) {
       sendMessage.setReplyMarkup(keyboard);
     }
@@ -94,11 +119,9 @@ public class MenuService {
   private InlineKeyboardMarkup getSubMenuWithSkills() {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
-    InlineKeyboardButton allBtn = new InlineKeyboardButton("ALL");
-    InlineKeyboardButton anyBtn = new InlineKeyboardButton("ANY");
+    InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
     allBtn.setCallbackData(CallbackState.SKILLS_ALL.value);
-    anyBtn.setCallbackData(CallbackState.SKILLS_ANY.value);
-    List<InlineKeyboardButton> buttons = List.of(allBtn, anyBtn);
+    List<InlineKeyboardButton> buttons = List.of(allBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);
     return markupInline;

@@ -8,8 +8,7 @@ public enum CallbackState {
   NO_CMD(StringUtils.EMPTY),
   SKILLS("Pressing button with Skills"),
   BLESSING_ITEMS("Pressing button with Blessing Items"),
-  SKILLS_ALL("Pressing button with ALL SKILLS"),
-  SKILLS_ANY("Pressing button with ANY SKILLS");
+  SKILLS_ALL("Pressing button with ALL SKILLS");
 
   public final String value;
 

@@ -67,9 +67,6 @@ public class TelegramFacade {
       case SKILLS_ALL:
         callbackCash.saveState(query, CallbackState.SKILLS_ALL);
         break;
-      case SKILLS_ANY:
-        callbackCash.saveState(query, CallbackState.SKILLS_ANY);
-        break;
       default:
         callbackCash.saveState(query, CallbackState.NO_CMD);
         break;

@@ -4,11 +4,12 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum Emoji {
-  WARNING(	"⚠️"),
+  PERFORMING_ARTS("🎭"),
   YELLOW_RIBBON("🎗"),
-  GEAR("⚙️"),
+  WAVING_HAND("👋"),
+  WARNING(	"⚠️"),
   GAME_DIE("🎲"),
-  PERFORMING_ARTS("🎭");
+  GEAR("⚙️");
 
   public final String value;
 
