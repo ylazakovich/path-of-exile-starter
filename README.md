@@ -44,7 +44,7 @@ Realized Telegram bot over implementation with Spring Webhook
 
 Spring service which aggregate data from the 3rd party places
 
-| **Features**                                  |     **Status**     |     **Units**      |
+| **Features**                                  |     **Status**     |   **Unit Tests**   |
 |-----------------------------------------------|:------------------:|:------------------:|
 | Database + Migration                          | :white_check_mark: |                    |
 | Load data to Database after application start | :white_check_mark: |                    |
