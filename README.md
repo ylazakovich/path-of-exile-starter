@@ -29,6 +29,7 @@ Realized Telegram bot over implementation with Spring Webhook
 | Subscribe Webhook after application Start                | :white_check_mark: |                       |
 | Save user info in Database                               | :white_check_mark: |                       |
 | Integration with Aggregator                              | :white_check_mark: |                       |
+| Welcome message                                          | :white_check_mark: |                       |
 | Menu with buttons: Start, Settings, Feedback             | :white_check_mark: |                       |
 | Submenu for Start: Skills, Blessing items                | :white_check_mark: |                       |
 | Functionality for button Start                           | :white_check_mark: |                       |
