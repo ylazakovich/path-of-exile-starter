@@ -21,6 +21,8 @@
 
 ### Telegram
 
+Realized Telegram bot over implementation with Spring Webhook
+
 | **Features**                                             |     **Status**     | **Units** | **Integration Tests** |
 |----------------------------------------------------------|:------------------:|:---------:|:---------------------:|
 | Database + Migration                                     | :white_check_mark: |           |                       |
@@ -38,17 +40,18 @@
 
 ### Aggregator
 
-Service which aggregate data from the 3rd party places
+Spring service which aggregate data from the 3rd party places
 
-| **Features**                                  |     **Status**     |     **Units**      | **Integration Tests** |
-|-----------------------------------------------|:------------------:|:------------------:|:---------------------:|
-| Database + Migration                          | :white_check_mark: |                    |                       |
-| Load data to Database after application start | :white_check_mark: |                    |                       |
-| Update data in Database by CRON               | :white_check_mark: |                    |                       |
-| Integration with PoeNinja                     | :white_check_mark: | :white_check_mark: |                       |
-| Analyzer                                      | :white_check_mark: | :white_check_mark: |                       |
-| Analyze skill positions                       | :white_check_mark: | :white_check_mark: |                       |
-| Analyze blessing positions                    |                    |                    |                       |
+| **Features**                                  |     **Status**     |     **Units**      |
+|-----------------------------------------------|:------------------:|:------------------:|
+| Database + Migration                          | :white_check_mark: |                    |
+| Load data to Database after application start | :white_check_mark: |                    |
+| Update data in Database by CRON               | :white_check_mark: |                    |
+| Integration with PoeNinja                     | :white_check_mark: | :white_check_mark: |
+| Swagger                                       |                    |                    |
+| Analyzer                                      | :white_check_mark: | :white_check_mark: |
+| Analyze skill positions                       | :white_check_mark: | :white_check_mark: |
+| Analyze blessing positions                    |                    |                    |
 
 ## Quick start
 
