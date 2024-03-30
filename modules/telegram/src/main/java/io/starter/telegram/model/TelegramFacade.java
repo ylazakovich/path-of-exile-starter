@@ -48,11 +48,11 @@ public class TelegramFacade {
   private BotApiMethod<?> handleInputMessage(Message message) {
     final MessageState state = Objects.requireNonNull(MessageState.byText(message.getText()));
     switch (state) {
+      case FIRST_START:
+        messageCash.saveState(message, MessageState.FIRST_START);
+        break;
       case START:
         messageCash.saveState(message, MessageState.START);
-        break;
-      case SKILLS:
-        messageCash.saveState(message, MessageState.SKILLS);
         break;
     }
     return updateHandler.handle(message, messageCash.getCurrentState(message.getFrom()));

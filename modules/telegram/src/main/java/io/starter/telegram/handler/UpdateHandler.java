@@ -30,8 +30,8 @@ public class UpdateHandler {
   public BotApiMethod<?> handle(Message message, MessageState state) {
     userRepo.addIfNotExist(message.getFrom());
     return switch (state) {
+      case FIRST_START -> menu.getMain(message);
       case START -> menu.getStart(message);
-      case SKILLS -> menu.getSkills(message);
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
   }

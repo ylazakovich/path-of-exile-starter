@@ -27,6 +27,6 @@ public class MessageCash {
   public MessageState getCurrentState(User user) {
     return Objects.nonNull(botStateMap.get(user.getId()))
         ? botStateMap.get(user.getId())
-        : MessageState.START;
+        : MessageState.FIRST_START;
   }
 }

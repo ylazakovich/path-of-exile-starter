@@ -3,7 +3,7 @@ package io.starter.telegram.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.starter.telegram.config.Emoji;
+import io.starter.telegram.cash.state.MessageState;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -17,19 +17,19 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 @Service
 public class MenuService {
 
-  public SendMessage getStart(final Message message) {
+  public SendMessage getMain(final Message message) {
     final ReplyKeyboardMarkup keyboard = getReplyMenu(message.getFrom());
     return createMessageWithInlineKeyboard(message, keyboard);
   }
 
-  public SendMessage getSkills(final Message message) {
+  public SendMessage getStart(final Message message) {
     final InlineKeyboardMarkup keyboard = getSubMenuWithSkills(message.getFrom());
     return createMessageWithInlineKeyboard(message.getChatId(), keyboard);
   }
 
   private SendMessage createMessageWithInlineKeyboard(final Message message,
                                                       final ReplyKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = buildDefault(
+    final SendMessage sendMessage = build(
         """
             \uD83D\uDC4B\
                 
@@ -45,7 +45,7 @@ public class MenuService {
 
   private SendMessage createMessageWithInlineKeyboard(final long chatId,
                                                       final InlineKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = buildDefault("What options do you want to choose ?", chatId);
+    final SendMessage sendMessage = build("What options do you want to choose ?", chatId);
     if (keyboard != null) {
       sendMessage.setReplyMarkup(keyboard);
     }
@@ -58,10 +58,10 @@ public class MenuService {
     KeyboardRow line1 = new KeyboardRow();
     KeyboardRow line2 = new KeyboardRow();
     KeyboardRow line3 = new KeyboardRow();
-    line1.add(new KeyboardButton("%s Start".formatted(Emoji.YELLOW_RIBBON)));
-    line1.add(new KeyboardButton("%s Settings".formatted(Emoji.GEAR)));
-    line2.add(new KeyboardButton("%s Clean".formatted(Emoji.GAME_DIE)));
-    line3.add(new KeyboardButton("%s Feedback".formatted(Emoji.PERFORMING_ARTS)));
+    line1.add(new KeyboardButton(MessageState.START.value));
+    line1.add(new KeyboardButton(MessageState.SETTINGS.value));
+    line2.add(new KeyboardButton(MessageState.CLEAN.value));
+    line3.add(new KeyboardButton(MessageState.FEEDBACK.value));
     keyboard.add(line1);
     keyboard.add(line2);
     keyboard.add(line3);
@@ -91,7 +91,7 @@ public class MenuService {
     return markupInline;
   }
 
-  private SendMessage buildDefault(String text, long chatId) {
+  private SendMessage build(String text, long chatId) {
     final SendMessage message = new SendMessage();
     message.enableMarkdown(true);
     message.setText(text);
