@@ -46,8 +46,7 @@ public class MenuService {
   private SendMessage createMessageWithInlineKeyboard(final Message message,
                                                       final ReplyKeyboardMarkup keyboard) {
     final SendMessage sendMessage = build("""
-            %s
-                
+            %s  
             Greetings, Exile **%s**!
             I will tell you the most profitable ways to earn your first Divine.
             """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName()),

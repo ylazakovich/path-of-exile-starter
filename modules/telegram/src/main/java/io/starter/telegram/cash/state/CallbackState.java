@@ -7,8 +7,8 @@ import org.apache.commons.lang3.StringUtils;
 public enum CallbackState {
   NO_CMD(StringUtils.EMPTY),
   SKILLS("Pressing button with Skills"),
-  BLESSING_ITEMS("Pressing button with Blessing Items"),
-  SKILLS_ALL("Pressing button with ALL SKILLS");
+  SKILLS_ALL("Pressing button with ALL SKILLS"),
+  BLESSING_ITEMS("Pressing button with Blessing Items");
 
   public final String value;
 
