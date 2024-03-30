@@ -9,7 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     steps:
-      - uses: dorny/test-reporter@v1
+      - uses: actions/checkout@v4
+      - name: Reporting
+        uses: dorny/test-reporter@v1
         with:
           artifact: /test-report-(.*)-(.*)/
           name: 'Test report: $1 $2'
