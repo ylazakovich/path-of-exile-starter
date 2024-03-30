@@ -7,7 +7,7 @@ public enum Emoji {
   PERFORMING_ARTS("🎭"),
   YELLOW_RIBBON("🎗"),
   WAVING_HAND("👋"),
-  WARNING(	"⚠️"),
+  WARNING("⚠️"),
   GAME_DIE("🎲"),
   GEAR("⚙️");
 
