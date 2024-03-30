@@ -23,22 +23,22 @@
 
 Realized Telegram bot over implementation with Spring Webhook
 
-| **Features**                                             |     **Status**     | **Units** | **Integration Tests** |
-|----------------------------------------------------------|:------------------:|:---------:|:---------------------:|
-| Database + Migration                                     | :white_check_mark: |           |                       |
-| Subscribe Webhook after application Start                | :white_check_mark: |           |                       |
-| Save user info in Database                               | :white_check_mark: |           |                       |
-| Integration with Aggregator                              | :white_check_mark: |           |                       |
-| Menu with buttons: Start, Settings, Feedback             | :white_check_mark: |           |                       |
-| Submenu for Start: Skills, Blessing items                | :white_check_mark: |           |                       |
-| Functionality for button Start                           | :white_check_mark: |           |                       |
-| Functionality for button Skills                          | :white_check_mark: |           |                       |
-| Functionality for button Blessing Items                  |                    |           |                       |
-| Functionality for button Settings                        |                    |           |                       |
-| Functionality for button Feedback                        |                    |           |                       |
-| Telegram channel with <br/>Updates/News/Market positions |                    |           |                       |
-| Admin keyboard management                                |                    |           |                       |
-| User keyboard management                                 |                    |           |                       |
+| **Features**                                             |     **Status**     | **Integration Tests** |
+|----------------------------------------------------------|:------------------:|:---------------------:|
+| Database + Migration                                     | :white_check_mark: |                       |
+| Subscribe Webhook after application Start                | :white_check_mark: |                       |
+| Save user info in Database                               | :white_check_mark: |                       |
+| Integration with Aggregator                              | :white_check_mark: |                       |
+| Menu with buttons: Start, Settings, Feedback             | :white_check_mark: |                       |
+| Submenu for Start: Skills, Blessing items                | :white_check_mark: |                       |
+| Functionality for button Start                           | :white_check_mark: |                       |
+| Functionality for button Skills                          | :white_check_mark: |                       |
+| Functionality for button Blessing Items                  |                    |                       |
+| Functionality for button Settings                        |                    |                       |
+| Functionality for button Feedback                        |                    |                       |
+| Telegram channel with <br/>Updates/News/Market positions |                    |                       |
+| Admin keyboard management                                |                    |                       |
+| User keyboard management                                 |                    |                       |
 
 ### Aggregator
 
