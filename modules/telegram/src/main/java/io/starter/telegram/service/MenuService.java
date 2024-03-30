@@ -3,6 +3,7 @@ package io.starter.telegram.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.starter.telegram.config.Emoji;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -57,10 +58,10 @@ public class MenuService {
     KeyboardRow line1 = new KeyboardRow();
     KeyboardRow line2 = new KeyboardRow();
     KeyboardRow line3 = new KeyboardRow();
-    line1.add(new KeyboardButton("\uD83C\uDF97 Skills"));
-    line1.add(new KeyboardButton("⚙\uFE0F Settings"));
-    line2.add(new KeyboardButton("\uD83C\uDFB2 Clean"));
-    line3.add(new KeyboardButton("\uD83C\uDFAD Feedback"));
+    line1.add(new KeyboardButton("%s Start".formatted(Emoji.YELLOW_RIBBON)));
+    line1.add(new KeyboardButton("%s Settings".formatted(Emoji.GEAR)));
+    line2.add(new KeyboardButton("%s Clean".formatted(Emoji.GAME_DIE)));
+    line3.add(new KeyboardButton("%s Feedback".formatted(Emoji.PERFORMING_ARTS)));
     keyboard.add(line1);
     keyboard.add(line2);
     keyboard.add(line3);
