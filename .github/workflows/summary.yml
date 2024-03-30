@@ -14,4 +14,3 @@ jobs:
           name: 'Test report: $1 $2'
           path: '**/build/test-results/**/TEST-*.xml'
           reporter: java-junit
-          token: ${{secrets.GITHUB_TOKEN}}
