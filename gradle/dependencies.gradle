@@ -2,7 +2,7 @@ ext {
     os = "macos"
     mac_os_arch = 'osx-aarch_64'
     netty = '4.1.104.Final'
-    flyway = '10.11.0'
+    flyway = '10.11.1'
     lombok = '1.18.32'
     telegram = '6.9.7.1'
     spring = '3.2.5'
@@ -10,7 +10,7 @@ ext {
     mockito = '5.11.0'
     assertJ = '3.25.3'
     testng = '7.10.1'
-    faker = '2.1.0'
+    faker = '2.2.0'
     jaxb = '2.3.1'
 }
 
