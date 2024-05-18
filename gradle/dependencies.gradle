@@ -12,6 +12,7 @@ ext {
     testng = '7.10.2'
     faker = '2.2.2'
     jaxb = '2.3.1'
+    selenide = '7.3.2'
 }
 
 subprojects {
