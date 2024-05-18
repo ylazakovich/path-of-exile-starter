@@ -21,6 +21,9 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
           java-version: '17'
+      - name: Setup Firefox
+        if: ${{ matrix.gradle-task != 'check' }}
+        uses: browser-actions/setup-chrome@latest
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:
