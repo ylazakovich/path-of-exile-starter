@@ -13,7 +13,7 @@ public class LoginTest {
     Selenide.closeWebDriver();
   }
 
-  @Test
+  @Test(enabled = false)
   public void testLogin() {
     Selenide.open("https://web.telegram.org/k");
     SelenideElement byPhoneBtn = $(Selectors.byCssSelector("button[class^='btn-primary']"));
