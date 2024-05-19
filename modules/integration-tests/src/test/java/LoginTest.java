@@ -22,6 +22,7 @@ public class LoginTest {
 
   @Test()
   void testLogin() {
+    Selenide.open();
     Selenide.open("https://web.telegram.org/k");
     SelenideElement byPhoneBtn = $(Selectors.byCssSelector("button[class^='btn-primary']"));
     byPhoneBtn.click();
