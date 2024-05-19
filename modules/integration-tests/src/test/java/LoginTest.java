@@ -17,6 +17,7 @@ public class LoginTest {
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
     Configuration.browserCapabilities.merge(options);
+    Configuration.headless = true;
   }
 
   @AfterMethod
