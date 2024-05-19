@@ -14,9 +14,10 @@ public class LoginTest {
   @BeforeMethod
   void setup() {
     ChromeOptions options = new ChromeOptions();
-    options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--no-sandbox");
     Configuration.browserCapabilities.merge(options);
+    Configuration.headless = true;
   }
 
   @AfterMethod
