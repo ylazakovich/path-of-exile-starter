@@ -10,7 +10,7 @@ public abstract class BaseUITest extends BaseTest {
   @BeforeSuite(alwaysRun = true)
   // TODO: Later can be implemented Listeners over injections
   protected void initBrowserConfig() {
-    Configuration.headless = true;
+//    Configuration.headless = true;
     Browser.setDefaultConfigurations();
   }
 
