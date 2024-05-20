@@ -1,7 +1,5 @@
 package io.starter.integrations.telegram;
 
-import static com.codeborne.selenide.Selenide.$;
-
 import com.codeborne.selenide.Selenide;
 import io.starter.BaseUITest;
 import org.testng.annotations.Test;
