@@ -1,3 +1,4 @@
 dependencies {
     implementation("com.codeborne:selenide:${selenide}")
+    implementation("org.aeonbits.owner:owner:${aeonbits}")
 }

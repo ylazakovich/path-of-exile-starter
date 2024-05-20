@@ -1,4 +1,4 @@
 rootProject.name = 'path-of-exile-starter'
 include ':modules:aggregator'
 include ':modules:telegram'
-include ':modules:integration-tests'
+include ':modules:tests'

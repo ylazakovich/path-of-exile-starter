@@ -13,6 +13,7 @@ ext {
     faker = '2.2.2'
     jaxb = '2.3.1'
     selenide = '7.3.2'
+    aeonbits = "1.0.12"
 }
 
 subprojects {
