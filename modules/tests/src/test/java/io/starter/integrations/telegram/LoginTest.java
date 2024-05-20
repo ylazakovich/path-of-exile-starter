@@ -1,10 +1,8 @@
-package io.starter.integrations;
+package io.starter.integrations.telegram;
 
 import static com.codeborne.selenide.Selenide.$;
 
-import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
 import io.starter.BaseUITest;
 import org.testng.annotations.Test;
 
@@ -30,5 +28,6 @@ public class LoginTest extends BaseUITest {
 //        $(Selectors.byXpath("//div[contains(@class, 'search-group')]/ul/a/div/div[text()='@poe_consultant_bot']"));
 //    result.click();
     // TODO: Need to make a controller with assigning code for auth then continue test
+    System.out.println();
   }
 }

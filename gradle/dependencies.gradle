@@ -33,12 +33,11 @@ subprojects {
         implementation("org.springframework.boot:spring-boot-starter-webflux:${spring}")
         implementation("org.mariadb.jdbc:mariadb-java-client:${mariadb}")
         implementation("net.datafaker:datafaker:${faker}")
+        implementation("org.testng:testng:${testng}")
         testImplementation("org.assertj:assertj-core:${assertJ}")
         testImplementation("org.mockito:mockito-core:${mockito}")
-        testImplementation("org.testng:testng:${testng}")
         annotationProcessor("org.projectlombok:lombok:${lombok}")
         compileOnly("org.projectlombok:lombok:${lombok}")
         runtimeOnly("io.netty:netty-resolver-dns-native-${os}:${netty}:${mac_os_arch}")
-//        api("org.slf4j:slf4j-api:${slf4j}")
     }
 }
