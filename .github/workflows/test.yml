@@ -21,8 +21,6 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
           java-version: '17'
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@latest
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v3
         with:
