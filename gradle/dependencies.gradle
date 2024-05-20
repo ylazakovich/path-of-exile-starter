@@ -14,6 +14,7 @@ ext {
     jaxb = '2.3.1'
     selenide = '7.3.2'
     aeonbits = "1.0.12"
+    slf4j = '2.0.13'
 }
 
 subprojects {
@@ -38,5 +39,6 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:${lombok}")
         compileOnly("org.projectlombok:lombok:${lombok}")
         runtimeOnly("io.netty:netty-resolver-dns-native-${os}:${netty}:${mac_os_arch}")
+//        api("org.slf4j:slf4j-api:${slf4j}")
     }
 }
