@@ -25,7 +25,8 @@
 
 #### Q: Does Telegram bot work over Webhook ?
 
-Yes, bot uses webhooks implementation
+Yes, bot uses webhooks implementation \
+Application is realized over `Spring` framework
 
 #### Q: Which resources do you use for checking actual prices ?
 
@@ -74,3 +75,23 @@ Here: [Status](.github/docs/ROADMAP.md#status)
 
 As each test is completed \
 I will update doc and stay ref for this feature
+
+#### Q: Are you controlling library versions ? 
+
+Repository is connected to dependabot with \
+regular checking and managing \
+new versions of libs
+
+#### Q: How do you control stability of your app ?
+
+Repository is connected to github actions
+1) Each pull request/merge into `main` triggers unit tests
+2) Integrations tests are in progress now and later will be done
+- Every release should run pipeline with running these tests
+- Nightly builds will have a rule for running these tests only manually
+
+#### Q: Are you planning to make a chat for communicate about this project ?
+
+Yes, I have a plan for that in future \
+Currently, I would recommend you to stay your feedback \
+over issues or discussion 
