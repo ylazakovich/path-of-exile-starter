@@ -1,6 +1,6 @@
 dependencies {
-    implementation("javax.xml.bind:jaxb-api:${jaxb}")
-    implementation("org.flywaydb:flyway-core:${flyway}")
-    implementation("org.flywaydb:flyway-mysql:${flyway}")
-    implementation("org.telegram:telegrambots-spring-boot-starter:${telegram}")
+    implementation("javax.xml.bind:jaxb-api:$jaxb")
+    implementation("org.flywaydb:flyway-core:$flyway")
+    implementation("org.flywaydb:flyway-mysql:$flyway")
+    implementation("org.telegram:telegrambots-spring-boot-starter:$telegram")
 }
