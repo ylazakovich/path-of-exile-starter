@@ -23,8 +23,8 @@ jobs:
           java-version: '17'
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          arguments: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+      - name: Run the unit tests
+        run: ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
         if: always()
         with:
