@@ -16,6 +16,7 @@ ext {
     aeonbits = "1.0.12"
     slf4j = '2.0.13'
     allure = '2.27.0'
+    httpcore5 = '5.2.4'
 }
 
 subprojects {
