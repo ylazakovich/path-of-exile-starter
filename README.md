@@ -5,9 +5,9 @@
 ## Overview
 
 - [What the service can do?](#what-is-about-service)
-- [FEATURES](.github/docs/ROADMAP.MD#status)
-    - [Telegram](.github/docs/ROADMAP.MD#telegram)
-    - [Aggregator](.github/docs/ROADMAP.MD#aggregator)
+- [FEATURES](.github/docs/ROADMAP.md#status)
+    - [Telegram](.github/docs/ROADMAP.md#telegram)
+    - [Aggregator](.github/docs/ROADMAP.md#aggregator)
 - [Quick start](#quick-start)
 - [FAQ](#faq)
 
