@@ -94,4 +94,4 @@ Repository is connected to github actions
 
 Yes, I have a plan for that in future \
 Currently, I would recommend you to stay your feedback \
-over issues or discussion 
+over `issues` or `discussion`
