@@ -1,4 +1,4 @@
-package io.starter.models;
+package io.starter.steps.models;
 
 import io.starter.annotations.PageTitle;
 import io.starter.annotations.PageUrl;

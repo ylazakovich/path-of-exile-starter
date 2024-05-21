@@ -1,4 +1,4 @@
-package io.starter.models;
+package io.starter.steps.models;
 
 import io.qameta.allure.Step;
 import io.starter.utils.Browser;
