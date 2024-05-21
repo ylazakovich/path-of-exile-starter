@@ -9,4 +9,5 @@ public class BrowserConfig {
 
   public static final String BROWSER = CONFIG.browser();
   public static final String REMOTE_URL = CONFIG.remoteUrl();
+  public static final Boolean IS_REMOTE = CONFIG.isRemote();
 }

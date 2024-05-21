@@ -11,4 +11,7 @@ public interface BrowserConfiguration extends Config {
   @Key("REMOTE_URL")
   String remoteUrl();
 
+  @Key("IS_REMOTE")
+  @DefaultValue("true")
+  Boolean isRemote();
 }
