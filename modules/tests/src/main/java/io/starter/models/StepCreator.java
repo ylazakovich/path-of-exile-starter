@@ -15,8 +15,7 @@ public interface StepCreator {
    * @param <T>       like {@link PageSteps}
    * @return expected page steps
    */
-  @SneakyThrows({NoSuchMethodException.class, InvocationTargetException.class, IllegalAccessException.class,
-      InstantiationException.class})
+  @SneakyThrows({NoSuchMethodException.class, InvocationTargetException.class, IllegalAccessException.class, InstantiationException.class})
   default <T extends PageSteps<?, ?, ?>> T getPageSteps(Class<T> stepClass) {
     Class<?> pageClass = getPageClass(stepClass);
     return stepClass.getConstructor(pageClass).newInstance(Selenide.page(pageClass.getConstructor().newInstance()));

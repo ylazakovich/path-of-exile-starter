@@ -10,8 +10,7 @@ import io.starter.utils.Browser;
  * @param <V> verification steps class
  * @param <P> page class
  */
-public abstract class PageSteps<S extends PageSteps<S, V, P>, V extends Verification<S, P>, P extends Page>
-    implements StepCreator {
+public abstract class PageSteps<S extends PageSteps<S, V, P>, V extends Verification<S, P>, P extends Page> implements StepCreator {
 
   protected V verification;
   protected P page;
