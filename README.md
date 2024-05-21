@@ -54,7 +54,7 @@ Bot is ready for working
 
 #### Q: Should I run api call for assigning webhook ?
 
-No, you don't need to it \
+No, you don't need to do it \
 Bot has controller which assign webhook to bot after starting application
 
 #### Q: Which database you have decided to use ?
