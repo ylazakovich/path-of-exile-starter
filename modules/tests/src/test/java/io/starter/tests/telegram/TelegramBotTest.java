@@ -1,4 +1,4 @@
-package io.starter.telegram;
+package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
 import org.testng.annotations.Test;
