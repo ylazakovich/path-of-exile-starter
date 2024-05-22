@@ -1,5 +1,9 @@
 package io.starter.service;
 
+import java.util.List;
+import java.util.Objects;
+
+import io.starter.entity.SkillEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +21,22 @@ public class DatabaseService {
   }
 
   public void loadSkills() {
-    skillsService.clearTable();
-    poeNinjaService.getSkills().subscribe(data -> skillsService.saveAll(data.getBody()));
+    if (skillsService.findAll().isEmpty()) {
+      poeNinjaService.getSkills().subscribe(data -> skillsService.saveAll(data.getBody()));
+    }
+  }
+
+  public void refreshSkills() {
+    List<SkillEntity> skillsBefore = skillsService.findAll();
+    poeNinjaService.getSkills().subscribe(data -> {
+      skillsBefore.forEach(priceBefore ->
+          Objects.requireNonNull(data.getBody()).getLines().stream()
+              .filter(priceAfter -> priceAfter.getName().equals(priceBefore.getName()) &&
+                  priceAfter.getVariant().equals(priceBefore.getVariant()))
+              .findFirst()
+              .ifPresent(matchedEntity -> priceBefore.setChaosValue(matchedEntity.getChaosValue()))
+      );
+      skillsService.saveAll(skillsBefore);
+    });
   }
 }

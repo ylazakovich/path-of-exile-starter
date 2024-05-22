@@ -1,9 +1,5 @@
 package io.starter.controller;
 
-import java.util.List;
-import java.util.Objects;
-
-import io.starter.entity.SkillEntity;
 import io.starter.service.DatabaseService;
 import io.starter.service.PoeNinjaService;
 import io.starter.service.SkillsService;
@@ -33,17 +29,9 @@ public class DatabaseController {
     databaseService.loadSkills();
   }
 
-  @Scheduled(cron = "* */10 * * * *")
+  @Scheduled(cron = "0 */10 * * * *")
   @GetMapping("/update/skills/prices")
   public void updatePricesGems() {
-    // TODO: need to move it to Service;
-    List<SkillEntity> pastState = skillsService.findAll();
-    poeNinjaService.getSkills().subscribe(data -> {
-      pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
-          .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName()) &&
-              currentPrice.getVariant().equals(pastPrice.getVariant()))
-          .findFirst().ifPresent(matchedEntity -> pastPrice.setChaosValue(matchedEntity.getChaosValue())));
-      skillsService.saveAll(pastState);
-    });
+    databaseService.refreshSkills();
   }
 }

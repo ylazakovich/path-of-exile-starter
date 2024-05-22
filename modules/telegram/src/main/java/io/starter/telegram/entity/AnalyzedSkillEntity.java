@@ -22,7 +22,7 @@ public class AnalyzedSkillEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, updatable = false)
+  @Column(nullable = false)
   public Long id;
   public @NonNull String name;
   public @NonNull Double profit;
