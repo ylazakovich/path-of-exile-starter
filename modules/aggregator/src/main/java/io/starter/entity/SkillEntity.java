@@ -26,7 +26,7 @@ public class SkillEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, updatable = false)
+  @Column(nullable = false)
   private Long id;
   private @NonNull String name;
   private @NonNull String variant;
