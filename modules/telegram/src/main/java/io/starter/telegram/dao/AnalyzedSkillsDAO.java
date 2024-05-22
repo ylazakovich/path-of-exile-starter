@@ -1,7 +1,6 @@
 package io.starter.telegram.dao;
 
 import java.util.List;
-import java.util.Objects;
 
 import io.starter.aggregator.model.Skill;
 import io.starter.telegram.entity.AnalyzedSkillEntity;
