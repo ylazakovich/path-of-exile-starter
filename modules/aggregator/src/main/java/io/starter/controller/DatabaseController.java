@@ -29,7 +29,7 @@ public class DatabaseController {
     databaseService.loadSkills();
   }
 
-  @Scheduled(cron = "* */10 * * * *")
+  @Scheduled(cron = "0 */10 * * * *")
   @GetMapping("/update/skills/prices")
   public void updatePricesGems() {
     databaseService.refreshSkills();

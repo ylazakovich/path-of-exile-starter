@@ -14,6 +14,6 @@ public class TelegramApplication {
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(TelegramApplication.class, args);
     context.getBean(WebhookService.class).assignToken();
-    context.getBean(DatabaseService.class).loadSkills();
+    context.getBean(DatabaseService.class).loadAnalyzedSkills();
   }
 }

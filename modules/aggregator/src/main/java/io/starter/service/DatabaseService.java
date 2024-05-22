@@ -27,13 +27,16 @@ public class DatabaseService {
   }
 
   public void refreshSkills() {
-    List<SkillEntity> pastState = skillsService.findAll();
+    List<SkillEntity> skillsBefore = skillsService.findAll();
     poeNinjaService.getSkills().subscribe(data -> {
-      pastState.forEach(pastPrice -> Objects.requireNonNull(data.getBody()).getLines().stream()
-          .filter(currentPrice -> currentPrice.getName().equals(pastPrice.getName()) &&
-              currentPrice.getVariant().equals(pastPrice.getVariant()))
-          .findFirst().ifPresent(matchedEntity -> pastPrice.setChaosValue(matchedEntity.getChaosValue())));
-      skillsService.saveAll(pastState);
+      skillsBefore.forEach(priceBefore ->
+          Objects.requireNonNull(data.getBody()).getLines().stream()
+              .filter(priceAfter -> priceAfter.getName().equals(priceBefore.getName()) &&
+                  priceAfter.getVariant().equals(priceBefore.getVariant()))
+              .findFirst()
+              .ifPresent(matchedEntity -> priceBefore.setChaosValue(matchedEntity.getChaosValue()))
+      );
+      skillsService.saveAll(skillsBefore);
     });
   }
 }
