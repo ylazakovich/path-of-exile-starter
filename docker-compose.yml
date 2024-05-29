@@ -1,7 +1,7 @@
 services:
 
   aggregator-database:
-    image: mariadb:11.2
+    image: mariadb:11.2.4
     restart: always
     ports:
       - "3306:3306"
@@ -10,7 +10,7 @@ services:
       MARIADB_DATABASE: aggregator
 
   telegram-database:
-    image: mariadb:11.2
+    image: mariadb:11.2.4
     restart: always
     ports:
       - "3307:3306"
