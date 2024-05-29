@@ -5,9 +5,9 @@
 ## Overview
 
 - [What the service can do?](#what-is-about-service)
-- [Status](.github/docs/ROADMAP.md#status)
-    - [Telegram](.github/docs/ROADMAP.md#telegram)
-    - [Aggregator](.github/docs/ROADMAP.md#aggregator)
+- [Status](config/docs/ROADMAP.md#status)
+    - [Telegram](config/docs/ROADMAP.md#telegram)
+    - [Aggregator](config/docs/ROADMAP.md#aggregator)
 - [Quick start](#quick-start)
 - [FAQ](#faq)
 
@@ -19,7 +19,7 @@
 
 ## Quick start
 
-![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/.github/docs/demo.jpg)
+![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/config/docs/demo.jpg)
 
 ## FAQ
 
@@ -71,7 +71,7 @@ I haven't finished yet `1.0.0` version
 #### Q: How to understand business of your feature ?
 
 You can keep an eye on the status of test for every business feature \
-Here: [Status](.github/docs/ROADMAP.md#status)
+Here: [Status](config/docs/ROADMAP.md#status)
 
 As each test is completed \
 I will update doc and stay ref for this feature
