@@ -6,12 +6,11 @@ subprojects {
   tasks.withType(JavaCompile).configureEach {
     options.encoding = encoding
     options.debug = true
-    sourceCompatibility = 17
+    sourceCompatibility = JavaVersion.VERSION_17
     options.debugOptions.debugLevel = "source,lines,vars"
   }
 
   java {
-    sourceCompatibility = JavaVersion.VERSION_17
     toolchain {
       languageVersion = JavaLanguageVersion.of(17)
     }
