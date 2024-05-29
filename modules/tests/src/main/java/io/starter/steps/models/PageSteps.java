@@ -30,6 +30,7 @@ public abstract class PageSteps<S extends PageSteps<S, V, P>, V extends Verifica
    * @return steps class
    */
   @Step("Refresh page")
+  @SuppressWarnings("unchecked")
   public S refreshPage() {
     Browser.refresh();
     return (S) this;
