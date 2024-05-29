@@ -10,9 +10,8 @@ subprojects {
     options.debugOptions.debugLevel = "source,lines,vars"
   }
 
-  sourceCompatibility = '17'
-
   java {
+    sourceCompatibility = JavaVersion.VERSION_17
     toolchain {
       languageVersion = JavaLanguageVersion.of(17)
     }
