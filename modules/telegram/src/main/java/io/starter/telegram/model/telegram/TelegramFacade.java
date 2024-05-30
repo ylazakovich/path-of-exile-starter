@@ -61,7 +61,7 @@ public class TelegramFacade {
         messageCash.saveState(message, MessageState.START);
         break;
       default:
-        messageCash.saveState(message, MessageState.FIRST_START);
+        messageCash.saveState(message, MessageState.WELCOME);
         break;
     }
     return updateHandler.handle(message, messageCash.getCurrentState(message.getFrom()));
