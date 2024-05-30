@@ -1,4 +1,4 @@
-package io.starter.telegram.model;
+package io.starter.telegram.model.telegram;
 
 import java.util.Objects;
 

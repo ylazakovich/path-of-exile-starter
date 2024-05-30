@@ -1,6 +1,6 @@
 package io.starter.telegram.controller;
 
-import io.starter.telegram.model.Telegram;
+import io.starter.telegram.model.telegram.Telegram;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
