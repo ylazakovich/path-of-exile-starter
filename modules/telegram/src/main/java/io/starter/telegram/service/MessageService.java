@@ -2,7 +2,7 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.aggregator.model.Skill;
+import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.dao.AnalyzedSkillsDAO;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;

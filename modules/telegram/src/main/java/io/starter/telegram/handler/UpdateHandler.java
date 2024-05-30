@@ -28,7 +28,7 @@ public class UpdateHandler {
   }
 
   public BotApiMethod<?> handle(Message message, MessageState state) {
-    userRepo.addIfNotExist(message.getFrom());
+    userRepo.saveWhenNotExist(message.getFrom());
     return switch (state) {
       case FIRST_START -> menu.getMain(message);
       case START -> menu.getStart(message);
@@ -37,7 +37,7 @@ public class UpdateHandler {
   }
 
   public BotApiMethod<?> handle(CallbackQuery query, CallbackState state) {
-    userRepo.addIfNotExist(query.getFrom());
+    userRepo.saveWhenNotExist(query.getFrom());
     final long chatId = query.getMessage().getChatId();
     return switch (state) {
       case SKILLS -> menu.getMenuWithSkills(chatId);

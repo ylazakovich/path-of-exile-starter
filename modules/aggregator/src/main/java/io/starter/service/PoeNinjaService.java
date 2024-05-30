@@ -17,8 +17,8 @@ public class PoeNinjaService {
   private final PoeNinjaConfig config;
   private final WebClient client;
 
-  public PoeNinjaService() {
-    this.config = new PoeNinjaConfig();
+  public PoeNinjaService(PoeNinjaConfig config) {
+    this.config = config;
     this.client = WebClient.builder()
         .baseUrl(config.baseUrl)
         .exchangeStrategies(ExchangeStrategies

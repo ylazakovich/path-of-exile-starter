@@ -1,4 +1,4 @@
-package io.starter.aggregator.model;
+package io.starter.telegram.model.aggregator;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
