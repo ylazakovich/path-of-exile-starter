@@ -13,6 +13,7 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @Component
 @Slf4j
@@ -33,11 +34,19 @@ public class TelegramFacade {
   public BotApiMethod<?> handleUpdate(Update update) {
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
-      log.info("Received {}", callbackQuery);
+      User user = callbackQuery.getFrom();
+      log.info("Query received by user [id: {}, name: {}] user made ['{}']",
+          user.getId(),
+          user.getFirstName(),
+          callbackQuery.getData());
       return handleCallbackQuery(callbackQuery);
     } else {
       Message message = update.getMessage();
-      log.info("Received {}", message);
+      User user = message.getFrom();
+      log.info("Message received by user [id: '{}',  name: '{}'] - user send ['{}']",
+          user.getId(),
+          user.getFirstName(),
+          message.getText());
       if (message.hasText()) {
         return handleInputMessage(message);
       }
