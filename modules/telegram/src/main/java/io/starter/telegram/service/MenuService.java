@@ -28,7 +28,7 @@ public class MenuService {
     return createMessageWithInlineKeyboard(message.getChatId(), getStartSubMenu());
   }
 
-  public SendMessage getMenuWithSkills(MaybeInaccessibleMessage message) {
+  public EditMessageText getMenuWithSkills(MaybeInaccessibleMessage message) {
     final String text = """
         GUIDE
 
@@ -40,7 +40,7 @@ public class MenuService {
         1. Faster Attack Support - Skill Gem which you can craft and trade on market
         2. 10 - Your expected profit value in Chaos
         """;
-    return createMessageWithInlineKeyboard(text, message.getChatId(), getSubMenuWithSkills());
+    return createMessageWithInlineKeyboard(message, text, getSubMenuWithSkills());
   }
 
   private SendMessage createMessageWithInlineKeyboard(Message message,
@@ -57,14 +57,14 @@ public class MenuService {
     return sendMessage;
   }
 
-  private SendMessage createMessageWithInlineKeyboard(String text,
-                                                      long chatId,
-                                                      InlineKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = generateSendMessage(text, chatId);
+  private EditMessageText createMessageWithInlineKeyboard(MaybeInaccessibleMessage message,
+                                                          String text,
+                                                          InlineKeyboardMarkup keyboard) {
+    final EditMessageText result = generateEditMessage(message, text);
     if (keyboard != null) {
-      sendMessage.setReplyMarkup(keyboard);
+      result.setReplyMarkup(keyboard);
     }
-    return sendMessage;
+    return result;
   }
 
   private SendMessage createMessageWithInlineKeyboard(long chatId,
