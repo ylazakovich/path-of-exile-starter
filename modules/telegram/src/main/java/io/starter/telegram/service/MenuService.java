@@ -116,14 +116,26 @@ public class MenuService {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
-    allBtn.setCallbackData(CallbackState.SKILLS_ALL.value);
+    allBtn.setCallbackData(CallbackState.All_SKILLS.value);
     List<InlineKeyboardButton> buttons = List.of(allBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);
     return markupInline;
   }
 
-  public SendMessage generateSendMessage(String text, long chatId) {
+  public InlineKeyboardMarkup keyboardWithRefresh() {
+    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardButton refreshBtn = new InlineKeyboardButton(Emoji.REPEAT.value);
+    refreshBtn.setCallbackData(CallbackState.REFRESH.value);
+    List<InlineKeyboardButton> buttons = List.of(refreshBtn);
+    keyboard.add(buttons);
+    markup.setKeyboard(keyboard);
+    return markup;
+  }
+
+  public SendMessage generateSendMessage(String text,
+                                         long chatId) {
     return SendMessage.builder()
         .chatId(chatId)
         .parseMode("Markdown")
@@ -131,12 +143,25 @@ public class MenuService {
         .build();
   }
 
-  public EditMessageText generateEditMessage(MaybeInaccessibleMessage message, String text) {
+  public EditMessageText generateEditMessage(MaybeInaccessibleMessage message,
+                                             String text) {
     return EditMessageText.builder()
         .chatId(message.getChatId())
         .messageId(message.getMessageId())
         .parseMode("Markdown")
         .text(text)
+        .build();
+  }
+
+  public EditMessageText generateEditMessage(MaybeInaccessibleMessage message,
+                                             String text,
+                                             InlineKeyboardMarkup keyboard) {
+    return EditMessageText.builder()
+        .chatId(message.getChatId())
+        .messageId(message.getMessageId())
+        .parseMode("Markdown")
+        .text(text)
+        .replyMarkup(keyboard)
         .build();
   }
 }

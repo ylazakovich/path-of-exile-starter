@@ -8,6 +8,7 @@ import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
 @Service
 public class MessageService {
@@ -24,7 +25,8 @@ public class MessageService {
   @SneakyThrows
   public EditMessageText messageWithReadySkillsForTrade(CallbackQuery callback) {
     final List<Skill> skills = analyzedSkillsDAO.findAll();
-    return menuService.generateEditMessage(callback.getMessage(), initBuilder(skills).toString());
+    InlineKeyboardMarkup markup = menuService.keyboardWithRefresh();
+    return menuService.generateEditMessage(callback.getMessage(), initBuilder(skills).toString(), markup);
   }
 
   private StringBuilder initBuilder(List<Skill> skills) {
