@@ -9,7 +9,8 @@ public enum Emoji {
   WAVING_HAND("👋"),
   WARNING("⚠️"),
   GAME_DIE("🎲"),
-  GEAR("⚙️");
+  GEAR("⚙️"),
+  REPEAT("🔄");
 
   public final String value;
 

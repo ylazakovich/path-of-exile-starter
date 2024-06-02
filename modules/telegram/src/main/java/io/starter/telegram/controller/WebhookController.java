@@ -26,10 +26,10 @@ public class WebhookController {
   public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
-      log.info("Telegram has catch update with {}", callbackQuery);
+      log.info("Telegram has catch callback with id ['{}']", callbackQuery.getId());
     } else {
       Message message = update.getMessage();
-      log.info("Telegram has catch update with {}", message);
+      log.info("Telegram has catch message with id ['{}']", message.getMessageId());
     }
     return telegram.onWebhookUpdateReceived(update);
   }

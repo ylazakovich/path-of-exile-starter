@@ -27,7 +27,7 @@ public class Telegram extends SpringWebhookBot {
 
   @Override
   public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-    return FACADE.handleUpdate(update);
+    return FACADE.handleOnUpdate(update);
   }
 
   @Override

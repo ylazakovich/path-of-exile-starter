@@ -6,9 +6,10 @@ import org.apache.commons.lang3.StringUtils;
 @AllArgsConstructor
 public enum CallbackState {
   NO_CMD(StringUtils.EMPTY),
-  SKILLS("Pressing button with Skills"),
-  SKILLS_ALL("Pressing button with ALL SKILLS"),
-  BLESSING_ITEMS("Pressing button with Blessing Items");
+  SKILLS("Pressing button with 'Skills'"),
+  All_SKILLS("Pressing button with 'All skills'"),
+  REFRESH("Pressing button with 'Refresh'"),
+  BLESSING_ITEMS("Pressing button with 'Blessing Items'");
 
   public final String value;
 

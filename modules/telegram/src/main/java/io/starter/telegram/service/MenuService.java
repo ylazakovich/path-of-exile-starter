@@ -8,6 +8,8 @@ import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.config.Emoji;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -18,15 +20,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 @Service
 public class MenuService {
 
-  public SendMessage getMain(final Message message) {
+  public SendMessage getMain(Message message) {
     return createMessageWithInlineKeyboard(message, getReplyMenu());
   }
 
-  public SendMessage getStart(final Message message) {
+  public SendMessage getStart(Message message) {
     return createMessageWithInlineKeyboard(message.getChatId(), getStartSubMenu());
   }
 
-  public SendMessage getMenuWithSkills(final long chatId) {
+  public EditMessageText getMenuWithSkills(MaybeInaccessibleMessage message) {
     final String text = """
         GUIDE
 
@@ -38,12 +40,12 @@ public class MenuService {
         1. Faster Attack Support - Skill Gem which you can craft and trade on market
         2. 10 - Your expected profit value in Chaos
         """;
-    return createMessageWithInlineKeyboard(text, chatId, getSubMenuWithSkills());
+    return createMessageWithInlineKeyboard(message, text, getSubMenuWithSkills());
   }
 
-  private SendMessage createMessageWithInlineKeyboard(final Message message,
-                                                      final ReplyKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = build("""
+  private SendMessage createMessageWithInlineKeyboard(Message message,
+                                                      ReplyKeyboardMarkup keyboard) {
+    final SendMessage sendMessage = generateSendMessage("""
             %s
             Greetings, Exile **%s**!
             I will tell you the most profitable ways to earn your first Divine.
@@ -55,19 +57,19 @@ public class MenuService {
     return sendMessage;
   }
 
-  private SendMessage createMessageWithInlineKeyboard(final String text,
-                                                      final long chatId,
-                                                      final InlineKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = build(text, chatId);
+  private EditMessageText createMessageWithInlineKeyboard(MaybeInaccessibleMessage message,
+                                                          String text,
+                                                          InlineKeyboardMarkup keyboard) {
+    final EditMessageText result = generateEditMessage(message, text);
     if (keyboard != null) {
-      sendMessage.setReplyMarkup(keyboard);
+      result.setReplyMarkup(keyboard);
     }
-    return sendMessage;
+    return result;
   }
 
-  private SendMessage createMessageWithInlineKeyboard(final long chatId,
-                                                      final InlineKeyboardMarkup keyboard) {
-    final SendMessage sendMessage = build("What options do you want to choose ?", chatId);
+  private SendMessage createMessageWithInlineKeyboard(long chatId,
+                                                      InlineKeyboardMarkup keyboard) {
+    final SendMessage sendMessage = generateSendMessage("What options do you want to choose ?", chatId);
     if (keyboard != null) {
       sendMessage.setReplyMarkup(keyboard);
     }
@@ -114,18 +116,52 @@ public class MenuService {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
-    allBtn.setCallbackData(CallbackState.SKILLS_ALL.value);
+    allBtn.setCallbackData(CallbackState.All_SKILLS.value);
     List<InlineKeyboardButton> buttons = List.of(allBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);
     return markupInline;
   }
 
-  private SendMessage build(String text, long chatId) {
-    final SendMessage message = new SendMessage();
-    message.enableMarkdown(true);
-    message.setText(text);
-    message.setChatId(chatId);
-    return message;
+  public InlineKeyboardMarkup keyboardWithRefresh() {
+    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
+    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardButton refreshBtn = new InlineKeyboardButton(Emoji.REPEAT.value);
+    refreshBtn.setCallbackData(CallbackState.REFRESH.value);
+    List<InlineKeyboardButton> buttons = List.of(refreshBtn);
+    keyboard.add(buttons);
+    markup.setKeyboard(keyboard);
+    return markup;
+  }
+
+  public SendMessage generateSendMessage(String text,
+                                         long chatId) {
+    return SendMessage.builder()
+        .chatId(chatId)
+        .parseMode("Markdown")
+        .text(text)
+        .build();
+  }
+
+  public EditMessageText generateEditMessage(MaybeInaccessibleMessage message,
+                                             String text) {
+    return EditMessageText.builder()
+        .chatId(message.getChatId())
+        .messageId(message.getMessageId())
+        .parseMode("Markdown")
+        .text(text)
+        .build();
+  }
+
+  public EditMessageText generateEditMessage(MaybeInaccessibleMessage message,
+                                             String text,
+                                             InlineKeyboardMarkup keyboard) {
+    return EditMessageText.builder()
+        .chatId(message.getChatId())
+        .messageId(message.getMessageId())
+        .parseMode("Markdown")
+        .text(text)
+        .replyMarkup(keyboard)
+        .build();
   }
 }
