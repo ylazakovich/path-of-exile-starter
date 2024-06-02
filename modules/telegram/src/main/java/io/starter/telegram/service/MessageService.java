@@ -4,7 +4,6 @@ import java.util.List;
 
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.dao.AnalyzedSkillsDAO;
-import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -22,7 +21,6 @@ public class MessageService {
     this.menuService = menuService;
   }
 
-  @SneakyThrows
   public EditMessageText messageWithReadySkillsForTrade(CallbackQuery callback) {
     final List<Skill> skills = analyzedSkillsDAO.findAll();
     InlineKeyboardMarkup markup = menuService.keyboardWithRefresh();
