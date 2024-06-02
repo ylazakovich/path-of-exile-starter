@@ -2,11 +2,12 @@ package io.starter.telegram.cash.state;
 
 import io.starter.telegram.config.Emoji;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum MessageState {
 
-  NO_CMD(""),
+  NO_CMD(StringUtils.EMPTY),
   WELCOME("/start"),
   START("%s Start".formatted(Emoji.YELLOW_RIBBON)),
   SETTINGS("%s Settings".formatted(Emoji.GEAR)),
