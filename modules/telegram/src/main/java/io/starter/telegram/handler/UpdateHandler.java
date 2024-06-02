@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.User;
 
 @Component
 @Slf4j
@@ -17,18 +19,20 @@ public class UpdateHandler {
 
   private final MessageService messageService;
   private final MenuService menu;
-  private final UserDAO userRepo;
+  private final UserDAO userDAO;
 
   public UpdateHandler(MessageService messageService,
                        MenuService menu,
-                       UserDAO userRepo) {
+                       UserDAO userDAO) {
     this.messageService = messageService;
-    this.userRepo = userRepo;
+    this.userDAO = userDAO;
     this.menu = menu;
   }
 
-  public BotApiMethod<?> handle(Message message, MessageState state) {
-    userRepo.saveWhenNotExist(message.getFrom());
+  public BotApiMethod<?> handleOnUpdate(Message message, MessageState state) {
+    final User user = message.getFrom();
+    userDAO.saveWhenNotExist(user);
+    userDAO.saveLastMessageId(user, message);
     return switch (state) {
       case WELCOME -> menu.getMain(message);
       case START -> menu.getStart(message);
@@ -36,12 +40,15 @@ public class UpdateHandler {
     };
   }
 
-  public BotApiMethod<?> handle(CallbackQuery query, CallbackState state) {
-    userRepo.saveWhenNotExist(query.getFrom());
-    final long chatId = query.getMessage().getChatId();
+  public BotApiMethod<?> handleOnUpdate(CallbackQuery callback, CallbackState state) {
+    final User user = callback.getFrom();
+    final MaybeInaccessibleMessage message = callback.getMessage();
+    final long chatId = callback.getMessage().getChatId();
+    userDAO.saveWhenNotExist(user);
+    userDAO.saveLastMessageId(user, message);
     return switch (state) {
       case SKILLS -> menu.getMenuWithSkills(chatId);
-      case SKILLS_ALL -> messageService.messageWithReadySkillsForTrade(query);
+      case SKILLS_ALL -> messageService.messageWithReadySkillsForTrade(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };

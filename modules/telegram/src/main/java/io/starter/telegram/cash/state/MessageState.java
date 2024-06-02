@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum MessageState {
 
+  NO_CMD(""),
   WELCOME("/start"),
   START("%s Start".formatted(Emoji.YELLOW_RIBBON)),
   SETTINGS("%s Settings".formatted(Emoji.GEAR)),

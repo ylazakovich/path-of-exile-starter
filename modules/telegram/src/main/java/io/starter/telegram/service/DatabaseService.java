@@ -10,7 +10,8 @@ public class DatabaseService {
   private final AggregatorService aggregatorService;
   private final AnalyzedSkillsDAO analyzedSkillsDAO;
 
-  public DatabaseService(AggregatorService aggregatorService, AnalyzedSkillsDAO analyzedSkillsDAO) {
+  public DatabaseService(AggregatorService aggregatorService,
+                         AnalyzedSkillsDAO analyzedSkillsDAO) {
     this.aggregatorService = aggregatorService;
     this.analyzedSkillsDAO = analyzedSkillsDAO;
   }

@@ -24,8 +24,10 @@ public class UserEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(nullable = false, updatable = false)
+  @Column(nullable = false)
   public Long id;
   public @NonNull Long userId;
   public @NonNull String username;
+  @Column(name = "last_message_id")
+  public Integer lastMessageId;
 }
