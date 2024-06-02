@@ -43,11 +43,10 @@ public class UpdateHandler {
   public BotApiMethod<?> handleOnUpdate(CallbackQuery callback, CallbackState state) {
     final User user = callback.getFrom();
     final MaybeInaccessibleMessage message = callback.getMessage();
-    final long chatId = message.getChatId();
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> menu.getMenuWithSkills(chatId);
+      case SKILLS -> menu.getMenuWithSkills(message);
       case SKILLS_ALL -> messageService.messageWithReadySkillsForTrade(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
