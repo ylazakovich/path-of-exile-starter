@@ -43,7 +43,7 @@ public class UpdateHandler {
   public BotApiMethod<?> handleOnUpdate(CallbackQuery callback, CallbackState state) {
     final User user = callback.getFrom();
     final MaybeInaccessibleMessage message = callback.getMessage();
-    final long chatId = callback.getMessage().getChatId();
+    final long chatId = message.getChatId();
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
