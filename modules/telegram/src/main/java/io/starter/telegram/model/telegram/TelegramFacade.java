@@ -7,7 +7,6 @@ import io.starter.telegram.cash.MessageCash;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.handler.UpdateHandler;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
@@ -21,9 +20,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 public class TelegramFacade {
 
   private final UpdateHandler updateHandler;
-  @Getter
   private final CallbackCash callbackCash;
-  @Getter
   private final MessageCash messageCash;
 
   public TelegramFacade(UpdateHandler updateHandler,
