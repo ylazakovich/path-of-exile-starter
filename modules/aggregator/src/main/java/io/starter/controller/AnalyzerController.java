@@ -21,7 +21,7 @@ public class AnalyzerController {
 
   @GetMapping("/analyze/skills")
   public List<AnalyzedSkillDTO> findAllForTrade() {
-    return findAllForTrade(20);
+    return findAllForTrade(10);
   }
 
   @GetMapping("analyze/skills/{takeProfit}")

@@ -31,7 +31,7 @@ public class AnalyzedSkillsDAO {
   }
 
   public void add(List<Skill> skills) {
-    if (skills.isEmpty()) {
+    if (!skills.isEmpty()) {
       final List<AnalyzedSkillEntity> entities = skills.stream()
           .map(skill -> {
             AnalyzedSkillEntity analyzedSkillEntity = new AnalyzedSkillEntity();
