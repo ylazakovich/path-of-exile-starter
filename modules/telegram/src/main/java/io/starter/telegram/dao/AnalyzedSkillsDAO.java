@@ -1,5 +1,6 @@
 package io.starter.telegram.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.starter.telegram.model.aggregator.Skill;
@@ -44,18 +45,33 @@ public class AnalyzedSkillsDAO {
     }
   }
 
-  public void update(List<Skill> skillsAfter) {
-    List<AnalyzedSkillEntity> skillsBefore = analyzedSkillsRepository.findAll();
-    skillsAfter.forEach(skillAfter ->
-        skillsBefore.stream()
-            .filter(skillBefore -> skillBefore.getName().equals(skillAfter.getName()))
+  public void update(List<Skill> skills) {
+    List<AnalyzedSkillEntity> entitiesOnUpdate = analyzedSkillsRepository.findAll();
+    skills.forEach(skill ->
+        entitiesOnUpdate.stream()
+            .filter(entity -> entity.getName().equals(skill.getName()))
             .findFirst()
             .ifPresent(matchedEntity -> {
-                  matchedEntity.setCraftCost(skillAfter.getCraftCost());
-                  matchedEntity.setProfit(skillAfter.getProfit());
+                  matchedEntity.setCraftCost(skill.getCraftCost());
+                  matchedEntity.setProfit(skill.getProfit());
                 }
             )
     );
-    analyzedSkillsRepository.saveAll(skillsBefore);
+    analyzedSkillsRepository.saveAll(entitiesOnUpdate);
+  }
+
+  public void addNew(List<Skill> skills) {
+    List<AnalyzedSkillEntity> allEntities = analyzedSkillsRepository.findAll();
+    List<AnalyzedSkillEntity> entitiesOnAdding = new ArrayList<>();
+    skills.stream()
+        .filter(skill -> allEntities.stream().noneMatch(entity -> entity.getName().equals(skill.getName())))
+        .forEach(skill -> {
+          AnalyzedSkillEntity analyzedSkillEntity = new AnalyzedSkillEntity();
+          analyzedSkillEntity.setName(skill.getName());
+          analyzedSkillEntity.setCraftCost(skill.getCraftCost());
+          analyzedSkillEntity.setProfit(skill.getProfit());
+          entitiesOnAdding.add(analyzedSkillEntity);
+        });
+    analyzedSkillsRepository.saveAll(entitiesOnAdding);
   }
 }

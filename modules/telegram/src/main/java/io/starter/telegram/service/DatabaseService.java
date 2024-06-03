@@ -16,14 +16,17 @@ public class DatabaseService {
     this.analyzedSkillsDAO = analyzedSkillsDAO;
   }
 
-  public void loadAnalyzedSkills() {
+  public void loadSkills() {
     aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::add);
   }
 
-  @Scheduled(cron = "0 */10 * * * *")
-  public void refreshAnalyzedSkills() {
+  @Scheduled(cron = "0 */5 * * * *")
+  public void updateSkills() {
     aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::update);
   }
 
-  // TODO: Need to create method with adding new positions
+  @Scheduled(cron = "0 */2 * * * *")
+  public void addNewSkills() {
+    aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::addNew);
+  }
 }

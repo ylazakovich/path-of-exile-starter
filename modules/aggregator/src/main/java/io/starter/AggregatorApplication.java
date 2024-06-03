@@ -1,6 +1,6 @@
 package io.starter;
 
-import io.starter.service.DatabaseService;
+import io.starter.controller.DatabaseController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,6 +12,6 @@ public class AggregatorApplication {
 
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(AggregatorApplication.class, args);
-    context.getBean(DatabaseService.class).loadSkills();
+    context.getBean(DatabaseController.class).loadSkills();
   }
 }
