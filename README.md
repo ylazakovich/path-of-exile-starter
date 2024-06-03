@@ -19,7 +19,7 @@
 
 ## Quick start
 
-![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/config/docs/demo.jpg)
+![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/config/docs/demo.gif)
 
 ## FAQ
 
