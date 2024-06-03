@@ -2,7 +2,7 @@ ext {
     os = "macos"
     mac_os_arch = 'osx-aarch_64'
     netty = '4.1.104.Final'
-    flyway = '10.13.0'
+    flyway = '10.14.0'
     lombok = '1.18.32'
     telegram = '6.9.7.1'
     spring = '3.3.0'
