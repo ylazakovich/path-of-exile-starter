@@ -1,8 +1,9 @@
 package io.starter.controller;
 
+import java.util.Objects;
+
 import io.starter.service.DatabaseService;
 import io.starter.service.PoeNinjaService;
-import io.starter.service.SkillsService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,25 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 public class DatabaseController {
 
   private final DatabaseService databaseService;
-  private final SkillsService skillsService;
   private final PoeNinjaService poeNinjaService;
 
   public DatabaseController(DatabaseService databaseService,
-                            SkillsService skillsService,
                             PoeNinjaService poeNinjaService) {
     this.databaseService = databaseService;
-    this.skillsService = skillsService;
     this.poeNinjaService = poeNinjaService;
   }
 
   @GetMapping("/load/skills")
   public void loadSkills() {
-    databaseService.loadSkills();
+    poeNinjaService.getSkills().subscribe(data -> databaseService.loadSkills(Objects.requireNonNull(data.getBody())));
   }
 
-  @Scheduled(cron = "0 */10 * * * *")
-  @GetMapping("/update/skills/prices")
-  public void updatePricesGems() {
-    databaseService.refreshSkills();
+  @Scheduled(cron = "0 */1 * * * *")
+  public void updateSkills() {
+    poeNinjaService.getSkills().subscribe(data -> databaseService.updateSkills(Objects.requireNonNull(data.getBody())));
   }
+
+//  @Scheduled(cron = "0 */2 * * * *")
+//  public void addNewSkills() {
+//    databaseService.addNewSkills();
+//  }
 }
