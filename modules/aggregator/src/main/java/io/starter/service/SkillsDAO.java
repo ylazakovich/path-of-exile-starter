@@ -24,10 +24,6 @@ public class SkillsDAO {
     this.entityMapper = entityMapper;
   }
 
-  public List<SkillEntity> findAll() {
-    return skillRepo.findAll();
-  }
-
   public void saveAll(Lines<Skill> data) {
     List<SkillEntity> entityList = entityMapper.apply(data);
     skillRepo.saveAll(entityList);
@@ -35,9 +31,5 @@ public class SkillsDAO {
 
   public void saveAll(List<SkillEntity> entities) {
     skillRepo.saveAll(entities);
-  }
-
-  public void clearTable() {
-    skillRepo.truncateTable();
   }
 }

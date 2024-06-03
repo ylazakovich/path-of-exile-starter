@@ -24,16 +24,16 @@ public class DatabaseController {
 
   @GetMapping("/load/skills")
   public void loadSkills() {
-    poeNinjaService.getSkills().subscribe(data -> databaseService.loadSkills(Objects.requireNonNull(data.getBody())));
+    poeNinjaService.getSkills().subscribe(data -> databaseService.load(Objects.requireNonNull(data.getBody())));
   }
 
-  @Scheduled(cron = "0 */1 * * * *")
+  @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
-    poeNinjaService.getSkills().subscribe(data -> databaseService.updateSkills(Objects.requireNonNull(data.getBody())));
+    poeNinjaService.getSkills().subscribe(data -> databaseService.update(Objects.requireNonNull(data.getBody())));
   }
 
-//  @Scheduled(cron = "0 */2 * * * *")
-//  public void addNewSkills() {
-//    databaseService.addNewSkills();
-//  }
+  @Scheduled(cron = "0 */2 * * * *")
+  public void addNewSkills() {
+    poeNinjaService.getSkills().subscribe(data -> databaseService.addNew(Objects.requireNonNull(data.getBody())));
+  }
 }
