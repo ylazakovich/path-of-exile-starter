@@ -1,17 +1,17 @@
 package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
+import io.starter.config.AppConfig;
 import org.testng.annotations.Test;
 
 public class TelegramBotTest extends BaseUITest {
 
   // TODO: I think that it should be private method which should run only 1 time
-  @Test(enabled = false)
+  @Test(enabled = true)
   void testOnAssigningVerificationCode() {
-    String phone = "";
-    String code = "";
+    String code = regressionServiceSteps.getValidationCode();
     telegramNavigationSteps
-        .openLoginPage().loginViaPhone(phone)
+        .openLoginPage().loginViaPhone(AppConfig.ACCOUNT_PHONE)
         .inputVerificationCode(code);
   }
 
