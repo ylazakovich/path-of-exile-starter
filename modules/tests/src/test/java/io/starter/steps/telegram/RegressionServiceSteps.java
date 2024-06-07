@@ -23,7 +23,7 @@ public class RegressionServiceSteps {
   private void awaitValidationCode() {
     Waiter.awaitCondition(() -> regressionService.getValidatableCode().extract().jsonPath().getBoolean("is_not_used"),
         "No verification code. Admin can provide it",
-        Duration.ofSeconds(30),
+        Duration.ofSeconds(60),
         Duration.ofSeconds(4));
   }
 }
