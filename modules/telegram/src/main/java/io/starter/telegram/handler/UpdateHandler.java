@@ -2,7 +2,7 @@ package io.starter.telegram.handler;
 
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
-import io.starter.telegram.dao.UserDAO;
+import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.service.MenuService;
 import io.starter.telegram.service.MessageService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +19,11 @@ public class UpdateHandler {
 
   private final MessageService messageService;
   private final MenuService menu;
-  private final UserDAO userDAO;
+  private final UserDao userDAO;
 
   public UpdateHandler(MessageService messageService,
                        MenuService menu,
-                       UserDAO userDAO) {
+                       UserDao userDAO) {
     this.messageService = messageService;
     this.userDAO = userDAO;
     this.menu = menu;

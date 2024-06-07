@@ -11,12 +11,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnalyzedSkillsDAO {
+public class AnalyzedSkillsDao {
 
   private final AnalyzedSkillsRepository analyzedSkillsRepository;
 
   @Autowired
-  public AnalyzedSkillsDAO(AnalyzedSkillsRepository analyzedSkillsRepository) {
+  public AnalyzedSkillsDao(AnalyzedSkillsRepository analyzedSkillsRepository) {
     this.analyzedSkillsRepository = analyzedSkillsRepository;
   }
 

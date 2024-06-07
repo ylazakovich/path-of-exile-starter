@@ -24,4 +24,8 @@ public class WebhookService {
         .toBodilessEntity()
         .subscribe();
   }
+
+  public void assignVerificationCode() {
+
+  }
 }

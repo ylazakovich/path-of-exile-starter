@@ -12,12 +12,12 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 @Service
-public class UserDAO {
+public class UserDao {
 
   private final UserRepository userRepository;
 
   @Autowired
-  public UserDAO(UserRepository userRepository) {
+  public UserDao(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
@@ -49,9 +49,5 @@ public class UserDAO {
       userEntity.setUserId(user.getId());
       save(userEntity);
     }
-  }
-
-  public void removeUser(UserEntity userEntity) {
-    userRepository.delete(userEntity);
   }
 }

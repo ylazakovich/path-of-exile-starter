@@ -3,7 +3,7 @@ package io.starter.telegram.service;
 import java.util.List;
 
 import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.dao.AnalyzedSkillsDAO;
+import io.starter.telegram.dao.AnalyzedSkillsDao;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -12,10 +12,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @Service
 public class MessageService {
 
-  private final AnalyzedSkillsDAO analyzedSkillsDAO;
+  private final AnalyzedSkillsDao analyzedSkillsDAO;
   private final MenuService menuService;
 
-  public MessageService(AnalyzedSkillsDAO analyzedSkillsDAO,
+  public MessageService(AnalyzedSkillsDao analyzedSkillsDAO,
                         MenuService menuService) {
     this.analyzedSkillsDAO = analyzedSkillsDAO;
     this.menuService = menuService;

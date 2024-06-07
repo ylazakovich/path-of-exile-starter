@@ -1,5 +1,7 @@
 package io.starter.telegram.controller;
 
+import io.starter.telegram.dao.RegressionDao;
+import io.starter.telegram.entity.RegressionEntity;
 import io.starter.telegram.model.telegram.Telegram;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -11,15 +13,19 @@ import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import reactor.core.publisher.Mono;
 
 @RestController
 @Slf4j
 public class WebhookController {
 
   private final Telegram telegram;
+  private final RegressionDao regressionDao;
 
-  public WebhookController(Telegram telegram) {
+  public WebhookController(Telegram telegram,
+                           RegressionDao regressionDao) {
     this.telegram = telegram;
+    this.regressionDao = regressionDao;
   }
 
   @PostMapping("/")
@@ -34,9 +40,10 @@ public class WebhookController {
     return telegram.onWebhookUpdateReceived(update);
   }
 
-  @GetMapping
+  @GetMapping("/code")
   public ResponseEntity get() {
-    log.info("Health check");
-    return ResponseEntity.ok().build();
+    log.info("Get verification code for running regression");
+    RegressionEntity entity = regressionDao.read(1);
+    return ResponseEntity.ok().body(entity);
   }
 }
