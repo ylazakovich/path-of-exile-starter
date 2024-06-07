@@ -24,6 +24,6 @@ public class RegressionServiceSteps {
     Waiter.awaitCondition(() -> regressionService.getValidatableCode().extract().jsonPath().getBoolean("is_not_used"),
         "No verification code. Admin can provide it",
         Duration.ofSeconds(30),
-        Duration.ofMillis(4));
+        Duration.ofSeconds(4));
   }
 }
