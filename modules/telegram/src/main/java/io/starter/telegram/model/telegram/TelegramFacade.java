@@ -35,17 +35,21 @@ public class TelegramFacade {
     if (update.hasCallbackQuery()) {
       CallbackQuery callback = update.getCallbackQuery();
       User user = callback.getFrom();
-      log.info("Query received by user [id: {}, name: {}] user made ['{}']",
+      log.info("Query received by user [id: {} - username: '{}' - 'name: {} {}'] user made ['{}']",
           user.getId(),
+          user.getUserName(),
           user.getFirstName(),
+          user.getLastName(),
           callback.getData());
       return handleOnCallback(callback);
     } else {
       Message message = update.getMessage();
       User user = message.getFrom();
-      log.info("Message received by user [id: '{}',  name: '{}'] - user send ['{}']",
+      log.info("Message received by user [id: '{}' - username: '{}' - name: '{} {}'] - user send ['{}']",
           user.getId(),
+          user.getUserName(),
           user.getFirstName(),
+          user.getLastName(),
           message.getText());
       return handleOnMessage(message);
     }
