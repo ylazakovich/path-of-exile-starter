@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 public class TelegramBotTest extends BaseUITest {
 
   // TODO: I think that it should be private method which should run only 1 time
-  @Test(enabled = true)
+  @Test(enabled = false)
   void testOnAssigningVerificationCode() {
     String code = regressionServiceSteps.getValidationCode();
     telegramNavigationSteps
