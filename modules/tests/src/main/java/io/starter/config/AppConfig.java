@@ -8,4 +8,6 @@ public class AppConfig {
       ConfigFactory.create(AppConfiguration.class, System.getProperties());
 
   public static final String BASE_TELEGRAM_URL = CONFIG.baseTelegramUrl();
+  public static final String WEBHOOK_URL = CONFIG.webhookUrl();
+  public static final String ACCOUNT_PHONE = CONFIG.accountPhone();
 }
