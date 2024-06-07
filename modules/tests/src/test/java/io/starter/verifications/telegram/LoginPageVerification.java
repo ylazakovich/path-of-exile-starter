@@ -2,18 +2,18 @@ package io.starter.verifications.telegram;
 
 import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
-import io.starter.pages.telegram.HomePage;
+import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.Verification;
-import io.starter.steps.telegram.HomePageSteps;
+import io.starter.steps.telegram.LoginPageSteps;
 
-public class HomePageVerification extends Verification<HomePageSteps, HomePage> {
+public class LoginPageVerification extends Verification<LoginPageSteps, LoginPage> {
 
-  public HomePageVerification(HomePageSteps steps, HomePage page) {
+  public LoginPageVerification(LoginPageSteps steps, LoginPage page) {
     super(steps, page);
   }
 
   @Step("Verify that page is successfully opened")
-  public HomePageVerification verifyThatPageIsOpened() {
+  public LoginPageVerification verifyThatPageIsOpened() {
     page.getLoginBtnWithPhone().shouldBe(Condition.visible);
     return this;
   }

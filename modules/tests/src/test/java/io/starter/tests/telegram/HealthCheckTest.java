@@ -7,7 +7,7 @@ public class HealthCheckTest extends BaseUITest {
 
   @Test()
   void testGetWebApp() {
-    telegramNavigationSteps.openHomePage()
+    telegramNavigationSteps.openLoginPage()
         .verify()
         .verifyThatPageIsOpened();
   }
