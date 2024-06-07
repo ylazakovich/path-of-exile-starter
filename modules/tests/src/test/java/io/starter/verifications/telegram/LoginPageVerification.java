@@ -13,7 +13,7 @@ public class LoginPageVerification extends Verification<LoginPageSteps, LoginPag
   }
 
   @Step("Verify that page is successfully opened")
-  public LoginPageVerification verifyThatPageIsOpened() {
+  public LoginPageVerification verifyLoginDisplayed() {
     page.getLoginBtn().shouldBe(Condition.visible);
     return this;
   }

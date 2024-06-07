@@ -2,36 +2,30 @@ package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
 import io.starter.config.AppConfig;
+import io.starter.steps.telegram.HomePageSteps;
+import io.starter.utils.Browser;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class TelegramBotTest extends BaseUITest {
 
-  // TODO: I think that it should be private method which should run only 1 time
+  private HomePageSteps steps;
+
   @BeforeClass
   void session() {
-    String code = regressionServiceSteps.getValidationCode();
-    telegramNavigationSteps
+    steps = telegramNavigationSteps
         .openLoginPage().loginViaPhone(AppConfig.ACCOUNT_PHONE)
-        .inputVerificationCode(code);
+        .inputVerificationCode(regressionServiceSteps.getValidationCode());
   }
 
   @Test(enabled = false)
-  void testOnAssigningVerificationCode() {
+  void testUserOnSuccessfulLogin() {
+    steps.verify().verifySearchDisplayed();
   }
 
-  @Test(enabled = false)
-  void testUserOnStart() {
-    // TODO: Part of the other test
-//    SelenideElement searchInput = $(Selectors.byCssSelector("div[class=input-search]"));
-//    searchInput.setValue("@poe_consultant_bot");
-//    SelenideElement result =
-//    $(Selectors.byXpath("//div[contains(@class, 'search-group')]/ul/a/div/div[text()='@poe_consultant_bot']"));
-//    result.click();
+  @AfterClass
+  void tearDown() {
+    Browser.closeWebDriver();
   }
-
-  @Test(enabled = false)
-  void testUserOnWelcomeMessage() {
-  }
-
 }

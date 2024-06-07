@@ -1,6 +1,7 @@
 package io.starter.steps.telegram;
 
 import io.qameta.allure.Step;
+import io.starter.pages.telegram.HomePage;
 import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.PageSteps;
 import io.starter.verifications.telegram.LoginPageVerification;
@@ -22,8 +23,8 @@ public class LoginPageSteps extends PageSteps<LoginPageSteps, LoginPageVerificat
 
   // TODO should be other type of Steps -> HomePageSteps
   @Step("Input verification code")
-  public LoginPageSteps inputVerificationCode(String code) {
+  public HomePageSteps inputVerificationCode(String code) {
     page.inputCode(code);
-    return this;
+    return new HomePageSteps(new HomePage());
   }
 }
