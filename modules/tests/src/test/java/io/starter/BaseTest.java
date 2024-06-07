@@ -1,7 +1,6 @@
 package io.starter;
 
 import io.starter.config.AppConfig;
-import io.starter.services.telegram.RegressionService;
 import io.starter.steps.telegram.RegressionServiceSteps;
 import io.starter.steps.telegram.TelegramNavigationSteps;
 
