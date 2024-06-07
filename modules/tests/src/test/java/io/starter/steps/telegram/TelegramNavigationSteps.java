@@ -10,10 +10,8 @@ public class TelegramNavigationSteps extends Navigation {
     super(baseUrl);
   }
 
-  @Step("Open 'Google' home page")
+  @Step("Open 'Telegram' login page")
   public LoginPageSteps openLoginPage() {
     return new LoginPageSteps(openPage(LoginPage.class));
   }
-
-
 }

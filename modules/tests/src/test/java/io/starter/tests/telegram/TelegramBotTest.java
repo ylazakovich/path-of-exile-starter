@@ -8,15 +8,11 @@ public class TelegramBotTest extends BaseUITest {
   // TODO: I think that it should be private method which should run only 1 time
   @Test(enabled = false)
   void testOnAssigningVerificationCode() {
-//    SelenideElement byPhoneBtn = $(Selectors.byCssSelector("button[class^='btn-primary']"));
-//    byPhoneBtn.click();
-//    SelenideElement phoneField =
-//    $(Selectors.byCssSelector("div[class$=input-field-phone] > div[class=input-field-input]"));
-//    phoneField.setValue("");
-//    SelenideElement nextBtn = $(Selectors.byXpath("//button[contains(@class, 'btn-primary')]/span[text()='Next']"));
-//    nextBtn.click();
-//    SelenideElement code = $(Selectors.byCssSelector("input[type=tel]"));
-//    code.setValue("");
+    String phone = "";
+    String code = "";
+    telegramNavigationSteps
+        .openLoginPage().loginViaPhone(phone)
+        .inputVerificationCode(code);
   }
 
   @Test(enabled = false)

@@ -14,7 +14,7 @@ public class LoginPageVerification extends Verification<LoginPageSteps, LoginPag
 
   @Step("Verify that page is successfully opened")
   public LoginPageVerification verifyThatPageIsOpened() {
-    page.getLoginBtnWithPhone().shouldBe(Condition.visible);
+    page.getLoginBtn().shouldBe(Condition.visible);
     return this;
   }
 }

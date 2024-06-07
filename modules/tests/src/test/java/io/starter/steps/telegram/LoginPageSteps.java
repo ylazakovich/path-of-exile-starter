@@ -12,8 +12,18 @@ public class LoginPageSteps extends PageSteps<LoginPageSteps, LoginPageVerificat
     super.page = page;
   }
 
-  @Step("Click login by Phone")
-  public LoginPageSteps clickLoginWithPhone() {
+  @Step("Login by Phone")
+  public LoginPageSteps loginViaPhone(String phone) {
+    page.clickPrimaryBtn();
+    page.enterPhone(phone);
+    page.clickNextBtn();
+    return this;
+  }
+
+  // TODO should be other type of Steps -> HomePageSteps
+  @Step("Input verification code")
+  public LoginPageSteps inputVerificationCode(String code) {
+    page.inputCode(code);
     return this;
   }
 }
