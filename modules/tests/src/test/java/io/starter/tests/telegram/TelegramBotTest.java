@@ -2,22 +2,24 @@ package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
 import io.starter.config.AppConfig;
+import io.starter.steps.telegram.HomePageSteps;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class TelegramBotTest extends BaseUITest {
 
-  // TODO: I think that it should be private method which should run only 1 time
+  private HomePageSteps steps;
+
   @BeforeClass
   void session() {
-    String code = regressionServiceSteps.getValidationCode();
-    telegramNavigationSteps
+    steps = telegramNavigationSteps
         .openLoginPage().loginViaPhone(AppConfig.ACCOUNT_PHONE)
-        .inputVerificationCode(code);
+        .inputVerificationCode(regressionServiceSteps.getValidationCode());
   }
 
   @Test(enabled = false)
-  void testOnAssigningVerificationCode() {
+  void testUserOnSuccessfulLogin() {
+    steps.verify().verifySearchDisplayed();
   }
 
   @Test(enabled = false)
@@ -28,10 +30,6 @@ public class TelegramBotTest extends BaseUITest {
 //    SelenideElement result =
 //    $(Selectors.byXpath("//div[contains(@class, 'search-group')]/ul/a/div/div[text()='@poe_consultant_bot']"));
 //    result.click();
-  }
-
-  @Test(enabled = false)
-  void testUserOnWelcomeMessage() {
   }
 
 }
