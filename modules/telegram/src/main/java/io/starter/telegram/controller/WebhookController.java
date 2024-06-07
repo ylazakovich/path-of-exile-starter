@@ -39,7 +39,7 @@ public class WebhookController {
     return telegram.onWebhookUpdateReceived(update);
   }
 
-  @GetMapping("/code")
+  @GetMapping("/regression/code")
   public ResponseEntity get() {
     log.info("Get verification code for running regression");
     RegressionEntity entity = regressionDao.read(1);
