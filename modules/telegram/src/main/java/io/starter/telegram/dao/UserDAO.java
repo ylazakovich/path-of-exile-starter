@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import io.starter.telegram.entity.UserEntity;
 import io.starter.telegram.repo.UserRepository;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
@@ -41,11 +42,11 @@ public class UserDAO {
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     if (Objects.isNull(userEntity)) {
-      String userName = Objects.requireNonNullElse(
-          user.getUserName(), user.getFirstName() + " " + user.getLastName());
       userEntity = new UserEntity();
+      userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
+      userEntity.setFirstName(Objects.requireNonNullElse(user.getFirstName(), StringUtils.EMPTY));
+      userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       userEntity.setUserId(user.getId());
-      userEntity.setUsername(userName);
       save(userEntity);
     }
   }

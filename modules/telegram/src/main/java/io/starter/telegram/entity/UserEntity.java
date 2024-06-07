@@ -27,7 +27,8 @@ public class UserEntity implements Serializable {
   @Column(nullable = false)
   public Long id;
   public @NonNull Long userId;
-  public @NonNull String username;
-  @Column(name = "last_message_id")
+  public String userName;
+  public String firstName;
+  public String lastName;
   public Integer lastMessageId;
 }
