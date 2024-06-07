@@ -41,7 +41,11 @@ public class UserDAO {
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     if (Objects.isNull(userEntity)) {
-      userEntity = new UserEntity(user.getId(), user.getUserName());
+      String userName = Objects.requireNonNullElse(
+          user.getUserName(), user.getFirstName() + " " + user.getLastName());
+      userEntity = new UserEntity();
+      userEntity.setUserId(user.getId());
+      userEntity.setUsername(userName);
       save(userEntity);
     }
   }
