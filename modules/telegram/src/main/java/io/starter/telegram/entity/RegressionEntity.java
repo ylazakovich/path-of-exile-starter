@@ -2,6 +2,7 @@ package io.starter.telegram.entity;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,4 +25,6 @@ public class RegressionEntity implements Serializable {
   @Column(nullable = false)
   public Long id;
   public String code;
+  @JsonProperty("is_not_used")
+  public Boolean isNotUsed;
 }
