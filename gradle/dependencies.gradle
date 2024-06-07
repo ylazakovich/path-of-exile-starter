@@ -17,6 +17,8 @@ ext {
     slf4j = '2.0.13'
     allure = '2.27.0'
     httpcore5 = '5.2.4'
+    restAssured = '5.4.0'
+    awaitility = '4.2.1'
 }
 
 subprojects {

@@ -2,6 +2,7 @@ package io.starter.telegram.entity;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,24 +12,19 @@ import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "users")
-public class UserEntity implements Serializable {
+@Table(name = "regression")
+public class RegressionEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   public Long id;
-  public @NonNull Long userId;
-  public String userName;
-  public String firstName;
-  public String lastName;
-  public Integer lastMessageId;
+  public String code;
+  @JsonProperty("is_not_used")
+  public Boolean isNotUsed;
 }

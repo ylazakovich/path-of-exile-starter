@@ -19,7 +19,7 @@
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
         </module>
         <module name="IllegalImport">
-            <property name="illegalPkgs" value="junit, org.hamcrest"/>
+            <property name="illegalPkgs" value="junit"/>
             <property name="illegalClasses" value="java.util.logging.Logger"/>
         </module>
         <module name="RedundantImport"/>

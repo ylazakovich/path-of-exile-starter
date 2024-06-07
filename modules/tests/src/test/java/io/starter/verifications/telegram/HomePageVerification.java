@@ -13,8 +13,8 @@ public class HomePageVerification extends Verification<HomePageSteps, HomePage> 
   }
 
   @Step("Verify that page is successfully opened")
-  public HomePageVerification verifyThatPageIsOpened() {
-    page.getLoginBtnWithPhone().shouldBe(Condition.visible);
+  public HomePageVerification verifySearchDisplayed() {
+    page.getSearchInput().shouldBe(Condition.visible);
     return this;
   }
 }
