@@ -17,7 +17,9 @@ public class RegressionServiceSteps {
   @Step("Get validation code for login in Telegram Account")
   public String getValidationCode() {
     awaitValidationCode();
-    return regressionService.getValidatableCode().extract().jsonPath().getString("code");
+    return regressionService.getValidatableCode()
+        .extract()
+        .jsonPath().getString("code");
   }
 
   private void awaitValidationCode() {
