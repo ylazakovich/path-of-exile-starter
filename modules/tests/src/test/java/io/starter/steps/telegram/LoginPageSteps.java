@@ -21,7 +21,6 @@ public class LoginPageSteps extends PageSteps<LoginPageSteps, LoginPageVerificat
     return this;
   }
 
-  // TODO should be other type of Steps -> HomePageSteps
   @Step("Input verification code")
   public HomePageSteps inputVerificationCode(String code) {
     page.inputCode(code);
