@@ -1,3 +1,14 @@
+plugins {
+    id "io.sentry.jvm.gradle" version "$sentryVersion"
+}
+
+sentry {
+    includeSourceContext = true
+    org = "yaraslau-lazakovich"
+    projectName = "aggregator"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
 dependencies {
     implementation("org.flywaydb:flyway-core:$flyway")
     implementation("org.flywaydb:flyway-mysql:$flyway")

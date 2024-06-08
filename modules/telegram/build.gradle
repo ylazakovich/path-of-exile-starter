@@ -1,3 +1,14 @@
+plugins {
+    id "io.sentry.jvm.gradle" version "$sentryVersion"
+}
+
+sentry {
+    includeSourceContext = true
+    org = "yaraslau-lazakovich"
+    projectName = "telegram"
+    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+}
+
 dependencies {
     implementation("javax.xml.bind:jaxb-api:$jaxb")
     implementation("org.flywaydb:flyway-core:$flyway")
