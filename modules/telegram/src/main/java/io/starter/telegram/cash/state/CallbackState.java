@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 public enum CallbackState {
   NO_CMD(StringUtils.EMPTY),
   SKILLS("Pressing button with 'Skills'"),
-  All_SKILLS("Pressing button with 'All skills'"),
+  ALL_SKILLS("Pressing button with 'All skills'"),
   REFRESH("Pressing button with 'Refresh'"),
   BLESSING_ITEMS("Pressing button with 'Blessing Items'");
 

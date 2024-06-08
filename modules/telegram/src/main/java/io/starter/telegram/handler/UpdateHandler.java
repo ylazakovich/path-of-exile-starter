@@ -47,7 +47,7 @@ public class UpdateHandler {
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
       case SKILLS -> menu.getMenuWithSkills(message);
-      case All_SKILLS -> messageService.messageWithReadySkillsForTrade(callback);
+      case ALL_SKILLS -> messageService.messageWithReadySkillsForTrade(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };

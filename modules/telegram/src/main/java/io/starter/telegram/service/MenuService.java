@@ -116,7 +116,7 @@ public class MenuService {
     InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
     List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
-    allBtn.setCallbackData(CallbackState.All_SKILLS.value);
+    allBtn.setCallbackData(CallbackState.ALL_SKILLS.value);
     List<InlineKeyboardButton> buttons = List.of(allBtn);
     keyboard.add(buttons);
     markupInline.setKeyboard(keyboard);
