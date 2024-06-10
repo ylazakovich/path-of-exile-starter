@@ -15,6 +15,7 @@ Realized Telegram bot over implementation with Spring Webhook
 | Submenu for Start: Skills, Blessing items    | :white_check_mark: |                       |
 | Button Start                                 | :white_check_mark: |                       |
 | Button Skills                                | :white_check_mark: |                       |
+| Button Refresh Skills                        | :white_check_mark: |                       |
 | Button Blessing Items                        |                    |                       |
 | Button Settings                              |                    |                       |
 | Button Feedback                              |                    |                       |
