@@ -10,8 +10,12 @@ sentry {
 }
 
 dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$spring")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:$spring")
+    implementation("org.mariadb.jdbc:mariadb-java-client:$mariadb")
+    implementation("org.telegram:telegrambots-spring-boot-starter:$telegram")
     implementation("javax.xml.bind:jaxb-api:$jaxb")
     implementation("org.flywaydb:flyway-core:$flyway")
     implementation("org.flywaydb:flyway-mysql:$flyway")
-    implementation("org.telegram:telegrambots-spring-boot-starter:$telegram")
+    runtimeOnly("io.netty:netty-resolver-dns-native-$os:$netty:$mac_os_arch")
 }

@@ -6,9 +6,9 @@ telegram:
   token: TODO
   webhook: TODO
 
-sentry:
-  dsn: TODO
-  traces-sample-rate: 1.0
+#sentry:
+#  dsn: TODO
+#  traces-sample-rate: 1.0
 
 spring:
   flyway:
