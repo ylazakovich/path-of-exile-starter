@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 @RestController
 @Slf4j
@@ -36,7 +36,7 @@ public class WebhookController {
       Message message = update.getMessage();
       log.info("Telegram has catch message with id ['{}']", message.getMessageId());
     }
-    return telegram.onWebhookUpdateReceived(update);
+    return telegram.consumeUpdate(update);
   }
 
   @GetMapping("/regression/code")
