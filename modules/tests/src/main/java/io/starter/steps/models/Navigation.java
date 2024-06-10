@@ -3,10 +3,11 @@ package io.starter.steps.models;
 import java.util.Map;
 import java.util.Objects;
 
-import com.codeborne.selenide.BasicAuthCredentials;
-import com.codeborne.selenide.Selenide;
 import io.starter.annotations.PageUrl;
 import io.starter.utils.UrlUtils;
+
+import com.codeborne.selenide.BasicAuthCredentials;
+import com.codeborne.selenide.Selenide;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -2,8 +2,9 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.dao.AnalyzedSkillsDao;
+import io.starter.telegram.model.aggregator.Skill;
+
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

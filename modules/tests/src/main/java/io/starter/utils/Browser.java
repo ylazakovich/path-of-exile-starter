@@ -4,13 +4,14 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.Objects;
 
+import io.starter.config.BrowserConfig;
+
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.FileDownloadMode;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import io.starter.config.BrowserConfig;
 import lombok.experimental.UtilityClass;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.Cookie;

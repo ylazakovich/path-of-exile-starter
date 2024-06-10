@@ -1,9 +1,10 @@
 package io.starter.services.telegram;
 
+import io.starter.services.ApiService;
+
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
-import io.starter.services.ApiService;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor

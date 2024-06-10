@@ -1,13 +1,14 @@
 package io.starter.pages.telegram;
 
-import static com.codeborne.selenide.Selectors.byCssSelector;
-import static com.codeborne.selenide.Selectors.byXpath;
-import static com.codeborne.selenide.Selenide.$;
+import io.starter.annotations.PageUrl;
+import io.starter.steps.models.Page;
 
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.SelenideElement;
-import io.starter.annotations.PageUrl;
-import io.starter.steps.models.Page;
+
+import static com.codeborne.selenide.Selectors.byCssSelector;
+import static com.codeborne.selenide.Selectors.byXpath;
+import static com.codeborne.selenide.Selenide.$;
 
 @PageUrl("/k")
 public class LoginPage implements Page {

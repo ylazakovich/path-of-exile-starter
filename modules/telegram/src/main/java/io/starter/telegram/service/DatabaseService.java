@@ -1,6 +1,7 @@
 package io.starter.telegram.service;
 
 import io.starter.telegram.dao.AnalyzedSkillsDao;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 

@@ -3,6 +3,7 @@ package io.starter.telegram.config;
 import io.starter.telegram.model.telegram.Telegram;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.telegram.service.WebhookService;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -2,8 +2,6 @@ package io.starter.services;
 
 import java.util.concurrent.TimeUnit;
 
-import static io.restassured.RestAssured.given;
-
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.http.ContentType;
@@ -11,6 +9,8 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.hamcrest.Matchers;
+
+import static io.restassured.RestAssured.given;
 
 public class ApiService {
 

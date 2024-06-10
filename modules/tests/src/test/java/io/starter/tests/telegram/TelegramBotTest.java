@@ -4,6 +4,7 @@ import io.starter.BaseUITest;
 import io.starter.config.AppConfig;
 import io.starter.steps.telegram.HomePageSteps;
 import io.starter.utils.Browser;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;

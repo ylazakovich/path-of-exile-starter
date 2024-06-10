@@ -1,10 +1,11 @@
 package io.starter.verifications.telegram;
 
-import com.codeborne.selenide.Condition;
-import io.qameta.allure.Step;
 import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.Verification;
 import io.starter.steps.telegram.LoginPageSteps;
+
+import com.codeborne.selenide.Condition;
+import io.qameta.allure.Step;
 
 public class LoginPageVerification extends Verification<LoginPageSteps, LoginPage> {
 

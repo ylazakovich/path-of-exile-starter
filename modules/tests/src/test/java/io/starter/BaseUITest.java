@@ -1,8 +1,9 @@
 package io.starter;
 
-import com.codeborne.selenide.Configuration;
 import io.starter.config.BrowserConfig;
 import io.starter.utils.Browser;
+
+import com.codeborne.selenide.Configuration;
 import org.testng.annotations.BeforeSuite;
 
 public abstract class BaseUITest extends BaseTest {

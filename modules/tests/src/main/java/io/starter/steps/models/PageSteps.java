@@ -1,7 +1,8 @@
 package io.starter.steps.models;
 
-import io.qameta.allure.Step;
 import io.starter.utils.Browser;
+
+import io.qameta.allure.Step;
 
 /**
  * Abstract class for page steps class.

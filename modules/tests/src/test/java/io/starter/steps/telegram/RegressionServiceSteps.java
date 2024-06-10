@@ -2,9 +2,10 @@ package io.starter.steps.telegram;
 
 import java.time.Duration;
 
-import io.qameta.allure.Step;
 import io.starter.services.telegram.RegressionService;
 import io.starter.utils.Waiter;
+
+import io.qameta.allure.Step;
 
 public class RegressionServiceSteps {
 

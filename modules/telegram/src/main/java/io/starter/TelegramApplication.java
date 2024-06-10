@@ -1,6 +1,7 @@
 package io.starter;
 
 import io.starter.telegram.service.DatabaseService;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

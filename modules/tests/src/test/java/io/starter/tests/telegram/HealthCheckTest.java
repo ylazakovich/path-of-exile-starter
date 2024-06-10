@@ -2,6 +2,7 @@ package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
 import io.starter.utils.Browser;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 

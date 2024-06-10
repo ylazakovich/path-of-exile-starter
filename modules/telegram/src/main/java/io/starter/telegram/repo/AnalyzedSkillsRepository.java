@@ -3,6 +3,7 @@ package io.starter.telegram.repo;
 import java.util.List;
 
 import io.starter.telegram.entity.AnalyzedSkillEntity;
+
 import lombok.NonNull;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -3,6 +3,7 @@ package io.starter.telegram.service;
 import java.util.List;
 
 import io.starter.telegram.model.aggregator.Skill;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;

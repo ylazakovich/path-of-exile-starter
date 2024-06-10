@@ -1,10 +1,11 @@
 package io.starter.steps.telegram;
 
-import io.qameta.allure.Step;
 import io.starter.pages.telegram.HomePage;
 import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.PageSteps;
 import io.starter.verifications.telegram.LoginPageVerification;
+
+import io.qameta.allure.Step;
 
 public class LoginPageSteps extends PageSteps<LoginPageSteps, LoginPageVerification, LoginPage> {
 

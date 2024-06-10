@@ -1,17 +1,18 @@
 package io.starter.units.service.ninja;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import io.starter.model.Lines;
 import io.starter.model.Skill;
 import io.starter.service.PoeNinjaService;
 import io.starter.utils.Generator;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.testng.annotations.Test;
 import reactor.core.publisher.Mono;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PoeNinjaServiceTests {
 

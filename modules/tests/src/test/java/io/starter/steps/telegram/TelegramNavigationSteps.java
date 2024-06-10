@@ -1,9 +1,10 @@
 package io.starter.steps.telegram;
 
-import io.qameta.allure.Step;
 import io.starter.pages.telegram.HomePage;
 import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.Navigation;
+
+import io.qameta.allure.Step;
 
 public class TelegramNavigationSteps extends Navigation {
 
