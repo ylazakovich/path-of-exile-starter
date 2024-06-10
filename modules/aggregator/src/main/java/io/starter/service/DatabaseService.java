@@ -24,7 +24,7 @@ public class DatabaseService {
   }
 
   public void load(Lines<Skill> lines) {
-    if (!lines.getLines().isEmpty()) {
+    if (skillRepo.findAll().isEmpty()) {
       skillsDAO.saveAll(lines);
     }
   }
