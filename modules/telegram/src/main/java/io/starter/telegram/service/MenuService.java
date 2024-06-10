@@ -1,6 +1,7 @@
 package io.starter.telegram.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.starter.telegram.cash.state.CallbackState;
@@ -9,11 +10,12 @@ import io.starter.telegram.config.Emoji;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.MaybeInaccessibleMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 
@@ -92,7 +94,7 @@ public class MenuService {
   }
 
   private ReplyKeyboardMarkup buildReplyKeyboard() {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+    final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(Collections.emptyList());
     replyKeyboardMarkup.setSelective(true);
     replyKeyboardMarkup.setResizeKeyboard(true);
     replyKeyboardMarkup.setOneTimeKeyboard(false);
@@ -100,36 +102,36 @@ public class MenuService {
   }
 
   private InlineKeyboardMarkup getStartSubMenu() {
-    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup(Collections.emptyList());
+    List<InlineKeyboardRow> keyboard = new ArrayList<>();
     InlineKeyboardButton skillsBtn = new InlineKeyboardButton("Skills");
     InlineKeyboardButton blessingBtn = new InlineKeyboardButton("Blessing Items");
     skillsBtn.setCallbackData(CallbackState.SKILLS.value);
     blessingBtn.setCallbackData(CallbackState.BLESSING_ITEMS.value);
     List<InlineKeyboardButton> buttons = List.of(skillsBtn, blessingBtn);
-    keyboard.add(buttons);
+    keyboard.add(new InlineKeyboardRow(buttons));
     markupInline.setKeyboard(keyboard);
     return markupInline;
   }
 
   private InlineKeyboardMarkup getSubMenuWithSkills() {
-    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup();
-    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup(Collections.emptyList());
+    List<InlineKeyboardRow> keyboard = new ArrayList<>();
     InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
     allBtn.setCallbackData(CallbackState.ALL_SKILLS.value);
     List<InlineKeyboardButton> buttons = List.of(allBtn);
-    keyboard.add(buttons);
+    keyboard.add(new InlineKeyboardRow(buttons));
     markupInline.setKeyboard(keyboard);
     return markupInline;
   }
 
   public InlineKeyboardMarkup keyboardWithRefresh() {
-    InlineKeyboardMarkup markup = new InlineKeyboardMarkup();
-    List<List<InlineKeyboardButton>> keyboard = new ArrayList<>();
+    InlineKeyboardMarkup markup = new InlineKeyboardMarkup(Collections.emptyList());
+    List<InlineKeyboardRow> keyboard = new ArrayList<>();
     InlineKeyboardButton refreshBtn = new InlineKeyboardButton(Emoji.REPEAT.value);
     refreshBtn.setCallbackData(CallbackState.REFRESH.value);
     List<InlineKeyboardButton> buttons = List.of(refreshBtn);
-    keyboard.add(buttons);
+    keyboard.add(new InlineKeyboardRow(buttons));
     markup.setKeyboard(keyboard);
     return markup;
   }

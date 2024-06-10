@@ -1,42 +1,14 @@
 package io.starter.telegram.model.telegram;
 
-import lombok.Setter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
-import org.telegram.telegrambots.meta.api.methods.updates.SetWebhook;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.starter.SpringWebhookBot;
+import org.telegram.telegrambots.webhook.starter.SpringTelegramWebhookBot;
 
 @Slf4j
 @ToString
-public class Telegram extends SpringWebhookBot {
+public class Telegram extends SpringTelegramWebhookBot {
 
-  private final TelegramFacade FACADE;
-  @Setter
-  private String botPath;
-  @Setter
-  private String botUsername;
-  @Setter
-  private String botToken;
-
-  public Telegram(TelegramFacade facade, SetWebhook webhook, String botToken) {
-    super(webhook, botToken);
-    this.FACADE = facade;
-  }
-
-  @Override
-  public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
-    return FACADE.handleOnUpdate(update);
-  }
-
-  @Override
-  public String getBotPath() {
-    return botPath;
-  }
-
-  @Override
-  public String getBotUsername() {
-    return botUsername;
+  public Telegram(TelegramFacade facade, String token) {
+    super("bot%s".formatted(token), facade::handleOnUpdate, null, null);
   }
 }
