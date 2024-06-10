@@ -4,7 +4,7 @@ ext {
     netty = '4.1.104.Final'
     flyway = '10.14.0'
     lombok = '1.18.32'
-    telegram = '7.3.0'
+    telegram = '7.4.0'
     spring = '3.3.0'
     mariadb = '3.4.0'
     mockito = '5.12.0'
