@@ -94,42 +94,49 @@ public class MenuService {
   }
 
   private ReplyKeyboardMarkup buildReplyKeyboard() {
-    final ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup(Collections.emptyList());
-    replyKeyboardMarkup.setSelective(true);
-    replyKeyboardMarkup.setResizeKeyboard(true);
-    replyKeyboardMarkup.setOneTimeKeyboard(false);
-    return replyKeyboardMarkup;
+    return ReplyKeyboardMarkup.builder()
+        .selective(true)
+        .resizeKeyboard(true)
+        .oneTimeKeyboard(false)
+        .build();
   }
 
   private InlineKeyboardMarkup getStartSubMenu() {
-    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup(Collections.emptyList());
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
-    InlineKeyboardButton skillsBtn = new InlineKeyboardButton("Skills");
-    InlineKeyboardButton blessingBtn = new InlineKeyboardButton("Blessing Items");
-    skillsBtn.setCallbackData(CallbackState.SKILLS.value);
-    blessingBtn.setCallbackData(CallbackState.BLESSING_ITEMS.value);
+    InlineKeyboardButton skillsBtn = InlineKeyboardButton.builder()
+        .text("Skills")
+        .callbackData(CallbackState.SKILLS.value)
+        .build();
+    InlineKeyboardButton blessingBtn = InlineKeyboardButton.builder()
+        .text("Blessing Items")
+        .callbackData(CallbackState.BLESSING_ITEMS.value)
+        .build();
     List<InlineKeyboardButton> buttons = List.of(skillsBtn, blessingBtn);
     keyboard.add(new InlineKeyboardRow(buttons));
-    markupInline.setKeyboard(keyboard);
-    return markupInline;
+    return InlineKeyboardMarkup.builder()
+        .keyboard(keyboard)
+        .build();
   }
 
   private InlineKeyboardMarkup getSubMenuWithSkills() {
-    InlineKeyboardMarkup markupInline = new InlineKeyboardMarkup(Collections.emptyList());
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
-    InlineKeyboardButton allBtn = new InlineKeyboardButton("Analyze All Skills");
-    allBtn.setCallbackData(CallbackState.ALL_SKILLS.value);
+    InlineKeyboardButton allBtn = InlineKeyboardButton.builder()
+        .text("Analyze All Skills")
+        .callbackData(CallbackState.ALL_SKILLS.value).build();
     List<InlineKeyboardButton> buttons = List.of(allBtn);
     keyboard.add(new InlineKeyboardRow(buttons));
-    markupInline.setKeyboard(keyboard);
-    return markupInline;
+    return InlineKeyboardMarkup.builder()
+        .keyboard(keyboard)
+        .build();
   }
 
   public InlineKeyboardMarkup keyboardWithRefresh() {
     InlineKeyboardMarkup markup = new InlineKeyboardMarkup(Collections.emptyList());
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
-    InlineKeyboardButton refreshBtn = new InlineKeyboardButton(Emoji.REPEAT.value);
-    refreshBtn.setCallbackData(CallbackState.REFRESH.value);
+    InlineKeyboardButton refreshBtn = InlineKeyboardButton.builder()
+        .text(Emoji.REPEAT.value)
+        .callbackData(CallbackState.REFRESH.value)
+        .build();
     List<InlineKeyboardButton> buttons = List.of(refreshBtn);
     keyboard.add(new InlineKeyboardRow(buttons));
     markup.setKeyboard(keyboard);
