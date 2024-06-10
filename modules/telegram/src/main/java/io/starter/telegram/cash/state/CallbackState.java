@@ -8,8 +8,8 @@ public enum CallbackState {
   NO_CMD(StringUtils.EMPTY),
   SKILLS("Pressing button with 'Skills'"),
   ALL_SKILLS("Pressing button with 'All skills'"),
-  REFRESH("Pressing button with 'Refresh'"),
-  BLESSING_ITEMS("Pressing button with 'Blessing Items'");
+  REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
+  ITEMS_AFTER_BLESSING("Pressing button with 'Blessing Items'");
 
   public final String value;
 

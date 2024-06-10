@@ -109,7 +109,7 @@ public class MenuService {
         .build();
     InlineKeyboardButton blessingBtn = InlineKeyboardButton.builder()
         .text("Blessing Items")
-        .callbackData(CallbackState.BLESSING_ITEMS.value)
+        .callbackData(CallbackState.ITEMS_AFTER_BLESSING.value)
         .build();
     List<InlineKeyboardButton> buttons = List.of(skillsBtn, blessingBtn);
     keyboard.add(new InlineKeyboardRow(buttons));
@@ -135,7 +135,7 @@ public class MenuService {
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
     InlineKeyboardButton refreshBtn = InlineKeyboardButton.builder()
         .text(Emoji.REPEAT.value)
-        .callbackData(CallbackState.REFRESH.value)
+        .callbackData(CallbackState.REFRESH_SKILLS.value)
         .build();
     List<InlineKeyboardButton> buttons = List.of(refreshBtn);
     keyboard.add(new InlineKeyboardRow(buttons));
