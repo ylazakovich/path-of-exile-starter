@@ -30,7 +30,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: test-report-linux-${{matrix.gradle-task}}
+          name: test-report-linux-${{ matrix.gradle-task }}
           retention-days: 14
           path: |
             **/build/reports
@@ -46,9 +46,13 @@ jobs:
       pull-requests: write
       contents: write
     steps:
+      - name: Fetch metadata
+        uses: dependabot/fetch-metadata@v2.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 🤖 Merge PR from dependabot
         uses: fastify/github-action-merge-dependabot@v3.10.1
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           target: minor
           merge-method: rebase
