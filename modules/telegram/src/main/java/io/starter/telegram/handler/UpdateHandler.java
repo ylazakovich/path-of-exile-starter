@@ -44,7 +44,7 @@ public class UpdateHandler {
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> menu.callableMessageOnClickSkills(message);
+      case SKILLS -> menu.messageOnClickSkills(message);
       case ALL_SKILLS, REFRESH_SKILLS -> menu.callableMessageOnClickSkills(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
