@@ -16,6 +16,6 @@ import lombok.ToString;
 public class AnalyzedSkillDTO {
 
   private String name;
-  private double craftCost;
-  private double profit;
+  private double chaosEquivalentPrice;
+  private double chaosEquivalentProfit;
 }

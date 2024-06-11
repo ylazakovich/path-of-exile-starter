@@ -2,7 +2,7 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.telegram.dao.AnalyzedSkillsDao;
+import io.starter.telegram.dao.SkillsDao;
 import io.starter.telegram.model.aggregator.Skill;
 
 import org.springframework.stereotype.Service;
@@ -13,17 +13,17 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 @Service
 public class MessageService {
 
-  private final AnalyzedSkillsDao analyzedSkillsDAO;
+  private final SkillsDao skillsDAO;
   private final MenuService menuService;
 
-  public MessageService(AnalyzedSkillsDao analyzedSkillsDAO,
+  public MessageService(SkillsDao skillsDAO,
                         MenuService menuService) {
-    this.analyzedSkillsDAO = analyzedSkillsDAO;
+    this.skillsDAO = skillsDAO;
     this.menuService = menuService;
   }
 
   public EditMessageText messageWithReadySkillsForTrade(CallbackQuery callback) {
-    final List<Skill> skills = analyzedSkillsDAO.findAll();
+    final List<Skill> skills = skillsDAO.findAll();
     InlineKeyboardMarkup markup = menuService.keyboardWithRefresh();
     return menuService.generateEditMessage(callback.getMessage(), initBuilder(skills).toString(), markup);
   }
@@ -33,7 +33,7 @@ public class MessageService {
     skills.forEach(skill -> builder
         .append(skill.getName())
         .append(" : ")
-        .append(Math.round(skill.getProfit()))
+        .append(Math.round(skill.getChaosEquivalentProfit()))
         .append("\n"));
     return builder;
   }

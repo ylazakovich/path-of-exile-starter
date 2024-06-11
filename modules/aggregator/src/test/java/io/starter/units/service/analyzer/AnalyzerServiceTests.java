@@ -25,6 +25,6 @@ public class AnalyzerServiceTests {
     List<AnalyzedSkillDTO> actualList = analyzerService.analyze();
     AnalyzedSkillDTO actualSkill = actualList.stream().findAny().orElse(null);
     assertThat(actualList).isEqualTo(expectedList);
-    assertThat(Objects.requireNonNull(actualSkill).getProfit()).isGreaterThan(actualSkill.getCraftCost());
+    assertThat(Objects.requireNonNull(actualSkill).getChaosEquivalentProfit()).isGreaterThan(actualSkill.getChaosEquivalentPrice());
   }
 }

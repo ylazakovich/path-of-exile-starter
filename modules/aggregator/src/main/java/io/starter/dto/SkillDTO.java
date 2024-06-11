@@ -25,7 +25,7 @@ public class SkillDTO {
   private boolean corrupted;
   private int gemLevel;
   private int gemQuality;
-  private double chaosValue;
+  private double chaosEquivalentPrice;
 
   public static List<SkillDTO> convertToList(List<SkillEntity> entities) {
     return entities.stream()
@@ -35,20 +35,8 @@ public class SkillDTO {
             entity.getCorrupted(),
             entity.getGemLevel(),
             entity.getGemQuality(),
-            entity.getChaosValue()
+            entity.getChaosEquivalentPrice()
         ))
-        .collect(Collectors.toList());
-  }
-
-  public static List<SkillEntity> convertToEntity(List<SkillDTO> data) {
-    return data.stream()
-        .map(skillDTO -> new SkillEntity(
-            skillDTO.getName(),
-            skillDTO.getVariant(),
-            skillDTO.isCorrupted(),
-            skillDTO.getGemLevel(),
-            skillDTO.getGemQuality(),
-            skillDTO.getChaosValue()))
         .collect(Collectors.toList());
   }
 }

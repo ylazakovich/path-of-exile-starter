@@ -17,14 +17,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @EqualsAndHashCode
 @Entity
-@Table(name = "analyzed_skills")
-public class AnalyzedSkillEntity {
+@Table(name = "skills")
+public class SkillEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   public Long id;
   public @NonNull String name;
-  public @NonNull Double profit;
-  public @NonNull Double craftCost;
+  public @NonNull Double chaosEquivalentPrice;
+  public @NonNull Double chaosEquivalentProfit;
 }
