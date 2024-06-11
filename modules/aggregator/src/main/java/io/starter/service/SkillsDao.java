@@ -12,14 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillsDAO {
+public class SkillsDao {
 
   private final SkillsRepository skillsRepository;
   // TODO: need parametrized entity
   private final SkillEntityMapper entityMapper;
 
   @Autowired
-  public SkillsDAO(SkillsRepository skillsRepository,
+  public SkillsDao(SkillsRepository skillsRepository,
                    SkillEntityMapper entityMapper) {
     this.skillsRepository = skillsRepository;
     this.entityMapper = entityMapper;

@@ -14,19 +14,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class DatabaseService {
 
-  private final SkillsDAO skillsDAO;
+  private final SkillsDao skillsDao;
   private final SkillsRepository skillsRepository;
 
   @Autowired
-  public DatabaseService(SkillsDAO skillsDAO,
+  public DatabaseService(SkillsDao skillsDao,
                          SkillsRepository skillsRepository) {
-    this.skillsDAO = skillsDAO;
+    this.skillsDao = skillsDao;
     this.skillsRepository = skillsRepository;
   }
 
   public void load(Lines<Skill> lines) {
     if (skillsRepository.findAll().isEmpty()) {
-      skillsDAO.saveAll(lines);
+      skillsDao.saveAll(lines);
     }
   }
 
@@ -40,7 +40,7 @@ public class DatabaseService {
         .findFirst()
         .ifPresent(skill -> entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice()))
     );
-    skillsDAO.saveAll(entitiesOnUpdate);
+    skillsDao.saveAll(entitiesOnUpdate);
   }
 
   public void addNew(Lines<Skill> lines) {
@@ -64,6 +64,6 @@ public class DatabaseService {
           entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
           entitiesOnAdding.add(entity);
         });
-    skillsDAO.saveAll(entitiesOnAdding);
+    skillsDao.saveAll(entitiesOnAdding);
   }
 }

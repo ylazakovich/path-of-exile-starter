@@ -18,7 +18,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SkillDTO {
+public class SkillDto {
 
   private String name;
   private String variant;
@@ -27,9 +27,9 @@ public class SkillDTO {
   private int gemQuality;
   private double chaosEquivalentPrice;
 
-  public static List<SkillDTO> convertToList(List<SkillEntity> entities) {
+  public static List<SkillDto> convertToList(List<SkillEntity> entities) {
     return entities.stream()
-        .map(entity -> new SkillDTO(
+        .map(entity -> new SkillDto(
             entity.getName(),
             entity.getVariant(),
             entity.getCorrupted(),

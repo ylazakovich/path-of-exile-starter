@@ -24,8 +24,8 @@ public class OnCallbackAnswerService {
 
   private final SkillsDao skillsDao;
 
-  public OnCallbackAnswerService(SkillsDao skillsDAO) {
-    this.skillsDao = skillsDAO;
+  public OnCallbackAnswerService(SkillsDao skillsDao) {
+    this.skillsDao = skillsDao;
   }
 
   public EditMessageText onClickSkills(CallbackQuery callback) {

@@ -2,7 +2,7 @@ package io.starter.utils;
 
 import java.util.List;
 
-import io.starter.dto.AnalyzedSkillDTO;
+import io.starter.dto.AnalyzedSkillDto;
 import io.starter.model.Lines;
 import io.starter.model.Skill;
 
@@ -29,8 +29,8 @@ public class Generator {
         .build();
   }
 
-  public static AnalyzedSkillDTO generateAnalyzedSkill() {
-    return AnalyzedSkillDTO.builder()
+  public static AnalyzedSkillDto generateAnalyzedSkill() {
+    return AnalyzedSkillDto.builder()
         .name(faker.harryPotter().spell())
         .chaosEquivalentPrice(faker.number().randomDouble(1, 1, 5))
         .chaosEquivalentProfit(faker.number().randomDouble(5, 10, 1000))

@@ -2,7 +2,7 @@ package io.starter.controller;
 
 import java.util.List;
 
-import io.starter.dto.AnalyzedSkillDTO;
+import io.starter.dto.AnalyzedSkillDto;
 import io.starter.service.AnalyzerService;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +21,12 @@ public class AnalyzerController {
   }
 
   @GetMapping("/analyze/skills")
-  public List<AnalyzedSkillDTO> findAllForTrade() {
+  public List<AnalyzedSkillDto> findAllForTrade() {
     return findAllForTrade(10);
   }
 
   @GetMapping("analyze/skills/{takeProfit}")
-  public List<AnalyzedSkillDTO> findAllForTrade(@PathVariable("takeProfit") long value) {
+  public List<AnalyzedSkillDto> findAllForTrade(@PathVariable("takeProfit") long value) {
     return analyzerService.analyze().stream().filter(skill -> skill.getChaosEquivalentProfit() >= value).toList();
   }
 }

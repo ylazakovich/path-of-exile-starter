@@ -3,7 +3,7 @@ package io.starter.units.service.analyzer;
 import java.util.List;
 import java.util.Objects;
 
-import io.starter.dto.AnalyzedSkillDTO;
+import io.starter.dto.AnalyzedSkillDto;
 import io.starter.service.AnalyzerService;
 import io.starter.utils.Generator;
 
@@ -19,11 +19,11 @@ public class AnalyzerServiceTests {
 
   @Test
   void analyzeAllSkillsTest() {
-    List<AnalyzedSkillDTO> expectedList = List.of(Generator.generateAnalyzedSkill());
+    List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
     when(analyzerService.analyze()).thenReturn(expectedList);
 
-    List<AnalyzedSkillDTO> actualList = analyzerService.analyze();
-    AnalyzedSkillDTO actualSkill = actualList.stream().findAny().orElse(null);
+    List<AnalyzedSkillDto> actualList = analyzerService.analyze();
+    AnalyzedSkillDto actualSkill = actualList.stream().findAny().orElse(null);
     assertThat(actualList).isEqualTo(expectedList);
     assertThat(Objects.requireNonNull(actualSkill).getChaosEquivalentProfit()).isGreaterThan(actualSkill.getChaosEquivalentPrice());
   }

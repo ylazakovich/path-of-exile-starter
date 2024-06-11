@@ -9,25 +9,25 @@ import org.springframework.stereotype.Service;
 public class DatabaseService {
 
   private final AggregatorService aggregatorService;
-  private final SkillsDao skillsDAO;
+  private final SkillsDao skillsDao;
 
   public DatabaseService(AggregatorService aggregatorService,
-                         SkillsDao skillsDAO) {
+                         SkillsDao skillsDao) {
     this.aggregatorService = aggregatorService;
-    this.skillsDAO = skillsDAO;
+    this.skillsDao = skillsDao;
   }
 
   public void loadSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::add);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::add);
   }
 
   @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::update);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::update);
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   public void addNewSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::addNew);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::addNew);
   }
 }

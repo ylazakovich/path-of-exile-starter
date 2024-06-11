@@ -13,7 +13,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class AnalyzedSkillDTO {
+public class AnalyzedSkillDto {
 
   private String name;
   private double chaosEquivalentPrice;
