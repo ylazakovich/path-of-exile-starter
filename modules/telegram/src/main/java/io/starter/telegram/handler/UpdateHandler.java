@@ -37,6 +37,7 @@ public class UpdateHandler {
     return switch (state) {
       case WELCOME -> menu.getMain(message);
       case START -> menu.getStart(message);
+      case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
   }

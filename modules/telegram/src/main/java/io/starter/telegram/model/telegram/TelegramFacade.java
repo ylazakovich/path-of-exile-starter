@@ -60,11 +60,14 @@ public class TelegramFacade {
     final MessageState state = Objects.requireNonNull(MessageState.byText(message.getText()));
     final User user = message.getFrom();
     switch (state) {
+      case WELCOME:
+        messageCash.saveState(message, MessageState.WELCOME);
+        break;
       case START:
         messageCash.saveState(message, MessageState.START);
         break;
       default:
-        messageCash.saveState(message, MessageState.WELCOME);
+        messageCash.saveState(message, MessageState.NO_CMD);
         break;
     }
     return updateHandler.handleOnUpdate(message, messageCash.getCurrentState(user));

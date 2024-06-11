@@ -22,6 +22,6 @@ public enum MessageState {
         return state;
       }
     }
-    return WELCOME;
+    return NO_CMD;
   }
 }
