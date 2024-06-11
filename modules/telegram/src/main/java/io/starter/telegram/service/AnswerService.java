@@ -1,20 +1,25 @@
 package io.starter.telegram.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.config.Emoji;
-
+import io.starter.telegram.dao.SkillsDao;
+import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.utils.generator.reply_keyboard.InlineKeyboardGenerator;
 import io.starter.telegram.utils.generator.reply_keyboard.ReplyKeyboardGenerator;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
 import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
 import io.starter.telegram.utils.generator.reply_keyboard.buttons.InlineKeyboardButtonGenerator;
 import io.starter.telegram.utils.generator.reply_keyboard.rows.InlineKeyboardRowGenerator;
+
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -23,18 +28,42 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
-public class MenuService {
+public class AnswerService {
 
-  public SendMessage messageOnFirstStart(Message message) {
-    List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
-    List<String> line2 = List.of(MessageState.FEEDBACK.value);
-    String inlineMessage = """
-        %s
-        Greetings, Exile **%s**!
-        I will tell you the most profitable ways to earn your first Divine.
-        """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName());
-    ReplyKeyboardMarkup keyboard = ReplyKeyboardGenerator.replyMenu(line1, line2);
-    return SendMessageGenerator.generate(inlineMessage, message.getChatId(), keyboard);
+  private final SkillsDao skillsDao;
+
+  public AnswerService(SkillsDao skillsDAO) {
+    this.skillsDao = skillsDAO;
+  }
+
+  public EditMessageText callableMessageOnClickSkills(CallbackQuery callback) {
+    List<Skill> skills = skillsDao.findAll();
+    String inlineMessage = convertSkillsToStringBuilder(skills).toString();
+    InlineKeyboardMarkup keyboard = callableMessageOnClickSkills();
+    return EditMessageGenerator.generate(callback.getMessage(), inlineMessage, keyboard);
+  }
+
+  private InlineKeyboardMarkup callableMessageOnClickSkills() {
+    InlineKeyboardMarkup markup = new InlineKeyboardMarkup(Collections.emptyList());
+    List<InlineKeyboardRow> keyboard = new ArrayList<>();
+    InlineKeyboardButton refreshBtn = InlineKeyboardButton.builder()
+        .text(Emoji.REPEAT.value)
+        .callbackData(CallbackState.REFRESH_SKILLS.value)
+        .build();
+    List<InlineKeyboardButton> buttons = List.of(refreshBtn);
+    keyboard.add(new InlineKeyboardRow(buttons));
+    markup.setKeyboard(keyboard);
+    return markup;
+  }
+
+  private StringBuilder convertSkillsToStringBuilder(List<Skill> skills) {
+    final StringBuilder builder = new StringBuilder();
+    skills.forEach(skill -> builder
+        .append(skill.getName())
+        .append(" : ")
+        .append(Math.round(skill.getChaosEquivalentProfit()))
+        .append("\n"));
+    return builder;
   }
 
   public SendMessage messageOnClickStart(Message message) {
@@ -52,14 +81,19 @@ public class MenuService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  private InlineKeyboardMarkup keyboardOnClickSkills() {
-    InlineKeyboardButton button =
-        InlineKeyboardButtonGenerator.generate("Analyze All Skills", CallbackState.ALL_SKILLS.value);
-    List<InlineKeyboardButton> buttons = List.of(button);
-    return InlineKeyboardGenerator.withButtons(buttons);
+  public SendMessage messageOnFirstStart(Message message) {
+    List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
+    List<String> line2 = List.of(MessageState.FEEDBACK.value);
+    String inlineMessage = """
+        %s
+        Greetings, Exile **%s**!
+        I will tell you the most profitable ways to earn your first Divine.
+        """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName());
+    ReplyKeyboardMarkup keyboard = ReplyKeyboardGenerator.replyMenu(line1, line2);
+    return SendMessageGenerator.generate(inlineMessage, message.getChatId(), keyboard);
   }
 
-  public EditMessageText messageOnClickSkills(MaybeInaccessibleMessage message) {
+  public EditMessageText callableMessageOnClickSkills(MaybeInaccessibleMessage message) {
     String inlineMessage = """
         GUIDE
 
@@ -73,5 +107,12 @@ public class MenuService {
         """;
     InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
     return EditMessageGenerator.generate(message, inlineMessage, keyboard);
+  }
+
+  private InlineKeyboardMarkup keyboardOnClickSkills() {
+    InlineKeyboardButton button =
+        InlineKeyboardButtonGenerator.generate("Analyze All Skills", CallbackState.ALL_SKILLS.value);
+    List<InlineKeyboardButton> buttons = List.of(button);
+    return InlineKeyboardGenerator.withButtons(buttons);
   }
 }

@@ -3,8 +3,7 @@ package io.starter.telegram.handler;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.service.MenuService;
-import io.starter.telegram.service.MessageService;
+import io.starter.telegram.service.AnswerService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,14 +17,11 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 @Slf4j
 public class UpdateHandler {
 
-  private final MessageService messageService;
-  private final MenuService menu;
+  private final AnswerService menu;
   private final UserDao userDAO;
 
-  public UpdateHandler(MessageService messageService,
-                       MenuService menu,
+  public UpdateHandler(AnswerService menu,
                        UserDao userDAO) {
-    this.messageService = messageService;
     this.userDAO = userDAO;
     this.menu = menu;
   }
@@ -48,8 +44,8 @@ public class UpdateHandler {
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> menu.messageOnClickSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS -> messageService.messageWithSkills(callback);
+      case SKILLS -> menu.callableMessageOnClickSkills(message);
+      case ALL_SKILLS, REFRESH_SKILLS -> menu.callableMessageOnClickSkills(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
