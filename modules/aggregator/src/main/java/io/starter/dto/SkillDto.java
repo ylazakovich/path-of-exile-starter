@@ -18,37 +18,25 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class SkillDTO {
+public class SkillDto {
 
   private String name;
   private String variant;
   private boolean corrupted;
   private int gemLevel;
   private int gemQuality;
-  private double chaosValue;
+  private double chaosEquivalentPrice;
 
-  public static List<SkillDTO> convertToList(List<SkillEntity> entities) {
+  public static List<SkillDto> convertToList(List<SkillEntity> entities) {
     return entities.stream()
-        .map(entity -> new SkillDTO(
+        .map(entity -> new SkillDto(
             entity.getName(),
             entity.getVariant(),
             entity.getCorrupted(),
             entity.getGemLevel(),
             entity.getGemQuality(),
-            entity.getChaosValue()
+            entity.getChaosEquivalentPrice()
         ))
-        .collect(Collectors.toList());
-  }
-
-  public static List<SkillEntity> convertToEntity(List<SkillDTO> data) {
-    return data.stream()
-        .map(skillDTO -> new SkillEntity(
-            skillDTO.getName(),
-            skillDTO.getVariant(),
-            skillDTO.isCorrupted(),
-            skillDTO.getGemLevel(),
-            skillDTO.getGemQuality(),
-            skillDTO.getChaosValue()))
         .collect(Collectors.toList());
   }
 }

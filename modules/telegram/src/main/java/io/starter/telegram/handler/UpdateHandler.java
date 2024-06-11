@@ -3,8 +3,8 @@ package io.starter.telegram.handler;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.service.MenuService;
-import io.starter.telegram.service.MessageService;
+import io.starter.telegram.service.OnCallbackAnswerService;
+import io.starter.telegram.service.OnMessageAnswerService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,25 +18,25 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 @Slf4j
 public class UpdateHandler {
 
-  private final MessageService messageService;
-  private final MenuService menu;
-  private final UserDao userDAO;
+  private final OnMessageAnswerService onMessageAnswerService;
+  private final OnCallbackAnswerService onCallbackAnswerService;
+  private final UserDao userDao;
 
-  public UpdateHandler(MessageService messageService,
-                       MenuService menu,
-                       UserDao userDAO) {
-    this.messageService = messageService;
-    this.userDAO = userDAO;
-    this.menu = menu;
+  public UpdateHandler(OnMessageAnswerService onMessageAnswerService,
+                       OnCallbackAnswerService onCallbackAnswerService,
+                       UserDao userDao) {
+    this.userDao = userDao;
+    this.onMessageAnswerService = onMessageAnswerService;
+    this.onCallbackAnswerService = onCallbackAnswerService;
   }
 
   public BotApiMethod<?> handleOnUpdate(Message message, MessageState state) {
     final User user = message.getFrom();
-    userDAO.saveWhenNotExist(user);
-    userDAO.saveLastMessageId(user, message);
+    userDao.saveWhenNotExist(user);
+    userDao.saveLastMessageId(user, message);
     return switch (state) {
-      case WELCOME -> menu.getMain(message);
-      case START -> menu.getStart(message);
+      case WELCOME -> onMessageAnswerService.onFirstStart(message);
+      case START -> onMessageAnswerService.onClickStart(message);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
@@ -45,11 +45,11 @@ public class UpdateHandler {
   public BotApiMethod<?> handleOnUpdate(CallbackQuery callback, CallbackState state) {
     final User user = callback.getFrom();
     final MaybeInaccessibleMessage message = callback.getMessage();
-    userDAO.saveWhenNotExist(user);
-    userDAO.saveLastMessageId(user, message);
+    userDao.saveWhenNotExist(user);
+    userDao.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> menu.getMenuWithSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS -> messageService.messageWithReadySkillsForTrade(callback);
+      case SKILLS -> onMessageAnswerService.onClickSkills(message);
+      case ALL_SKILLS, REFRESH_SKILLS -> onCallbackAnswerService.onClickSkills(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };

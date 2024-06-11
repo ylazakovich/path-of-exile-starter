@@ -13,9 +13,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class AnalyzedSkillDTO {
+public class AnalyzedSkillDto {
 
   private String name;
-  private double craftCost;
-  private double profit;
+  private double chaosEquivalentPrice;
+  private double chaosEquivalentProfit;
 }

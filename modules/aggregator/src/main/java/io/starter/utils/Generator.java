@@ -2,7 +2,7 @@ package io.starter.utils;
 
 import java.util.List;
 
-import io.starter.dto.AnalyzedSkillDTO;
+import io.starter.dto.AnalyzedSkillDto;
 import io.starter.model.Lines;
 import io.starter.model.Skill;
 
@@ -22,18 +22,18 @@ public class Generator {
     return Skill.builder()
         .name(faker.harryPotter().spell())
         .variant(faker.tire().aspectRatio())
-        .chaosValue(faker.number().randomDouble(5, 0, 1000))
+        .chaosEquivalentPrice(faker.number().randomDouble(5, 0, 1000))
         .corrupted(faker.random().nextBoolean())
         .gemLevel(faker.number().numberBetween(0, 20))
         .gemQuality(faker.number().numberBetween(0, 20))
         .build();
   }
 
-  public static AnalyzedSkillDTO generateAnalyzedSkill() {
-    return AnalyzedSkillDTO.builder()
+  public static AnalyzedSkillDto generateAnalyzedSkill() {
+    return AnalyzedSkillDto.builder()
         .name(faker.harryPotter().spell())
-        .craftCost(faker.number().randomDouble(1, 1, 5))
-        .profit(faker.number().randomDouble(5, 10, 1000))
+        .chaosEquivalentPrice(faker.number().randomDouble(1, 1, 5))
+        .chaosEquivalentProfit(faker.number().randomDouble(5, 10, 1000))
         .build();
   }
 }

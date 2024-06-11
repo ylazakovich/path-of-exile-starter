@@ -6,31 +6,31 @@ import io.starter.entity.SkillEntity;
 import io.starter.mapper.SkillEntityMapper;
 import io.starter.model.Lines;
 import io.starter.model.Skill;
-import io.starter.repo.SkillRepo;
+import io.starter.repo.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillsDAO {
+public class SkillsDao {
 
-  private final SkillRepo skillRepo;
+  private final SkillsRepository skillsRepository;
   // TODO: need parametrized entity
   private final SkillEntityMapper entityMapper;
 
   @Autowired
-  public SkillsDAO(SkillRepo skillRepo,
+  public SkillsDao(SkillsRepository skillsRepository,
                    SkillEntityMapper entityMapper) {
-    this.skillRepo = skillRepo;
+    this.skillsRepository = skillsRepository;
     this.entityMapper = entityMapper;
   }
 
   public void saveAll(Lines<Skill> data) {
     List<SkillEntity> entityList = entityMapper.apply(data);
-    skillRepo.saveAll(entityList);
+    skillsRepository.saveAll(entityList);
   }
 
   public void saveAll(List<SkillEntity> entities) {
-    skillRepo.saveAll(entities);
+    skillsRepository.saveAll(entities);
   }
 }
