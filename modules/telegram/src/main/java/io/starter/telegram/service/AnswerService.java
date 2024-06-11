@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.starter.telegram.Constants;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.config.Emoji;
@@ -16,6 +17,7 @@ import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
 import io.starter.telegram.utils.generator.reply_keyboard.buttons.InlineKeyboardButtonGenerator;
 import io.starter.telegram.utils.generator.reply_keyboard.rows.InlineKeyboardRowGenerator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -60,22 +62,22 @@ public class AnswerService {
     final StringBuilder builder = new StringBuilder();
     skills.forEach(skill -> builder
         .append(skill.getName())
-        .append(" : ")
+        .append(Constants.SEPARATER)
         .append(Math.round(skill.getChaosEquivalentProfit()))
-        .append("\n"));
+        .append(StringUtils.LF));
     return builder;
   }
 
   public SendMessage messageOnClickStart(Message message) {
-    String inlineMessage = "What options do you want to choose ?";
+    String inlineMessage = Constants.QUESTION;
     InlineKeyboardMarkup inlineKeyboard = keyboardOnClickStart();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickStart() {
-    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator.generate("Skills", CallbackState.SKILLS.value);
-    InlineKeyboardButton button2 =
-        InlineKeyboardButtonGenerator.generate("Blessing Items", CallbackState.ITEMS_AFTER_BLESSING.value);
+    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator.generate(Constants.SKILLS, CallbackState.SKILLS.value);
+    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
+        .generate(Constants.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
     List<InlineKeyboardButton> buttons = List.of(button1, button2);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(buttons);
     return InlineKeyboardGenerator.withRows(keyboard);
@@ -84,34 +86,21 @@ public class AnswerService {
   public SendMessage messageOnFirstStart(Message message) {
     List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
     List<String> line2 = List.of(MessageState.FEEDBACK.value);
-    String inlineMessage = """
-        %s
-        Greetings, Exile **%s**!
-        I will tell you the most profitable ways to earn your first Divine.
-        """.formatted(Emoji.WAVING_HAND, message.getFrom().getFirstName());
+    String firstName = message.getFrom().getFirstName();
+    String inlineMessage = Constants.WELCOME.formatted(Emoji.WAVING_HAND, firstName);
     ReplyKeyboardMarkup keyboard = ReplyKeyboardGenerator.replyMenu(line1, line2);
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), keyboard);
   }
 
   public EditMessageText callableMessageOnClickSkills(MaybeInaccessibleMessage message) {
-    String inlineMessage = """
-        GUIDE
-
-        1. Looking for Skill gem      = 20 lvl / no quality
-        2. #1 + Gemcutter's Prism =   1  lvl / 20% quality
-
-        Example:
-        Faster Attack Support 10
-        1. Faster Attack Support - Skill Gem which you can craft and trade on market
-        2. 10 - Your expected profit value in Chaos
-        """;
+    String inlineMessage = Constants.SKILLS_GUIDE;
     InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
     return EditMessageGenerator.generate(message, inlineMessage, keyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickSkills() {
-    InlineKeyboardButton button =
-        InlineKeyboardButtonGenerator.generate("Analyze All Skills", CallbackState.ALL_SKILLS.value);
+    InlineKeyboardButton button = InlineKeyboardButtonGenerator
+        .generate(Constants.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
     List<InlineKeyboardButton> buttons = List.of(button);
     return InlineKeyboardGenerator.withButtons(buttons);
   }
