@@ -19,6 +19,6 @@ public enum CallbackState {
         return state;
       }
     }
-    return null;
+    return NO_CMD;
   }
 }
