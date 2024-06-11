@@ -101,7 +101,7 @@ public class AnswerService {
   private InlineKeyboardMarkup keyboardOnClickSkills() {
     InlineKeyboardButton button = InlineKeyboardButtonGenerator
         .generate(Constants.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
-    List<InlineKeyboardButton> buttons = List.of(button);
+    List<InlineKeyboardButton> buttons = new ArrayList<>(Collections.singleton(button));
     return InlineKeyboardGenerator.withButtons(buttons);
   }
 }
