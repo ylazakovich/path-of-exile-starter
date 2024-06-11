@@ -10,12 +10,12 @@ import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.config.Emoji;
 import io.starter.telegram.dao.SkillsDao;
 import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.utils.generator.reply_keyboard.InlineKeyboardGenerator;
-import io.starter.telegram.utils.generator.reply_keyboard.ReplyKeyboardGenerator;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
 import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
-import io.starter.telegram.utils.generator.reply_keyboard.buttons.InlineKeyboardButtonGenerator;
-import io.starter.telegram.utils.generator.reply_keyboard.rows.InlineKeyboardRowGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.ReplyKeyboardGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
