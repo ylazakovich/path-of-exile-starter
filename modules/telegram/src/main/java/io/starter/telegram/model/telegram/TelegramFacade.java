@@ -1,6 +1,8 @@
 package io.starter.telegram.model.telegram;
 
 import java.util.Objects;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import io.starter.telegram.cash.CallbackCash;
 import io.starter.telegram.cash.MessageCash;
@@ -21,15 +23,19 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 public class TelegramFacade {
 
   private final UpdateHandler updateHandler;
-  private final CallbackCash callbackCash;
-  private final MessageCash messageCash;
+  private final BiConsumer<Message, MessageState> messageConsumer;
+  private final BiConsumer<CallbackQuery, CallbackState> callbackConsumer;
+  private final Function<User, CallbackState> callbackHandler;
+  private final Function<User, MessageState> messageHandler;
 
   public TelegramFacade(UpdateHandler updateHandler,
                         CallbackCash callbackCash,
                         MessageCash messageCash) {
     this.updateHandler = updateHandler;
-    this.callbackCash = callbackCash;
-    this.messageCash = messageCash;
+    this.messageConsumer = messageCash::saveState;
+    this.callbackConsumer = callbackCash::saveState;
+    this.messageHandler = messageCash::getCurrentState;
+    this.callbackHandler = callbackCash::getCurrentState;
   }
 
   public BotApiMethod<?> handleOnUpdate(Update update) {
@@ -59,37 +65,14 @@ public class TelegramFacade {
   private BotApiMethod<?> handleOnMessage(Message message) {
     final MessageState state = Objects.requireNonNull(MessageState.byText(message.getText()));
     final User user = message.getFrom();
-    switch (state) {
-      case WELCOME:
-        messageCash.saveState(message, MessageState.WELCOME);
-        break;
-      case START:
-        messageCash.saveState(message, MessageState.START);
-        break;
-      default:
-        messageCash.saveState(message, MessageState.NO_CMD);
-        break;
-    }
-    return updateHandler.handleOnUpdate(message, messageCash.getCurrentState(user));
+    messageConsumer.accept(message, state);
+    return updateHandler.handleOnUpdate(message, messageHandler.apply(user));
   }
 
   public BotApiMethod<?> handleOnCallback(CallbackQuery callback) {
     final CallbackState state = Objects.requireNonNull(CallbackState.byData(callback.getData()));
     final User user = callback.getFrom();
-    switch (state) {
-      case SKILLS:
-        callbackCash.saveState(callback, CallbackState.SKILLS);
-        break;
-      case ALL_SKILLS:
-        callbackCash.saveState(callback, CallbackState.ALL_SKILLS);
-        break;
-      case REFRESH_SKILLS:
-        callbackCash.saveState(callback, CallbackState.REFRESH_SKILLS);
-        break;
-      default:
-        callbackCash.saveState(callback, CallbackState.NO_CMD);
-        break;
-    }
-    return updateHandler.handleOnUpdate(callback, callbackCash.getCurrentState(user));
+    callbackConsumer.accept(callback, state);
+    return updateHandler.handleOnUpdate(callback, callbackHandler.apply(user));
   }
 }
