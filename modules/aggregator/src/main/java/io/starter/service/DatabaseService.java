@@ -6,7 +6,7 @@ import java.util.List;
 import io.starter.entity.SkillEntity;
 import io.starter.model.Lines;
 import io.starter.model.Skill;
-import io.starter.repo.SkillRepo;
+import io.starter.repo.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,36 +15,36 @@ import org.springframework.stereotype.Service;
 public class DatabaseService {
 
   private final SkillsDAO skillsDAO;
-  private final SkillRepo skillRepo;
+  private final SkillsRepository skillsRepository;
 
   @Autowired
   public DatabaseService(SkillsDAO skillsDAO,
-                         SkillRepo skillRepo) {
+                         SkillsRepository skillsRepository) {
     this.skillsDAO = skillsDAO;
-    this.skillRepo = skillRepo;
+    this.skillsRepository = skillsRepository;
   }
 
   public void load(Lines<Skill> lines) {
-    if (skillRepo.findAll().isEmpty()) {
+    if (skillsRepository.findAll().isEmpty()) {
       skillsDAO.saveAll(lines);
     }
   }
 
   public void update(Lines<Skill> lines) {
-    List<SkillEntity> entitiesOnUpdate = skillRepo.findAll();
+    List<SkillEntity> entitiesOnUpdate = skillsRepository.findAll();
     entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
         .filter(skill -> skill.getName().equals(entity.getName())
             && skill.getGemLevel() == entity.getGemLevel()
             && skill.getGemQuality() == entity.getGemQuality()
             && skill.isCorrupted() == entity.getCorrupted())
         .findFirst()
-        .ifPresent(skill -> entity.setChaosValue(skill.getChaosValue()))
+        .ifPresent(skill -> entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice()))
     );
     skillsDAO.saveAll(entitiesOnUpdate);
   }
 
   public void addNew(Lines<Skill> lines) {
-    List<SkillEntity> allEntities = skillRepo.findAll();
+    List<SkillEntity> allEntities = skillsRepository.findAll();
     List<SkillEntity> entitiesOnAdding = new ArrayList<>();
     lines.getLines().stream()
         .filter(skill -> allEntities.stream()
@@ -61,7 +61,7 @@ public class DatabaseService {
           entity.setGemLevel(skill.getGemLevel());
           entity.setGemQuality(skill.getGemQuality());
           entity.setCorrupted(skill.isCorrupted());
-          entity.setChaosValue(skill.getChaosValue());
+          entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
           entitiesOnAdding.add(entity);
         });
     skillsDAO.saveAll(entitiesOnAdding);

@@ -27,6 +27,6 @@ public class AnalyzerController {
 
   @GetMapping("analyze/skills/{takeProfit}")
   public List<AnalyzedSkillDTO> findAllForTrade(@PathVariable("takeProfit") long value) {
-    return analyzerService.analyze().stream().filter(skill -> skill.getProfit() >= value).toList();
+    return analyzerService.analyze().stream().filter(skill -> skill.getChaosEquivalentProfit() >= value).toList();
   }
 }

@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface SkillRepo extends JpaRepository<SkillEntity, Long> {
+public interface SkillsRepository extends JpaRepository<SkillEntity, Long> {
 
   Optional<SkillEntity> findSkillById(Long id);
 

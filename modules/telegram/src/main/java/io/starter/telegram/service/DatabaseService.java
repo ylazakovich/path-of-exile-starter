@@ -1,6 +1,6 @@
 package io.starter.telegram.service;
 
-import io.starter.telegram.dao.AnalyzedSkillsDao;
+import io.starter.telegram.dao.SkillsDao;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -9,25 +9,25 @@ import org.springframework.stereotype.Service;
 public class DatabaseService {
 
   private final AggregatorService aggregatorService;
-  private final AnalyzedSkillsDao analyzedSkillsDAO;
+  private final SkillsDao skillsDAO;
 
   public DatabaseService(AggregatorService aggregatorService,
-                         AnalyzedSkillsDao analyzedSkillsDAO) {
+                         SkillsDao skillsDAO) {
     this.aggregatorService = aggregatorService;
-    this.analyzedSkillsDAO = analyzedSkillsDAO;
+    this.skillsDAO = skillsDAO;
   }
 
   public void loadSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::add);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::add);
   }
 
   @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::update);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::update);
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   public void addNewSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(analyzedSkillsDAO::addNew);
+    aggregatorService.getAnalyzedSkills().subscribe(skillsDAO::addNew);
   }
 }
