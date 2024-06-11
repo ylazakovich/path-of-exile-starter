@@ -35,8 +35,8 @@ public class UpdateHandler {
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
-      case WELCOME -> menu.getMain(message);
-      case START -> menu.getStart(message);
+      case WELCOME -> menu.messageOnFirstStart(message);
+      case START -> menu.messageOnClickStart(message);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
@@ -48,8 +48,8 @@ public class UpdateHandler {
     userDAO.saveWhenNotExist(user);
     userDAO.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> menu.getMenuWithSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS -> messageService.messageWithReadySkillsForTrade(callback);
+      case SKILLS -> menu.messageOnClickSkills(message);
+      case ALL_SKILLS, REFRESH_SKILLS -> messageService.messageWithSkills(callback);
       case NO_CMD -> null;
       default -> throw new IllegalStateException("Unexpected value: " + state);
     };
