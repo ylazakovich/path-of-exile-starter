@@ -1,9 +1,9 @@
-name: 'Run tests'
+name: 'Checkstyle'
 on:
-  workflow_run:
-    workflows: [ 'Checkstyle' ]
-    types:
-      - completed
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   run-tests-on-linux:
@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ 'test' ]
+        gradle-task: [ 'check' ]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
