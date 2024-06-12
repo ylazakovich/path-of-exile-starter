@@ -2,7 +2,7 @@ name: 'Run tests'
 on:
   push:
     branches:
-      - issue-40/tests
+      - main
   pull_request:
 
 jobs:
