@@ -13,18 +13,6 @@ jobs:
       matrix:
         gradle-task: [ 'test' ]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'corretto'
-          cache: 'gradle'
-          java-version: '17'
-      - name: Build with Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.8
       - name: Run the unit tests
         run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@v4
