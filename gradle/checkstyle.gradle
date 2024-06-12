@@ -11,8 +11,4 @@ subprojects {
             html.required = System.getenv('CI') == null
         }
     }
-
-    tasks.test {
-        enabled = false
-    }
 }
