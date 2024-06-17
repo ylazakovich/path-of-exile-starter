@@ -2,6 +2,7 @@ package io.starter.config;
 
 import org.aeonbits.owner.Config;
 
+@Config.Sources({"system:env"})
 public interface AppConfiguration extends Config {
 
   @Key("BASE_TELEGRAM_URL")
@@ -17,4 +18,8 @@ public interface AppConfiguration extends Config {
   @Key("BOT_USERNAME")
   @DefaultValue("@poe_consultant_bot")
   String botUsername();
+
+  @Key("IS_NIGHTLY_RUN")
+  @DefaultValue("false")
+  Boolean isNightlyRun();
 }

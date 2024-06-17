@@ -11,4 +11,5 @@ public class AppConfig {
   public static final String WEBHOOK_URL = CONFIG.webhookUrl();
   public static final String ACCOUNT_PHONE = CONFIG.accountPhone();
   public static final String BOT_USERNAME = CONFIG.botUsername();
+  public static final Boolean IS_NIGHTLY_RUN = CONFIG.isNightlyRun();
 }
