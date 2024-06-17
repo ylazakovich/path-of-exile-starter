@@ -13,4 +13,8 @@ public interface AppConfiguration extends Config {
 
   @Key("WEBHOOK_URL")
   String webhookUrl();
+
+  @Key("BOT_USERNAME")
+  @DefaultValue("@poe_consultant_bot")
+  String botUsername();
 }
