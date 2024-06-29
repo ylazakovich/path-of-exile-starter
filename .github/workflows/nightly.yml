@@ -12,20 +12,20 @@ jobs:
         gradle-task: [ 'check' ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Set up JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4
         with:
           distribution: 'corretto'
           cache: 'gradle'
           java-version: '17'
       - name: Build with Gradle
-        uses: gradle/actions/setup-gradle@v3
+        uses: gradle/actions/setup-gradle@dbbdc275be76ac10734476cc723d82dfe7ec6eda # v3
         with:
           gradle-version: 8.8
       - name: Run the Integration Tests
         run: gradle :modules:tests:${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808 # v4
         if: always()
         with:
           name: test-report-linux-${{matrix.gradle-task}}
