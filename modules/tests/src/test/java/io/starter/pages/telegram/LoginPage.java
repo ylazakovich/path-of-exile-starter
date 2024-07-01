@@ -9,6 +9,7 @@ import com.codeborne.selenide.SelenideElement;
 import static com.codeborne.selenide.Selectors.byCssSelector;
 import static com.codeborne.selenide.Selectors.byXpath;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.SetValueOptions.withText;
 
 @PageUrl("/k")
 public class LoginPage implements Page {
@@ -27,7 +28,7 @@ public class LoginPage implements Page {
   }
 
   public void enterPhone(String phone) {
-    phoneInput.setValue(phone);
+    phoneInput.setValue(withText(phone).sensitive());
   }
 
   public void clickNextBtn() {
@@ -35,6 +36,6 @@ public class LoginPage implements Page {
   }
 
   public void inputCode(String code) {
-    codeInput.setValue(code);
+    codeInput.setValue(withText(code).sensitive());
   }
 }

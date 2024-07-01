@@ -16,4 +16,8 @@ public class HomePage implements Page {
   public SelenideElement getSearchInput() {
     return searchInput;
   }
+
+  public void search(String text) {
+    searchInput.sendKeys(text);
+  }
 }

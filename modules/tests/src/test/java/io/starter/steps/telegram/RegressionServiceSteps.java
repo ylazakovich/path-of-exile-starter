@@ -16,15 +16,20 @@ public class RegressionServiceSteps {
   }
 
   @Step("Get validation code for login in Telegram Account")
-  public String getValidationCode() {
+  public String getCode() {
     awaitValidationCode();
-    return regressionService.getValidatableCode()
+    return regressionService.getCode()
         .extract()
         .jsonPath().getString("code");
   }
 
+  @Step("Get validation code for login in Telegram Account")
+  public void expireCode() {
+    regressionService.expireCode();
+  }
+
   private void awaitValidationCode() {
-    Waiter.awaitCondition(() -> regressionService.getValidatableCode().extract().jsonPath().getBoolean("is_not_used"),
+    Waiter.awaitCondition(() -> regressionService.getCode().extract().jsonPath().getBoolean("is_not_used"),
         "No verification code. Admin can provide it",
         Duration.ofSeconds(60),
         Duration.ofSeconds(4));
