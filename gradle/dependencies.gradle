@@ -6,7 +6,7 @@ ext {
     lombok = '1.18.34'
     telegram = '7.7.1'
     spring = '3.3.1'
-    mariadb = '3.4.0'
+    mariadb = '3.4.1'
     mockito = '5.12.0'
     assertJ = '3.26.3'
     testng = '7.10.2'
