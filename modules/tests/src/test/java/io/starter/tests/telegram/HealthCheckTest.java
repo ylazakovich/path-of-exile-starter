@@ -1,6 +1,5 @@
 package io.starter.tests.telegram;
 
-
 import io.starter.BaseUITest;
 import io.starter.utils.Browser;
 
