@@ -1,5 +1,6 @@
 package io.starter.tests.telegram;
 
+
 import io.starter.BaseUITest;
 import io.starter.utils.Browser;
 
@@ -10,6 +11,13 @@ public class HealthCheckTest extends BaseUITest {
 
   @Test()
   void testGetWebApp() {
+    telegramNavigationSteps.openLoginPage()
+        .verify()
+        .verifyLoginDisplayed();
+  }
+
+  @Test()
+  void testGetWebApp2() {
     telegramNavigationSteps.openLoginPage()
         .verify()
         .verifyLoginDisplayed();
