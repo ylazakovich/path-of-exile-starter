@@ -5,7 +5,7 @@ on:
       - main
   pull_request:
 env:
-  IS_REMOTE: ${{ secrets.IS_REMOTE }}
+  IS_REMOTE: ${{ process.env.IS_REMOTE }}
 
 jobs:
   run-tests-on-linux:
