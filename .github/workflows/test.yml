@@ -4,8 +4,6 @@ on:
     branches:
       - main
   pull_request:
-env:
-  IS_REMOTE: ${{ secrets.IS_REMOTE }}
 
 jobs:
   run-tests-on-linux:
@@ -28,7 +26,9 @@ jobs:
         with:
           gradle-version: 8.9
       - name: Run the unit tests
-        run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain IS_REMOTE=${{ env.IS_REMOTE }}
+        env:
+          IS_REMOTE: ${{ secrets.IS_REMOTE }}
+        run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4
         if: always()
         with:
