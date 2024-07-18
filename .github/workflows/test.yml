@@ -21,6 +21,10 @@ jobs:
           distribution: 'corretto'
           cache: 'gradle'
           java-version: '17'
+      - name: 'Create env file'
+        run: |
+          touch .env
+          echo IS_REMOTE=${{ secrets.IS_REMOTE }} >> .env
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@d9c87d481d55275bb5441eef3fe0e46805f9ef70 # v3
         with:
