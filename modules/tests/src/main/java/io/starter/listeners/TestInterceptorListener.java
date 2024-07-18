@@ -5,8 +5,8 @@ import java.util.Objects;
 
 import io.starter.annotations.Nightly;
 import io.starter.config.AppConfig;
-
 import io.starter.utils.TestUtils;
+
 import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;
 import org.testng.ITestContext;
