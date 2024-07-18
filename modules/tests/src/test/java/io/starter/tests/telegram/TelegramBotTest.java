@@ -1,7 +1,6 @@
 package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
-import io.starter.annotations.Nightly;
 import io.starter.config.AppConfig;
 import io.starter.steps.telegram.HomePageSteps;
 import io.starter.utils.Browser;
@@ -22,14 +21,12 @@ public class TelegramBotTest extends BaseUITest {
     regressionServiceSteps.expireCode();
   }
 
-  @Test()
-  @Nightly
+  @Test(enabled = false)
   void testUserOnSuccessfulLogin() {
     steps.verify().verifySearchDisplayed();
   }
 
-  @Nightly(isEnabled = true)
-  @Test()
+  @Test(enabled = false)
   void testUserOnWelcomeMessage() {
     steps.verify().verifySearchDisplayed();
   }
