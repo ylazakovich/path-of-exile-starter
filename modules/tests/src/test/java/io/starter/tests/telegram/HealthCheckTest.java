@@ -15,13 +15,6 @@ public class HealthCheckTest extends BaseUITest {
         .verifyLoginDisplayed();
   }
 
-  @Test()
-  void testGetWebApp2() {
-    telegramNavigationSteps.openLoginPage()
-        .verify()
-        .verifyLoginDisplayed();
-  }
-
   @AfterClass
   void tearDown() {
     Browser.closeWebDriver();
