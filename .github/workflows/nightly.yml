@@ -2,8 +2,6 @@ name: "Nightly Tests"
 
 on:
   workflow_dispatch:
-env:
-  IS_REMOTE: ${{ secrets.IS_REMOTE }}
 
 jobs:
   run-tests-on-linux:
