@@ -1,3 +1,22 @@
+dependencyManagement {
+    dependencies {
+        dependency "org.seleniumhq.selenium:selenium-java:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-devtools-v85:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-http:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-api:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-json:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-manager:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-support:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-safari-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-chrome-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-chromium-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-firefox-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-edge-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-ie-driver:$selenium"
+        dependency "org.seleniumhq.selenium:selenium-remote-driver:$selenium"
+    }
+}
+
 dependencies {
     implementation("org.awaitility:awaitility:$awaitility")
     implementation("io.rest-assured:rest-assured:$restAssured")
