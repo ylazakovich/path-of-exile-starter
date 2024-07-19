@@ -38,7 +38,7 @@ public class UpdateHandler {
       case WELCOME -> onMessageAnswerService.onFirstStart(message);
       case START -> onMessageAnswerService.onClickStart(message);
       case NO_CMD -> null;
-      default -> throw new IllegalStateException("Unexpected value: " + state);
+      default -> null;
     };
   }
 
@@ -51,7 +51,7 @@ public class UpdateHandler {
       case SKILLS -> onMessageAnswerService.onClickSkills(message);
       case ALL_SKILLS, REFRESH_SKILLS -> onCallbackAnswerService.onClickSkills(callback);
       case NO_CMD -> null;
-      default -> throw new IllegalStateException("Unexpected value: " + state);
+      default -> null;
     };
   }
 }

@@ -28,7 +28,14 @@ public class TelegramBotTest extends BaseUITest {
 
   @Test(enabled = false)
   void testUserOnWelcomeMessage() {
-    steps.verify().verifySearchDisplayed();
+    String user = AppConfig.BOT_USERNAME;
+    steps.verify()
+        .verifySearchDisplayed()
+        .backToSteps()
+        .search(user)
+        .selectChat(user)
+        .verify()
+        .verifySearchDisplayed();
   }
 
   @AfterClass
