@@ -17,12 +17,22 @@ public class TelegramBotTest extends BaseUITest {
   void session() {
     steps = telegramNavigationSteps
         .openLoginPage().loginViaPhone(AppConfig.ACCOUNT_PHONE)
-        .inputVerificationCode(regressionServiceSteps.getValidationCode());
+        .inputVerificationCode(regressionServiceSteps.getCode());
+    regressionServiceSteps.expireCode();
   }
 
   @Test(enabled = false)
   void testUserOnSuccessfulLogin() {
     steps.verify().verifySearchDisplayed();
+  }
+
+  @Test(enabled = false)
+  void testUserOnWelcomeMessage() {
+    String user = AppConfig.BOT_USERNAME;
+    steps.search(user)
+        .selectChat(0)
+        .verify()
+        .verifyOpenedChat();
   }
 
   @AfterClass

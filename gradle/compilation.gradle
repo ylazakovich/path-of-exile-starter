@@ -3,6 +3,14 @@ subprojects {
     encoding = 'UTF-8'
   }
 
+  bootJar {
+    enabled = false
+  }
+
+  jar {
+    enabled = true
+  }
+
   tasks.withType(JavaCompile).configureEach {
     options.encoding = encoding
     options.debug = true

@@ -22,6 +22,14 @@ public class ApiService {
         .spec(getResponseSpecification());
   }
 
+  protected ValidatableResponse put(RequestSpecification requestSpecification, String path) {
+    return given(requestSpecification)
+        .when()
+        .put(path)
+        .then()
+        .spec(getResponseSpecification());
+  }
+
   protected RequestSpecification getRequestSpecification(String uri, ContentType contentType) {
     return new RequestSpecBuilder()
         .setBaseUri(uri)

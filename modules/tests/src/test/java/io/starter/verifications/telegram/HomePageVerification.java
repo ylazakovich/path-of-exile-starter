@@ -15,7 +15,13 @@ public class HomePageVerification extends Verification<HomePageSteps, HomePage> 
 
   @Step("Verify that page is successfully opened")
   public HomePageVerification verifySearchDisplayed() {
-    page.getSearchInput().shouldBe(Condition.visible);
+    page.getSearch().shouldBe(Condition.visible);
+    return this;
+  }
+
+  @Step("Verify that chat is exist")
+  public HomePageVerification verifyOpenedChat() {
+    page.getOpenedChat().shouldBe(Condition.visible);
     return this;
   }
 }

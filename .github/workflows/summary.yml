@@ -1,9 +1,10 @@
-name: 'Test Report'
+name: "Test Report"
 on:
   workflow_run:
-    workflows: [ 'Run tests' ]
+    workflows: ["Run tests"]
     types:
       - completed
+
 jobs:
   report:
     runs-on: ubuntu-latest
@@ -16,8 +17,8 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
       - uses: dorny/test-reporter@v1
         with:
-#          artifact: /test-report-(.*)-(.*)/
-#          name: 'Test report: $1 $2'
-          name: 'Test report'
-          path: '**/build/test-results/**/TEST-*.xml'
+          #          artifact: /test-report-(.*)-(.*)/
+          #          name: 'Test report: $1 $2'
+          name: "Test report"
+          path: "**/build/test-results/**/TEST-*.xml"
           reporter: java-junit

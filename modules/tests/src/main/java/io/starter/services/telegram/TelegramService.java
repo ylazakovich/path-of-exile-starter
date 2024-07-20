@@ -16,6 +16,10 @@ public class TelegramService extends ApiService {
     return get(getRequestSpecification(ContentType.JSON), path);
   }
 
+  protected ValidatableResponse put(String path) {
+    return put(getRequestSpecification(ContentType.JSON), path);
+  }
+
   private RequestSpecification getRequestSpecification(ContentType contentType) {
     return getRequestSpecification(baseUrl, contentType);
   }

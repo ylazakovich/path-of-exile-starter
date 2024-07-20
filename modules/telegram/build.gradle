@@ -1,13 +1,13 @@
-plugins {
-    id "io.sentry.jvm.gradle" version "$sentryVersion"
-}
+//plugins {
+//    id "io.sentry.jvm.gradle" version "$sentryVersion"
+//}
 
-sentry {
-    includeSourceContext = true
-    org = "yaraslau-lazakovich"
-    projectName = "telegram"
-    authToken = System.getenv("SENTRY_AUTH_TOKEN")
-}
+//sentry {
+//    includeSourceContext = true
+//    org = "yaraslau-lazakovich"
+//    projectName = "telegram"
+//    authToken = System.getenv("SENTRY_AUTH_TOKEN")
+//}
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$spring")

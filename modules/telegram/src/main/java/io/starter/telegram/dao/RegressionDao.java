@@ -19,4 +19,8 @@ public class RegressionDao {
   public RegressionEntity read(long id) {
     return regressionRepository.findById(id);
   }
+
+  public RegressionEntity update(RegressionEntity entity) {
+    return regressionRepository.save(entity);
+  }
 }
