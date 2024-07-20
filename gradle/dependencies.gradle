@@ -1,11 +1,11 @@
 ext {
     os = "macos"
     mac_os_arch = 'osx-aarch_64'
-    netty = '4.1.111.Final'
+    netty = '4.1.112.Final'
     flyway = '10.16.0'
     lombok = '1.18.34'
     telegram = '7.7.1'
-    spring = '3.3.1'
+    spring = '3.3.2'
     mariadb = '3.4.1'
     mockito = '5.12.0'
     assertJ = '3.26.3'
@@ -13,7 +13,7 @@ ext {
     faker = '2.3.1'
     jaxb = '2.3.1'
     selenide = '7.3.3'
-    selenium = '4.22.0'
+    selenium = '4.23.0'
     aeonbits = "1.0.12"
     slf4j = '2.0.13'
     allure = '2.28.0'
