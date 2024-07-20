@@ -1,12 +1,12 @@
 package io.starter.pages.telegram;
 
-import static com.codeborne.selenide.Selenide.$$x;
-
-import com.codeborne.selenide.ElementsCollection;
 import io.starter.annotations.PageUrl;
 
 import com.codeborne.selenide.Container;
+import com.codeborne.selenide.ElementsCollection;
 import org.openqa.selenium.support.FindBy;
+
+import static com.codeborne.selenide.Selenide.$$x;
 
 @PageUrl("/k")
 public class SearchPage extends HomePage {
@@ -20,6 +20,7 @@ public class SearchPage extends HomePage {
 
   private static class SearchBlock implements Container {
 
-    private ElementsCollection chats = $$x("//div[@class='search-group__name']/span[text()='Chats']/../following-sibling::ul[@class='chatlist']");
+    private final String chatXpath = "//div[@class='search-group__name']/span[text()='Chats']";
+    private ElementsCollection chats = $$x(chatXpath);
   }
 }
