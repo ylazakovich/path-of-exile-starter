@@ -18,4 +18,10 @@ public class HomePageVerification extends Verification<HomePageSteps, HomePage> 
     page.getSearch().shouldBe(Condition.visible);
     return this;
   }
+
+  @Step("Verify that chat is exist")
+  public HomePageVerification verifyOpenedChat() {
+    page.getOpenedChat().shouldBe(Condition.visible);
+    return this;
+  }
 }

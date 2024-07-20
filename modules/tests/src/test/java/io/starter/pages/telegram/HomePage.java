@@ -12,9 +12,14 @@ import static com.codeborne.selenide.Selenide.$;
 public class HomePage implements Page {
 
   private SelenideElement search = $(".input-search");
+  private SelenideElement openedChat = $(".chat-background");
 
   public SelenideElement getSearch() {
     return search;
+  }
+
+  public SelenideElement getOpenedChat() {
+    return openedChat;
   }
 
   public SearchPage search(String text) {

@@ -1,6 +1,6 @@
 package io.starter.steps.telegram;
 
-import io.starter.pages.telegram.HomePage;
+import com.codeborne.selenide.Selenide;
 import io.starter.pages.telegram.SearchPage;
 import io.starter.steps.models.PageSteps;
 import io.starter.verifications.telegram.SearchPageVerification;
@@ -12,8 +12,8 @@ public class SearchPageSteps extends PageSteps<SearchPageSteps, SearchPageVerifi
     super.page = page;
   }
 
-  public HomePageSteps selectChat(String user) {
-    page.selectChat(user);
-    return new HomePageSteps(new HomePage());
+  public HomePageSteps selectChat(int index) {
+    page.selectChat(index);
+    return new HomePageSteps(Selenide.page());
   }
 }
