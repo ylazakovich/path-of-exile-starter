@@ -1,9 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:best-practices",
-    "mergeConfidence:all-badges"
-  ],
+  "extends": ["config:best-practices", "mergeConfidence:all-badges"],
   "packageRules": [
     {
       "matchPackagePatterns": ["mariadb"],

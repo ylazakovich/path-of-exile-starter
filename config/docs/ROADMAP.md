@@ -5,7 +5,7 @@
 Realized Telegram bot over implementation with Spring Webhook
 
 | **Features**                                 |     **Status**     | **Integration Tests** |
-|----------------------------------------------|:------------------:|:---------------------:|
+| -------------------------------------------- | :----------------: | :-------------------: |
 | Database + Migration                         | :white_check_mark: |                       |
 | Subscribe Webhook after application Start    | :white_check_mark: |                       |
 | Save user info in Database                   | :white_check_mark: |                       |
@@ -25,7 +25,7 @@ Realized Telegram bot over implementation with Spring Webhook
 Spring service which aggregate data from the 3rd party places
 
 | **Features**                                  |     **Status**     |   **Unit Tests**   |
-|-----------------------------------------------|:------------------:|:------------------:|
+| --------------------------------------------- | :----------------: | :----------------: |
 | Database + Migration                          | :white_check_mark: |                    |
 | Load data to Database after application start | :white_check_mark: |                    |
 | Update data in Database by CRON               | :white_check_mark: |                    |
