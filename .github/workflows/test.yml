@@ -14,16 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         gradle-task: [ "check" ]
-
-
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Prettify code
-        uses: creyD/prettier_action@v4.3
+        uses: actionsx/prettier@v3
         with:
-          prettier_options: --check --ignore-unknown **/*.* | shopt -s globstar dotglob
-          dry: true
+          args: --check --ignore-unknown '**/*.*'
       - name: Set up JDK
         uses: actions/setup-java@99b8673ff64fbf99d8d325f52d9a5bdedb8483e9 # v4
         with:
