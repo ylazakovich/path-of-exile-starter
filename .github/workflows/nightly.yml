@@ -15,6 +15,8 @@ jobs:
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
       - name: Check repository over Prettier
         uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
         with:
           args: --check --ignore-unknown '**/*.*'
       - name: Set up JDK
