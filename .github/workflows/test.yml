@@ -20,7 +20,7 @@ jobs:
       - name: Check repository over Prettier
         uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
         env:
-          FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: true
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE20: "true"
         with:
           args: --check --ignore-unknown '**/*.*'
       - name: Set up JDK
