@@ -6,16 +6,16 @@
 
 - [What the service can do?](#what-is-about-service)
 - [Status](config/docs/ROADMAP.md#status)
-    - [Telegram](config/docs/ROADMAP.md#telegram)
-    - [Aggregator](config/docs/ROADMAP.md#aggregator)
+  - [Telegram](config/docs/ROADMAP.md#telegram)
+  - [Aggregator](config/docs/ROADMAP.md#aggregator)
 - [Quick start](#quick-start)
 - [FAQ](#faq)
 
 ## What is about Service
 
-1) Easy start for trading in Path of Exile
-2) Service is able to provide you positions for trade
-3) You are able to manage it over Telegram
+1. Easy start for trading in Path of Exile
+2. Service is able to provide you positions for trade
+3. You are able to manage it over Telegram
 
 ## Quick start
 
@@ -36,15 +36,17 @@ Currently, bot check prices over https://poe.ninja/
 
 So, for that purpose I would recommend you to use ngrok \
 Then copy https links from console into `application.properties`
+
 - webhook - links from ngrok
 - token - botfather provide this token
 
 Then
 
 **Option 1**
-1) run `docker-compose.yml`
-2) start application from aggregator module
-3) start application from telegram module
+
+1. run `docker-compose.yml`
+2. start application from aggregator module
+3. start application from telegram module
 
 **Option 2** (not ready yet)
 
@@ -76,7 +78,7 @@ Here: [Status](config/docs/ROADMAP.md#status)
 As each test is completed \
 I will update doc and stay ref for this feature
 
-#### Q: Are you controlling library versions ? 
+#### Q: Are you controlling library versions ?
 
 Repository is connected to dependabot with \
 regular checking and managing \
@@ -85,8 +87,10 @@ new versions of libs
 #### Q: How do you control stability of your app ?
 
 Repository is connected to github actions
-1) Each pull request/merge into `main` triggers unit tests
-2) Integrations tests are in progress now and later will be done
+
+1. Each pull request/merge into `main` triggers unit tests
+2. Integrations tests are in progress now and later will be done
+
 - Every release should run pipeline with running these tests
 - Nightly builds will have a rule for running these tests only manually
 
