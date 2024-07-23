@@ -32,7 +32,7 @@ jobs:
       - uses: actions/upload-artifact@0b2256b8c012f0828dc542b3febcab082c67f72b # v4
         if: always()
         with:
-          name: test-report-linux-${{matrix.gradle-task}}
+          name: test-report-linux-${{ matrix.gradle-task }}
           retention-days: 14
           path: |
             **/build/reports
