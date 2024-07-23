@@ -15,6 +15,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
+      - name: Check Variables
+        run: |
+          echo "OS: ${{ matrix.os }}"
+          echo "Gradle Task: ${{ matrix.gradle-task }}"
       - uses: dorny/test-reporter@v1
         with:
           name: 📎Test report ${{ matrix.os }} ${{ matrix.gradle-task }}
