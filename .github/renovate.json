@@ -8,5 +8,6 @@
       "allowedVersions": "<11.3"
     }
   ],
+  "labels": ["dependencies"],
   "dependencyDashboardApproval": true
 }
