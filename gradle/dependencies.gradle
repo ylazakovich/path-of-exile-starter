@@ -20,7 +20,6 @@ ext {
     httpcore5 = '5.2.5'
     restAssured = '5.5.0'
     awaitility = '4.2.1'
-    sentryVersion = '4.10.0'
 }
 
 subprojects {
