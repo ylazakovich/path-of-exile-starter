@@ -13,12 +13,11 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         with:
-          github-token: ${{secrets.GITHUB_TOKEN}}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
       - uses: dorny/test-reporter@v1
         with:
-          #          artifact: /test-report-(.*)-(.*)/
-          #          name: 'Test report: $1 $2'
-          name: "Test report"
+          name: 📎Test report ${{ matrix.os }} ${{ matrix.gradle-task }}
+          artifact: /test-report-(.*)-(.*)/
           path: "**/build/test-results/**/TEST-*.xml"
           reporter: java-junit
