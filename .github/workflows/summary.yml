@@ -17,6 +17,6 @@ jobs:
           run-id: ${{ github.event.workflow_run.id }}
       - uses: dorny/test-reporter@v1
         with:
-          name: "Test report $1 $2"
+          name: "Test report ${{matrix.os}} ${{matrix.gradle-task}}"
           path: "**/build/test-results/**/TEST-*.xml"
           reporter: java-junit
