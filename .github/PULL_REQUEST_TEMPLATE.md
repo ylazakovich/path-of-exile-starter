@@ -1,9 +1,3 @@
----
-name: Pull request template
-about: Default template of PR
-title: "TITLE: What has been implemented in this PR"
----
-
 ## Proposed changes
 
 Closes #issue
