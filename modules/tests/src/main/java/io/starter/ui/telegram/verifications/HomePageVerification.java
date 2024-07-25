@@ -1,11 +1,11 @@
 package io.starter.ui.telegram.verifications;
 
 import io.starter.steps.models.Verification;
+import io.starter.ui.telegram.pages.HomePage;
+import io.starter.ui.telegram.steps.HomePageSteps;
 
 import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
-import io.starter.ui.telegram.pages.HomePage;
-import io.starter.ui.telegram.steps.HomePageSteps;
 
 public class HomePageVerification extends Verification<HomePageSteps, HomePage> {
 

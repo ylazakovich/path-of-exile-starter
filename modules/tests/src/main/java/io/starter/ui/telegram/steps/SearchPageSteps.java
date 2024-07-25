@@ -1,10 +1,10 @@
 package io.starter.ui.telegram.steps;
 
 import io.starter.steps.models.PageSteps;
+import io.starter.ui.telegram.pages.SearchPage;
+import io.starter.ui.telegram.verifications.SearchPageVerification;
 
 import com.codeborne.selenide.Selenide;
-import io.starter.ui.telegram.verifications.SearchPageVerification;
-import io.starter.ui.telegram.pages.SearchPage;
 
 public class SearchPageSteps extends PageSteps<SearchPageSteps, SearchPageVerification, SearchPage> {
 

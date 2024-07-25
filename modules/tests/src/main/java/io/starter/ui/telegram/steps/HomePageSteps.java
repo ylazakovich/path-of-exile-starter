@@ -1,10 +1,10 @@
 package io.starter.ui.telegram.steps;
 
 import io.starter.steps.models.PageSteps;
-
-import com.codeborne.selenide.Selenide;
 import io.starter.ui.telegram.pages.HomePage;
 import io.starter.ui.telegram.verifications.HomePageVerification;
+
+import com.codeborne.selenide.Selenide;
 
 public class HomePageSteps extends PageSteps<HomePageSteps, HomePageVerification, HomePage> {
 
