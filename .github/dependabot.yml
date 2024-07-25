@@ -7,12 +7,10 @@ updates:
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "org.seleniumhq.selenium:*"
-    labels:
-      - dependencies
+    labels: [dependencies]
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    labels:
-      - dependencies
+    labels: [dependencies]
