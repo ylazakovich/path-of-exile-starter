@@ -6,7 +6,7 @@ updates:
       interval: daily
     open-pull-requests-limit: 10
     ignore:
-      - dependency-name: "org.seleniumhq.selenium"
+      - dependency-name: "org.seleniumhq.selenium:*"
     labels:
       - dependencies
   - package-ecosystem: "github-actions"
