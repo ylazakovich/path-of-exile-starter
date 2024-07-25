@@ -1,4 +1,4 @@
-package io.starter.ui.telegram;
+package io.starter.ui.telegram.pages;
 
 import io.starter.annotations.PageUrl;
 import io.starter.steps.models.Page;

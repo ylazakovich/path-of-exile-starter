@@ -2,7 +2,7 @@ package io.starter.tests.telegram;
 
 import io.starter.BaseUITest;
 import io.starter.config.AppConfig;
-import io.starter.ui.telegram.HomePageSteps;
+import io.starter.ui.telegram.steps.HomePageSteps;
 import io.starter.utils.Browser;
 
 import org.testng.annotations.AfterClass;
