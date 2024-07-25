@@ -7,7 +7,7 @@ labels: "feature"
 
 ## Description
 
-Briefly describe the feature request you are suggesting. <br>
+Briefly describe the feature request you are suggesting.
 
 ## Details
 

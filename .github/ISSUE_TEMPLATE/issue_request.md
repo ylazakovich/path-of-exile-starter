@@ -7,7 +7,7 @@ labels: "bug"
 
 ## Description
 
-Briefly describe the issue you are experiencing. <br>
+Briefly describe the issue you are experiencing.
 
 ## Details
 
