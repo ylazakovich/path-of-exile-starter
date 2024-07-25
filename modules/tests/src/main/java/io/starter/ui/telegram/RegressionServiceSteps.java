@@ -1,4 +1,4 @@
-package io.starter.steps.telegram;
+package io.starter.ui.telegram;
 
 import java.time.Duration;
 

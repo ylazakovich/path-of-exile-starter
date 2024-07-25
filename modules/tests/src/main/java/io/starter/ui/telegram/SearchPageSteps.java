@@ -1,8 +1,6 @@
-package io.starter.steps.telegram;
+package io.starter.ui.telegram;
 
-import io.starter.pages.telegram.SearchPage;
 import io.starter.steps.models.PageSteps;
-import io.starter.verifications.telegram.SearchPageVerification;
 
 import com.codeborne.selenide.Selenide;
 

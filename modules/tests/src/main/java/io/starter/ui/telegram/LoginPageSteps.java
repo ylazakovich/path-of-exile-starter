@@ -1,9 +1,6 @@
-package io.starter.steps.telegram;
+package io.starter.ui.telegram;
 
-import io.starter.pages.telegram.HomePage;
-import io.starter.pages.telegram.LoginPage;
 import io.starter.steps.models.PageSteps;
-import io.starter.verifications.telegram.LoginPageVerification;
 
 import io.qameta.allure.Step;
 

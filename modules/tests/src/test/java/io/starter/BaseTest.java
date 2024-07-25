@@ -1,8 +1,8 @@
 package io.starter;
 
 import io.starter.config.AppConfig;
-import io.starter.steps.telegram.RegressionServiceSteps;
-import io.starter.steps.telegram.TelegramNavigationSteps;
+import io.starter.ui.telegram.RegressionServiceSteps;
+import io.starter.ui.telegram.TelegramNavigationSteps;
 
 abstract class BaseTest {
 

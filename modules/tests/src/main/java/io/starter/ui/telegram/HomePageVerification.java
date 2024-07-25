@@ -1,8 +1,6 @@
-package io.starter.verifications.telegram;
+package io.starter.ui.telegram;
 
-import io.starter.pages.telegram.HomePage;
 import io.starter.steps.models.Verification;
-import io.starter.steps.telegram.HomePageSteps;
 
 import com.codeborne.selenide.Condition;
 import io.qameta.allure.Step;
