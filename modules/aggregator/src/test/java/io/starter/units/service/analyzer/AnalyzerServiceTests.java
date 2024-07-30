@@ -18,13 +18,16 @@ public class AnalyzerServiceTests {
   private final AnalyzerService analyzerService = mock();
 
   @Test
-  void analyzeAllSkillsTest() {
-    List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
+  void testServiceAnalyzeMethod() {
+    final List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
     when(analyzerService.analyze()).thenReturn(expectedList);
 
     List<AnalyzedSkillDto> actualList = analyzerService.analyze();
-    AnalyzedSkillDto actualSkill = actualList.stream().findAny().orElse(null);
+    AnalyzedSkillDto actualSkill = Objects.requireNonNull(actualList.stream().findAny().orElse(null));
+    double actualProfit = actualSkill.getChaosEquivalentProfit();
+    double actualPrice = actualSkill.getChaosEquivalentPrice();
+
     assertThat(actualList).isEqualTo(expectedList);
-    assertThat(Objects.requireNonNull(actualSkill).getChaosEquivalentProfit()).isGreaterThan(actualSkill.getChaosEquivalentPrice());
+    assertThat(actualProfit).isGreaterThan(actualPrice);
   }
 }

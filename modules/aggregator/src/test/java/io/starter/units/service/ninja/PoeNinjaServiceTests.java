@@ -19,14 +19,14 @@ public class PoeNinjaServiceTests {
   private final PoeNinjaService poeNinjaService = mock();
 
   @Test
-  void getAllSkillGemsTest() {
-    Lines<Skill> expected = Generator.generateLineWithSkills();
-    when(poeNinjaService.getSkills()).thenReturn(Mono.just(ResponseEntity.ok(expected)));
+  void testServiceGetSkillsMethod() {
+    final Lines<Skill> expectedBody = Generator.generateLineWithSkills();
+    when(poeNinjaService.getSkills()).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
 
     poeNinjaService.getSkills().subscribe(
         actual -> {
           assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
-          assertThat(actual.getBody()).isEqualTo(expected);
+          assertThat(actual.getBody()).isEqualTo(expectedBody);
         }
     );
   }
