@@ -17,7 +17,7 @@ modules/*/bin
 statics/bin
 
 # Lombok
-*/*/src/main/generated
+**/src/main/generated
 
 # Local resources
 modules/**/local_resources/
