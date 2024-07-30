@@ -2,9 +2,7 @@
 
 build
 hs_err_pid*
-#!.idea
 .idea/*
-#!/.idea/icon.png
 out
 *.ipr
 *.iws
