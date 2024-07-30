@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.starter.telegram.Constants;
 import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.config.Emoji;
+import io.starter.telegram.constants.Emoji;
 import io.starter.telegram.dao.SkillsDao;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;

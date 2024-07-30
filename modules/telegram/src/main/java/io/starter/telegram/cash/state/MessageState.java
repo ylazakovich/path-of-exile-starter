@@ -1,6 +1,6 @@
 package io.starter.telegram.cash.state;
 
-import io.starter.telegram.config.Emoji;
+import io.starter.telegram.constants.Emoji;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

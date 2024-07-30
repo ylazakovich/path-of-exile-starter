@@ -1,6 +1,6 @@
 package io.starter.service;
 
-import io.starter.config.PoeNinjaConfig;
+import io.starter.config.NinjaConfig;
 import io.starter.model.Lines;
 import io.starter.model.Skill;
 
@@ -15,13 +15,11 @@ import reactor.core.publisher.Mono;
 @Service
 public class PoeNinjaService {
 
-  private final PoeNinjaConfig config;
   private final WebClient client;
 
-  public PoeNinjaService(PoeNinjaConfig config) {
-    this.config = config;
+  public PoeNinjaService() {
     this.client = WebClient.builder()
-        .baseUrl(config.baseUrl)
+        .baseUrl(NinjaConfig.BASE_URL)
         .exchangeStrategies(ExchangeStrategies
             .builder()
             .codecs(
@@ -34,7 +32,7 @@ public class PoeNinjaService {
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills() {
     return client.get()
-        .uri("%s?%s".formatted(config.route, "league=%s&type=SkillGem".formatted(config.league)))
+        .uri("%s?%s".formatted(NinjaConfig.ROUTE, "league=%s&type=SkillGem".formatted(NinjaConfig.LEAGUE)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .toEntity(new ParameterizedTypeReference<>() {

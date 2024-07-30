@@ -34,6 +34,7 @@ subprojects {
     }
 
     dependencies {
+        implementation("org.aeonbits.owner:owner:$aeonbits")
         implementation("net.datafaker:datafaker:$faker")
         implementation("org.testng:testng:$testng")
         testImplementation("org.assertj:assertj-core:$assertJ")

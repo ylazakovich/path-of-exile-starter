@@ -44,10 +44,10 @@ public class UserDao {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
-      userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
-      userEntity.setFirstName(Objects.requireNonNullElse(user.getFirstName(), StringUtils.EMPTY));
-      userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       userEntity.setUserId(user.getId());
+      userEntity.setFirstName(user.getFirstName());
+      userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
+      userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       save(userEntity);
     }
   }

@@ -21,7 +21,6 @@ dependencies {
     implementation("org.awaitility:awaitility:$awaitility")
     implementation("io.rest-assured:rest-assured:$restAssured")
     implementation("io.qameta.allure:allure-testng:$allure")
-    implementation("org.aeonbits.owner:owner:$aeonbits")
     implementation("com.codeborne:selenide:$selenide")
     implementation("org.apache.httpcomponents.core5:httpcore5:$httpcore5")
     implementation("org.slf4j:slf4j-api:$slf4j")

@@ -1,6 +1,6 @@
 package io.starter.telegram.service;
 
-import io.starter.telegram.config.TelegramConfig;
+import io.starter.telegram.config.BotConfig;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -9,10 +9,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class WebhookService {
 
   private final WebClient client;
-  private final TelegramConfig config;
 
-  public WebhookService(TelegramConfig config) {
-    this.config = config;
+  public WebhookService() {
     this.client = WebClient.builder()
         .baseUrl("https://api.telegram.org")
         .build();
@@ -20,13 +18,9 @@ public class WebhookService {
 
   public void assignToken() {
     client.post()
-        .uri("/bot%s/setWebhook?url=%s".formatted(config.token, config.webHook))
+        .uri("/bot%s/setWebhook?url=%s".formatted(BotConfig.TOKEN, BotConfig.WEBHOOK))
         .retrieve()
         .toBodilessEntity()
         .subscribe();
-  }
-
-  public void assignVerificationCode() {
-
   }
 }
