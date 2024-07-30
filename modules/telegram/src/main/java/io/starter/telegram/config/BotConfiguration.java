@@ -3,14 +3,12 @@ package io.starter.telegram.config;
 import org.aeonbits.owner.Config;
 
 @Config.LoadPolicy(Config.LoadType.MERGE)
-@Config.Sources({"system:env"})
+@Config.Sources({"system:env", "classpath:local_resources/bot.properties"})
 public interface BotConfiguration extends Config {
 
-  @Key("WEBHOOK")
-  @DefaultValue("TODO")
+  @Key("TELEGRAM_BOT_WEBHOOK")
   String webHook();
 
   @Key("TELEGRAM_BOT_TOKEN")
-  @DefaultValue("TODO")
   String token();
 }
