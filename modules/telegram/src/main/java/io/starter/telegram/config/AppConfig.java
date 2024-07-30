@@ -12,18 +12,15 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 public class AppConfig {
 
-  private final TelegramConfig config;
   private final WebhookService webhookService;
 
-  public AppConfig(TelegramConfig config,
-                   WebhookService webhookService) {
-    this.config = config;
+  public AppConfig(WebhookService webhookService) {
     this.webhookService = webhookService;
   }
 
   @Bean
   public Telegram springWebhookBot(TelegramFacade telegramFacade) {
-    return new Telegram(config.token, telegramFacade::handleOnUpdate, setWebhook());
+    return new Telegram(BotConfig.TOKEN, telegramFacade::handleOnUpdate, setWebhook());
   }
 
   private Runnable setWebhook() {
