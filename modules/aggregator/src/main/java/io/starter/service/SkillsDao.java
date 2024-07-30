@@ -2,6 +2,7 @@ package io.starter.service;
 
 import java.util.List;
 
+import io.starter.config.NinjaConfig;
 import io.starter.entity.SkillEntity;
 import io.starter.mapper.SkillEntityMapper;
 import io.starter.model.Lines;
@@ -31,6 +32,8 @@ public class SkillsDao {
   }
 
   public void saveAll(List<SkillEntity> entities) {
+    // TODO: Need implement dynamically read league
+    entities.forEach(entity -> entity.setLeague(NinjaConfig.LEAGUE));
     skillsRepository.saveAll(entities);
   }
 }
