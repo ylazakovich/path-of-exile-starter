@@ -50,7 +50,7 @@ Then
 
 **Option 2** (not ready yet)
 
-Run over console `run_app.sh`
+Run over console `app.sh`
 
 Then \
 Bot is ready for working
