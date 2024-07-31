@@ -2,19 +2,23 @@ package io.starter.config;
 
 import org.aeonbits.owner.Config;
 
-@Config.LoadPolicy(Config.LoadType.MERGE)
-@Config.Sources({"system:env"})
+import static org.aeonbits.owner.Config.LoadPolicy;
+import static org.aeonbits.owner.Config.LoadType;
+import static org.aeonbits.owner.Config.Sources;
+
+@LoadPolicy(LoadType.MERGE)
+@Sources({"system:env"})
 public interface NinjaConfiguration extends Config {
 
-  @Config.Key("NINJA_BASE_URL")
-  @Config.DefaultValue("https://poe.ninja")
+  @Key("NINJA_BASE_URL")
+  @DefaultValue("https://poe.ninja")
   String baseUrl();
 
-  @Config.Key("NINJA_ROUTE")
-  @Config.DefaultValue("/api/data/itemoverview")
+  @Key("NINJA_ROUTE")
+  @DefaultValue("/api/data/itemoverview")
   String route();
 
-  @Config.Key("NINJA_LEAGUE")
-  @Config.DefaultValue("Standard")
+  @Key("NINJA_LEAGUE")
+  @DefaultValue("Standard")
   String league();
 }

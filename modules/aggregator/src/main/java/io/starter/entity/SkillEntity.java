@@ -28,8 +28,8 @@ public class SkillEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   private Long id;
+  private @NonNull Long leagueId;
   private @NonNull String name;
-  private @NonNull String league;
   private @NonNull String variant;
   private @NonNull Boolean corrupted;
   private @NonNull Integer gemLevel;
