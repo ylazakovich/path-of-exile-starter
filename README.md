@@ -35,10 +35,26 @@ Currently, bot check prices over https://poe.ninja/
 #### Q: How to up bot locally ?
 
 So, for that purpose I would recommend you to use ngrok \
-Then copy https links from console into `application.properties`
+Then go into [BotConfiguration.class](https://github.com/ylazakovich/path-of-exile-starter/blob/main/modules/telegram/src/main/java/io/starter/telegram/config/BotConfiguration.java)
 
 - webhook - links from ngrok
-- token - botfather provide this token
+- token - BotFather provide this token
+
+<details>
+<summary>Example</summary>
+
+```java
+
+@Key("TELEGRAM_BOT_WEBHOOK")
+@DefaultValue("https://1234-567-890-00-111.ngrok-free.app")
+String webHook();
+
+@Key("TELEGRAM_BOT_TOKEN")
+@DefaultValue("1234567890:AABBCC-DDDDD")
+String token();
+```
+
+</details>
 
 Then
 
