@@ -32,8 +32,12 @@ public class SkillsDao {
   }
 
   public void saveAll(Lines<Skill> data) {
-    List<SkillEntity> entityList = mapper.apply(data);
-    repo.saveAll(entityList);
+    leagueRepo.findById(1L)
+        .flatMap(league -> {
+          List<SkillEntity> entityList = mapper.apply(data);
+          repo.saveAll(entityList);
+          return Optional.empty();
+        });
   }
 
   public void saveAll(List<SkillEntity> entities) {

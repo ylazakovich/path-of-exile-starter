@@ -5,6 +5,7 @@ import java.util.List;
 import io.starter.dao.LeaguesDao;
 import io.starter.model.path_of_exile.League;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,7 @@ public class DatabasePathOfExileService {
     this.leaguesDao = leaguesDao;
   }
 
+  @Transactional
   public void load(List<League> leagues) {
     leaguesDao.saveAll(leagues);
   }

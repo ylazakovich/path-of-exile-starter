@@ -9,6 +9,7 @@ import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 import io.starter.repo.SkillsRepository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class DatabaseNinjaService {
     this.skillsRepository = skillsRepository;
   }
 
+  @Transactional
   public void load(Lines<Skill> lines) {
     if (skillsRepository.findAll().isEmpty()) {
       skillsDao.saveAll(lines);

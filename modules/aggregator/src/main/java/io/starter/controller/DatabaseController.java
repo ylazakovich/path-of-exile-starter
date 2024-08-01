@@ -37,7 +37,7 @@ public class DatabaseController {
   }
 
   @GetMapping("/load/leagues")
-  public void allLeagues() {
+  public void loadAllLeagues() {
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
   }
 

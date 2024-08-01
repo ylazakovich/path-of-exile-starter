@@ -32,8 +32,8 @@ public class SkillEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   private Long id;
-  @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.PERSIST)
-  @JoinColumn(name = "league_id", nullable = false)
+  @ManyToOne(fetch = FetchType.EAGER, optional = false)
+  @JoinColumn(name = "league_id")
   private @NonNull LeagueEntity leagueId;
   private @NonNull String name;
   private @NonNull String variant;
