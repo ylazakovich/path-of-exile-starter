@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import io.starter.entity.LeagueEntity;
 import io.starter.model.path_of_exile.League;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,9 +17,9 @@ public class LeagueEntityMapper implements Function<List<League>, List<LeagueEnt
     AtomicReference<Long> count = new AtomicReference<>((long) 1);
     return data.stream()
         .map(league -> {
-              LeagueEntity leagueEntity = new LeagueEntity(league.getId());
-              leagueEntity.setId(count.getAndSet(count.get() + 1));
-              return leagueEntity;
+          LeagueEntity leagueEntity = new LeagueEntity(league.getId());
+          leagueEntity.setId(count.getAndSet(count.get() + 1));
+          return leagueEntity;
         })
         .toList();
   }

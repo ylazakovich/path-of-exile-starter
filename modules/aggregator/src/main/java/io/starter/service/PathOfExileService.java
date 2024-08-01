@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.starter.config.PathOfExileConfig;
 import io.starter.model.path_of_exile.League;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import reactor.core.publisher.Mono;
 @Service
 public class PathOfExileService {
 
-  private final static String LEAGUES = "api/leagues";
+  private static final String LEAGUES = "api/leagues";
   private final WebClient client;
 
   public PathOfExileService() {
