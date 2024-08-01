@@ -27,8 +27,4 @@ public class LeaguesDao {
     List<LeagueEntity> entityList = mapper.apply(data);
     repo.saveAll(entityList);
   }
-
-  public void saveAllEntities(List<LeagueEntity> data) {
-    repo.saveAll(data);
-  }
 }
