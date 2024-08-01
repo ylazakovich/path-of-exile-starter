@@ -1,8 +1,8 @@
 package io.starter.service;
 
 import io.starter.config.NinjaConfig;
-import io.starter.model.Lines;
-import io.starter.model.Skill;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.Skill;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;

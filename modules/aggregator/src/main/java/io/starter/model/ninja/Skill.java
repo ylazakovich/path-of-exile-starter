@@ -1,4 +1,4 @@
-package io.starter.model;
+package io.starter.model.ninja;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

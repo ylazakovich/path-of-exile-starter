@@ -3,8 +3,8 @@ package io.starter.utils;
 import java.util.List;
 
 import io.starter.dto.AnalyzedSkillDto;
-import io.starter.model.Lines;
-import io.starter.model.Skill;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.Skill;
 
 import lombok.experimental.UtilityClass;
 import net.datafaker.Faker;
