@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @AllArgsConstructor
 public enum CallbackState {
+
   NO_CMD(StringUtils.EMPTY),
   SKILLS("Pressing button with 'Skills'"),
   ALL_SKILLS("Pressing button with 'All skills'"),
