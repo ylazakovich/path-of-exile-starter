@@ -1,21 +1,23 @@
-package io.starter.model;
-
-import java.util.List;
+package io.starter.model.path_of_exile;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@EqualsAndHashCode
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @ToString
-public class Lines<T> {
+public class League {
 
-  @JsonProperty("lines")
-  private List<T> lines;
+  @JsonProperty("id")
+  private String id;
+  @JsonProperty("description")
+  private String description;
 }

@@ -1,7 +1,7 @@
 package io.starter.units.service.ninja;
 
-import io.starter.model.Lines;
-import io.starter.model.Skill;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.Skill;
 import io.starter.service.PoeNinjaService;
 import io.starter.utils.Generator;
 

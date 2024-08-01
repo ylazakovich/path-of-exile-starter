@@ -3,23 +3,28 @@ package io.starter.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.starter.dao.LeaguesDao;
+import io.starter.dao.SkillsDao;
 import io.starter.entity.SkillEntity;
-import io.starter.model.Lines;
-import io.starter.model.Skill;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.Skill;
+import io.starter.model.path_of_exile.League;
+import io.starter.repo.LeaguesRepository;
 import io.starter.repo.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DatabaseService {
+public class DatabaseNinjaService {
 
   private final SkillsDao skillsDao;
+
   private final SkillsRepository skillsRepository;
 
   @Autowired
-  public DatabaseService(SkillsDao skillsDao,
-                         SkillsRepository skillsRepository) {
+  public DatabaseNinjaService(SkillsDao skillsDao,
+                              SkillsRepository skillsRepository) {
     this.skillsDao = skillsDao;
     this.skillsRepository = skillsRepository;
   }
