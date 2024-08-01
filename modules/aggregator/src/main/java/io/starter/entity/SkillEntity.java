@@ -2,7 +2,6 @@ package io.starter.entity;
 
 import java.io.Serializable;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
