@@ -17,7 +17,7 @@ public class SkillEntityMapper implements Function<Lines<Skill>, List<SkillEntit
   public List<SkillEntity> apply(Lines<Skill> data) {
     return data.getLines().stream()
         .map(skill -> new SkillEntity(
-            new LeagueEntity("Standard"), // TODO: Need implement dynamically read league
+            new LeagueEntity(),
             skill.getName(),
             skill.getVariant(),
             skill.isCorrupted(),

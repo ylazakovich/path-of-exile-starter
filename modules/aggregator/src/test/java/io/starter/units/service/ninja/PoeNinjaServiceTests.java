@@ -16,14 +16,16 @@ import static org.mockito.Mockito.when;
 
 public class PoeNinjaServiceTests {
 
+  private static final String LEAGUE = "Standard";
+
   private final PoeNinjaService poeNinjaService = mock();
 
   @Test
   void testServiceGetSkillsMethod() {
     final Lines<Skill> expectedBody = Generator.generateLineWithSkills();
-    when(poeNinjaService.getSkills()).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
+    when(poeNinjaService.getSkills(LEAGUE)).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
 
-    poeNinjaService.getSkills().subscribe(
+    poeNinjaService.getSkills(LEAGUE).subscribe(
         actual -> {
           assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
           assertThat(actual.getBody()).isEqualTo(expectedBody);
