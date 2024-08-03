@@ -3,6 +3,7 @@ package io.starter.service;
 import java.util.List;
 
 import io.starter.dao.LeaguesDao;
+import io.starter.entity.LeagueEntity;
 import io.starter.model.path_of_exile.League;
 
 import jakarta.transaction.Transactional;
@@ -22,5 +23,9 @@ public class DatabasePathOfExileService {
   @Transactional
   public void load(List<League> leagues) {
     leaguesDao.saveAll(leagues);
+  }
+
+  public List<LeagueEntity> readAll() {
+    return leaguesDao.readAll();
   }
 }

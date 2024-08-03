@@ -27,4 +27,12 @@ public class LeaguesDao {
     List<LeagueEntity> entityList = mapper.apply(data);
     repo.saveAll(entityList);
   }
+
+  public List<LeagueEntity> readAll() {
+    return repo.findAll();
+  }
+
+  public LeagueEntity read(String name) {
+    return repo.findByName(name);
+  }
 }

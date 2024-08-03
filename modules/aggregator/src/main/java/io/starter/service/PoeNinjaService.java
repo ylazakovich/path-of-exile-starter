@@ -30,12 +30,13 @@ public class PoeNinjaService {
         .build();
   }
 
-  public Mono<ResponseEntity<Lines<Skill>>> getSkills() {
+  public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
     return client.get()
-        .uri("%s?%s".formatted(NinjaConfig.ROUTE, "league=%s&type=SkillGem".formatted(NinjaConfig.LEAGUE)))
+        .uri("%s?%s".formatted(NinjaConfig.ROUTE, "league=%s&type=SkillGem".formatted(league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .toEntity(new ParameterizedTypeReference<>() {
         });
   }
 }
+

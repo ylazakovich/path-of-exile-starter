@@ -7,10 +7,11 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/health")
-public class HealthCheck {
+public class HealthCheckController {
 
   @GetMapping("/ping")
   public Mono<String> ping() {
+    // TODO: here need to write logic with checking that tables are not empty and step by step 
     return Mono.just("ok");
   }
 }

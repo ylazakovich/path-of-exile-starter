@@ -25,8 +25,8 @@ public class AnalyzerController {
     return findAllForTrade(10);
   }
 
-  @GetMapping("analyze/skills/{takeProfit}")
-  public List<AnalyzedSkillDto> findAllForTrade(@PathVariable("takeProfit") long value) {
+  @GetMapping("/analyze/skills/{diff}")
+  public List<AnalyzedSkillDto> findAllForTrade(@PathVariable("diff") long value) {
     return analyzerService.analyze().stream().filter(skill -> skill.getChaosEquivalentProfit() >= value).toList();
   }
 }
