@@ -16,8 +16,9 @@ import static org.mockito.Mockito.when;
 
 public class PoeNinjaServiceTests {
 
-  private final PoeNinjaService poeNinjaService = mock();
   private static final String LEAGUE = "Standard";
+
+  private final PoeNinjaService poeNinjaService = mock();
 
   @Test
   void testServiceGetSkillsMethod() {

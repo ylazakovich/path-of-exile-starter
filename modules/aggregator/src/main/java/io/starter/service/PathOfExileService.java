@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 public class PathOfExileService {
 
   private static final String LEAGUES = "api/leagues";
+
   private final WebClient client;
 
   public PathOfExileService() {
