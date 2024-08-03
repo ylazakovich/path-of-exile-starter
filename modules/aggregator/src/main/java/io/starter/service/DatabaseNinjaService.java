@@ -2,63 +2,38 @@ package io.starter.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import io.starter.dao.SkillsDao;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.SkillEntity;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
-import io.starter.repo.LeaguesRepository;
 import io.starter.repo.SkillsRepository;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 @Service
 public class DatabaseNinjaService {
 
   private final SkillsDao skillsDao;
   private final SkillsRepository skillsRepository;
-  private final LeaguesRepository leaguesRepository;
 
   @Autowired
   public DatabaseNinjaService(SkillsDao skillsDao,
-                              SkillsRepository skillsRepository,
-                              LeaguesRepository leaguesRepository) {
+                              SkillsRepository skillsRepository) {
     this.skillsDao = skillsDao;
     this.skillsRepository = skillsRepository;
-    this.leaguesRepository = leaguesRepository;
   }
 
-  @Transactional
   public void load(Lines<Skill> lines, LeagueEntity league) {
-    if (skillsRepository.findAllByLeagueId(league).isEmpty()) {
-      skillsDao.saveAll(lines);
+    if (skillsRepository.findAllByLeagueId(league).isEmpty() && !lines.getLines().isEmpty()) {
+      skillsDao.saveAll(lines, league.getId());
     }
   }
 
-  @Transactional
-  public Mono<Void> load2(Lines<Skill> lines, LeagueEntity league) {
-    return Mono.fromCallable(() -> {
-          leaguesRepository.findById(league.getId())
-              .flatMap(entity -> {
-                if (skillsRepository.findById(entity.getId()).isEmpty()) {
-                  skillsDao.saveAll(lines);
-                }
-                return Optional.empty();
-              });
-          return Void.TYPE;
-        })
-        .subscribeOn(Schedulers.boundedElastic())
-        .then();
-  }
-
-  public void update(Lines<Skill> lines) {
-    List<SkillEntity> entitiesOnUpdate = skillsRepository.findAll();
+  public void update(Lines<Skill> lines, LeagueEntity league) {
+    List<SkillEntity> entitiesOnUpdate = skillsRepository.findAllByLeagueId(league);
     entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
         .filter(skill -> skill.getName().equals(entity.getName())
             && skill.getGemLevel() == entity.getGemLevel()
@@ -67,11 +42,11 @@ public class DatabaseNinjaService {
         .findFirst()
         .ifPresent(skill -> entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice()))
     );
-    skillsDao.saveAll(entitiesOnUpdate);
+    skillsDao.saveAll(entitiesOnUpdate, league.getId());
   }
 
-  public void addNew(Lines<Skill> lines) {
-    List<SkillEntity> allEntities = skillsRepository.findAll();
+  public void addNew(Lines<Skill> lines, LeagueEntity league) {
+    List<SkillEntity> allEntities = skillsRepository.findAllByLeagueId(league);
     List<SkillEntity> entitiesOnAdding = new ArrayList<>();
     lines.getLines().stream()
         .filter(skill -> allEntities.stream()
@@ -91,6 +66,6 @@ public class DatabaseNinjaService {
           entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
           entitiesOnAdding.add(entity);
         });
-    skillsDao.saveAll(entitiesOnAdding);
+    skillsDao.saveAll(entitiesOnAdding, league.getId());
   }
 }

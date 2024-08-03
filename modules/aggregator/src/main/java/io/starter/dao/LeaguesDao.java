@@ -7,6 +7,7 @@ import io.starter.mapper.LeagueEntityMapper;
 import io.starter.model.path_of_exile.League;
 import io.starter.repo.LeaguesRepository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class LeaguesDao {
     this.mapper = mapper;
   }
 
+  @Transactional
   public void saveAll(List<League> data) {
     List<LeagueEntity> entityList = mapper.apply(data);
     repo.saveAll(entityList);
