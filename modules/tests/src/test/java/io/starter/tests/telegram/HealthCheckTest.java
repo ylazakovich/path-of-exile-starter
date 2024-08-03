@@ -12,7 +12,7 @@ public class HealthCheckTest extends BaseUITest {
   void testGetWebApp() {
     telegramNavigationSteps.openLoginPage()
         .verify()
-        .verifyLoginDisplayed();;
+        .verifyLoginDisplayed();
   }
 
   @AfterClass
