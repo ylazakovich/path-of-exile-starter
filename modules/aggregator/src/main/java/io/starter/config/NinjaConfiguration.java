@@ -17,8 +17,4 @@ public interface NinjaConfiguration extends Config {
   @Key("NINJA_ROUTE")
   @DefaultValue("/api/data/itemoverview")
   String route();
-
-  @Key("NINJA_LEAGUE")
-  @DefaultValue("Standard")
-  String league();
 }

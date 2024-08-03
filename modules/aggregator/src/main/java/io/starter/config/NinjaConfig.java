@@ -9,5 +9,4 @@ public class NinjaConfig {
 
   public static final String BASE_URL = CONFIG.baseUrl();
   public static final String ROUTE = CONFIG.route();
-  public static final String LEAGUE = CONFIG.league();
 }
