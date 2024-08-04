@@ -7,7 +7,7 @@ import java.util.List;
 import io.starter.telegram.Constants;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.constants.Emoji;
-import io.starter.telegram.dao.SkillsDao;
+import io.starter.telegram.dao.SkillDao;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
 
@@ -22,14 +22,14 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @Service
 public class OnCallbackAnswerService {
 
-  private final SkillsDao skillsDao;
+  private final SkillDao skillDao;
 
-  public OnCallbackAnswerService(SkillsDao skillsDao) {
-    this.skillsDao = skillsDao;
+  public OnCallbackAnswerService(SkillDao skillDao) {
+    this.skillDao = skillDao;
   }
 
   public EditMessageText onClickSkills(CallbackQuery callback) {
-    List<Skill> skills = skillsDao.findAll();
+    List<Skill> skills = skillDao.readAll();
     String inlineMessage = convertSkillsToStringBuilder(skills).toString();
     InlineKeyboardMarkup keyboard = onClickSkills();
     return EditMessageGenerator.generate(callback.getMessage(), inlineMessage, keyboard);

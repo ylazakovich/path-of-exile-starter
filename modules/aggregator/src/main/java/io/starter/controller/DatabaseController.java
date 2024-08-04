@@ -1,5 +1,6 @@
 package io.starter.controller;
 
+import java.util.List;
 import java.util.Objects;
 
 import io.starter.entity.LeagueEntity;
@@ -9,7 +10,9 @@ import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,8 +50,13 @@ public class DatabaseController {
     log.info("Finished process with loading skills from league - {}", league);
   }
 
+  @GetMapping ("/leagues")
+  public ResponseEntity<List<LeagueEntity>> getLeagues() {
+    return ResponseEntity.ok(databasePathOfExileService.readAll());
+  }
+
   @PostMapping("/load/leagues")
-  public void loadAllLeagues() {
+  public void postLeagues() {
     log.info("Started process with loading all leagues...");
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
     log.info("Finished process with loading all leagues");

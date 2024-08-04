@@ -2,6 +2,7 @@ package io.starter.telegram.dao;
 
 import java.util.Objects;
 
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.UserEntity;
 import io.starter.telegram.repo.UserRepository;
 
@@ -42,6 +43,7 @@ public class UserDao {
 
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
+    userEntity.setLeagueId(new LeagueEntity()); // TODO: Finally need to fetch league in Setting callback
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
       userEntity.setUserId(user.getId());

@@ -2,27 +2,33 @@ package io.starter.telegram.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.SkillEntity;
 import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.repo.SkillsRepository;
+import io.starter.telegram.repo.LeagueRepository;
+import io.starter.telegram.repo.SkillRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SkillsDao {
+public class SkillDao {
 
-  private final SkillsRepository skillsRepository;
+  private final SkillRepository skillRepository;
+  private final LeagueRepository leagueRepository;
 
   @Autowired
-  public SkillsDao(SkillsRepository skillsRepository) {
-    this.skillsRepository = skillsRepository;
+  public SkillDao(SkillRepository skillRepository,
+                  LeagueRepository leagueRepository) {
+    this.skillRepository = skillRepository;
+    this.leagueRepository = leagueRepository;
   }
 
-  public List<Skill> findAll() {
-    List<SkillEntity> all = skillsRepository.findAll(Sort.by(Sort.Direction.DESC, "chaosEquivalentProfit"));
+  public List<Skill> readAll() {
+    List<SkillEntity> all = skillRepository.findAll(Sort.by(Sort.Direction.DESC, "chaosEquivalentProfit"));
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getName());
@@ -33,21 +39,26 @@ public class SkillsDao {
   }
 
   public void add(List<Skill> skills) {
-    if (skillsRepository.findAll().isEmpty()) {
-      final List<SkillEntity> entities = skills.stream()
-          .map(skill -> {
-            SkillEntity skillEntity = new SkillEntity();
-            skillEntity.setName(skill.getName());
-            skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
-            skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
-            return skillEntity;
-          }).toList();
-      skillsRepository.saveAll(entities);
-    }
+    leagueRepository.findAll()
+        .forEach(league -> {
+          if (skillRepository.findAll().isEmpty()) {
+            final List<SkillEntity> entities = skills.stream()
+                .map(skill -> {
+                  SkillEntity skillEntity = new SkillEntity();
+                  skillEntity.setLeagueId(league); // TODO: Finally need to fetch league
+                  skillEntity.setName(skill.getName());
+                  skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
+                  skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
+                  return skillEntity;
+                }).toList();
+            skillRepository.saveAll(entities);
+          }
+        }
+    );
   }
 
   public void update(List<Skill> skills) {
-    List<SkillEntity> entitiesOnUpdate = skillsRepository.findAll();
+    List<SkillEntity> entitiesOnUpdate = skillRepository.findAll();
     skills.forEach(skill ->
         entitiesOnUpdate.stream()
             .filter(entity -> entity.getName().equals(skill.getName()))
@@ -58,11 +69,11 @@ public class SkillsDao {
                 }
             )
     );
-    skillsRepository.saveAll(entitiesOnUpdate);
+    skillRepository.saveAll(entitiesOnUpdate);
   }
 
   public void addNew(List<Skill> skills) {
-    List<SkillEntity> allEntities = skillsRepository.findAll();
+    List<SkillEntity> allEntities = skillRepository.findAll();
     List<SkillEntity> entitiesOnAdding = new ArrayList<>();
     skills.stream()
         .filter(skill -> allEntities.stream().noneMatch(entity -> entity.getName().equals(skill.getName())))
@@ -73,6 +84,6 @@ public class SkillsDao {
           skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
           entitiesOnAdding.add(skillEntity);
         });
-    skillsRepository.saveAll(entitiesOnAdding);
+    skillRepository.saveAll(entitiesOnAdding);
   }
 }

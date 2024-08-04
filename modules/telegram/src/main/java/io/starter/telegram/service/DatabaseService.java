@@ -1,6 +1,7 @@
 package io.starter.telegram.service;
 
-import io.starter.telegram.dao.SkillsDao;
+import io.starter.telegram.dao.LeagueDao;
+import io.starter.telegram.dao.SkillDao;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -9,25 +10,32 @@ import org.springframework.stereotype.Service;
 public class DatabaseService {
 
   private final AggregatorService aggregatorService;
-  private final SkillsDao skillsDao;
+  private final SkillDao skillDao;
+  private final LeagueDao leagueDao;
 
   public DatabaseService(AggregatorService aggregatorService,
-                         SkillsDao skillsDao) {
+                         SkillDao skillDao,
+                         LeagueDao leagueDao) {
     this.aggregatorService = aggregatorService;
-    this.skillsDao = skillsDao;
+    this.skillDao = skillDao;
+    this.leagueDao = leagueDao;
   }
 
   public void loadSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::add);
+    aggregatorService.getAnalyzedSkills().subscribe(skillDao::add);
+  }
+
+  public void loadLeagues() {
+    aggregatorService.getLeagues().subscribe(leagueDao::update);
   }
 
   @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::update);
+    aggregatorService.getAnalyzedSkills().subscribe(skillDao::update);
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   public void addNewSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillsDao::addNew);
+    aggregatorService.getAnalyzedSkills().subscribe(skillDao::addNew);
   }
 }
