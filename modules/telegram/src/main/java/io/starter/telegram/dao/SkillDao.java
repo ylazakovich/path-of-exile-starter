@@ -2,9 +2,7 @@ package io.starter.telegram.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.SkillEntity;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.repo.LeagueRepository;
@@ -53,8 +51,7 @@ public class SkillDao {
                 }).toList();
             skillRepository.saveAll(entities);
           }
-        }
-    );
+        });
   }
 
   public void update(List<Skill> skills) {

@@ -1,4 +1,4 @@
-package io.starter.telegram.config;
+package io.starter.telegram.config.third_party;
 
 import org.aeonbits.owner.ConfigFactory;
 

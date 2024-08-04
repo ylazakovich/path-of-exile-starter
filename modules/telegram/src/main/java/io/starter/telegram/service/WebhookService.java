@@ -1,8 +1,8 @@
 package io.starter.telegram.service;
 
 import io.starter.telegram.config.BotConfig;
+import io.starter.telegram.config.third_party.TelegramConfig;
 
-import io.starter.telegram.config.TelegramConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 

@@ -2,7 +2,7 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.telegram.config.AggregatorConfig;
+import io.starter.telegram.config.third_party.AggregatorConfig;
 import io.starter.telegram.model.aggregator.League;
 import io.starter.telegram.model.aggregator.Skill;
 
@@ -29,7 +29,8 @@ public class AggregatorService {
         .uri(SKILLS)
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<>() {});
+        .bodyToMono(new ParameterizedTypeReference<>() {
+        });
   }
 
   public Mono<List<League>> getLeagues() {
@@ -37,6 +38,7 @@ public class AggregatorService {
         .uri(LEAGUES)
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
-        .bodyToMono(new ParameterizedTypeReference<>() {});
+        .bodyToMono(new ParameterizedTypeReference<>() {
+        });
   }
 }

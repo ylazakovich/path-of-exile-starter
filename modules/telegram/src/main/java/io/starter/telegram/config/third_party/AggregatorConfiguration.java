@@ -1,10 +1,10 @@
-package io.starter.telegram.config;
+package io.starter.telegram.config.third_party;
+
+import org.aeonbits.owner.Config;
 
 import static org.aeonbits.owner.Config.LoadPolicy;
 import static org.aeonbits.owner.Config.LoadType;
 import static org.aeonbits.owner.Config.Sources;
-
-import org.aeonbits.owner.Config;
 
 @LoadPolicy(LoadType.MERGE)
 @Sources({"system:env"})
