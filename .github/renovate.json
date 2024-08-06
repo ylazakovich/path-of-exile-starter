@@ -1,13 +1,23 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices", "mergeConfidence:all-badges"],
+  "extends": [
+    "config:best-practices",
+    "mergeConfidence:all-badges"
+  ],
   "packageRules": [
     {
-      "matchPackagePatterns": ["mariadb"],
-      "matchManagers": ["docker-compose", "dockerfile"],
-      "allowedVersions": "<11.3"
+      "matchManagers": [
+        "docker-compose",
+        "dockerfile"
+      ],
+      "allowedVersions": "<11.3",
+      "matchPackageNames": [
+        "/mariadb/"
+      ]
     }
   ],
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "dependencyDashboardApproval": true
 }
