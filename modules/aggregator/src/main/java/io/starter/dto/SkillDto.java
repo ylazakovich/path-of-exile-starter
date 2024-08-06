@@ -20,6 +20,7 @@ import lombok.ToString;
 @ToString
 public class SkillDto {
 
+  private Long leagueId;
   private String name;
   private String variant;
   private boolean corrupted;
@@ -30,6 +31,7 @@ public class SkillDto {
   public static List<SkillDto> convertToList(List<SkillEntity> entities) {
     return entities.stream()
         .map(entity -> new SkillDto(
+            entity.getLeagueId().getId(),
             entity.getName(),
             entity.getVariant(),
             entity.getCorrupted(),

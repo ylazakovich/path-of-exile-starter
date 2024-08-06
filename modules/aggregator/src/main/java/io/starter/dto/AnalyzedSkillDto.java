@@ -15,6 +15,7 @@ import lombok.ToString;
 @ToString
 public class AnalyzedSkillDto {
 
+  private Long league_id;
   private String name;
   private double chaosEquivalentPrice;
   private double chaosEquivalentProfit;
