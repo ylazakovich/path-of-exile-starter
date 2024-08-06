@@ -21,21 +21,21 @@ public class DatabaseService {
     this.leagueDao = leagueDao;
   }
 
-  public void loadSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillDao::add);
+  public void loadLeagues() {
+    aggregatorService.getLeagues().subscribe(leagueDao::saveAll);
   }
 
-  public void loadLeagues() {
-    aggregatorService.getLeagues().subscribe(leagueDao::update);
+  public void loadSkills() {
+    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::add));
   }
 
   @Scheduled(cron = "0 */5 * * * *")
-  public void updateSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillDao::update);
+  private void updateSkills() {
+    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::update));
   }
 
   @Scheduled(cron = "0 */2 * * * *")
-  public void addNewSkills() {
-    aggregatorService.getAnalyzedSkills().subscribe(skillDao::addNew);
+  private void addNewSkills() {
+    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::addNew));
   }
 }

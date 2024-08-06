@@ -15,18 +15,20 @@ import reactor.core.publisher.Mono;
 @Service
 public class AggregatorService {
 
-  private static final String SKILLS = "/analyzer/analyze/skills";
+  private static final String SKILLS = "/analyzer/analyze/skills?league=%s";
   private static final String LEAGUES = "/database/leagues";
 
   private final WebClient client;
 
   public AggregatorService() {
-    this.client = WebClient.builder().baseUrl(AggregatorConfig.BASE_URL).build();
+    this.client = WebClient.builder()
+        .baseUrl(AggregatorConfig.BASE_URL)
+        .build();
   }
 
-  public Mono<List<Skill>> getAnalyzedSkills() {
+  public Mono<List<Skill>> getAnalyzedSkills(String league) {
     return client.get()
-        .uri(SKILLS)
+        .uri(SKILLS.formatted(league))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .bodyToMono(new ParameterizedTypeReference<>() {

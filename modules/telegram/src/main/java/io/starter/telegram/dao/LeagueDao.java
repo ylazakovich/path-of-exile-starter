@@ -23,7 +23,7 @@ public class LeagueDao {
     return repo.findAll();
   }
 
-  public void update(List<League> leagues) {
+  public void saveAll(List<League> leagues) {
     final List<LeagueEntity> entities = leagues.stream()
         .map(league -> new LeagueEntity(league.getName()))
         .toList();
