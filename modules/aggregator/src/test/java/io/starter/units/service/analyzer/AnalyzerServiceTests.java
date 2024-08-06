@@ -15,14 +15,15 @@ import static org.mockito.Mockito.when;
 
 public class AnalyzerServiceTests {
 
+  private static final String queryParam = "Standard";
   private final AnalyzerService analyzerService = mock();
 
   @Test
   void testServiceAnalyzeMethod() {
     final List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
-    when(analyzerService.analyze()).thenReturn(expectedList);
+    when(analyzerService.analyze(queryParam)).thenReturn(expectedList);
 
-    List<AnalyzedSkillDto> actualList = analyzerService.analyze();
+    List<AnalyzedSkillDto> actualList = analyzerService.analyze(queryParam);
     AnalyzedSkillDto actualSkill = Objects.requireNonNull(actualList.stream().findAny().orElse(null));
     double actualProfit = actualSkill.getChaosEquivalentProfit();
     double actualPrice = actualSkill.getChaosEquivalentPrice();
