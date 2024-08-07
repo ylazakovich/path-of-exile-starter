@@ -3,6 +3,7 @@ package io.starter.telegram.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.SkillEntity;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.repo.LeagueRepository;
@@ -54,8 +55,8 @@ public class SkillDao {
         });
   }
 
-  public void update(List<Skill> skills) {
-    List<SkillEntity> entitiesOnUpdate = skillRepository.findAll();
+  public void update(LeagueEntity league, List<Skill> skills) {
+    List<SkillEntity> entitiesOnUpdate = skillRepository.findAllByLeagueId(league);
     skills.forEach(skill ->
         entitiesOnUpdate.stream()
             .filter(entity -> entity.getName().equals(skill.getName()))
@@ -69,16 +70,17 @@ public class SkillDao {
     skillRepository.saveAll(entitiesOnUpdate);
   }
 
-  public void addNew(List<Skill> skills) {
-    List<SkillEntity> allEntities = skillRepository.findAll();
+  public void addNew(LeagueEntity league, List<Skill> skills) {
+    List<SkillEntity> allEntities = skillRepository.findAllByLeagueId(league);
     List<SkillEntity> entitiesOnAdding = new ArrayList<>();
     skills.stream()
         .filter(skill -> allEntities.stream().noneMatch(entity -> entity.getName().equals(skill.getName())))
         .forEach(skill -> {
-          SkillEntity skillEntity = new SkillEntity();
-          skillEntity.setName(skill.getName());
-          skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
-          skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
+          SkillEntity skillEntity = new SkillEntity(
+              league,
+              skill.getName(),
+              skill.getChaosEquivalentPrice(),
+              skill.getChaosEquivalentProfit());
           entitiesOnAdding.add(skillEntity);
         });
     skillRepository.saveAll(entitiesOnAdding);

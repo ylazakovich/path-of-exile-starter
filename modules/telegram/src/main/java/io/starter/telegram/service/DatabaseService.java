@@ -31,11 +31,15 @@ public class DatabaseService {
 
   @Scheduled(cron = "0 */5 * * * *")
   private void updateSkills() {
-    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::update));
+    leagueDao.readAll()
+        .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
+            .subscribe(skills -> skillDao.update(league, skills)));
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   private void addNewSkills() {
-    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::addNew));
+    leagueDao.readAll()
+        .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
+            .subscribe(skills -> skillDao.addNew(league, skills)));
   }
 }
