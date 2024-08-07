@@ -37,7 +37,7 @@ public class LeagueDao {
   public void saveIfAbsent(List<League> leagues) {
     leagues.forEach(league -> {
       if (repo.findById(league.getId()).isEmpty()) {
-       save(new LeagueEntity(league.getName()));
+        save(new LeagueEntity(league.getName()));
       }
     });
   }
