@@ -6,7 +6,6 @@ import java.util.List;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.SkillEntity;
 import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.repo.LeagueRepository;
 import io.starter.telegram.repo.SkillRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,17 +16,15 @@ import org.springframework.stereotype.Service;
 public class SkillDao {
 
   private final SkillRepository skillRepository;
-  private final LeagueRepository leagueRepository;
 
   @Autowired
-  public SkillDao(SkillRepository skillRepository,
-                  LeagueRepository leagueRepository) {
+  public SkillDao(SkillRepository skillRepository) {
     this.skillRepository = skillRepository;
-    this.leagueRepository = leagueRepository;
   }
 
-  public List<Skill> readAll() {
-    List<SkillEntity> all = skillRepository.findAll(Sort.by(Sort.Direction.DESC, "chaosEquivalentProfit"));
+  public List<Skill> readAll(LeagueEntity league) {
+    List<SkillEntity> all =
+        skillRepository.findAllByLeagueId(league, Sort.by(Sort.Direction.DESC, "chaosEquivalentProfit"));
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getName());
@@ -37,22 +34,17 @@ public class SkillDao {
     }).toList();
   }
 
-  public void add(List<Skill> skills) {
-    leagueRepository.findAll()
-        .forEach(league -> {
-          if (skillRepository.findAll().isEmpty()) {
-            final List<SkillEntity> entities = skills.stream()
-                .map(skill -> {
-                  SkillEntity skillEntity = new SkillEntity();
-                  skillEntity.setLeagueId(league); // TODO: Finally need to fetch league
-                  skillEntity.setName(skill.getName());
-                  skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
-                  skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
-                  return skillEntity;
-                }).toList();
-            skillRepository.saveAll(entities);
-          }
-        });
+  public void add(LeagueEntity league, List<Skill> skills) {
+    if (skillRepository.findAllByLeagueId(league).isEmpty()) {
+      final List<SkillEntity> entities = skills.stream()
+          .map(skill -> new SkillEntity(
+              league,
+              skill.getName(),
+              skill.getChaosEquivalentPrice(),
+              skill.getChaosEquivalentProfit()
+          )).toList();
+      skillRepository.saveAll(entities);
+    }
   }
 
   public void update(LeagueEntity league, List<Skill> skills) {

@@ -22,23 +22,25 @@ public class DatabaseService {
   }
 
   public void loadLeagues() {
-    aggregatorService.getLeagues().subscribe(leagueDao::saveAll);
+    aggregatorService.getLeagues().subscribe(leagueDao::saveIfAbsent);
   }
 
   public void loadSkills() {
-    leagueDao.readAll().forEach(league -> aggregatorService.getAnalyzedSkills(league.name).subscribe(skillDao::add));
+    leagueDao.selectAll()
+        .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
+            .subscribe(skills -> skillDao.add(league, skills)));
   }
 
   @Scheduled(cron = "0 */5 * * * *")
   private void updateSkills() {
-    leagueDao.readAll()
+    leagueDao.selectAll()
         .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
             .subscribe(skills -> skillDao.update(league, skills)));
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   private void addNewSkills() {
-    leagueDao.readAll()
+    leagueDao.selectAll()
         .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
             .subscribe(skills -> skillDao.addNew(league, skills)));
   }

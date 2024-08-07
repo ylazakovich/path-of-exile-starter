@@ -15,5 +15,6 @@ import lombok.ToString;
 @ToString
 public class League {
 
+  private Long id;
   private String name;
 }

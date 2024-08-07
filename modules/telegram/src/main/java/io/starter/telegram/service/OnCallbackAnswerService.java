@@ -29,7 +29,8 @@ public class OnCallbackAnswerService {
   }
 
   public EditMessageText onClickSkills(CallbackQuery callback) {
-    List<Skill> skills = skillDao.readAll();
+    // TODO: should be read dynamically
+    List<Skill> skills = skillDao.readAll(null);
     String inlineMessage = convertSkillsToStringBuilder(skills).toString();
     InlineKeyboardMarkup keyboard = onClickSkills();
     return EditMessageGenerator.generate(callback.getMessage(), inlineMessage, keyboard);

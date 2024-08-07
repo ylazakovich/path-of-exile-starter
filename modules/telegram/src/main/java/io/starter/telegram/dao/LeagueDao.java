@@ -19,14 +19,26 @@ public class LeagueDao {
     this.repo = leagueRepository;
   }
 
-  public List<LeagueEntity> readAll() {
+  public List<LeagueEntity> selectAll() {
     return repo.findAll();
   }
 
-  public void saveAll(List<League> leagues) {
+  public void save(List<League> leagues) {
     final List<LeagueEntity> entities = leagues.stream()
         .map(league -> new LeagueEntity(league.getName()))
         .toList();
     repo.saveAll(entities);
+  }
+
+  public void save(LeagueEntity entity) {
+    repo.save(entity);
+  }
+
+  public void saveIfAbsent(List<League> leagues) {
+    leagues.forEach(league -> {
+      if (repo.findById(league.getId()).isEmpty()) {
+       save(new LeagueEntity(league.getName()));
+      }
+    });
   }
 }
