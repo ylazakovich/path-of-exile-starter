@@ -19,7 +19,7 @@ ext {
     allure = '2.29.0'
     httpcore5 = '5.2.5'
     restAssured = '5.5.0'
-    awaitility = '4.2.1'
+    awaitility = '4.2.2'
 }
 
 subprojects {
