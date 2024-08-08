@@ -13,10 +13,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Skill {
+public class League {
 
-  private Long leagueId;
+  private Long id;
   private String name;
-  private double chaosEquivalentPrice;
-  private double chaosEquivalentProfit;
 }

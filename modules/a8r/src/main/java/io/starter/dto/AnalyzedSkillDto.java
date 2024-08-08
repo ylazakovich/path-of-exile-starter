@@ -1,4 +1,4 @@
-package io.starter.telegram.model.aggregator;
+package io.starter.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +13,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Skill {
+public class AnalyzedSkillDto {
 
-  private Long leagueId;
+  private Long league_id;
   private String name;
   private double chaosEquivalentPrice;
   private double chaosEquivalentProfit;
