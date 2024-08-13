@@ -15,7 +15,7 @@ ext {
     selenide = '7.4.1'
     selenium = '4.23.0'
     aeonbits = "1.0.12"
-    slf4j = '2.0.15'
+    slf4j = '2.0.16'
     allure = '2.29.0'
     httpcore5 = '5.2.5'
     restAssured = '5.5.0'
