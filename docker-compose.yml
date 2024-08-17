@@ -1,6 +1,6 @@
 services:
   aggregator-database:
-    image: mariadb:11.2.5@sha256:57a30f335f24bce78482dcb14b10030dccd871b0fc6dce2568a17348e880af53
+    image: mariadb:11.2.5@sha256:eb1908e5cbdc8abb1790ee146ff23bba02246ef38fa3f30a3c9362bb119a4ce3
     restart: always
     ports:
       - "3306:3306"
@@ -9,7 +9,7 @@ services:
       MARIADB_DATABASE: aggregator
 
   telegram-database:
-    image: mariadb:11.2.5@sha256:57a30f335f24bce78482dcb14b10030dccd871b0fc6dce2568a17348e880af53
+    image: mariadb:11.2.5@sha256:eb1908e5cbdc8abb1790ee146ff23bba02246ef38fa3f30a3c9362bb119a4ce3
     restart: always
     ports:
       - "3307:3306"
