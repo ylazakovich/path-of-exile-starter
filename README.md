@@ -1,5 +1,8 @@
 # PATH OF EXILE STARTER
 
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg)](https://renovatebot.com/)
+[![Dependabot enabled](https://img.shields.io/badge/dependabot-enabled-blue)](https://github.com/dependabot/dependabot-core)
+
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
 
 ## Overview
