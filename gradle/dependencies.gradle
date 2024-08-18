@@ -2,9 +2,9 @@ ext {
     os = "macos"
     mac_os_arch = 'osx-aarch_64'
     netty = '4.1.112.Final'
-    flyway = '10.17.0'
+    flyway = '10.17.1'
     lombok = '1.18.34'
-    telegram = '7.7.2'
+    telegram = '7.8.0'
     spring = '3.3.2'
     mariadb = '3.4.1'
     mockito = '5.12.0'
@@ -12,14 +12,14 @@ ext {
     testng = '7.10.2'
     faker = '2.3.1'
     jaxb = '2.3.1'
-    selenide = '7.4.1'
-    selenium = '4.23.0'
+    selenide = '7.4.2'
+    selenium = '4.23.1'
     aeonbits = "1.0.12"
-    slf4j = '2.0.13'
+    slf4j = '2.0.16'
     allure = '2.29.0'
     httpcore5 = '5.2.5'
     restAssured = '5.5.0'
-    awaitility = '4.2.1'
+    awaitility = '4.2.2'
 }
 
 subprojects {
