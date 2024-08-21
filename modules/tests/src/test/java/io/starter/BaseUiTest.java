@@ -6,7 +6,7 @@ import io.starter.utils.Browser;
 import com.codeborne.selenide.Configuration;
 import org.testng.annotations.BeforeSuite;
 
-public abstract class BaseUITest extends BaseTest {
+public abstract class BaseUiTest extends BaseTest {
 
   @BeforeSuite(alwaysRun = true)
   protected void baseSetup() {

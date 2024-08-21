@@ -1,6 +1,6 @@
 package io.starter.tests.telegram;
 
-import io.starter.BaseUITest;
+import io.starter.BaseUiTest;
 import io.starter.config.AppConfig;
 import io.starter.ui.telegram.steps.HomePageSteps;
 import io.starter.utils.Browser;
@@ -9,7 +9,7 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-public class TelegramBotTest extends BaseUITest {
+public class TelegramBotTest extends BaseUiTest {
 
   private HomePageSteps steps;
 
