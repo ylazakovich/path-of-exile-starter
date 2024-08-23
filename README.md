@@ -1,5 +1,7 @@
 # PATH OF EXILE STARTER
 
+[![Renovate enabled](https://img.shields.io/badge/renovate-enabled-brightgreen.svg?logo=renovate)](https://renovatebot.com/)
+
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
 
 ## Overview
