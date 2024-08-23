@@ -5,7 +5,7 @@ ext {
     flyway = '10.17.2'
     lombok = '1.18.34'
     telegram = '7.9.1'
-    spring = '3.3.2'
+    spring = '3.3.3'
     mariadb = '3.4.1'
     mockito = '5.12.0'
     assertJ = '3.26.3'
