@@ -23,8 +23,8 @@ public class SkillDao {
   }
 
   public List<Skill> readAll(LeagueEntity league) {
-    List<SkillEntity> all =
-        skillRepository.findAllByLeagueId(league, Sort.by(Sort.Direction.DESC, "chaosEquivalentProfit"));
+    final String column = "chaosEquivalentProfit";
+    List<SkillEntity> all = skillRepository.findAllByLeagueId(league, Sort.by(Sort.Direction.DESC, column));
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getName());

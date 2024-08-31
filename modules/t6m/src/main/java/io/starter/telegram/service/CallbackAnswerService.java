@@ -11,6 +11,7 @@ import io.starter.telegram.constants.Emoji;
 import io.starter.telegram.constants.LeagueSetting;
 import io.starter.telegram.dao.SkillDao;
 import io.starter.telegram.dao.UserDao;
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.utils.generator.messages.AnswerCallbackQueryGenerator;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
@@ -42,12 +43,12 @@ public class CallbackAnswerService {
     return AnswerCallbackQueryGenerator.generateAnswerCallbackQuery(callbackQuery.getId());
   }
 
-  public EditMessageText onClickSkills(CallbackQuery callback) {
-    // TODO: should be read dynamically
-    List<Skill> skills = skillDao.readAll(null);
+  public EditMessageText onClickSkills(CallbackQuery callbackQuery) {
+    LeagueEntity leagueEntity = userDao.readLeague(callbackQuery.getFrom());
+    List<Skill> skills = skillDao.readAll(leagueEntity);
     String inlineMessage = convertSkillsToStringBuilder(skills).toString();
     InlineKeyboardMarkup keyboard = onClickSkills();
-    return EditMessageGenerator.generate(callback.getMessage(), inlineMessage, keyboard);
+    return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
   private InlineKeyboardMarkup onClickSkills() {

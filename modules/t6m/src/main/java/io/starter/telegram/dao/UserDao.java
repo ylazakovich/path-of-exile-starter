@@ -54,6 +54,11 @@ public class UserDao {
     save(userEntity);
   }
 
+  public LeagueEntity readLeague(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    return entity.getLeagueId();
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(9L);
