@@ -4,7 +4,7 @@
 
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
 
-[![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg)](https://t.me/poe_consultant_bot)
+[![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg?logo=telegram)](https://t.me/poe_consultant_bot)
 
 ## 📚 Overview
 
