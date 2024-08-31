@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public enum Emoji {
 
+  RIGHT("➡️"),
   PERFORMING_ARTS("🎭"),
   YELLOW_RIBBON("🎗"),
   WAVING_HAND("👋"),

@@ -2,8 +2,10 @@ package io.starter.telegram.dao;
 
 import java.util.Objects;
 
+import io.starter.telegram.constants.LeagueSetting;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.entity.UserEntity;
+import io.starter.telegram.repo.LeagueRepository;
 import io.starter.telegram.repo.UserRepository;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,10 +19,13 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 public class UserDao {
 
   private final UserRepository userRepository;
+  private final LeagueRepository leagueRepository;
 
   @Autowired
-  public UserDao(UserRepository userRepository) {
+  public UserDao(UserRepository userRepository,
+                 LeagueRepository leagueRepository) {
     this.userRepository = userRepository;
+    this.leagueRepository = leagueRepository;
   }
 
   public void save(UserEntity userEntity) {
@@ -41,11 +46,20 @@ public class UserDao {
     save(entity);
   }
 
+  public void saveLeague(User user,
+                         LeagueSetting setting) {
+    UserEntity userEntity = userRepository.findByUserId(user.getId());
+    LeagueEntity leagueEntity = leagueRepository.findById(setting.id);
+    userEntity.setLeagueId(leagueEntity);
+    save(userEntity);
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
-    userEntity.setLeagueId(new LeagueEntity()); // TODO: Finally need to fetch league in Setting callback
+    LeagueEntity leagueEntity = leagueRepository.findById(9L);
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
+      userEntity.setLeagueId(leagueEntity);
       userEntity.setUserId(user.getId());
       userEntity.setFirstName(user.getFirstName());
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));

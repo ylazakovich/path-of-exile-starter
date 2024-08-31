@@ -3,8 +3,8 @@ package io.starter.telegram.handler;
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.service.OnCallbackAnswerService;
-import io.starter.telegram.service.OnMessageAnswerService;
+import io.starter.telegram.service.CallbackAnswerService;
+import io.starter.telegram.service.MessageAnswerService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -18,16 +18,16 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 @Slf4j
 public class UpdateHandler {
 
-  private final OnMessageAnswerService onMessageAnswerService;
-  private final OnCallbackAnswerService onCallbackAnswerService;
+  private final MessageAnswerService messageAnswerService;
+  private final CallbackAnswerService callbackAnswerService;
   private final UserDao userDao;
 
-  public UpdateHandler(OnMessageAnswerService onMessageAnswerService,
-                       OnCallbackAnswerService onCallbackAnswerService,
+  public UpdateHandler(MessageAnswerService messageAnswerService,
+                       CallbackAnswerService callbackAnswerService,
                        UserDao userDao) {
     this.userDao = userDao;
-    this.onMessageAnswerService = onMessageAnswerService;
-    this.onCallbackAnswerService = onCallbackAnswerService;
+    this.messageAnswerService = messageAnswerService;
+    this.callbackAnswerService = callbackAnswerService;
   }
 
   public BotApiMethod<?> handleOnUpdate(Message message, MessageState state) {
@@ -35,8 +35,9 @@ public class UpdateHandler {
     userDao.saveWhenNotExist(user);
     userDao.saveLastMessageId(user, message);
     return switch (state) {
-      case WELCOME -> onMessageAnswerService.onFirstStart(message);
-      case START -> onMessageAnswerService.onClickStart(message);
+      case WELCOME -> messageAnswerService.onFirstStart(message);
+      case START -> messageAnswerService.onClickStart(message);
+      case SETTINGS -> messageAnswerService.onClickSettings(message);
       case NO_CMD -> null;
       default -> null;
     };
@@ -48,8 +49,10 @@ public class UpdateHandler {
     userDao.saveWhenNotExist(user);
     userDao.saveLastMessageId(user, message);
     return switch (state) {
-      case SKILLS -> onMessageAnswerService.onClickSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS -> onCallbackAnswerService.onClickSkills(callback);
+      case SETTING_STANDARD, SETTING_LEAGUE, SETTING_HARDCORE, SETTING_LEAGUE_HARDCORE
+          -> callbackAnswerService.onClickSetting(callback);
+      case SKILLS -> messageAnswerService.onClickSkills(message);
+      case ALL_SKILLS, REFRESH_SKILLS -> callbackAnswerService.onClickSkills(callback);
       case NO_CMD -> null;
       default -> null;
     };

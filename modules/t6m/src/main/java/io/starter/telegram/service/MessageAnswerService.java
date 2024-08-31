@@ -26,44 +26,66 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
-public class OnMessageAnswerService {
+public class MessageAnswerService {
 
-  public OnMessageAnswerService() {
+  public MessageAnswerService() {
   }
 
   public SendMessage onFirstStart(Message message) {
     List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
     List<String> line2 = List.of(MessageState.FEEDBACK.value);
     String firstName = message.getFrom().getFirstName();
-    String inlineMessage = Constants.WELCOME.formatted(Emoji.WAVING_HAND, firstName);
+    String inlineMessage = Constants.General.WELCOME.formatted(Emoji.WAVING_HAND, firstName);
     ReplyKeyboardMarkup keyboard = ReplyKeyboardGenerator.replyMenu(line1, line2);
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), keyboard);
   }
 
   public SendMessage onClickStart(Message message) {
-    String inlineMessage = Constants.QUESTION;
+    String inlineMessage = Constants.General.QUESTION;
     InlineKeyboardMarkup inlineKeyboard = keyboardOnClickStart();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickStart() {
-    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator.generate(Constants.SKILLS, CallbackState.SKILLS.value);
+    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
+        .generate(Constants.StepWithAnalyze.SKILLS, CallbackState.SKILLS.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
+        .generate(Constants.StepWithAnalyze.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
     List<InlineKeyboardButton> buttons = List.of(button1, button2);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(buttons);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
+  public SendMessage onClickSettings(Message message) {
+    String inlineMessage = Constants.StepWithSettings.ANSWER;
+    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
+    return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
+  }
+
+  private InlineKeyboardMarkup keyboardOnClickSettings() {
+    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
+        .generate(Constants.StepWithSettings.STANDARD, CallbackState.SETTING_STANDARD.value);
+    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
+        .generate(Constants.StepWithSettings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
+    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
+        .generate(Constants.StepWithSettings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
+    InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
+        .generate(Constants.StepWithSettings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
+    List<InlineKeyboardButton> row1 = List.of(button1, button2);
+    List<InlineKeyboardButton> row2 = List.of(button3, button4);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
+    return InlineKeyboardGenerator.withRows(keyboard);
+  }
+
   public EditMessageText onClickSkills(MaybeInaccessibleMessage message) {
-    String inlineMessage = Constants.SKILLS_GUIDE;
+    String inlineMessage = Constants.StepWithAnalyze.SKILLS_GUIDE;
     InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
     return EditMessageGenerator.generate(message, inlineMessage, keyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickSkills() {
     InlineKeyboardButton button = InlineKeyboardButtonGenerator
-        .generate(Constants.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
+        .generate(Constants.StepWithAnalyze.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
     List<InlineKeyboardButton> buttons = new ArrayList<>(Collections.singleton(button));
     return InlineKeyboardGenerator.withButtons(buttons);
   }
