@@ -12,12 +12,12 @@ public class InlineKeyboardRowGenerator {
 
   public static List<InlineKeyboardRow> generate(List<InlineKeyboardButton> rows) {
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
-      keyboard.add(new InlineKeyboardRow(rows));
+    keyboard.add(new InlineKeyboardRow(rows));
     return keyboard;
   }
 
   @SafeVarargs
-  public static List<InlineKeyboardRow> generate(List<InlineKeyboardButton>...rows) {
+  public static List<InlineKeyboardRow> generate(List<InlineKeyboardButton>... rows) {
     List<InlineKeyboardRow> keyboard = new ArrayList<>();
     for (List<InlineKeyboardButton> row : rows) {
       keyboard.add(new InlineKeyboardRow(row));
