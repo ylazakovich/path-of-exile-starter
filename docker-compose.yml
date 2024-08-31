@@ -1,18 +1,18 @@
-services:
-  aggregator-database:
-    image: mariadb:11.2.5@sha256:eb1908e5cbdc8abb1790ee146ff23bba02246ef38fa3f30a3c9362bb119a4ce3
-    restart: always
-    ports:
-      - "3306:3306"
-    environment:
-      MARIADB_ROOT_PASSWORD: root
-      MARIADB_DATABASE: aggregator
+x-common: &mariadb-config
+  image: mariadb:11.2.5@sha256:eb1908e5cbdc8abb1790ee146ff23bba02246ef38fa3f30a3c9362bb119a4ce3
+  restart: always
 
-  telegram-database:
-    image: mariadb:11.2.5@sha256:eb1908e5cbdc8abb1790ee146ff23bba02246ef38fa3f30a3c9362bb119a4ce3
-    restart: always
-    ports:
-      - "3307:3306"
+services:
+  aggregator-mariadb:
+    <<: *mariadb-config
+    ports: ["3306:3306"]
     environment:
+      MARIADB_DATABASE: aggregator
       MARIADB_ROOT_PASSWORD: root
+
+  telegram-mariadb:
+    <<: *mariadb-config
+    ports: ["3307:3306"]
+    environment:
       MARIADB_DATABASE: telegram
+      MARIADB_ROOT_PASSWORD: root

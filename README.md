@@ -1,119 +1,28 @@
 # PATH OF EXILE STARTER
 
-[![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate)](https://renovatebot.com/)
-
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
+[![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate&style=flat)](https://renovatebot.com/)
 
-## Overview
+[![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg?logo=telegram)](https://t.me/poe_consultant_bot)
 
-- [What the service can do?](#what-is-about-service)
-- [Status](config/docs/ROADMAP.md#status)
-  - [Telegram](config/docs/ROADMAP.md#telegram)
-  - [Aggregator](config/docs/ROADMAP.md#aggregator)
-- [Quick start](#quick-start)
-- [FAQ](#faq)
+## 📚 Overview
 
-## What is about Service
+- [Quick start](#-quick-start)
+- [Features](#-features)
+- [FAQ](.github/docs/FAQ.md#-faq)
+
+## 🚀 Features
+
+- Bot over Webhook (Spring implementation)
+- Create / Read / Update values by Schedule
+- Easy analyze Path of Exile positions for trade
+- Use https://poe.ninja/ as the main data aggregator
+- Manage your own Settings over bot
+
+## 🖥️ Quick start
 
 1. Easy start for trading in Path of Exile
 2. Service is able to provide you positions for trade
 3. You are able to manage it over Telegram
 
-## Quick start
-
-![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/config/docs/preview.gif)
-
-## FAQ
-
-#### Q: Does Telegram bot work over Webhook ?
-
-Yes, bot uses webhooks implementation \
-Application is realized over `Spring` framework
-
-#### Q: Which resources do you use for checking actual prices ?
-
-Currently, bot check prices over https://poe.ninja/
-
-#### Q: How to up bot locally ?
-
-So, for that purpose I would recommend you to use ngrok \
-Then go into [BotConfiguration.class](https://github.com/ylazakovich/path-of-exile-starter/blob/main/modules/telegram/src/main/java/io/starter/telegram/config/BotConfiguration.java)
-
-- webhook - links from ngrok
-- token - BotFather provide this token
-
-<details>
-<summary>Example</summary>
-
-```java
-
-@Key("TELEGRAM_BOT_WEBHOOK")
-@DefaultValue("https://1234-567-890-00-111.ngrok-free.app")
-String webHook();
-
-@Key("TELEGRAM_BOT_TOKEN")
-@DefaultValue("1234567890:AABBCC-DDDDD")
-String token();
-```
-
-</details>
-
-Then
-
-**Option 1**
-
-1. run `docker-compose.yml`
-2. start application from aggregator module
-3. start application from telegram module
-
-**Option 2** (not ready yet)
-
-Run over console `app.sh`
-
-Then \
-Bot is ready for working
-
-#### Q: Should I run api call for assigning webhook ?
-
-No, you don't need to do it \
-Bot has controller which assign webhook to bot after starting application
-
-#### Q: Which database you have decided to use ?
-
-I decided to use `mariadb` \
-Also application use migrations flow over flyway mechanism
-
-#### Q: Are you planning to make a documentation ?
-
-It is possible, but at the moment I have no a lot of free time \
-I haven't finished yet `1.0.0` version
-
-#### Q: How to understand business of your feature ?
-
-You can keep an eye on the status of test for every business feature \
-Here: [Status](config/docs/ROADMAP.md#status)
-
-As each test is completed \
-I will update doc and stay ref for this feature
-
-#### Q: Are you controlling library versions ?
-
-Repository is connected to dependabot with \
-regular checking and managing \
-new versions of libs
-
-#### Q: How do you control stability of your app ?
-
-Repository is connected to github actions
-
-1. Each pull request/merge into `main` triggers unit tests
-2. Integrations tests are in progress now and later will be done
-
-- Every release should run pipeline with running these tests
-- Nightly builds will have a rule for running these tests only manually
-
-#### Q: Are you planning to make a chat for communicate about this project ?
-
-Yes, I have a plan for that in future \
-Currently, I would recommend you to stay your feedback \
-over `issues` or `discussion`
+![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/.github/docs/preview.gif)
