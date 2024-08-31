@@ -1,15 +1,14 @@
 # PATH OF EXILE STARTER
 
-[![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate&style=plastic)](https://renovatebot.com/)
-
 ![Build Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
+[![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate&style=plastic)](https://renovatebot.com/)
 
 [![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg?logo=telegram)](https://t.me/poe_consultant_bot)
 
 ## 📚 Overview
 
 - [Quick start](#-quick-start)
-- [Feature](#-features)
+- [Features](#-features)
 - [FAQ](.github/docs/FAQ.md#-faq)
 
 ## 🚀 Features
