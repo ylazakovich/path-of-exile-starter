@@ -36,7 +36,7 @@ public class DatabaseController {
   }
 
   @PostMapping("/load/rates")
-  public void loadAllRates() {
+  public void loadRates() {
     databasePathOfExileService.readAll().forEach(this::loadRates);
   }
 
@@ -46,7 +46,7 @@ public class DatabaseController {
   }
 
   @PostMapping("/load/skills")
-  public void loadAllSkills() {
+  public void loadSkills() {
     databasePathOfExileService.readAll().forEach(this::loadSkills);
   }
 
@@ -66,10 +66,17 @@ public class DatabaseController {
   }
 
   @Scheduled(cron = "0 */5 * * * *")
+  public void updateRates() {
+    databasePathOfExileService.readAll()
+        .forEach(league -> poeNinjaService.getRates(league.getName())
+            .subscribe(data -> databaseNinjaService.updateCurrencies(data.getBody(), league)));
+  }
+
+  @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(data -> databaseNinjaService.update(data.getBody(), league)));
+            .subscribe(data -> databaseNinjaService.updateSkills(data.getBody(), league)));
   }
 
   @Scheduled(cron = "0 */2 * * * *")

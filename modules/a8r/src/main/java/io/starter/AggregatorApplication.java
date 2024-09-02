@@ -14,6 +14,7 @@ public class AggregatorApplication {
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(AggregatorApplication.class, args);
     context.getBean(DatabaseController.class).postLeagues();
-    context.getBean(DatabaseController.class).loadAllSkills();
+    context.getBean(DatabaseController.class).loadSkills();
+    context.getBean(DatabaseController.class).loadRates();
   }
 }

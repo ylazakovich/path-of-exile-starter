@@ -6,6 +6,7 @@ import java.util.List;
 import io.starter.dao.RatesDao;
 import io.starter.dao.SkillsDao;
 import io.starter.entity.LeagueEntity;
+import io.starter.entity.RateEntity;
 import io.starter.entity.SkillEntity;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
@@ -47,7 +48,17 @@ public class DatabaseNinjaService {
     }
   }
 
-  public void update(Lines<Skill> lines, LeagueEntity league) {
+  public void updateCurrencies(Lines<Currency> lines, LeagueEntity league) {
+    List<RateEntity> entitiesOnUpdate = ratesRepository.findAllByLeagueId(league);
+    entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
+        .filter(currency -> currency.getName().equals(entity.getName()))
+        .findFirst()
+        .ifPresent(currency -> entity.setChaosEquivalent(currency.getChaosEquivalent()))
+    );
+    ratesDao.saveAll(entitiesOnUpdate, league.getId());
+  }
+
+  public void updateSkills(Lines<Skill> lines, LeagueEntity league) {
     List<SkillEntity> entitiesOnUpdate = skillsRepository.findAllByLeagueId(league);
     entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
         .filter(skill -> skill.getName().equals(entity.getName())
