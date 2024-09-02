@@ -10,4 +10,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface RatesRepository extends JpaRepository<RateEntity, Long> {
 
   List<RateEntity> findAllByLeagueId(LeagueEntity league);
+
+  RateEntity findByNameAndLeagueId(String name, LeagueEntity league);
 }

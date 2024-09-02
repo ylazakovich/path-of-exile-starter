@@ -39,5 +39,6 @@ public class SkillEntity implements Serializable {
   private @NonNull Boolean corrupted;
   private @NonNull Integer gemLevel;
   private @NonNull Integer gemQuality;
-  private @NonNull Double chaosEquivalentPrice;
+  private @NonNull Double chaosEquivalent;
+  private @NonNull Double divineEquivalent;
 }

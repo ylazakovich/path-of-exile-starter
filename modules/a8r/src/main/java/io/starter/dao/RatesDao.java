@@ -10,9 +10,9 @@ import io.starter.model.ninja.Lines;
 import io.starter.repo.LeaguesRepository;
 import io.starter.repo.RatesRepository;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RatesDao {

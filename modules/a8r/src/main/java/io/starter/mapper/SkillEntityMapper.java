@@ -23,7 +23,8 @@ public class SkillEntityMapper implements Function<Lines<Skill>, List<SkillEntit
             skill.isCorrupted(),
             skill.getGemLevel(),
             skill.getGemQuality(),
-            skill.getChaosEquivalentPrice()))
+            skill.getChaosEquivalent(),
+            0.0))
         .toList();
   }
 }

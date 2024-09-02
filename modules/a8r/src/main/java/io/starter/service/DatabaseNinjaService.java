@@ -66,7 +66,7 @@ public class DatabaseNinjaService {
             && skill.getGemQuality() == entity.getGemQuality()
             && skill.isCorrupted() == entity.getCorrupted())
         .findFirst()
-        .ifPresent(skill -> entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice()))
+        .ifPresent(skill -> entity.setChaosEquivalent(skill.getChaosEquivalent()))
     );
     skillsDao.saveAll(entitiesOnUpdate, league.getId());
   }
@@ -89,7 +89,7 @@ public class DatabaseNinjaService {
           entity.setGemLevel(skill.getGemLevel());
           entity.setGemQuality(skill.getGemQuality());
           entity.setCorrupted(skill.isCorrupted());
-          entity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
+          entity.setChaosEquivalent(skill.getChaosEquivalent());
           entitiesOnAdding.add(entity);
         });
     skillsDao.saveAll(entitiesOnAdding, league.getId());

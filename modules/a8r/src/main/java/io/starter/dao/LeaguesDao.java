@@ -7,9 +7,9 @@ import io.starter.mapper.LeagueEntityMapper;
 import io.starter.model.path_of_exile.League;
 import io.starter.repo.LeaguesRepository;
 
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class LeaguesDao {

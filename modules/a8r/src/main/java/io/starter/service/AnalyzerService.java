@@ -46,8 +46,8 @@ public class AnalyzerService {
           if (Objects.nonNull(matchingLevelGem)) {
             long leagueId = qlt.getLeagueId();
             String name = qlt.getName();
-            double maxQualityPrice = qlt.getChaosEquivalentPrice();
-            double maxLevelPrice = matchingLevelGem.getChaosEquivalentPrice();
+            double maxQualityPrice = qlt.getChaosEquivalent();
+            double maxLevelPrice = matchingLevelGem.getChaosEquivalent();
             // TODO: craftCost should read from currency table
             return new AnalyzedSkillDto(leagueId, name, 1.0, maxQualityPrice - maxLevelPrice);
           }

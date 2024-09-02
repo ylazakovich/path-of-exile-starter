@@ -27,5 +27,5 @@ public class Skill {
   @JsonProperty("gemQuality")
   private int gemQuality;
   @JsonProperty("chaosValue")
-  private double chaosEquivalentPrice;
+  private double chaosEquivalent;
 }

@@ -9,6 +9,8 @@ import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +63,7 @@ public class DatabaseController {
   }
 
   @PostMapping("/load/leagues")
-  public void postLeagues() {
+  public void loadLeagues() {
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
   }
 
@@ -84,5 +86,12 @@ public class DatabaseController {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
             .subscribe(data -> databaseNinjaService.addNew(Objects.requireNonNull(data.getBody()), league)));
+  }
+
+  @EventListener(ApplicationReadyEvent.class)
+  public void loadDataAfterStartup() {
+    loadLeagues();
+    loadRates();
+    loadSkills();
   }
 }
