@@ -4,14 +4,12 @@ import java.util.List;
 import java.util.Optional;
 
 import io.starter.entity.RateEntity;
-import io.starter.entity.SkillEntity;
 import io.starter.mapper.RateEntityMapper;
-import io.starter.mapper.SkillEntityMapper;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
-import io.starter.model.ninja.Skill;
 import io.starter.repo.LeaguesRepository;
 import io.starter.repo.RatesRepository;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

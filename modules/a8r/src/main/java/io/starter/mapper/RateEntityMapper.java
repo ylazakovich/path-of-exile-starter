@@ -7,6 +7,7 @@ import io.starter.entity.LeagueEntity;
 import io.starter.entity.RateEntity;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
+
 import org.springframework.stereotype.Service;
 
 @Service
