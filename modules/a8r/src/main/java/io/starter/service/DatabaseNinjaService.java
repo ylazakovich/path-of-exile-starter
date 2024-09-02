@@ -3,11 +3,14 @@ package io.starter.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.starter.dao.RatesDao;
 import io.starter.dao.SkillsDao;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.SkillEntity;
+import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
+import io.starter.repo.RatesRepository;
 import io.starter.repo.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +20,28 @@ import org.springframework.stereotype.Service;
 public class DatabaseNinjaService {
 
   private final SkillsDao skillsDao;
+  private final RatesDao ratesDao;
   private final SkillsRepository skillsRepository;
+  private final RatesRepository ratesRepository;
 
   @Autowired
   public DatabaseNinjaService(SkillsDao skillsDao,
-                              SkillsRepository skillsRepository) {
+                              RatesDao ratesDao,
+                              SkillsRepository skillsRepository,
+                              RatesRepository ratesRepository) {
     this.skillsDao = skillsDao;
+    this.ratesDao = ratesDao;
     this.skillsRepository = skillsRepository;
+    this.ratesRepository = ratesRepository;
   }
 
-  public void load(Lines<Skill> lines, LeagueEntity league) {
+  public void loadCurrency(Lines<Currency> lines, LeagueEntity league) {
+    if (ratesRepository.findAllByLeagueId(league).isEmpty() && !lines.getLines().isEmpty()) {
+      ratesDao.saveAll(lines, league.getId());
+    }
+  }
+
+  public void loadSkills(Lines<Skill> lines, LeagueEntity league) {
     if (skillsRepository.findAllByLeagueId(league).isEmpty() && !lines.getLines().isEmpty()) {
       skillsDao.saveAll(lines, league.getId());
     }
