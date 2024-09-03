@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Log4j2
 @RestController
 @RequestMapping("/database")
+@Log4j2
 public class DatabaseController {
 
   private final DatabasePathOfExileService databasePathOfExileService;
@@ -55,6 +55,7 @@ public class DatabaseController {
   }
 
   private void loadSkills(LeagueEntity league) {
+    log.info("Loading skills for: {}", league.getName());
     poeNinjaService.getSkills(league.getName())
         .subscribe(data -> databaseNinjaService.loadSkills(data.getBody(), league));
   }
