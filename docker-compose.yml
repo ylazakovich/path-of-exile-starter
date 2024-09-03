@@ -7,10 +7,10 @@ services:
     <<: *mariadb-config
     ports: ["3306:3306"]
     environment:
-      MARIADB_DATABASE: aggregator
+      MARIADB_DATABASE: a8r
       MARIADB_ROOT_PASSWORD: root
 
-  t6m-mariadb:
+  telegram-mariadb:
     <<: *mariadb-config
     ports: ["3307:3306"]
     environment:

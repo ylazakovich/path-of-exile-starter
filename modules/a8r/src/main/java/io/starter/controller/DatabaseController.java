@@ -9,8 +9,8 @@ import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Log4j2
 @RestController
 @RequestMapping("/database")
 public class DatabaseController {
@@ -43,6 +44,7 @@ public class DatabaseController {
   }
 
   private void loadRates(LeagueEntity league) {
+    log.info("Loading rates for: {}", league.getName());
     poeNinjaService.getRates(league.getName())
         .subscribe(data -> databaseNinjaService.loadCurrency(data.getBody(), league));
   }
@@ -64,6 +66,7 @@ public class DatabaseController {
 
   @PostMapping("/load/leagues")
   public void loadLeagues() {
+    log.info("Loading leagues");
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
   }
 
@@ -88,9 +91,10 @@ public class DatabaseController {
             .subscribe(data -> databaseNinjaService.addNew(Objects.requireNonNull(data.getBody()), league)));
   }
 
-  @EventListener(ApplicationReadyEvent.class)
+  @SneakyThrows
   public void loadDataAfterStartup() {
-    loadLeagues();
+    // TODO: Need to investigate how to make it over CompletableFuture of Mono
+    Thread.sleep(800);
     loadRates();
     loadSkills();
   }

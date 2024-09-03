@@ -1,5 +1,7 @@
 package io.starter.service;
 
+import java.util.Objects;
+
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.RateEntity;
 import io.starter.repo.RatesRepository;
@@ -21,6 +23,9 @@ public class RateService {
                                                LeagueEntity league) {
     final String item = "Divine Orb";
     RateEntity entity = ratesRepository.findByNameAndLeagueId(item, league);
+    if (Objects.isNull(entity)) {
+      return 0;
+    }
     return chaosEquivalent / entity.getChaosEquivalent();
   }
 }
