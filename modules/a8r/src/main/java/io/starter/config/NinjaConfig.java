@@ -8,5 +8,6 @@ public class NinjaConfig {
       ConfigFactory.create(NinjaConfiguration.class, System.getProperties());
 
   public static final String BASE_URL = CONFIG.baseUrl();
-  public static final String ROUTE = CONFIG.route();
+  public static final String ITEM_ROUTE = CONFIG.itemRoute();
+  public static final String CURRENCY_ROUTE = CONFIG.currencyRoute();
 }

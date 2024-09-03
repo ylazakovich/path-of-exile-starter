@@ -9,11 +9,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class AggregatorApplication {
+public class A8R {
 
   public static void main(String[] args) {
-    ConfigurableApplicationContext context = SpringApplication.run(AggregatorApplication.class, args);
-    context.getBean(DatabaseController.class).postLeagues();
-    context.getBean(DatabaseController.class).loadAllSkills();
+    ConfigurableApplicationContext context = SpringApplication.run(A8R.class, args);
+    context.getBean(DatabaseController.class).loadDataAfterStartup();
   }
 }

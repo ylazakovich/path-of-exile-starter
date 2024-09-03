@@ -3,11 +3,11 @@ x-common: &mariadb-config
   restart: always
 
 services:
-  aggregator-mariadb:
+  a8r-mariadb:
     <<: *mariadb-config
     ports: ["3306:3306"]
     environment:
-      MARIADB_DATABASE: aggregator
+      MARIADB_DATABASE: a8r
       MARIADB_ROOT_PASSWORD: root
 
   telegram-mariadb:

@@ -1,6 +1,7 @@
 package io.starter.service;
 
 import io.starter.config.NinjaConfig;
+import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 
@@ -32,7 +33,16 @@ public class PoeNinjaService {
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
     return client.get()
-        .uri("%s?%s".formatted(NinjaConfig.ROUTE, "league=%s&type=SkillGem".formatted(league)))
+        .uri("%s?%s".formatted(NinjaConfig.ITEM_ROUTE, "league=%s&type=SkillGem".formatted(league)))
+        .accept(MediaType.APPLICATION_JSON)
+        .retrieve()
+        .toEntity(new ParameterizedTypeReference<>() {
+        });
+  }
+
+  public Mono<ResponseEntity<Lines<Currency>>> getRates(String league) {
+    return client.get()
+        .uri("%s?%s".formatted(NinjaConfig.CURRENCY_ROUTE, "league=%s&type=Currency".formatted(league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .toEntity(new ParameterizedTypeReference<>() {

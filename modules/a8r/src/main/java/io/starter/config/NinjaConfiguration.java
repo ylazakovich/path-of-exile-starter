@@ -14,7 +14,11 @@ public interface NinjaConfiguration extends Config {
   @DefaultValue("https://poe.ninja")
   String baseUrl();
 
-  @Key("NINJA_ROUTE")
+  @Key("NINJA_ITEM_ROUTE")
   @DefaultValue("/api/data/itemoverview")
-  String route();
+  String itemRoute();
+
+  @Key("NINJA_CURRENCY_ROUTE")
+  @DefaultValue("/api/data/currencyoverview")
+  String currencyRoute();
 }

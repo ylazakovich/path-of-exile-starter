@@ -24,8 +24,8 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 @Entity
-@Table(name = "skills")
-public class SkillEntity implements Serializable {
+@Table(name = "rates")
+public class RateEntity implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,10 +35,5 @@ public class SkillEntity implements Serializable {
   @JoinColumn(name = "league_id")
   private @NonNull LeagueEntity leagueId;
   private @NonNull String name;
-  private @NonNull String variant;
-  private @NonNull Boolean corrupted;
-  private @NonNull Integer gemLevel;
-  private @NonNull Integer gemQuality;
   private @NonNull Double chaosEquivalent;
-  private @NonNull Double divineEquivalent;
 }

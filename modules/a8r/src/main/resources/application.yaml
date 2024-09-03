@@ -7,7 +7,7 @@ spring:
     baseline-version: 0
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/aggregator
+    url: jdbc:mariadb://localhost:3306/a8r
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
@@ -17,3 +17,9 @@ spring:
       ddl-auto: validate
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        cache:
+          use_second_level_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory

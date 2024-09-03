@@ -9,10 +9,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
-public class TelegramApplication {
+public class Telegram {
 
   public static void main(String[] args) {
-    ConfigurableApplicationContext context = SpringApplication.run(TelegramApplication.class, args);
+    ConfigurableApplicationContext context = SpringApplication.run(Telegram.class, args);
     context.getBean(DatabaseService.class).loadLeagues();
     context.getBean(DatabaseService.class).loadSkills();
   }

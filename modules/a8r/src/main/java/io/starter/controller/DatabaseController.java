@@ -9,6 +9,7 @@ import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -37,17 +38,26 @@ public class DatabaseController {
     this.pathOfExileService = pathOfExileService;
   }
 
+  @PostMapping("/load/rates")
+  public void loadRates() {
+    databasePathOfExileService.readAll().forEach(this::loadRates);
+  }
+
+  private void loadRates(LeagueEntity league) {
+    log.info("Loading rates for: {}", league.getName());
+    poeNinjaService.getRates(league.getName())
+        .subscribe(data -> databaseNinjaService.loadCurrency(data.getBody(), league));
+  }
+
   @PostMapping("/load/skills")
-  public void loadAllSkills() {
-    log.info("Started process with loading all skills...");
+  public void loadSkills() {
     databasePathOfExileService.readAll().forEach(this::loadSkills);
-    log.info("Finished process with loading all skills");
   }
 
   private void loadSkills(LeagueEntity league) {
-    log.info("Started process with loading skills from league - {}", league.getName());
-    poeNinjaService.getSkills(league.getName()).subscribe(data -> databaseNinjaService.load(data.getBody(), league));
-    log.info("Finished process with loading skills from league - {}", league);
+    log.info("Loading skills for: {}", league.getName());
+    poeNinjaService.getSkills(league.getName())
+        .subscribe(data -> databaseNinjaService.loadSkills(data.getBody(), league));
   }
 
   @GetMapping ("/leagues")
@@ -56,27 +66,37 @@ public class DatabaseController {
   }
 
   @PostMapping("/load/leagues")
-  public void postLeagues() {
-    log.info("Started process with loading all leagues...");
+  public void loadLeagues() {
+    log.info("Loading leagues");
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
-    log.info("Finished process with loading all leagues");
+  }
+
+  @Scheduled(cron = "0 */5 * * * *")
+  public void updateRates() {
+    databasePathOfExileService.readAll()
+        .forEach(league -> poeNinjaService.getRates(league.getName())
+            .subscribe(data -> databaseNinjaService.updateCurrencies(data.getBody(), league)));
   }
 
   @Scheduled(cron = "0 */5 * * * *")
   public void updateSkills() {
-    log.info("Started process with updating all skills...");
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(data -> databaseNinjaService.update(data.getBody(), league)));
-    log.info("Finished process with updating all skills");
+            .subscribe(data -> databaseNinjaService.updateSkills(data.getBody(), league)));
   }
 
   @Scheduled(cron = "0 */2 * * * *")
   public void addNewSkills() {
-    log.info("Started process with adding new skills...");
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
             .subscribe(data -> databaseNinjaService.addNew(Objects.requireNonNull(data.getBody()), league)));
-    log.info("Finished process with adding new skills");
+  }
+
+  @SneakyThrows
+  public void loadDataAfterStartup() {
+    // TODO: Need to investigate how to make it over CompletableFuture of Mono
+    Thread.sleep(800);
+    loadRates();
+    loadSkills();
   }
 }

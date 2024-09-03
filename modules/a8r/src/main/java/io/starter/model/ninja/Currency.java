@@ -14,18 +14,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class Skill {
+public class Currency {
 
-  @JsonProperty("name")
+  @JsonProperty("currencyTypeName")
   private String name;
-  @JsonProperty("variant")
-  private String variant;
-  @JsonProperty("corrupted")
-  private boolean corrupted;
-  @JsonProperty("gemLevel")
-  private int gemLevel;
-  @JsonProperty("gemQuality")
-  private int gemQuality;
-  @JsonProperty("chaosValue")
+  @JsonProperty("chaosEquivalent")
   private double chaosEquivalent;
 }

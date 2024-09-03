@@ -22,7 +22,7 @@ public class Generator {
     return Skill.builder()
         .name(faker.harryPotter().spell())
         .variant(faker.tire().aspectRatio())
-        .chaosEquivalentPrice(faker.number().randomDouble(5, 0, 1000))
+        .chaosEquivalent(faker.number().randomDouble(5, 0, 1000))
         .corrupted(faker.random().nextBoolean())
         .gemLevel(faker.number().numberBetween(0, 20))
         .gemQuality(faker.number().numberBetween(0, 20))
