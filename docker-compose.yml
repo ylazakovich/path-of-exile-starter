@@ -1,5 +1,5 @@
 x-common: &mariadb-config
-  image: mariadb:11.2.5@sha256:ae5b42880472ca8dced4e6fe7d6be3918af4c58c736ddc84a8876b4f8f061fe0
+  image: mariadb:11.2.5@sha256:1363d4688aed0a0c3ddacb6e1b0a93dcfd765e557cb05e207b46bc8c60e376af
   restart: always
 
 services:
