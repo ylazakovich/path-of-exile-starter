@@ -6,7 +6,7 @@ ext {
     lombok = '1.18.34'
     telegram = '7.10.0'
     spring = '3.3.3'
-    jcache = '6.6.0.Final'
+    jcache = '6.6.1.Final'
     mariadb = '3.4.1'
     mockito = '5.13.0'
     assertJ = '3.26.3'
