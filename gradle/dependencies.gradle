@@ -5,7 +5,7 @@ ext {
     flyway = '10.18.0'
     lombok = '1.18.34'
     telegram = '7.10.0'
-    spring = '3.3.3'
+    spring = '3.3.4'
     jcache = '6.6.1.Final'
     mariadb = '3.4.1'
     mockito = '5.13.0'
