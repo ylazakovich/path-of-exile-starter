@@ -14,10 +14,12 @@ subprojects {
     apply plugin: 'checkstyle'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
+    apply plugin: 'jacoco'
 }
 
-apply from: 'gradle/checkstyle.gradle'
+apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/compilation.gradle'
+apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/tests.gradle'
 
