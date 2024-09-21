@@ -17,22 +17,27 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4
+
       - name: Check repository over Prettier
         uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
         with:
           args: --check --ignore-unknown '**/*.*'
+
       - name: Set up JDK
         uses: actions/setup-java@2dfa2011c5b2a0f1489bf9e433881c92c1631f88 # v4
         with:
           distribution: "corretto"
           cache: "gradle"
           java-version: "17"
+
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
         with:
           gradle-version: "8.10.1"
+
       - name: Run the unit tests
         run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+
       - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
         if: always()
         with:
@@ -41,3 +46,19 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
+
+      - name: Run Test Coverage
+        run: ./gradlew jacocoTestReport
+
+      - name: Generate JaCoCo Badge
+        uses: cicirello/jacoco-badge-generator@v2
+        with:
+          generate-branches-badge: true
+          jacoco-csv-file: build/reports/test/jacocoTestReport.xml
+
+      - name: Update Jacoco Badge
+        uses: test-room-7/action-update-file@v1
+        with:
+          file-path: .github/badges/jacoco.svg
+          commit-msg: Update Jacoco Badge
+          github-token: ${{ secrets.GITHUB_TOKEN }}
