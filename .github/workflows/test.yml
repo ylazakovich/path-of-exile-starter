@@ -54,10 +54,7 @@ jobs:
         uses: cicirello/jacoco-badge-generator@v2
         with:
           generate-branches-badge: true
-          jacoco-csv-file: >
-            modules/a8r/build/reports/test/jacocoTestReport.csv
-            modules/telegram/build/reports/test/jacocoTestReport.csv
-            modules/tests/build/reports/test/jacocoTestReport.csv
+          jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
 
       - name: Update Jacoco Badge
         uses: test-room-7/action-update-file@v1
