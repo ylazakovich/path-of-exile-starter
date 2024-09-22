@@ -56,6 +56,13 @@ jobs:
           generate-branches-badge: true
           jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
 
+      - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
+        if: always()
+        with:
+          name: coverage-report-linux-${{ matrix.gradle-task }}
+          retention-days: 14
+          path: "**/build/reports/jacoco/test/html"
+
       - name: Update Jacoco Badge
         uses: test-room-7/action-update-file@v1
         with:
