@@ -26,7 +26,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@d156388eb19639ec20ade50009f3d199ce1e2808 # v4
         with:
-          gradle-version: "8.10.1"
+          gradle-version: "8.10.2"
       - name: Run the Integration Tests
         run: gradle :modules:tests:${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@50769540e7f4bd5e21e526ee35c689e35e0d6874 # v4
