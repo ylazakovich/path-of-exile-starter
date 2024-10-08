@@ -38,7 +38,7 @@ jobs:
       - name: Run the unit tests
         run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
 
-      - uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4
+      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4
         if: always()
         with:
           name: test-report-linux-${{ matrix.gradle-task }}
@@ -56,7 +56,7 @@ jobs:
           generate-branches-badge: true
           jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
 
-      - uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4
+      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4
         if: always()
         with:
           name: coverage-report-linux-${{ matrix.gradle-task }}
