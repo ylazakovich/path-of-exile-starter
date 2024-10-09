@@ -29,7 +29,7 @@ jobs:
           gradle-version: "8.10.2"
       - name: Run the Integration Tests
         run: gradle :modules:tests:${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-      - uses: actions/upload-artifact@84480863f228bb9747b473957fcc9e309aa96097 # v4
+      - uses: actions/upload-artifact@604373da6381bf24206979c74d06a550515601b9 # v4
         if: always()
         with:
           name: test-report-linux-${{ matrix.gradle-task }}
