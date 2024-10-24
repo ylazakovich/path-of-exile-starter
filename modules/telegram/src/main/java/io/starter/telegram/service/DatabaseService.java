@@ -1,5 +1,6 @@
 package io.starter.telegram.service;
 
+import io.starter.telegram.config.ScheduleConfig;
 import io.starter.telegram.dao.LeagueDao;
 import io.starter.telegram.dao.SkillDao;
 
@@ -31,14 +32,14 @@ public class DatabaseService {
             .subscribe(skills -> skillDao.add(league, skills)));
   }
 
-  @Scheduled(cron = "0 */5 * * * *")
+  @Scheduled(cron = ScheduleConfig.T6M_UPDATE_CRON)
   private void updateSkills() {
     leagueDao.selectAll()
         .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)
             .subscribe(skills -> skillDao.update(league, skills)));
   }
 
-  @Scheduled(cron = "0 */2 * * * *")
+  @Scheduled(cron = ScheduleConfig.T6M_ADD_CRON)
   private void addNewSkills() {
     leagueDao.selectAll()
         .forEach(league -> aggregatorService.getAnalyzedSkills(league.name)

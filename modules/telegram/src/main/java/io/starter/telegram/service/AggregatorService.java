@@ -2,7 +2,7 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.telegram.config.third_party.AggregatorConfig;
+import io.starter.telegram.config.third_party.A8rConfig;
 import io.starter.telegram.model.aggregator.League;
 import io.starter.telegram.model.aggregator.Skill;
 
@@ -22,7 +22,7 @@ public class AggregatorService {
 
   public AggregatorService() {
     this.client = WebClient.builder()
-        .baseUrl(AggregatorConfig.BASE_URL)
+        .baseUrl(A8rConfig.BASE_URL)
         .build();
   }
 

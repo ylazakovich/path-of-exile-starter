@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @Slf4j
-public class AppConfig {
+public class AppSpringConfig {
 
   private final WebhookService webhookService;
 
-  public AppConfig(WebhookService webhookService) {
+  public AppSpringConfig(WebhookService webhookService) {
     this.webhookService = webhookService;
   }
 
