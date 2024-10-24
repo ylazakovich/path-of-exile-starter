@@ -8,9 +8,9 @@ import static org.aeonbits.owner.Config.Sources;
 
 @LoadPolicy(LoadType.MERGE)
 @Sources({"system:env"})
-public interface AggregatorConfiguration extends Config {
+public interface A8rConfiguration extends Config {
 
-  @Key("AGGREGATOR_BASE_URL")
+  @Key("A8R_BASE_URL")
   @DefaultValue("http://localhost:8080")
   String baseUrl();
 }

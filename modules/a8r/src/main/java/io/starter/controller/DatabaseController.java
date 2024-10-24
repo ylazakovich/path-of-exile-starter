@@ -3,6 +3,7 @@ package io.starter.controller;
 import java.util.List;
 import java.util.Objects;
 
+import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
 import io.starter.service.DatabaseNinjaService;
 import io.starter.service.DatabasePathOfExileService;
@@ -71,21 +72,21 @@ public class DatabaseController {
     pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
   }
 
-  @Scheduled(cron = "0 */5 * * * *")
+  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void updateRates() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getRates(league.getName())
             .subscribe(data -> databaseNinjaService.updateCurrencies(data.getBody(), league)));
   }
 
-  @Scheduled(cron = "0 */5 * * * *")
+  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
   public void updateSkills() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
             .subscribe(data -> databaseNinjaService.updateSkills(data.getBody(), league)));
   }
 
-  @Scheduled(cron = "0 */2 * * * *")
+  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void addNewSkills() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
