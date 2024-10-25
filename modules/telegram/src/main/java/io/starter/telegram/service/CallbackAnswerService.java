@@ -1,7 +1,5 @@
 package io.starter.telegram.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,6 +13,9 @@ import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.utils.generator.messages.AnswerCallbackQueryGenerator;
 import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
+import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -43,34 +44,45 @@ public class CallbackAnswerService {
     return AnswerCallbackQueryGenerator.generateAnswerCallbackQuery(callbackQuery.getId());
   }
 
+  // TODO: not finished
   public EditMessageText onClickSkills(CallbackQuery callbackQuery) {
     LeagueEntity leagueEntity = userDao.readLeague(callbackQuery.getFrom());
     List<Skill> skills = skillDao.readAll(leagueEntity);
-    String inlineMessage = convertSkillsToStringBuilder(skills).toString();
-    InlineKeyboardMarkup keyboard = onClickSkills();
+    int page = 0;
+    String inlineMessage = toPaginatedMessage(page, skills);
+    InlineKeyboardMarkup keyboard = onClickSkills(page);
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
-  private InlineKeyboardMarkup onClickSkills() {
-    InlineKeyboardMarkup markup = new InlineKeyboardMarkup(Collections.emptyList());
-    List<InlineKeyboardRow> keyboard = new ArrayList<>();
-    InlineKeyboardButton refreshBtn = InlineKeyboardButton.builder()
-        .text(Emoji.REPEAT.value)
-        .callbackData(CallbackState.REFRESH_SKILLS.value)
-        .build();
-    List<InlineKeyboardButton> buttons = List.of(refreshBtn);
-    keyboard.add(new InlineKeyboardRow(buttons));
-    markup.setKeyboard(keyboard);
-    return markup;
+  // TODO: not finished
+  private InlineKeyboardMarkup onClickSkills(int page) {
+    List<InlineKeyboardButton> headerButtons = List.of(
+        InlineKeyboardButtonGenerator.generate("Назад", "page:" + (page - 1)),
+        InlineKeyboardButtonGenerator.generate(String.valueOf(page), "current page"),
+        InlineKeyboardButtonGenerator.generate("Вперед", "page:" + (page + 1))
+    );
+    List<InlineKeyboardButton> footerButtons = List.of(
+        InlineKeyboardButtonGenerator.generate(
+            Emoji.REPEAT.value,
+            CallbackState.REFRESH_SKILLS.value
+        )
+    );
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, footerButtons);
+    return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  private StringBuilder convertSkillsToStringBuilder(List<Skill> skills) {
+  private String toPaginatedMessage(int page, List<Skill> skills) {
+    final int itemsPerPage = 10;
+    int start = page * itemsPerPage;
+    int end = Math.min(start + itemsPerPage, skills.size());
     final StringBuilder builder = new StringBuilder();
-    skills.forEach(skill -> builder
-        .append(skill.getName())
-        .append(Constants.General.SEPARATER)
-        .append(Math.round(skill.getChaosEquivalentProfit()))
-        .append(StringUtils.LF));
-    return builder;
+    for (int i = start; i < end; i++) {
+      builder
+          .append(skills.get(i).getName())
+          .append(Constants.General.SEPARATER)
+          .append(Math.round(skills.get(i).getChaosEquivalentProfit()))
+          .append(StringUtils.LF);
+    }
+    return builder.toString();
   }
 }
