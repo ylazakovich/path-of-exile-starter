@@ -18,6 +18,7 @@
 - Easy analyze Path of Exile positions for trade
 - Use https://poe.ninja/ as the main data aggregator
 - Manage your own Settings over bot
+- Pagination
 
 ## 🖥️ Quick start
 
