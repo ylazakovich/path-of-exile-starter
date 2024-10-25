@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-import io.starter.telegram.Constants;
 import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
 import io.starter.telegram.constants.LeagueSetting;
 import io.starter.telegram.dao.SkillDao;
