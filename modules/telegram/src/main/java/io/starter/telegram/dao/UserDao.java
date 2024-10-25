@@ -80,7 +80,7 @@ public class UserDao {
       userEntity.setFirstName(user.getFirstName());
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
       userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
-      userEntity.setSkillPage(0);
+      userEntity.setSkillPage(1);
       save(userEntity);
     }
   }
