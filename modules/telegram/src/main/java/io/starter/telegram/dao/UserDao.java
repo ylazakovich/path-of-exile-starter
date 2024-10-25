@@ -59,6 +59,17 @@ public class UserDao {
     return entity.getLeagueId();
   }
 
+  public int readSkillPage(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    return entity.getSkillPage();
+  }
+
+  public void saveSkillPage(User user, int page) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    entity.setSkillPage(page);
+    save(entity);
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(9L);
@@ -69,6 +80,7 @@ public class UserDao {
       userEntity.setFirstName(user.getFirstName());
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
       userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
+      userEntity.setSkillPage(0);
       save(userEntity);
     }
   }

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -46,9 +47,18 @@ public class CallbackAnswerService {
 
   // TODO: not finished
   public EditMessageText onClickSkills(CallbackQuery callbackQuery) {
-    LeagueEntity leagueEntity = userDao.readLeague(callbackQuery.getFrom());
+    User from = callbackQuery.getFrom();
+    LeagueEntity leagueEntity = userDao.readLeague(from);
     List<Skill> skills = skillDao.readAll(leagueEntity);
-    int page = 0;
+    CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
+    int page = userDao.readSkillPage(from);
+    if (callbackState == CallbackState.SKILLS_NEXT) {
+      page = page + 1;
+    }
+    if (callbackState == CallbackState.SKILLS_PREVIOUS) {
+      page = page - 1;
+    }
+    userDao.saveSkillPage(from, page);
     String inlineMessage = toPaginatedMessage(page, skills);
     InlineKeyboardMarkup keyboard = onClickSkills(page);
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
@@ -57,9 +67,15 @@ public class CallbackAnswerService {
   // TODO: not finished
   private InlineKeyboardMarkup onClickSkills(int page) {
     List<InlineKeyboardButton> headerButtons = List.of(
-        InlineKeyboardButtonGenerator.generate("Назад", "page:" + (page - 1)),
-        InlineKeyboardButtonGenerator.generate(String.valueOf(page), "current page"),
-        InlineKeyboardButtonGenerator.generate("Вперед", "page:" + (page + 1))
+        InlineKeyboardButtonGenerator.generate(
+            Emoji.LEFT.value,
+            CallbackState.SKILLS_PREVIOUS.value.formatted(page - 1)),
+        InlineKeyboardButtonGenerator.generate(
+            String.valueOf(page),
+            CallbackState.CURRENT.value),
+        InlineKeyboardButtonGenerator.generate(
+            Emoji.RIGHT.value,
+            CallbackState.SKILLS_NEXT.value.formatted(page + 1))
     );
     List<InlineKeyboardButton> footerButtons = List.of(
         InlineKeyboardButtonGenerator.generate(
@@ -71,6 +87,7 @@ public class CallbackAnswerService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
+  // TODO: create task for realizing paginated message over Fabric Pattern
   private String toPaginatedMessage(int page, List<Skill> skills) {
     final int itemsPerPage = 10;
     int start = page * itemsPerPage;

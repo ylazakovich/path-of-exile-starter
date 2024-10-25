@@ -7,5 +7,6 @@ CREATE TABLE users
     user_name       VARCHAR(255),
     last_name       VARCHAR(255),
     last_message_id INT,
+    skill_page      INT          NOT NULL,
     FOREIGN KEY (league_id) REFERENCES leagues (id)
 );

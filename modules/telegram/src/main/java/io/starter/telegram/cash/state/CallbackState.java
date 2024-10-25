@@ -15,7 +15,10 @@ public enum CallbackState {
   SKILLS("Pressing button with 'Skills'"),
   ALL_SKILLS("Pressing button with 'All skills'"),
   REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
-  ITEMS_AFTER_BLESSING("Pressing button with 'Blessing Items'");
+  ITEMS_AFTER_BLESSING("Pressing button with 'Blessing Items'"),
+  CURRENT("Pressing on current page"),
+  SKILLS_NEXT("skills - Pressing NEXT"),
+  SKILLS_PREVIOUS("skills - Pressing PREVIOUS");
 
   public final String value;
 

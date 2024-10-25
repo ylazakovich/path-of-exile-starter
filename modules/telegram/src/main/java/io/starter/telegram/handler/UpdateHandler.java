@@ -38,7 +38,6 @@ public class UpdateHandler {
       case WELCOME -> messageAnswerService.onFirstStart(message);
       case START -> messageAnswerService.onClickStart(message);
       case SETTINGS -> messageAnswerService.onClickSettings(message);
-      case NO_CMD -> null;
       default -> null;
     };
   }
@@ -52,8 +51,7 @@ public class UpdateHandler {
       case SETTING_STANDARD, SETTING_LEAGUE, SETTING_HARDCORE, SETTING_LEAGUE_HARDCORE
           -> callbackAnswerService.onClickSetting(callback);
       case SKILLS -> messageAnswerService.onClickSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS -> callbackAnswerService.onClickSkills(callback);
-      case NO_CMD -> null;
+      case ALL_SKILLS, REFRESH_SKILLS, SKILLS_PREVIOUS, SKILLS_NEXT -> callbackAnswerService.onClickSkills(callback);
       default -> null;
     };
   }
