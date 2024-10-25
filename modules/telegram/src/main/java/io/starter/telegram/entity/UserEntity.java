@@ -37,4 +37,5 @@ public class UserEntity implements Serializable {
   public String userName;
   public String lastName;
   public Integer lastMessageId;
+  public @NonNull Integer skillPage;
 }

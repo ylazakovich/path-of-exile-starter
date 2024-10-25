@@ -1,4 +1,4 @@
-package io.starter.telegram;
+package io.starter.telegram.constants;
 
 public class Constants {
 
@@ -7,20 +7,20 @@ public class Constants {
     public static final String SEPARATER = " : ";
     public static final String QUESTION = "What options do you want to choose ?";
     public static final String WELCOME = """
-      %s
-      Greetings, Exile **%s**!
-      I will tell you the most profitable ways to earn your first Divine.
-      """;
+        %s
+        Greetings, Exile **%s**!
+        I will tell you the most profitable ways to earn your first Divine.
+        """;
   }
 
   public static class StepWithAnalyze {
 
     public static final String SKILLS_GUIDE = """
         GUIDE
-
+        
         1. Looking for Skill gem      = 20 lvl / no quality
         2. #1 + Gemcutter's Prism =   1  lvl / 20% quality
-
+        
         Example:
         Faster Attack Support 10
         1. Faster Attack Support - Skill Gem which you can craft and trade on market
@@ -47,5 +47,7 @@ public class Constants {
     public static final String HARDCORE = "Hardcore";
     public static final String LEAGUE = "League";
     public static final String LEAGUE_HARDCORE = "League Hardcore";
+
+    public static final String SETTINGS_UPDATED = "Your settings has been updated";
   }
 }

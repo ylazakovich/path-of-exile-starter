@@ -13,14 +13,14 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class AggregatorService {
+public class A8rService {
 
   private static final String SKILLS = "/analyzer/analyze/skills?league=%s";
   private static final String LEAGUES = "/database/leagues";
 
   private final WebClient client;
 
-  public AggregatorService() {
+  public A8rService() {
     this.client = WebClient.builder()
         .baseUrl(A8rConfig.BASE_URL)
         .build();

@@ -9,8 +9,8 @@ public enum LeagueSetting {
   HARDCORE(2L, CallbackState.SETTING_HARDCORE),
   LEAGUE_HARDCORE(10L, CallbackState.SETTING_LEAGUE_HARDCORE);
 
-  public long id;
-  public CallbackState state;
+  public final long id;
+  public final CallbackState state;
 
   LeagueSetting(Long id, CallbackState state) {
     this.id = id;
