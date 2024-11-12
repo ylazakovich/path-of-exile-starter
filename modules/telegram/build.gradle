@@ -9,5 +9,5 @@ dependencies {
     implementation("javax.xml.bind:jaxb-api:$jaxb")
     implementation("org.flywaydb:flyway-core:$flyway")
     implementation("org.flywaydb:flyway-mysql:$flyway")
-    runtimeOnly("io.netty:netty-resolver-dns-native-$os:$netty:$mac_os_arch")
+    runtimeOnly("io.netty:netty-all:$netty")
 }

@@ -1,6 +1,4 @@
 ext {
-    os = "macos"
-    mac_os_arch = 'osx-aarch_64'
     netty = '4.1.114.Final'
     flyway = '10.21.0'
     lombok = '1.18.34'
