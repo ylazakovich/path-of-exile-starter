@@ -1,7 +1,7 @@
 ext {
     netty = '4.1.115.Final'
     flyway = '10.21.0'
-    lombok = '1.18.34'
+    lombok = '1.18.36'
     telegram = '7.10.0'
     spring = '3.3.5'
     jcache = '6.6.2.Final'
