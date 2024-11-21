@@ -33,7 +33,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
         with:
-          gradle-version: "8.11"
+          gradle-version: "8.11.1"
 
       - name: Run the unit tests
         run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
