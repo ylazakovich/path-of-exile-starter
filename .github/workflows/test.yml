@@ -30,7 +30,7 @@ jobs:
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
       - name: Run the unit tests
-        run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+        run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         if: always()
         with:
