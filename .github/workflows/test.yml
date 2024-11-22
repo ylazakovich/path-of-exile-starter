@@ -17,27 +17,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
       - name: Check repository over Prettier
         uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
         with:
           args: --check --ignore-unknown '**/*.*'
-
       - name: Set up JDK
         uses: actions/setup-java@8df1039502a15bceb9433410b1a100fbe190c53b # v4
         with:
           distribution: "corretto"
           cache: "gradle"
           java-version: "17"
-
       - name: Build with Gradle
         uses: gradle/actions/setup-gradle@cc4fc85e6b35bafd578d5ffbc76a5518407e1af0 # v4
-        with:
-          gradle-version: "8.11.1"
-
       - name: Run the unit tests
         run: gradle ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         if: always()
         with:
@@ -46,16 +39,13 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
-
       - name: Run Test Coverage
         run: ./gradlew jacocoTestReport
-
       - name: Generate JaCoCo Badge
         uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921 # v2
         with:
           generate-branches-badge: true
           jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
-
       - uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4
         if: always()
         with:
