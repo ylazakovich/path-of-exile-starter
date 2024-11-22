@@ -12,13 +12,6 @@ spring:
     username: root
     password: root
     driver-class-name: org.mariadb.jdbc.Driver
-    hikari:
-      minimum-idle: 5
-      maximum-pool-size: 20
-      idle-timeout: 30000
-      max-lifetime: 1800000
-      connection-timeout: 20000
-      transaction-isolation: TRANSACTION_READ_COMMITTED
 
   jpa:
     hibernate:
