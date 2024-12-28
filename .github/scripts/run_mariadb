@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker compose up -d --quiet-pull a8r-mariadb telegram-mariadb

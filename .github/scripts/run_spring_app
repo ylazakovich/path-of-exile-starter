@@ -1,6 +1,5 @@
 #!/bin/bash
-# TODO: need to adjust this script
-docker compose up -d database
+# TODO: need to adjust and think about it again
 gradle :path-of-exile-starter-aggregator:bootRun &
 
 echo "Service will started about few minutes"

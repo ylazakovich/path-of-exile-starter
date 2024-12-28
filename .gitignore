@@ -21,3 +21,4 @@ statics/bin
 
 # Local resources
 modules/**/local_resources/
+*.env
