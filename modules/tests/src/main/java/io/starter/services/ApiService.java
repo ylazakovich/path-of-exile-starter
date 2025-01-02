@@ -30,10 +30,10 @@ public class ApiService {
         .spec(getResponseSpecification());
   }
 
-  protected RequestSpecification getRequestSpecification(String uri, ContentType contentType) {
+  protected RequestSpecification getRequestSpecification(String uri) {
     return new RequestSpecBuilder()
         .setBaseUri(uri)
-        .setContentType(contentType)
+        .setContentType(ContentType.JSON)
         .build();
   }
 

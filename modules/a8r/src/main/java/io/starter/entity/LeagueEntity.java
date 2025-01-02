@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -30,4 +31,6 @@ public class LeagueEntity implements Serializable {
   private Long id;
   @Column(unique = true)
   private @NonNull String name;
+  @Version
+  private Long version;
 }

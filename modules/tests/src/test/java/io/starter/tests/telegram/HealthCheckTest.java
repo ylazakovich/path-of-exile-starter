@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 public class HealthCheckTest extends BaseUiTest {
 
-  @Test()
+  @Test(description = "Web telegram should be available for login")
   void testGetWebApp() {
     telegramNavigationSteps.openLoginPage()
         .verify()

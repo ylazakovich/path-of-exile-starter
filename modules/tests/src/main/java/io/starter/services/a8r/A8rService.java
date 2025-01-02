@@ -1,4 +1,4 @@
-package io.starter.services.telegram;
+package io.starter.services.a8r;
 
 import io.starter.services.ApiService;
 
@@ -7,7 +7,7 @@ import io.restassured.specification.RequestSpecification;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class TelegramService extends ApiService {
+public class A8rService extends ApiService {
 
   private final String baseUrl;
 
@@ -15,11 +15,8 @@ public class TelegramService extends ApiService {
     return get(getRequestSpecification(), path);
   }
 
-  protected ValidatableResponse put(String path) {
-    return put(getRequestSpecification(), path);
-  }
-
   private RequestSpecification getRequestSpecification() {
     return getRequestSpecification(baseUrl);
   }
+
 }
