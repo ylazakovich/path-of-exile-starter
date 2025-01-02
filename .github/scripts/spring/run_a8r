@@ -1,6 +1,5 @@
 #!/bin/bash
-# TODO: need to adjust and think about it again
-gradle :path-of-exile-starter-aggregator:bootRun &
+./gradlew :modules:a8r:bootRun &
 
 echo "Service will started about few minutes"
 count=0
@@ -17,4 +16,4 @@ until [ $status -eq 200 ]; do
   echo "Service... $((count += $sleep)) seconds, status code - $status"
   sleep $sleep
 done
-echo "Service is started on http://localhost:8080/health/ping"
+echo "Service is started on http://localhost:8080"
