@@ -6,8 +6,8 @@ subprojects {
 
         testLogging {
             events "passed", "skipped", "failed"
-            showExceptions true
-            exceptionFormat 'full'
+            showExceptions = true
+            exceptionFormat = 'full'
         }
     }
 }
