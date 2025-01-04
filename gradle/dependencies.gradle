@@ -35,8 +35,7 @@ subprojects {
     dependencies {
         implementation("org.aeonbits.owner:owner:$aeonbits")
         implementation("net.datafaker:datafaker:$faker")
-        testImplementation platform("io.qameta.allure:allure-bom:$allure")
-        implementation("io.qameta.allure:allure-testng")
+        implementation("io.qameta.allure:allure-testng:$allure")
         implementation("org.testng:testng:$testng")
         testImplementation("org.assertj:assertj-core:$assertJ")
         testImplementation("org.mockito:mockito-core:$mockito")
