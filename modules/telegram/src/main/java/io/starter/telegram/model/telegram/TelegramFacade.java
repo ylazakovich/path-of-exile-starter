@@ -69,7 +69,7 @@ public class TelegramFacade {
     return updateHandler.handleOnUpdate(message, messageHandler.apply(user));
   }
 
-  public BotApiMethod<?> handleOnCallback(CallbackQuery callback) {
+  private BotApiMethod<?> handleOnCallback(CallbackQuery callback) {
     final CallbackState state = Objects.requireNonNull(CallbackState.byData(callback.getData()));
     final User user = callback.getFrom();
     callbackConsumer.accept(callback, state);

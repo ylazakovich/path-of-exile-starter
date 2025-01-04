@@ -34,7 +34,7 @@ jobs:
           chmod +x .github/scripts/compose/run_mariadb
           .github/scripts/compose/run_mariadb
         shell: bash
-      - name: Spring - start A8r service
+      - name: Spring - A8r start
         run: |
           chmod +x .github/scripts/spring/run_a8r
           .github/scripts/spring/run_a8r
