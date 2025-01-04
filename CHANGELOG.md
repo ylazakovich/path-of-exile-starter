@@ -7,4 +7,7 @@
 ### Telegram
 
 - handle Message command /start
-- added unit test for command /start
+- added unit test for command '/start'
+- added unit test for command '🎗Start'
+- added unit test for command '⚙ Settings'
+- added unit test for unknown command
