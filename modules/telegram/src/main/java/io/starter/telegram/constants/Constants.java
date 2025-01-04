@@ -13,7 +13,7 @@ public class Constants {
         """;
   }
 
-  public static class StepWithAnalyze {
+  public static class Start {
 
     public static final String SKILLS_GUIDE = """
         GUIDE
@@ -30,7 +30,7 @@ public class Constants {
     public static final String BLESSING = "Blessing Items";
   }
 
-  public static class StepWithSettings {
+  public static class Settings {
 
     // TODO: Later need to make a feature for bot to show current user league dynamically
     public static final String ANSWER = """

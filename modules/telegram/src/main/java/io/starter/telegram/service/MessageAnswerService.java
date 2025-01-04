@@ -48,29 +48,29 @@ public class MessageAnswerService {
 
   private InlineKeyboardMarkup keyboardOnClickStart() {
     InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithAnalyze.SKILLS, CallbackState.SKILLS.value);
+        .generate(Constants.Start.SKILLS, CallbackState.SKILLS.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithAnalyze.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
+        .generate(Constants.Start.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
     List<InlineKeyboardButton> buttons = List.of(button1, button2);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(buttons);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
   public SendMessage onClickSettings(Message message) {
-    String inlineMessage = Constants.StepWithSettings.ANSWER;
+    String inlineMessage = Constants.Settings.ANSWER;
     InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickSettings() {
     InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithSettings.STANDARD, CallbackState.SETTING_STANDARD.value);
+        .generate(Constants.Settings.STANDARD, CallbackState.SETTING_STANDARD.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithSettings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
+        .generate(Constants.Settings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
     InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithSettings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
+        .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
     InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithSettings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
+        .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
     List<InlineKeyboardButton> row1 = List.of(button1, button2);
     List<InlineKeyboardButton> row2 = List.of(button3, button4);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
@@ -78,14 +78,14 @@ public class MessageAnswerService {
   }
 
   public EditMessageText onClickSkills(MaybeInaccessibleMessage message) {
-    String inlineMessage = Constants.StepWithAnalyze.SKILLS_GUIDE;
+    String inlineMessage = Constants.Start.SKILLS_GUIDE;
     InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
     return EditMessageGenerator.generate(message, inlineMessage, keyboard);
   }
 
   private InlineKeyboardMarkup keyboardOnClickSkills() {
     InlineKeyboardButton button = InlineKeyboardButtonGenerator
-        .generate(Constants.StepWithAnalyze.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
+        .generate(Constants.Start.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
     List<InlineKeyboardButton> buttons = new ArrayList<>(Collections.singleton(button));
     return InlineKeyboardGenerator.withButtons(buttons);
   }
