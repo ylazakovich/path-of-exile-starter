@@ -6,7 +6,11 @@ import org.aeonbits.owner.Config;
 @Config.Sources({"system:env"})
 public interface AppConfiguration extends Config {
 
-  @Key("BASE_TELEGRAM_URL")
+  @Key("POE_NINJA_BASE_URL")
+  @DefaultValue("https://poe.ninja")
+  String poeNinjaBaseUrl();
+
+  @Key("TELEGRAM_BASE_URL")
   @DefaultValue("https://web.telegram.org")
   String telegramBaseUrl();
 
