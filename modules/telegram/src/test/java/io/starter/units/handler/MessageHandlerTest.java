@@ -2,6 +2,7 @@ package io.starter.units.handler;
 
 import io.starter.telegram.cash.CallbackCash;
 import io.starter.telegram.cash.MessageCash;
+import io.starter.telegram.constants.Constants;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.telegram.TelegramFacade;
@@ -9,11 +10,12 @@ import io.starter.telegram.service.CallbackAnswerService;
 import io.starter.telegram.service.MessageAnswerService;
 
 import net.datafaker.Faker;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.starter.telegram.cash.state.MessageState.SETTINGS;
@@ -39,7 +41,7 @@ public class MessageHandlerTest {
 
   private final Faker faker = new Faker();
 
-  @BeforeMethod
+  @BeforeClass
   void setUp() {
     when(update.hasCallbackQuery()).thenReturn(false);
     when(update.getMessage()).thenReturn(message);
@@ -56,11 +58,13 @@ public class MessageHandlerTest {
 
     when(message.getText()).thenReturn(WELCOME.value);
     when(user.getFirstName()).thenReturn(firstName);
+    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onFirstStart(message);
-    SendMessage actual = (SendMessage) bot.handleOnUpdate(update);
-    assertThat(actual).isEqualTo(expected);
+    SendMessage actual = (SendMessage) botApiMethod;
+    assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual.getText()).contains(firstName);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test(description = "Bot should send message about selecting next command")
@@ -69,9 +73,12 @@ public class MessageHandlerTest {
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
 
     when(message.getText()).thenReturn(START.value);
+    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onClickStart(message);
-    SendMessage actual = (SendMessage) bot.handleOnUpdate(update);
+    SendMessage actual = (SendMessage) botApiMethod;
+    assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
+    assertThat(actual.getText()).isEqualTo(Constants.General.QUESTION);
     assertThat(actual).isEqualTo(expected);
   }
 
@@ -81,9 +88,11 @@ public class MessageHandlerTest {
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
 
     when(message.getText()).thenReturn(SETTINGS.value);
+    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onClickSettings(message);
-    SendMessage actual = (SendMessage) bot.handleOnUpdate(update);
+    SendMessage actual = (SendMessage) botApiMethod;
+    assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual).isEqualTo(expected);
   }
 
@@ -94,8 +103,8 @@ public class MessageHandlerTest {
     String text = faker.text().text();
 
     when(message.getText()).thenReturn(text);
+    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
-    SendMessage actual = (SendMessage) bot.handleOnUpdate(update);
-    assertThat(actual).isNull();
+    assertThat(botApiMethod).isNull();
   }
 }

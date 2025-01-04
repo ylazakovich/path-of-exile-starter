@@ -10,7 +10,7 @@ public class AnswerCallbackQueryGenerator {
 
   public static AnswerCallbackQuery generateAnswerCallbackQuery(String callbackQueryId) {
     AnswerCallbackQuery answer = new AnswerCallbackQuery(callbackQueryId);
-    answer.setText(Constants.StepWithSettings.SETTINGS_UPDATED);
+    answer.setText(Constants.Settings.SETTINGS_UPDATED);
     return answer;
   }
 }
