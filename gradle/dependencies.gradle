@@ -15,7 +15,7 @@ ext {
     selenium = '4.27.0'
     aeonbits = "1.0.12"
     slf4j = '2.0.16'
-    allureVersion = '2.29.1'
+    allure = '2.29.1'
     httpcore5 = '5.3.1'
     restAssured = '5.5.0'
     awaitility = '4.2.2'
@@ -35,8 +35,7 @@ subprojects {
     dependencies {
         implementation("org.aeonbits.owner:owner:$aeonbits")
         implementation("net.datafaker:datafaker:$faker")
-        testImplementation platform("io.qameta.allure:allure-bom:$allureVersion")
-        implementation("io.qameta.allure:allure-testng")
+        implementation("io.qameta.allure:allure-testng:$allure")
         implementation("org.testng:testng:$testng")
         testImplementation("org.assertj:assertj-core:$assertJ")
         testImplementation("org.mockito:mockito-core:$mockito")
