@@ -2,6 +2,7 @@ plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.4.1'
+    id 'io.qameta.allure' version '2.12.0'
 }
 
 allprojects {
@@ -15,6 +16,7 @@ subprojects {
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'jacoco'
+    apply plugin: 'io.qameta.allure'
 }
 
 apply from: 'gradle/coverage.gradle'
@@ -22,5 +24,6 @@ apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/tests.gradle'
+apply from: 'gradle/aspectj.gradle'
 
 defaultTasks 'check'

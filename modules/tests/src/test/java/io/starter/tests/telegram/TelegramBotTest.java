@@ -5,10 +5,13 @@ import io.starter.config.AppConfig;
 import io.starter.ui.telegram.steps.HomePageSteps;
 import io.starter.utils.Browser;
 
+import io.qameta.allure.Epic;
+import io.qameta.allure.Feature;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+@Epic("Service Telegram Bot")
 public class TelegramBotTest extends BaseUiTest {
 
   private HomePageSteps steps;
@@ -21,12 +24,8 @@ public class TelegramBotTest extends BaseUiTest {
     regressionServiceSteps.expireCode();
   }
 
-  @Test(enabled = false)
-  void testUserOnSuccessfulLogin() {
-    steps.verify().verifySearchDisplayed();
-  }
-
-  @Test(enabled = false)
+  @Feature("'/start'")
+  @Test(enabled = false, description = "User should be able to see command 'START'")
   void testUserOnWelcomeMessage() {
     String user = AppConfig.BOT_USERNAME;
     steps.search(user)
