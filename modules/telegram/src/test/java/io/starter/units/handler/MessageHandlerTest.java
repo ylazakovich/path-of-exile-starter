@@ -15,7 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static io.starter.telegram.cash.state.MessageState.SETTINGS;
@@ -41,7 +41,7 @@ public class MessageHandlerTest {
 
   private final Faker faker = new Faker();
 
-  @BeforeMethod
+  @BeforeClass
   void setUp() {
     when(update.hasCallbackQuery()).thenReturn(false);
     when(update.getMessage()).thenReturn(message);

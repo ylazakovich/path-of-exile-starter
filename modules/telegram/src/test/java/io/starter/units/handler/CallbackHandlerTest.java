@@ -25,7 +25,7 @@ import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,7 +50,7 @@ public class CallbackHandlerTest {
 
   private final Faker faker = new Faker();
 
-  @BeforeMethod
+  @BeforeClass
   void setUp() {
     when(update.hasCallbackQuery()).thenReturn(true);
     when(update.getCallbackQuery()).thenReturn(callbackQuery);
