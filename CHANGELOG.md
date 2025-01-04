@@ -11,7 +11,7 @@
 #### Unit tests for Message handler
 
 - command `/start`
-- command `🎗Start`
+- command `🎗 Start`
 - command `⚙ Settings`
 - `unknown command`
 
