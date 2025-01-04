@@ -5,5 +5,6 @@
 ### A8R
 
 ### Telegram
-* handle Message command /start
-* added unit test for command /start
+
+- handle Message command /start
+- added unit test for command /start
