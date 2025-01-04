@@ -1,8 +1,4 @@
 subprojects {
-    allure {
-        version = '2.30.0'
-    }
-
     tasks.withType(Test).configureEach {
         useTestNG()
         jvmArgs = ['-ea', '-Xmx512m']

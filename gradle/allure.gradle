@@ -1,0 +1,5 @@
+subprojects {
+    allure {
+        version = "2.30.0"
+    }
+}

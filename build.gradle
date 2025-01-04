@@ -25,5 +25,6 @@ apply from: 'gradle/checkstyle.gradle'
 apply from: 'gradle/dependencies.gradle'
 apply from: 'gradle/tests.gradle'
 apply from: 'gradle/aspectj.gradle'
+apply from: 'gradle/allure.gradle'
 
 defaultTasks 'check'
