@@ -12,8 +12,8 @@ import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.telegram.service.CallbackAnswerService;
 import io.starter.telegram.service.MessageAnswerService;
-
 import io.starter.telegram.utils.generator.replykeyboard.ReplyKeyboardGenerator;
+
 import net.datafaker.Faker;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
