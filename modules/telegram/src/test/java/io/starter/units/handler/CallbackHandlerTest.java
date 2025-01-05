@@ -77,8 +77,8 @@ public class CallbackHandlerTest {
 
   @Test(description = "Bot should react on clicking button 'skills'",
       dataProviderClass = CallbackHandlerProvider.class,
-      dataProvider = "whenUserOnSettingsPage")
-  void testUserInteractionOnSettingsPage(CallbackState state) {
+      dataProvider = "whenUserInSettingsMenu")
+  void testUserInteractionInSettingsMenu(CallbackState state) {
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
     String callbackQueryId = String.valueOf(faker.number().positive());
@@ -96,19 +96,20 @@ public class CallbackHandlerTest {
 
   @Test(description = "Bot should react on clicking button 'skills'",
       dataProviderClass = CallbackHandlerProvider.class,
-      dataProvider = "whenUserOnSkillsPage")
-  void testUserInteractionOnSkillsPage(CallbackState state) {
+      dataProvider = "whenUserInSkillsMenu")
+  void testUserInteractionInSkillsMenu(CallbackState state) {
     LeagueEntity leagueEntity = mock(LeagueEntity.class);
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
     String callbackQueryId = String.valueOf(faker.number().positive());
-    int page = faker.number().numberBetween(1, 10);
     List<Skill> skills = IntStream.range(0, 20)
         .mapToObj(i -> Skill.builder()
             .name(faker.harryPotter().spell())
             .chaosEquivalentProfit(faker.number().numberBetween(5, 100))
             .build())
         .toList();
+    int lastPage = (int) Math.ceil((double) skills.size() / 10);
+    int page = faker.number().numberBetween(1, lastPage);
 
     when(callbackQuery.getData()).thenReturn(state.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);

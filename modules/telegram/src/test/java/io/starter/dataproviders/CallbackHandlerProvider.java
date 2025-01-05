@@ -7,7 +7,7 @@ import org.testng.annotations.DataProvider;
 public class CallbackHandlerProvider {
 
   @DataProvider()
-  public Object[][] whenUserOnSkillsPage() {
+  public Object[][] whenUserInSkillsMenu() {
     return new Object[][] {
         {CallbackState.ALL_SKILLS},
         {CallbackState.SKILLS_PREVIOUS},
@@ -17,7 +17,7 @@ public class CallbackHandlerProvider {
   }
 
   @DataProvider()
-  public Object[][] whenUserOnSettingsPage() {
+  public Object[][] whenUserInSettingsMenu() {
     return new Object[][] {
         {CallbackState.SETTING_STANDARD},
         {CallbackState.SETTING_LEAGUE},
