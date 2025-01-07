@@ -1,6 +1,6 @@
 ext {
     netty = '4.1.116.Final'
-    flyway = '11.1.0'
+    flyway = '11.1.1'
     lombok = '1.18.36'
     telegram = '8.2.0'
     spring = '3.4.1'
