@@ -96,7 +96,7 @@ public class DatabaseController {
   @SneakyThrows
   public void loadDataAfterStartup() {
     // TODO: Need to investigate how to make it over CompletableFuture of Mono
-    Thread.sleep(800);
+//    Thread.sleep(800);
     loadRates();
     loadSkills();
   }
