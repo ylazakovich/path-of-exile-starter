@@ -34,7 +34,7 @@ public abstract class BaseCallbackTest extends BaseTest {
   protected final MessageCash messageCash = spy(MessageCash.class);
 
   @BeforeClass
-  void setUp() {
+  protected void setUp() {
     when(update.hasCallbackQuery()).thenReturn(true);
     when(update.getCallbackQuery()).thenReturn(callbackQuery);
     when(callbackQuery.getFrom()).thenReturn(user);
