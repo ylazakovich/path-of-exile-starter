@@ -1,4 +1,4 @@
-package io.starter.units.handler;
+package io.starter.tests;
 
 import net.datafaker.Faker;
 

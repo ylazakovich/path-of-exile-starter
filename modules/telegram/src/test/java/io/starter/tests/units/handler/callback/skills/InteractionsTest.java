@@ -1,4 +1,4 @@
-package io.starter.units.handler.callback.skills;
+package io.starter.tests.units.handler.callback.skills;
 
 import java.util.List;
 import java.util.stream.IntStream;
@@ -10,7 +10,7 @@ import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.model.telegram.TelegramFacade;
-import io.starter.units.handler.callback.BaseCallbackTest;
+import io.starter.tests.units.handler.callback.BaseCallbackTest;
 
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;

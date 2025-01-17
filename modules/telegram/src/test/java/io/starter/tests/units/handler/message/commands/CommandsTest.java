@@ -1,9 +1,9 @@
-package io.starter.units.handler.message.commands;
+package io.starter.tests.units.handler.message.commands;
 
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.telegram.TelegramFacade;
-import io.starter.units.handler.message.BaseMessageTest;
+import io.starter.tests.units.handler.message.BaseMessageTest;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
