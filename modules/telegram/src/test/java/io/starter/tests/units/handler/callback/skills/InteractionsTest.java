@@ -40,7 +40,7 @@ public class InteractionsTest extends BaseCallbackTest {
     assertThat(actual).isEqualTo(expected);
   }
 
-  @Test(description = "Bot should react on clicking button 'skills'",
+  @Test(description = "Bot should react on clicking button 'settings'",
       dataProviderClass = CallbackHandlerProvider.class,
       dataProvider = "whenUserInSettingsMenu")
   void testUserInteractionInSettingsMenu(CallbackState state) {
@@ -59,7 +59,7 @@ public class InteractionsTest extends BaseCallbackTest {
     assertThat(actual).isEqualTo(expected);
   }
 
-  @Test(description = "Bot should react on clicking button 'skills'",
+  @Test(description = "Bot should react on clicking button options in 'skills' menu",
       dataProviderClass = CallbackHandlerProvider.class,
       dataProvider = "whenUserInSkillsMenu")
   void testUserInteractionInSkillsMenu(CallbackState state) {
