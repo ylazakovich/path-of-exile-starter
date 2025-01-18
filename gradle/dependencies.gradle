@@ -7,7 +7,7 @@ ext {
     jcache = '6.6.4.Final'
     mariadb = '3.5.1'
     mockito = '5.15.2'
-    assertJ = '3.27.2'
+    assertJ = '3.27.3'
     testng = '7.10.2'
     faker = '2.4.2'
     jaxb = '2.3.1'
