@@ -8,7 +8,7 @@ ext {
     mariadb = '3.5.2'
     mockito = '5.15.2'
     assertJ = '3.27.3'
-    testng = '7.10.2'
+    testng = '7.11.0'
     faker = '2.4.2'
     jaxb = '2.3.1'
     selenide = '7.7.1'
