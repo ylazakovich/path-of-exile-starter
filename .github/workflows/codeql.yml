@@ -22,23 +22,23 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout repository
+      - name: 🔨Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           # Fetch at least the immediate parents so that if this is
           # a pull request then we can checkout the head.
           fetch-depth: 2
-      - name: Setup java
-        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4
+      - name: 🔨Setup java
+        uses: actions/setup-java@7a6d8a8234af8eb26422e24e3006232cccaa061b # v4
         with:
           distribution: "corretto"
           cache: "gradle"
           java-version: 17
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3
+      - name: 🔨Initialize CodeQL
+        uses: github/codeql-action/init@f6091c0113d1dcf9b98e269ee48e8a7e51b7bdd4 # v3
         with:
           languages: java
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@9e8d0789d4a0fa9ceb6b1738f7e269594bdd67f0 # v3
+      - name: 🔨Autobuild
+        uses: github/codeql-action/autobuild@f6091c0113d1dcf9b98e269ee48e8a7e51b7bdd4 # v3
+      - name: 🔐Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@f6091c0113d1dcf9b98e269ee48e8a7e51b7bdd4 # v3

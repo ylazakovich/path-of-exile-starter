@@ -13,6 +13,6 @@ public class A8r {
 
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(A8r.class, args);
-    context.getBean(DatabaseController.class).loadDataAfterStartup();
+    context.getBean(DatabaseController.class).loading();
   }
 }
