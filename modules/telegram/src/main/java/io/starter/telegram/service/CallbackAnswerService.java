@@ -70,7 +70,12 @@ public class CallbackAnswerService {
   }
 
   private InlineKeyboardMarkup onClickSkills(int page) {
-    List<InlineKeyboardButton> headerButtons = List.of(
+    // TODO: need to finish guide
+    InlineKeyboardButton linkToGuide =
+        InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
+    linkToGuide.setUrl(Constants.Start.SKILLS_GUIDE_LINK);
+    List<InlineKeyboardButton> headerButtons = List.of(linkToGuide);
+    List<InlineKeyboardButton> bodyButtons = List.of(
         InlineKeyboardButtonGenerator.generate(Emoji.LEFT.value, CallbackState.SKILLS_PREVIOUS.value),
         InlineKeyboardButtonGenerator.generate(String.valueOf(page), CallbackState.CURRENT.value),
         InlineKeyboardButtonGenerator.generate(Emoji.RIGHT.value, CallbackState.SKILLS_NEXT.value)
@@ -78,7 +83,7 @@ public class CallbackAnswerService {
     List<InlineKeyboardButton> footerButtons = List.of(
         InlineKeyboardButtonGenerator.generate(Emoji.REPEAT.value, CallbackState.REFRESH_SKILLS.value)
     );
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, footerButtons);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, bodyButtons, footerButtons);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
