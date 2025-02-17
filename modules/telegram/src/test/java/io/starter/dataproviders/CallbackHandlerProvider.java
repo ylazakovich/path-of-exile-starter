@@ -9,7 +9,6 @@ public class CallbackHandlerProvider {
   @DataProvider()
   public Object[][] whenUserInSkillsMenu() {
     return new Object[][] {
-        {CallbackState.ALL_SKILLS},
         {CallbackState.SKILLS_PREVIOUS},
         {CallbackState.SKILLS_NEXT},
         {CallbackState.REFRESH_SKILLS}

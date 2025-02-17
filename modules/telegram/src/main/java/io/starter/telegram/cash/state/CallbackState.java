@@ -13,7 +13,6 @@ public enum CallbackState {
   SETTING_HARDCORE("Pressing button with 'Hardcore'"),
   SETTING_LEAGUE_HARDCORE("Pressing button with 'League Hardcore'"),
   SKILLS("Pressing button with 'Skills'"),
-  ALL_SKILLS("Pressing button with 'All skills'"),
   REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
   ITEMS_AFTER_BLESSING("Pressing button with 'Blessing Items'"),
   CURRENT("Pressing on current page"),

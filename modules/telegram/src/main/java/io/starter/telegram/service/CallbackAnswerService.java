@@ -53,7 +53,7 @@ public class CallbackAnswerService {
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
     int page = userDao.readSkillPage(from);
     String inlineMessage = StringUtils.EMPTY;
-    if (callbackState == CallbackState.ALL_SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
+    if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
       inlineMessage = toPaginatedMessage(page, skills);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {

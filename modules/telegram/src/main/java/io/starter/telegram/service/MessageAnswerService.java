@@ -1,14 +1,11 @@
 package io.starter.telegram.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import io.starter.telegram.cash.state.CallbackState;
 import io.starter.telegram.cash.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
-import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
 import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
 import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.telegram.utils.generator.replykeyboard.ReplyKeyboardGenerator;
@@ -17,8 +14,6 @@ import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowG
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -75,18 +70,5 @@ public class MessageAnswerService {
     List<InlineKeyboardButton> row2 = List.of(button3, button4);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
     return InlineKeyboardGenerator.withRows(keyboard);
-  }
-
-  public EditMessageText onClickSkills(MaybeInaccessibleMessage message) {
-    String inlineMessage = Constants.Start.SKILLS_GUIDE;
-    InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
-    return EditMessageGenerator.generate(message, inlineMessage, keyboard);
-  }
-
-  private InlineKeyboardMarkup keyboardOnClickSkills() {
-    InlineKeyboardButton button = InlineKeyboardButtonGenerator
-        .generate(Constants.Start.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
-    List<InlineKeyboardButton> buttons = new ArrayList<>(Collections.singleton(button));
-    return InlineKeyboardGenerator.withButtons(buttons);
   }
 }
