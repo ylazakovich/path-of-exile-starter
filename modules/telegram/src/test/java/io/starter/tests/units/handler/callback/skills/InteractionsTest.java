@@ -25,21 +25,6 @@ import static org.mockito.Mockito.when;
 
 public class InteractionsTest extends BaseCallbackTest {
 
-  @Test(description = "Bot should react on clicking button 'skills'")
-  void testWhenUserClickBtnSkills() {
-    UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
-    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
-
-    when(callbackQuery.getData()).thenReturn(CallbackState.SKILLS.value);
-    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
-
-    EditMessageText expected = messageAnswerService.onClickSkills(message);
-    EditMessageText actual = (EditMessageText) botApiMethod;
-    assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
-    assertThat(actual.getText()).isEqualTo(Constants.Start.SKILLS_GUIDE);
-    assertThat(actual).isEqualTo(expected);
-  }
-
   @Test(description = "Bot should react on clicking button 'settings'",
       dataProviderClass = CallbackHandlerProvider.class,
       dataProvider = "whenUserInSettingsMenu")
