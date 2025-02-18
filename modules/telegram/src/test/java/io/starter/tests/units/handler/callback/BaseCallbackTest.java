@@ -29,7 +29,7 @@ public abstract class BaseCallbackTest extends BaseTest {
   protected final User user = mock(User.class);
 
   protected final CallbackAnswerService callbackAnswerService = spy(new CallbackAnswerService(skillDao, userDao));
-  protected final MessageAnswerService messageAnswerService = spy(MessageAnswerService.class);
+  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(userDao));
   protected final CallbackCache callbackCache = spy(CallbackCache.class);
   protected final MessageCache messageCache = spy(MessageCache.class);
 

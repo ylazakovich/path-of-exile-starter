@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 import io.starter.dataproviders.CallbackHandlerProvider;
 import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.constants.League;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.aggregator.Skill;
@@ -34,11 +35,26 @@ public class InteractionsTest extends BaseCallbackTest {
 
     when(callbackQuery.getData()).thenReturn(state.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
+    LeagueEntity leagueEntity = new LeagueEntity();
+    switch (state) {
+      case SETTING_STANDARD:
+        leagueEntity.setId(League.STANDARD.id);
+        when(userDao.readLeague(user)).thenReturn(leagueEntity);
+      case SETTING_LEAGUE:
+        leagueEntity.setId(League.LEAGUE.id);
+        when(userDao.readLeague(user)).thenReturn(leagueEntity);
+      case SETTING_HARDCORE:
+        leagueEntity.setId(League.HARDCORE.id);
+        when(userDao.readLeague(user)).thenReturn(leagueEntity);
+      case SETTING_LEAGUE_HARDCORE:
+        leagueEntity.setId(League.LEAGUE_HARDCORE.id);
+        when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    }
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     EditMessageText expected = callbackAnswerService.onClickSetting(callbackQuery);
     EditMessageText actual = (EditMessageText) botApiMethod;
-    assertThat(botApiMethod.getMethod()).isEqualTo(AnswerCallbackQuery.PATH);
+    assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
     assertThat(actual.getText()).contains("Your Current League");
     assertThat(actual).isEqualTo(expected);
   }
