@@ -71,6 +71,7 @@ public class CommandsTest extends BaseMessageTest {
     SendMessage actual = (SendMessage) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual.getText()).contains("Your Current League");
+    assertThat(actual.getText()).doesNotContain("empty", "null");
     assertThat(actual).isEqualTo(expected);
   }
 

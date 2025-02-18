@@ -63,6 +63,7 @@ public class InteractionsTest extends BaseCallbackTest {
     EditMessageText actual = (EditMessageText) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
     assertThat(actual.getText()).contains("Your Current League");
+    assertThat(actual.getText()).doesNotContain("empty", "null");
     assertThat(actual).isEqualTo(expected);
   }
 
