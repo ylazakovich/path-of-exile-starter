@@ -5,6 +5,7 @@ import java.util.stream.IntStream;
 
 import io.starter.dataproviders.CallbackHandlerProvider;
 import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.League;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
@@ -12,6 +13,7 @@ import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.callback.BaseCallbackTest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.testng.annotations.Test;
@@ -35,19 +37,25 @@ public class InteractionsTest extends BaseCallbackTest {
     when(callbackQuery.getData()).thenReturn(state.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
     LeagueEntity leagueEntity = new LeagueEntity();
+    String msg = Constants.Settings.ANSWER_FORMAT;
+    String empty = StringUtils.EMPTY;
     switch (state) {
       case SETTING_STANDARD:
         leagueEntity.setId(League.STANDARD.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
+        when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted("⭐", empty, empty, empty));
       case SETTING_LEAGUE:
         leagueEntity.setId(League.LEAGUE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
+        when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, "⭐", empty, empty));
       case SETTING_HARDCORE:
         leagueEntity.setId(League.HARDCORE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
+        when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, empty, "⭐", empty));
       case SETTING_LEAGUE_HARDCORE:
         leagueEntity.setId(League.LEAGUE_HARDCORE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
+        when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, empty, empty, "⭐"));
     }
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 

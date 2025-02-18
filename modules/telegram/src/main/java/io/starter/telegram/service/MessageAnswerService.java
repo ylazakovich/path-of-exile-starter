@@ -6,19 +6,15 @@ import io.starter.telegram.cache.state.CallbackState;
 import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
-import io.starter.telegram.constants.League;
-import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.generator.messages.SendMessageGenerator;
 import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.telegram.generator.replykeyboard.ReplyKeyboardGenerator;
 import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
 import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
-import org.apache.commons.lang3.StringUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -26,13 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
+@AllArgsConstructor
 public class MessageAnswerService {
 
-  private final UserDao userDao;
-
-  public MessageAnswerService(UserDao userDao) {
-    this.userDao = userDao;
-  }
+  private final SettingsService settingsService;
 
   public SendMessage onFirstStart(Message message) {
     List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
@@ -60,41 +53,8 @@ public class MessageAnswerService {
   }
 
   public SendMessage onClickSettings(Message message) {
-    String inlineMessage = inlineMessage(message.getFrom());
-    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
+    String inlineMessage = settingsService.generateInlineMessage(message.getFrom());
+    InlineKeyboardMarkup inlineKeyboard = settingsService.generateKeyboard();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
-  }
-
-  private String inlineMessage(User user) {
-    LeagueEntity leagueEntity = userDao.readLeague(user);
-    String empty = StringUtils.EMPTY;
-    if (leagueEntity.getId().equals(League.STANDARD.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted("⭐", empty, empty, empty);
-    }
-    if (leagueEntity.getId().equals(League.LEAGUE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, "⭐", empty, empty);
-    }
-    if (leagueEntity.getId().equals(League.HARDCORE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, "⭐", empty);
-    }
-    if (leagueEntity.getId().equals(League.LEAGUE_HARDCORE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, empty, "⭐");
-    }
-    throw new RuntimeException("No such league");
-  }
-
-  private InlineKeyboardMarkup keyboardOnClickSettings() {
-    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.STANDARD, CallbackState.SETTING_STANDARD.value);
-    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
-    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
-    InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
-    List<InlineKeyboardButton> row1 = List.of(button1, button2);
-    List<InlineKeyboardButton> row2 = List.of(button3, button4);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
-    return InlineKeyboardGenerator.withRows(keyboard);
   }
 }

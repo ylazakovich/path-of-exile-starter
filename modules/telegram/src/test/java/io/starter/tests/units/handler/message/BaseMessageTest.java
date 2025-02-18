@@ -5,6 +5,7 @@ import io.starter.telegram.cache.MessageCache;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.service.CallbackAnswerService;
 import io.starter.telegram.service.MessageAnswerService;
+import io.starter.telegram.service.SettingsService;
 import io.starter.tests.BaseTest;
 
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -20,12 +21,13 @@ import static org.mockito.Mockito.when;
 public abstract class BaseMessageTest extends BaseTest {
 
   protected final CallbackAnswerService callbackAnswerService = mock(CallbackAnswerService.class);
+  protected final SettingsService settingsService = mock(SettingsService.class);
   protected final UserDao userDao = mock(UserDao.class);
   protected final Message message = mock(Message.class);
   protected final Update update = mock(Update.class);
   protected final User user = mock(User.class);
 
-  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(userDao));
+  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(settingsService));
   protected final CallbackCache callbackCache = spy(CallbackCache.class);
   protected final MessageCache messageCache = spy(MessageCache.class);
 

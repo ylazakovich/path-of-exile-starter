@@ -16,6 +16,7 @@ import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonG
 import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 import io.starter.telegram.model.aggregator.Skill;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -26,24 +27,20 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
+@AllArgsConstructor
 public class CallbackAnswerService {
 
   private final SkillDao skillDao;
   private final UserDao userDao;
-
-  public CallbackAnswerService(SkillDao skillDao,
-                               UserDao userDao) {
-    this.skillDao = skillDao;
-    this.userDao = userDao;
-  }
+  private final SettingsService settingsService;
 
   public EditMessageText onClickSetting(CallbackQuery callbackQuery) {
     League league = League.byCallbackState(CallbackState.byData(callbackQuery.getData()));
     userDao.saveLeague(callbackQuery.getFrom(), Objects.requireNonNull(league));
-    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
+    InlineKeyboardMarkup inlineKeyboard = settingsService.generateKeyboard();
     return EditMessageGenerator.generate(
         callbackQuery.getMessage(),
-        inlineMessage(callbackQuery.getFrom()),
+        settingsService.generateInlineMessage(callbackQuery.getFrom()),
         inlineKeyboard);
   }
 
@@ -113,38 +110,5 @@ public class CallbackAnswerService {
       page = 1;
     }
     return page;
-  }
-
-  private InlineKeyboardMarkup keyboardOnClickSettings() {
-    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.STANDARD, CallbackState.SETTING_STANDARD.value);
-    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
-    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
-    InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
-    List<InlineKeyboardButton> row1 = List.of(button1, button2);
-    List<InlineKeyboardButton> row2 = List.of(button3, button4);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
-    return InlineKeyboardGenerator.withRows(keyboard);
-  }
-
-  private String inlineMessage(User user) {
-    LeagueEntity leagueEntity = userDao.readLeague(user);
-    String empty = StringUtils.EMPTY;
-    if (leagueEntity.getId().equals(League.STANDARD.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted("⭐", empty, empty, empty);
-    }
-    if (leagueEntity.getId().equals(League.LEAGUE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, "⭐", empty, empty);
-    }
-    if (leagueEntity.getId().equals(League.HARDCORE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, "⭐", empty);
-    }
-    if (leagueEntity.getId().equals(League.LEAGUE_HARDCORE.id)) {
-      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, empty, "⭐");
-    }
-    throw new RuntimeException("No such league");
   }
 }

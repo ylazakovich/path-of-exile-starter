@@ -25,4 +25,13 @@ public enum League {
     }
     return null;
   }
+
+  public static League byId(long id) {
+    for (League league : League.values()) {
+      if (league.id == id) {
+        return league;
+      }
+    }
+    return null;
+  }
 }

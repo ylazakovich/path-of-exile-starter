@@ -7,6 +7,7 @@ import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.message.BaseMessageTest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.testng.annotations.Test;
@@ -57,13 +58,16 @@ public class CommandsTest extends BaseMessageTest {
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
 
-    when(message.getText()).thenReturn(SETTINGS.value);
+    when(this.message.getText()).thenReturn(SETTINGS.value);
     LeagueEntity leagueEntity = new LeagueEntity();
     leagueEntity.setId(League.STANDARD.id);
     when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    String msg = Constants.Settings.ANSWER_FORMAT;
+    String empty = StringUtils.EMPTY;
+    when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted("⭐", empty, empty, empty));
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
-    SendMessage expected = messageAnswerService.onClickSettings(message);
+    SendMessage expected = messageAnswerService.onClickSettings(this.message);
     SendMessage actual = (SendMessage) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual.getText()).contains("Your Current League");
