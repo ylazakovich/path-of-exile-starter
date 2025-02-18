@@ -1,7 +1,7 @@
 package io.starter.telegram.handler;
 
-import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.service.CallbackAnswerService;
 import io.starter.telegram.service.MessageAnswerService;
@@ -50,8 +50,7 @@ public class UpdateHandler {
     return switch (state) {
       case SETTING_STANDARD, SETTING_LEAGUE, SETTING_HARDCORE, SETTING_LEAGUE_HARDCORE
           -> callbackAnswerService.onClickSetting(callback);
-      case SKILLS -> messageAnswerService.onClickSkills(message);
-      case ALL_SKILLS, REFRESH_SKILLS, SKILLS_PREVIOUS, SKILLS_NEXT -> callbackAnswerService.onClickSkills(callback);
+      case SKILLS, REFRESH_SKILLS, SKILLS_PREVIOUS, SKILLS_NEXT -> callbackAnswerService.onClickSkills(callback);
       default -> null;
     };
   }

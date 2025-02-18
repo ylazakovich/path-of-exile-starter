@@ -4,10 +4,10 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 
-import io.starter.telegram.cash.CallbackCash;
-import io.starter.telegram.cash.MessageCash;
-import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.cache.CallbackCache;
+import io.starter.telegram.cache.MessageCache;
+import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.handler.UpdateHandler;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,13 @@ public class TelegramFacade {
   private final Function<User, MessageState> messageHandler;
 
   public TelegramFacade(UpdateHandler updateHandler,
-                        CallbackCash callbackCash,
-                        MessageCash messageCash) {
+                        CallbackCache callbackCache,
+                        MessageCache messageCache) {
     this.updateHandler = updateHandler;
-    this.messageConsumer = messageCash::saveState;
-    this.callbackConsumer = callbackCash::saveState;
-    this.messageHandler = messageCash::getCurrentState;
-    this.callbackHandler = callbackCash::getCurrentState;
+    this.messageConsumer = messageCache::saveState;
+    this.callbackConsumer = callbackCache::saveState;
+    this.messageHandler = messageCache::getCurrentState;
+    this.callbackHandler = callbackCache::getCurrentState;
   }
 
   public BotApiMethod<?> handleOnUpdate(Update update) {

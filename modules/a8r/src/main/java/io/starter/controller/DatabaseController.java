@@ -10,7 +10,6 @@ import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -93,7 +92,6 @@ public class DatabaseController {
             .subscribe(data -> databaseNinjaService.addNew(Objects.requireNonNull(data.getBody()), league)));
   }
 
-  @SneakyThrows
   public void loading() {
     loadRates();
     loadSkills();

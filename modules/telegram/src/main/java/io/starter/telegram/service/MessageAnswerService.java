@@ -1,24 +1,20 @@
 package io.starter.telegram.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
-import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
-import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.ReplyKeyboardGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
+import io.starter.telegram.generator.messages.SendMessageGenerator;
+import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
+import io.starter.telegram.generator.replykeyboard.ReplyKeyboardGenerator;
+import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
+import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.message.MaybeInaccessibleMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -26,10 +22,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
+@AllArgsConstructor
 public class MessageAnswerService {
 
-  public MessageAnswerService() {
-  }
+  private final SettingsService settingsService;
 
   public SendMessage onFirstStart(Message message) {
     List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
@@ -57,36 +53,8 @@ public class MessageAnswerService {
   }
 
   public SendMessage onClickSettings(Message message) {
-    String inlineMessage = Constants.Settings.ANSWER;
-    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
+    String inlineMessage = settingsService.generateInlineMessage(message.getFrom());
+    InlineKeyboardMarkup inlineKeyboard = settingsService.generateKeyboard();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
-  }
-
-  private InlineKeyboardMarkup keyboardOnClickSettings() {
-    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.STANDARD, CallbackState.SETTING_STANDARD.value);
-    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
-    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
-    InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
-        .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
-    List<InlineKeyboardButton> row1 = List.of(button1, button2);
-    List<InlineKeyboardButton> row2 = List.of(button3, button4);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
-    return InlineKeyboardGenerator.withRows(keyboard);
-  }
-
-  public EditMessageText onClickSkills(MaybeInaccessibleMessage message) {
-    String inlineMessage = Constants.Start.SKILLS_GUIDE;
-    InlineKeyboardMarkup keyboard = keyboardOnClickSkills();
-    return EditMessageGenerator.generate(message, inlineMessage, keyboard);
-  }
-
-  private InlineKeyboardMarkup keyboardOnClickSkills() {
-    InlineKeyboardButton button = InlineKeyboardButtonGenerator
-        .generate(Constants.Start.ALL_SKILLS, CallbackState.ALL_SKILLS.value);
-    List<InlineKeyboardButton> buttons = new ArrayList<>(Collections.singleton(button));
-    return InlineKeyboardGenerator.withButtons(buttons);
   }
 }

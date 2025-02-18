@@ -3,23 +3,22 @@ package io.starter.telegram.service;
 import java.util.List;
 import java.util.Objects;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
 import io.starter.telegram.constants.League;
 import io.starter.telegram.dao.SkillDao;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.entity.LeagueEntity;
+import io.starter.telegram.generator.messages.EditMessageGenerator;
+import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
+import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
+import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.utils.generator.messages.AnswerCallbackQueryGenerator;
-import io.starter.telegram.utils.generator.messages.EditMessageGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -28,24 +27,23 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 @Service
+@AllArgsConstructor
 public class CallbackAnswerService {
 
   private final SkillDao skillDao;
   private final UserDao userDao;
+  private final SettingsService settingsService;
 
-  public CallbackAnswerService(SkillDao skillDao,
-                               UserDao userDao) {
-    this.skillDao = skillDao;
-    this.userDao = userDao;
-  }
-
-  public AnswerCallbackQuery onClickSetting(CallbackQuery callbackQuery) {
+  public EditMessageText onClickSetting(CallbackQuery callbackQuery) {
     League league = League.byCallbackState(CallbackState.byData(callbackQuery.getData()));
     userDao.saveLeague(callbackQuery.getFrom(), Objects.requireNonNull(league));
-    return AnswerCallbackQueryGenerator.generateAnswerCallbackQuery(callbackQuery.getId());
+    InlineKeyboardMarkup inlineKeyboard = settingsService.generateKeyboard();
+    return EditMessageGenerator.generate(
+        callbackQuery.getMessage(),
+        settingsService.generateInlineMessage(callbackQuery.getFrom()),
+        inlineKeyboard);
   }
 
-  // TODO: not finished
   public EditMessageText onClickSkills(CallbackQuery callbackQuery) {
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
@@ -53,7 +51,7 @@ public class CallbackAnswerService {
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
     int page = userDao.readSkillPage(from);
     String inlineMessage = StringUtils.EMPTY;
-    if (callbackState == CallbackState.ALL_SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
+    if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
       inlineMessage = toPaginatedMessage(page, skills);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {
@@ -70,7 +68,11 @@ public class CallbackAnswerService {
   }
 
   private InlineKeyboardMarkup onClickSkills(int page) {
-    List<InlineKeyboardButton> headerButtons = List.of(
+    InlineKeyboardButton linkToGuide =
+        InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
+    linkToGuide.setUrl(Constants.Start.SKILLS_GUIDE_LINK);
+    List<InlineKeyboardButton> headerButtons = List.of(linkToGuide);
+    List<InlineKeyboardButton> bodyButtons = List.of(
         InlineKeyboardButtonGenerator.generate(Emoji.LEFT.value, CallbackState.SKILLS_PREVIOUS.value),
         InlineKeyboardButtonGenerator.generate(String.valueOf(page), CallbackState.CURRENT.value),
         InlineKeyboardButtonGenerator.generate(Emoji.RIGHT.value, CallbackState.SKILLS_NEXT.value)
@@ -78,7 +80,7 @@ public class CallbackAnswerService {
     List<InlineKeyboardButton> footerButtons = List.of(
         InlineKeyboardButtonGenerator.generate(Emoji.REPEAT.value, CallbackState.REFRESH_SKILLS.value)
     );
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, footerButtons);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, bodyButtons, footerButtons);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 

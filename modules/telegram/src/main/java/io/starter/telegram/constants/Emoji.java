@@ -8,7 +8,7 @@ public enum Emoji {
   LEFT("⬅️"),
   RIGHT("➡️"),
   PERFORMING_ARTS("🎭"),
-  YELLOW_RIBBON("🎗"),
+  YELLOW_RIBBON("💎"),
   WAVING_HAND("👋"),
   WARNING("⚠️"),
   GAME_DIE("🎲"),

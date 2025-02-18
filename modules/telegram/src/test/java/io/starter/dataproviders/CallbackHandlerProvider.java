@@ -1,6 +1,6 @@
 package io.starter.dataproviders;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 
 import org.testng.annotations.DataProvider;
 
@@ -9,7 +9,7 @@ public class CallbackHandlerProvider {
   @DataProvider()
   public Object[][] whenUserInSkillsMenu() {
     return new Object[][] {
-        {CallbackState.ALL_SKILLS},
+        {CallbackState.SKILLS},
         {CallbackState.SKILLS_PREVIOUS},
         {CallbackState.SKILLS_NEXT},
         {CallbackState.REFRESH_SKILLS}

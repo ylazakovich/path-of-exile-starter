@@ -1,4 +1,4 @@
-package io.starter.telegram.utils.generator.replykeyboard.rows;
+package io.starter.telegram.generator.replykeyboard.rows;
 
 import java.util.List;
 

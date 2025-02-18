@@ -1,6 +1,6 @@
 package io.starter.telegram.constants;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 
 public enum League {
 
@@ -20,6 +20,15 @@ public enum League {
   public static League byCallbackState(CallbackState state) {
     for (League league : League.values()) {
       if (league.state.equals(state)) {
+        return league;
+      }
+    }
+    return null;
+  }
+
+  public static League byId(long id) {
+    for (League league : League.values()) {
+      if (league.id == id) {
         return league;
       }
     }

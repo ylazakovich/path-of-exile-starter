@@ -1,10 +1,10 @@
-package io.starter.telegram.utils.generator.replykeyboard;
+package io.starter.telegram.generator.replykeyboard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.starter.telegram.utils.generator.replykeyboard.buttons.KeyboardButtonGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.rows.KeyboardRowGenerator;
+import io.starter.telegram.generator.replykeyboard.buttons.KeyboardButtonGenerator;
+import io.starter.telegram.generator.replykeyboard.rows.KeyboardRowGenerator;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
