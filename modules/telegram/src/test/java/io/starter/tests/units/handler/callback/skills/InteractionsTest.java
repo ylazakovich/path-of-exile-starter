@@ -12,7 +12,6 @@ import io.starter.telegram.model.aggregator.Skill;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.callback.BaseCallbackTest;
 
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.testng.annotations.Test;
