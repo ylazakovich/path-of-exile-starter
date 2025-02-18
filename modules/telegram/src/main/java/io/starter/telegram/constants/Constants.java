@@ -24,16 +24,16 @@ public class Constants {
   public static class Settings {
 
     // TODO: Later need to make a feature for bot to show current user league dynamically
-    public static final String ANSWER = """
+    public static final String ANSWER_FORMAT = """
         If you want change league
         please select one of available options
         
         ⭐ - Your Current League
         
-        ➡️ Standard
-        ➡️ League ⭐
-        ➡️ Hardcore
-        ➡️ League Hardcore""";
+        ➡️ Standard %s
+        ➡️ League %s
+        ➡️ Hardcore %s
+        ➡️ League Hardcore %s""";
     public static final String STANDARD = "Standard";
     public static final String HARDCORE = "Hardcore";
     public static final String LEAGUE = "League";

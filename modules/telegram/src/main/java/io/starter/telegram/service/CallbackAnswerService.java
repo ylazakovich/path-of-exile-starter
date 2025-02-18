@@ -10,7 +10,6 @@ import io.starter.telegram.constants.League;
 import io.starter.telegram.dao.SkillDao;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.entity.LeagueEntity;
-import io.starter.telegram.generator.messages.AnswerCallbackQueryGenerator;
 import io.starter.telegram.generator.messages.EditMessageGenerator;
 import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
@@ -19,7 +18,6 @@ import io.starter.telegram.model.aggregator.Skill;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.User;
@@ -39,13 +37,16 @@ public class CallbackAnswerService {
     this.userDao = userDao;
   }
 
-  public AnswerCallbackQuery onClickSetting(CallbackQuery callbackQuery) {
+  public EditMessageText onClickSetting(CallbackQuery callbackQuery) {
     League league = League.byCallbackState(CallbackState.byData(callbackQuery.getData()));
     userDao.saveLeague(callbackQuery.getFrom(), Objects.requireNonNull(league));
-    return AnswerCallbackQueryGenerator.generateAnswerCallbackQuery(callbackQuery.getId());
+    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
+    return EditMessageGenerator.generate(
+        callbackQuery.getMessage(),
+        inlineMessage(callbackQuery.getFrom()),
+        inlineKeyboard);
   }
 
-  // TODO: not finished
   public EditMessageText onClickSkills(CallbackQuery callbackQuery) {
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
@@ -70,7 +71,6 @@ public class CallbackAnswerService {
   }
 
   private InlineKeyboardMarkup onClickSkills(int page) {
-    // TODO: need to finish guide
     InlineKeyboardButton linkToGuide =
         InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
     linkToGuide.setUrl(Constants.Start.SKILLS_GUIDE_LINK);
@@ -113,5 +113,38 @@ public class CallbackAnswerService {
       page = 1;
     }
     return page;
+  }
+
+  private InlineKeyboardMarkup keyboardOnClickSettings() {
+    InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.STANDARD, CallbackState.SETTING_STANDARD.value);
+    InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.LEAGUE, CallbackState.SETTING_LEAGUE.value);
+    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
+    InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
+    List<InlineKeyboardButton> row1 = List.of(button1, button2);
+    List<InlineKeyboardButton> row2 = List.of(button3, button4);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
+    return InlineKeyboardGenerator.withRows(keyboard);
+  }
+
+  private String inlineMessage(User user) {
+    LeagueEntity leagueEntity = userDao.readLeague(user);
+    String empty = StringUtils.EMPTY;
+    if (leagueEntity.getId().equals(League.STANDARD.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted("⭐", empty, empty, empty);
+    }
+    if (leagueEntity.getId().equals(League.LEAGUE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, "⭐", empty, empty);
+    }
+    if (leagueEntity.getId().equals(League.HARDCORE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, "⭐", empty);
+    }
+    if (leagueEntity.getId().equals(League.LEAGUE_HARDCORE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, empty, "⭐");
+    }
+    throw new RuntimeException("No such league");
   }
 }

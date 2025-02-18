@@ -5,7 +5,6 @@ import java.util.stream.IntStream;
 
 import io.starter.dataproviders.CallbackHandlerProvider;
 import io.starter.telegram.cache.state.CallbackState;
-import io.starter.telegram.constants.Constants;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.aggregator.Skill;
@@ -37,10 +36,10 @@ public class InteractionsTest extends BaseCallbackTest {
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
-    AnswerCallbackQuery expected = callbackAnswerService.onClickSetting(callbackQuery);
-    AnswerCallbackQuery actual = (AnswerCallbackQuery) botApiMethod;
+    EditMessageText expected = callbackAnswerService.onClickSetting(callbackQuery);
+    EditMessageText actual = (EditMessageText) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(AnswerCallbackQuery.PATH);
-    assertThat(actual.getText()).isEqualTo(Constants.Settings.SETTINGS_UPDATED);
+    assertThat(actual.getText()).contains("Your Current League");
     assertThat(actual).isEqualTo(expected);
   }
 

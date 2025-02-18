@@ -6,14 +6,19 @@ import io.starter.telegram.cache.state.CallbackState;
 import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
+import io.starter.telegram.constants.League;
+import io.starter.telegram.dao.UserDao;
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.generator.messages.SendMessageGenerator;
 import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.telegram.generator.replykeyboard.ReplyKeyboardGenerator;
 import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
 import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
@@ -23,7 +28,10 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @Service
 public class MessageAnswerService {
 
-  public MessageAnswerService() {
+  private final UserDao userDao;
+
+  public MessageAnswerService(UserDao userDao) {
+    this.userDao = userDao;
   }
 
   public SendMessage onFirstStart(Message message) {
@@ -52,9 +60,27 @@ public class MessageAnswerService {
   }
 
   public SendMessage onClickSettings(Message message) {
-    String inlineMessage = Constants.Settings.ANSWER;
+    String inlineMessage = inlineMessage(message.getFrom());
     InlineKeyboardMarkup inlineKeyboard = keyboardOnClickSettings();
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
+  }
+
+  private String inlineMessage(User user) {
+    LeagueEntity leagueEntity = userDao.readLeague(user);
+    String empty = StringUtils.EMPTY;
+    if (leagueEntity.getId().equals(League.STANDARD.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted("⭐", empty, empty, empty);
+    }
+    if (leagueEntity.getId().equals(League.LEAGUE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, "⭐", empty, empty);
+    }
+    if (leagueEntity.getId().equals(League.HARDCORE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, "⭐", empty);
+    }
+    if (leagueEntity.getId().equals(League.LEAGUE_HARDCORE.id)) {
+      return Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, empty, "⭐");
+    }
+    throw new RuntimeException("No such league");
   }
 
   private InlineKeyboardMarkup keyboardOnClickSettings() {
