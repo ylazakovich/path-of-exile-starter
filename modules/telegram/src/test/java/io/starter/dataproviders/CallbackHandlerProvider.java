@@ -1,6 +1,6 @@
 package io.starter.dataproviders;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 
 import org.testng.annotations.DataProvider;
 

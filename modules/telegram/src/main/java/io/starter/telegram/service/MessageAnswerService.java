@@ -2,8 +2,8 @@ package io.starter.telegram.service;
 
 import java.util.List;
 
-import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
 import io.starter.telegram.utils.generator.messages.SendMessageGenerator;

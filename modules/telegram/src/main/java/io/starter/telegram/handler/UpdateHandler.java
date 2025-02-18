@@ -1,7 +1,7 @@
 package io.starter.telegram.handler;
 
-import io.starter.telegram.cash.state.CallbackState;
-import io.starter.telegram.cash.state.MessageState;
+import io.starter.telegram.cache.state.CallbackState;
+import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.service.CallbackAnswerService;
 import io.starter.telegram.service.MessageAnswerService;

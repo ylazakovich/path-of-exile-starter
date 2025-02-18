@@ -1,4 +1,4 @@
-package io.starter.telegram.cash.state;
+package io.starter.telegram.cache.state;
 
 import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

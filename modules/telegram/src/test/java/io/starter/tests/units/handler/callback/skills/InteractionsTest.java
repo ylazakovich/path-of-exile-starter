@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import io.starter.dataproviders.CallbackHandlerProvider;
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
@@ -30,7 +30,7 @@ public class InteractionsTest extends BaseCallbackTest {
       dataProvider = "whenUserInSettingsMenu")
   void testUserInteractionInSettingsMenu(CallbackState state) {
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
-    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
+    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
     String callbackQueryId = String.valueOf(faker.number().positive());
 
     when(callbackQuery.getData()).thenReturn(state.value);
@@ -50,7 +50,7 @@ public class InteractionsTest extends BaseCallbackTest {
   void testUserInteractionInSkillsMenu(CallbackState state) {
     LeagueEntity leagueEntity = mock(LeagueEntity.class);
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
-    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
+    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
     String callbackQueryId = String.valueOf(faker.number().positive());
     List<Skill> skills = IntStream.range(0, 20)
         .mapToObj(i -> Skill.builder()
@@ -78,7 +78,7 @@ public class InteractionsTest extends BaseCallbackTest {
   @Test(description = "Bot should ignore not supporting interaction")
   void testWhenUserMadeUnknownInteraction() {
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
-    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCash, messageCash));
+    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
     String text = faker.text().text();
 
     when(callbackQuery.getData()).thenReturn(text);

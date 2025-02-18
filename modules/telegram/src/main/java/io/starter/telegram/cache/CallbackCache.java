@@ -1,10 +1,10 @@
-package io.starter.telegram.cash;
+package io.starter.telegram.cache;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 
 import lombok.Getter;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 
 @Getter
 @Service
-public class CallbackCash {
+public class CallbackCache {
 
   private final Map<Long, CallbackState> botStateMap = new HashMap<>();
 

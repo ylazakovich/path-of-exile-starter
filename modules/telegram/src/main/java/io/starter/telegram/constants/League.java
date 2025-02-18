@@ -1,6 +1,6 @@
 package io.starter.telegram.constants;
 
-import io.starter.telegram.cash.state.CallbackState;
+import io.starter.telegram.cache.state.CallbackState;
 
 public enum League {
 

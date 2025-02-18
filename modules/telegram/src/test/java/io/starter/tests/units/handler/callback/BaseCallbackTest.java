@@ -1,7 +1,7 @@
 package io.starter.tests.units.handler.callback;
 
-import io.starter.telegram.cash.CallbackCash;
-import io.starter.telegram.cash.MessageCash;
+import io.starter.telegram.cache.CallbackCache;
+import io.starter.telegram.cache.MessageCache;
 import io.starter.telegram.dao.SkillDao;
 import io.starter.telegram.dao.UserDao;
 import io.starter.telegram.service.CallbackAnswerService;
@@ -30,8 +30,8 @@ public abstract class BaseCallbackTest extends BaseTest {
 
   protected final CallbackAnswerService callbackAnswerService = spy(new CallbackAnswerService(skillDao, userDao));
   protected final MessageAnswerService messageAnswerService = spy(MessageAnswerService.class);
-  protected final CallbackCash callbackCash = spy(CallbackCash.class);
-  protected final MessageCash messageCash = spy(MessageCash.class);
+  protected final CallbackCache callbackCache = spy(CallbackCache.class);
+  protected final MessageCache messageCache = spy(MessageCache.class);
 
   @BeforeClass
   protected void setUp() {
