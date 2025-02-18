@@ -1,6 +1,8 @@
 package io.starter.tests.units.handler.message.commands;
 
 import io.starter.telegram.constants.Constants;
+import io.starter.telegram.constants.League;
+import io.starter.telegram.entity.LeagueEntity;
 import io.starter.telegram.handler.UpdateHandler;
 import io.starter.telegram.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.message.BaseMessageTest;
@@ -56,11 +58,15 @@ public class CommandsTest extends BaseMessageTest {
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
 
     when(message.getText()).thenReturn(SETTINGS.value);
+    LeagueEntity leagueEntity = new LeagueEntity();
+    leagueEntity.setId(League.STANDARD.id);
+    when(userDao.readLeague(user)).thenReturn(leagueEntity);
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onClickSettings(message);
     SendMessage actual = (SendMessage) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
+    assertThat(actual.getText()).contains("Your Current League");
     assertThat(actual).isEqualTo(expected);
   }
 
