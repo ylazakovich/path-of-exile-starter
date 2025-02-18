@@ -1,4 +1,4 @@
-package io.starter.telegram.utils.generator.messages;
+package io.starter.telegram.generator.messages;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;

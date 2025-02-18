@@ -1,4 +1,4 @@
-package io.starter.telegram.utils.generator.replykeyboard;
+package io.starter.telegram.generator.replykeyboard;
 
 import java.util.List;
 

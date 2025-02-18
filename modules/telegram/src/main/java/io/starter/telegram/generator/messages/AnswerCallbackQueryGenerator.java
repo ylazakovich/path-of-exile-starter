@@ -1,4 +1,4 @@
-package io.starter.telegram.utils.generator.messages;
+package io.starter.telegram.generator.messages;
 
 import io.starter.telegram.constants.Constants;
 

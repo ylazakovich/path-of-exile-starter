@@ -6,11 +6,11 @@ import io.starter.telegram.cache.state.CallbackState;
 import io.starter.telegram.cache.state.MessageState;
 import io.starter.telegram.constants.Constants;
 import io.starter.telegram.constants.Emoji;
-import io.starter.telegram.utils.generator.messages.SendMessageGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.InlineKeyboardGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.ReplyKeyboardGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
-import io.starter.telegram.utils.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
+import io.starter.telegram.generator.messages.SendMessageGenerator;
+import io.starter.telegram.generator.replykeyboard.InlineKeyboardGenerator;
+import io.starter.telegram.generator.replykeyboard.ReplyKeyboardGenerator;
+import io.starter.telegram.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
+import io.starter.telegram.generator.replykeyboard.rows.InlineKeyboardRowGenerator;
 
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

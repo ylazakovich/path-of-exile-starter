@@ -1,4 +1,4 @@
-package io.starter.telegram.utils.generator.replykeyboard.buttons;
+package io.starter.telegram.generator.replykeyboard.buttons;
 
 import lombok.experimental.UtilityClass;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
