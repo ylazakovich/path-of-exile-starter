@@ -19,6 +19,7 @@
       "matchManagers": ["maven"]
     }
   ],
+  "commitMessageTopic": "{{depName}}",
   "labels": ["dependencies"],
   "dependencyDashboardApproval": true
 }
