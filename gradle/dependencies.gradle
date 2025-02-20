@@ -3,7 +3,7 @@ ext {
     flyway = '11.3.3'
     lombok = '1.18.36'
     telegram = '8.2.0'
-    spring = '3.4.2'
+    spring = '3.4.3'
     hibernate = '6.6.8.Final'
     mariadb = '3.5.2'
     mockito = '5.15.2'
