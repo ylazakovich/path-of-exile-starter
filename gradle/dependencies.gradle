@@ -6,7 +6,7 @@ ext {
     spring = '3.4.3'
     hibernate = '6.6.9.Final'
     mariadb = '3.5.2'
-    mockito = '5.15.2'
+    mockito = '5.16.0'
     assertJ = '3.27.3'
     testng = '7.11.0'
     faker = '2.4.2'
