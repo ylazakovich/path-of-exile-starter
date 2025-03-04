@@ -1,6 +1,6 @@
 subprojects {
     checkstyle {
-        toolVersion = "10.21.3"
+        toolVersion = "10.21.4"
     }
 
     tasks.withType(Checkstyle).configureEach {
