@@ -1,12 +1,12 @@
 ext {
     netty = '4.1.119.Final'
-    flyway = '11.3.4'
+    flyway = '11.4.0'
     lombok = '1.18.36'
     telegram = '8.2.0'
     spring = '3.4.3'
-    hibernate = '6.6.10.Final'
+    hibernate = '6.6.11.Final'
     mariadb = '3.5.2'
-    mockito = '5.16.0'
+    mockito = '5.16.1'
     assertJ = '3.27.3'
     testng = '7.11.0'
     faker = '2.4.2'
@@ -16,7 +16,7 @@ ext {
     aeonbits = "1.0.12"
     slf4j = '2.0.17'
     allure = '2.29.1'
-    httpcore5 = '5.3.3'
+    httpcore5 = '5.3.4'
     restAssured = '5.5.1'
     awaitility = '4.3.0'
 }
