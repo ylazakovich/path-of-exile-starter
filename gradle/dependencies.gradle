@@ -1,5 +1,5 @@
 ext {
-    netty = '4.1.119.Final'
+    netty = '4.2.0.Final'
     flyway = '11.6.0'
     lombok = '1.18.38'
     telegram = '8.2.0'
