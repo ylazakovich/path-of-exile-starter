@@ -9,7 +9,7 @@ ext {
     mockito = '5.17.0'
     assertJ = '3.27.3'
     testng = '7.11.0'
-    faker = '2.4.2'
+    faker = '2.4.3'
     jaxb = '2.3.1'
     selenide = '7.8.1'
     selenium = '4.30.0'
