@@ -19,6 +19,7 @@ ext {
     httpcore5 = '5.3.4'
     restAssured = '5.5.1'
     awaitility = '4.3.0'
+    spotbugs_annotation = '4.9.3'
 }
 
 subprojects {
@@ -40,7 +41,7 @@ subprojects {
         testImplementation("org.assertj:assertj-core:$assertJ")
         testImplementation("org.mockito:mockito-core:$mockito")
         annotationProcessor("org.projectlombok:lombok:$lombok")
-        compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.3")
+        compileOnly("com.github.spotbugs:spotbugs-annotations:$spotbugs_annotation")
         compileOnly("org.projectlombok:lombok:$lombok")
     }
 }
