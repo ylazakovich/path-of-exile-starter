@@ -44,18 +44,22 @@ public class InteractionsTest extends BaseCallbackTest {
         leagueEntity.setId(League.STANDARD.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
         when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted("⭐", empty, empty, empty));
+        return;
       case SETTING_LEAGUE:
         leagueEntity.setId(League.LEAGUE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
         when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, "⭐", empty, empty));
+        return;
       case SETTING_HARDCORE:
         leagueEntity.setId(League.HARDCORE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
         when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, empty, "⭐", empty));
+        return;
       case SETTING_LEAGUE_HARDCORE:
         leagueEntity.setId(League.LEAGUE_HARDCORE.id);
         when(userDao.readLeague(user)).thenReturn(leagueEntity);
         when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted(empty, empty, empty, "⭐"));
+        return;
     }
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
