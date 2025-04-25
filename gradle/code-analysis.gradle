@@ -18,7 +18,7 @@ subprojects {
 
     spotbugs {
         effort = SpotBugsEffort.MAX
-        reportLevel = SpotBugsConfidence.HIGH
+        reportLevel = SpotBugsConfidence.DEFAULT
         excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
     }
 
@@ -27,7 +27,6 @@ subprojects {
             xml { required = true }
             html {
                 required = true
-                outputLocation = file("$project.layout.buildDirectory/reports/spotbugs/main.html")
                 stylesheet = 'fancy-hist.xsl'
             }
         }
@@ -38,7 +37,6 @@ subprojects {
             xml { required = true }
             html {
                 required = true
-                outputLocation = file("$project.layout.buildDirectory/reports/spotbugs/test.html")
                 stylesheet = 'fancy-hist.xsl'
             }
         }
