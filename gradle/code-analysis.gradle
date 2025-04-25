@@ -11,4 +11,17 @@ subprojects {
             html.required = System.getenv('CI') == null
         }
     }
+
+    spotless {
+        java {
+            googleJavaFormat()
+            target 'src/**/*.java'
+        }
+
+        format('misc') {
+            target '*.gradle', '*.md', '.gitignore'
+            trimTrailingWhitespace()
+            endWithNewline()
+        }
+    }
 }
