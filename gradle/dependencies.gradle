@@ -40,6 +40,7 @@ subprojects {
         testImplementation("org.assertj:assertj-core:$assertJ")
         testImplementation("org.mockito:mockito-core:$mockito")
         annotationProcessor("org.projectlombok:lombok:$lombok")
+        compileOnly("com.github.spotbugs:spotbugs-annotations:4.9.3")
         compileOnly("org.projectlombok:lombok:$lombok")
     }
 }

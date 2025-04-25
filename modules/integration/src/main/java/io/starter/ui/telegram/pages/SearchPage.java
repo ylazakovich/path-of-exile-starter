@@ -20,7 +20,7 @@ public class SearchPage extends HomePage {
 
   private static class SearchBlock implements Container {
 
-    private final String chatXpath = "//div[@class='search-group__name']/span[text()='Chats']";
+    private static final String chatXpath = "//div[@class='search-group__name']/span[text()='Chats']";
     private ElementsCollection chats = $$x(chatXpath);
   }
 }
