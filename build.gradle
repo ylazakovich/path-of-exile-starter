@@ -2,7 +2,7 @@ plugins {
     id 'checkstyle'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'org.springframework.boot' version '3.4.5'
-    id 'com.diffplug.spotless' version '6.25.0'
+    id 'com.github.spotbugs' version '6.1.9'
 }
 
 allprojects {
@@ -13,10 +13,10 @@ allprojects {
 subprojects {
     apply plugin: 'java'
     apply plugin: 'checkstyle'
+    apply plugin: 'com.github.spotbugs'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'jacoco'
-    apply plugin: 'com.diffplug.spotless'
 }
 
 apply from: 'gradle/coverage.gradle'

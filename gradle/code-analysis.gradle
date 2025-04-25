@@ -1,3 +1,7 @@
+def classLoader = plugins['com.github.spotbugs'].class.classLoader
+def SpotBugsEffort = classLoader.findLoadedClass('com.github.spotbugs.snom.Effort')
+def SpotBugsConfidence = classLoader.findLoadedClass('com.github.spotbugs.snom.Confidence')
+
 subprojects {
     checkstyle {
         toolVersion = "10.23.0"
@@ -12,16 +16,31 @@ subprojects {
         }
     }
 
-    spotless {
-        java {
-            googleJavaFormat()
-            target 'src/**/*.java'
-        }
+    spotbugs {
+        effort = SpotBugsEffort.MAX
+        reportLevel = SpotBugsConfidence.HIGH
+        excludeFilter = rootProject.file('config/spotbugs/excludeFilter.xml')
+    }
 
-        format('misc') {
-            target '*.gradle', '*.md', '.gitignore'
-            trimTrailingWhitespace()
-            endWithNewline()
+    tasks.named('spotbugsMain').configure {
+        reports {
+            xml { required = true }
+            html {
+                required = true
+                outputLocation = file("$project.layout.buildDirectory/reports/spotbugs/main.html")
+                stylesheet = 'fancy-hist.xsl'
+            }
+        }
+    }
+
+    tasks.named('spotbugsTest').configure {
+        reports {
+            xml { required = true }
+            html {
+                required = true
+                outputLocation = file("$project.layout.buildDirectory/reports/spotbugs/test.html")
+                stylesheet = 'fancy-hist.xsl'
+            }
         }
     }
 }
