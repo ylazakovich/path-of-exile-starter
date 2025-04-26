@@ -7,8 +7,6 @@ COPY gradle ./gradle
 COPY config ./config
 COPY modules/${MODULE} ./modules/${MODULE}
 
-ENV ORG_GRADLE_JAVA_INSTALLATIONS_AUTO_DETECT=true
-
 RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
 
 FROM eclipse-temurin:21.0.7_6-jre@sha256:f08ebc4aae836b96ec861a89b5187260a9bca54ad87255ca55eddbf097b444f5
