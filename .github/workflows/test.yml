@@ -36,20 +36,6 @@ jobs:
         shell: bash
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-      - name: 🛑Stop Application
-        run: |
-          chmod +x ./stop_app
-          ./stop_app
-        shell: bash
-      - name: 📦Packing test artifacts
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        if: always()
-        with:
-          name: test-report-linux-${{ matrix.gradle-task }}
-          retention-days: 14
-          path: |
-            **/build/reports
-            **/build/test-results
       - name: 🔬Run Test Coverage
         run: ./gradlew jacocoTestReport
       - name: 🔨Generate JaCoCo Badge
@@ -57,10 +43,34 @@ jobs:
         with:
           generate-branches-badge: true
           jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
-      - name: 📦 Packing coverage artifacts
+      - name: 📥 Collecting logs from all docker containers
+        uses: jwalton/gh-docker-logs@v2
+        with:
+          dest: logs
+      - name: 🛑Stop Application
+        run: |
+          chmod +x ./stop_app
+          ./stop_app
+        shell: bash
+      - name: 📦Packing test results as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: test-report-linux-${{ matrix.gradle-task }}
+          retention-days: 3
+          path: |
+            **/build/reports
+            **/build/test-results
+      - name: 📦 Packing coverage results as artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: coverage-report-linux-${{ matrix.gradle-task }}
-          retention-days: 14
+          retention-days: 3
           path: "**/build/reports/jacoco/test/html"
+      - name: 📦 Packing docker compose logs as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: docker-logs
+          retention-days: 3
+          path: logs
