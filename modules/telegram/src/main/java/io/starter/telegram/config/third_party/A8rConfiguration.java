@@ -11,6 +11,6 @@ import static org.aeonbits.owner.Config.Sources;
 public interface A8rConfiguration extends Config {
 
   @Key("A8R_BASE_URL")
-  @DefaultValue("http://a8r:8080")
+  @DefaultValue("http://localhost:8080")
   String baseUrl();
 }
