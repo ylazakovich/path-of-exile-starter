@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.15_6-jdk@sha256:324122d7274b03f0b0ea58b46c4dbea15f1861a1d543547b6bc9c076ac730b9f AS builder
+FROM eclipse-temurin:21.0.7_6-jdk@sha256:b997045cddee5aa5460aaec871775d8f24e5bea1af1592d8741bd5d4ff793e27 AS builder
 ARG MODULE
 WORKDIR /app
 
@@ -9,7 +9,7 @@ COPY modules/${MODULE} ./modules/${MODULE}
 
 RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
 
-FROM eclipse-temurin:17.0.15_6-jre@sha256:7b62d52c4978a88a7b2d096a3e27cd961f943407825d75c8db6260812ec13eec
+FROM eclipse-temurin:21.0.7_6-jre@sha256:f08ebc4aae836b96ec861a89b5187260a9bca54ad87255ca55eddbf097b444f5
 ARG MODULE
 ARG PORT
 WORKDIR /app
