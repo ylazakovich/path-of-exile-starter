@@ -1,5 +1,5 @@
 services:
-  mariadb-core: &mariadb-core
+  mariadb-core:
     image: mariadb:11.2.5@sha256:1363d4688aed0a0c3ddacb6e1b0a93dcfd765e557cb05e207b46bc8c60e376af
     restart: always
     healthcheck:
@@ -9,16 +9,6 @@ services:
       retries: 5
 
   a8r:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE: a8r
-        PORT: 8080
-    environment:
-      DATABASE_HOST: a8r-mariadb
-      DATABASE_PORT: 3306
-    ports: ["8080:8080"]
     depends_on:
       a8r-mariadb:
         condition: service_healthy
@@ -29,25 +19,10 @@ services:
       retries: 60
 
   a8r-mariadb:
-    <<: *mariadb-core
-    ports: ["3306:3306"]
-    volumes:
-      - a8r_mariadb_data:/var/lib/mysql
-    environment:
-      MARIADB_DATABASE: a8r
-      MARIADB_ROOT_PASSWORD: root
+    extends:
+      service: mariadb-core
 
   telegram:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        MODULE: telegram
-        PORT: 5050
-    environment:
-      DATABASE_HOST: telegram-mariadb
-      DATABASE_PORT: 3306
-    ports: ["5050:5050"]
     depends_on:
       telegram-mariadb:
         condition: service_healthy
@@ -55,13 +30,8 @@ services:
         condition: service_healthy
 
   telegram-mariadb:
-    <<: *mariadb-core
-    ports: ["3307:3306"]
-    volumes:
-      - telegram_mariadb_data:/var/lib/mysql
-    environment:
-      MARIADB_DATABASE: telegram
-      MARIADB_ROOT_PASSWORD: root
+    extends:
+      service: mariadb-core
 
 volumes:
   a8r_mariadb_data:
