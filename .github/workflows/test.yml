@@ -1,9 +1,9 @@
 name: "Run tests"
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_run:
+    workflows: ["Check formatting"]
+    types:
+      - completed
 env:
   IS_REMOTE: ${{ secrets.IS_REMOTE }}
 
@@ -15,12 +15,6 @@ jobs:
       matrix:
         gradle-task: ["check"]
     steps:
-      - name: 🔨Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: 🔬Check repository over Prettier
-        uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
-        with:
-          args: --check --ignore-unknown '**/*.*'
       - name: 🔨Set up JDK
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
         with:
