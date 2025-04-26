@@ -14,7 +14,7 @@ RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
 
 FROM eclipse-temurin:17-jre
 ARG MODULE
-ARG PORT=8080
+ARG PORT
 WORKDIR /app
 
 COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar app.jar
