@@ -99,6 +99,7 @@ public class DatabaseNinjaService {
           entity.setGemQuality(skill.getGemQuality());
           entity.setCorrupted(skill.isCorrupted());
           entity.setChaosEquivalent(skill.getChaosEquivalent());
+          entity.setDivineEquivalent(rateService.toDivineEquivalent(skill.getChaosEquivalent(), league));
           entity.setLeagueId(league);
           return entity;
         })
