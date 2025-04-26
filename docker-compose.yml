@@ -1,18 +1,38 @@
-x-common: &mariadb-config
-  image: mariadb:11.2.5@sha256:1363d4688aed0a0c3ddacb6e1b0a93dcfd765e557cb05e207b46bc8c60e376af
-  restart: always
-
 services:
+  mariadb-core:
+    image: mariadb:11.2.5@sha256:1363d4688aed0a0c3ddacb6e1b0a93dcfd765e557cb05e207b46bc8c60e376af
+    restart: always
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  a8r:
+    depends_on:
+      a8r-mariadb:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+      interval: 5s
+      timeout: 1s
+      retries: 60
+
   a8r-mariadb:
-    <<: *mariadb-config
-    ports: ["3306:3306"]
-    environment:
-      MARIADB_DATABASE: a8r
-      MARIADB_ROOT_PASSWORD: root
+    extends:
+      service: mariadb-core
+
+  telegram:
+    depends_on:
+      telegram-mariadb:
+        condition: service_healthy
+      a8r:
+        condition: service_healthy
 
   telegram-mariadb:
-    <<: *mariadb-config
-    ports: ["3307:3306"]
-    environment:
-      MARIADB_DATABASE: telegram
-      MARIADB_ROOT_PASSWORD: root
+    extends:
+      service: mariadb-core
+
+volumes:
+  a8r_mariadb_data:
+  telegram_mariadb_data:
