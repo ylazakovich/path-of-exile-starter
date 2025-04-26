@@ -41,9 +41,18 @@ Then
 2. start application from aggregator module
 3. start application from telegram module
 
-**Option 2** (not ready yet)
+**Option 2**
 
-Run over console `app.sh`
+Run via console 
+```bash
+./run_app.sh
+```
+When want to restart your app
+1. stop application via console
+2. start application via console
+```bash
+./stop_app.sh
+```
 
 Then \
 Bot is ready for working
