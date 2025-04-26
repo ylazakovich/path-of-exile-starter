@@ -19,6 +19,7 @@
 - Use https://poe.ninja/ as the main data aggregator
 - Manage your own Settings over bot
 - Pagination
+- Application can be started via docker-compose
 
 ## 🖥️ Quick start
 
