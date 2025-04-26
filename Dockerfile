@@ -1,12 +1,10 @@
 FROM eclipse-temurin:17.0.15_6-jdk@sha256:324122d7274b03f0b0ea58b46c4dbea15f1861a1d543547b6bc9c076ac730b9f AS builder
-
 ARG MODULE
 WORKDIR /app
 
 COPY gradlew settings.gradle build.gradle lombok.config ./
 COPY gradle ./gradle
 COPY config ./config
-
 COPY modules/${MODULE} ./modules/${MODULE}
 
 RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
