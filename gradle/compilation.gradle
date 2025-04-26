@@ -4,11 +4,11 @@ subprojects {
   }
 
   bootJar {
-    enabled = false
+    enabled = true
   }
 
   jar {
-    enabled = true
+    enabled = false
   }
 
   tasks.withType(JavaCompile).configureEach {

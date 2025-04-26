@@ -8,7 +8,7 @@ spring:
     locations: classpath:db/migration/common,classpath:db/migration/${ENV_VARIABLE}
 
   datasource:
-    url: jdbc:mariadb://localhost:3306/a8r
+    url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/a8r
     username: root
     password: root
 

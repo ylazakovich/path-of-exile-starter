@@ -8,7 +8,7 @@ spring:
     locations: classpath:db/migration/common,classpath:db/migration/${ENV_VARIABLE}
 
   datasource:
-    url: jdbc:mariadb://localhost:3307/telegram
+    url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3307}/telegram
     username: root
     password: root
 
