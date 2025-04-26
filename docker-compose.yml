@@ -18,19 +18,19 @@ services:
     environment:
       DATABASE_HOST: a8r-mariadb
       DATABASE_PORT: 3306
-    ports: [ "8080:8080" ]
+    ports: ["8080:8080"]
     depends_on:
       a8r-mariadb:
         condition: service_healthy
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8080/health/ping" ]
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
       interval: 5s
       timeout: 1s
       retries: 60
 
   a8r-mariadb:
     <<: *mariadb-core
-    ports: [ "3306:3306" ]
+    ports: ["3306:3306"]
     volumes:
       - a8r_mariadb_data:/var/lib/mysql
     environment:
@@ -47,7 +47,7 @@ services:
     environment:
       DATABASE_HOST: telegram-mariadb
       DATABASE_PORT: 3306
-    ports: [ "5050:5050" ]
+    ports: ["5050:5050"]
     depends_on:
       telegram-mariadb:
         condition: service_healthy
@@ -56,7 +56,7 @@ services:
 
   telegram-mariadb:
     <<: *mariadb-core
-    ports: [ "3307:3306" ]
+    ports: ["3307:3306"]
     volumes:
       - telegram_mariadb_data:/var/lib/mysql
     environment:
