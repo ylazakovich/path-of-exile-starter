@@ -31,9 +31,9 @@ jobs:
       - name: 🔨Setup java
         uses: actions/setup-java@c5195efecf7bdfc987ee8bae7a71cb8b11521c00 # v4
         with:
-          distribution: "corretto"
+          distribution: "temurin"
           cache: "gradle"
-          java-version: 17
+          java-version: "21"
       - name: 🔨Initialize CodeQL
         uses: github/codeql-action/init@28deaeda66b76a05916b6923827895f2b14ab387 # v3
         with:
