@@ -16,8 +16,8 @@ ARG MODULE
 ARG PORT
 WORKDIR /app
 
-COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar ${MODULE}.jar
+COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar app.jar
 
 EXPOSE ${PORT}
 
-ENTRYPOINT ["java", "-jar", "${MODULE}.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
