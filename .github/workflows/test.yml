@@ -1,9 +1,9 @@
 name: "Run tests"
 on:
-  workflow_run:
-    workflows: ["Check formatting"]
-    types:
-      - completed
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
 env:
   IS_REMOTE: ${{ secrets.IS_REMOTE }}
 
