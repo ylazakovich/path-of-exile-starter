@@ -1,6 +1,6 @@
 services:
   mariadb-core:
-    image: mariadb:11.2.5@sha256:1363d4688aed0a0c3ddacb6e1b0a93dcfd765e557cb05e207b46bc8c60e376af
+    image: mariadb:11.2.6@sha256:ff87d49107a1e4878c63c3a3132bfdf628e6732879b8e4ceb72e041206d3aece
     restart: always
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
