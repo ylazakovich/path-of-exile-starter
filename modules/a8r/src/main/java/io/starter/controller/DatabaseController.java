@@ -95,7 +95,7 @@ public class DatabaseController {
 
   @SneakyThrows(InterruptedException.class)
   public void loading() {
-    Thread.sleep(800);
+    Thread.sleep(2_000);
     loadRates();
     loadSkills();
   }

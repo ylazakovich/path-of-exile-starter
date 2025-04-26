@@ -14,8 +14,10 @@ import io.starter.model.ninja.Skill;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class DatabaseNinjaService {
 
   private final RatesDao ratesDao;
@@ -75,29 +77,20 @@ public class DatabaseNinjaService {
         .findFirst()
         .ifPresent(skill -> entity.setChaosEquivalent(skill.getChaosEquivalent()))
     );
-    dataAccessService
-        .findLeagueById(league.getId())
-        .flatMap(leagueEntity -> {
+    dataAccessService.findLeagueById(league.getId())
+        .ifPresent(leagueEntity -> {
           entitiesOnUpdate.forEach(entity -> {
-            entity.setLeagueId(dataAccessService.findLeagueById(league.getId()).orElseThrow());
+            entity.setLeagueId(leagueEntity);
             entity.setDivineEquivalent(rateService.toDivineEquivalent(entity.getChaosEquivalent(), league));
           });
           dataAccessService.saveSkills(entitiesOnUpdate);
-          return Optional.empty();
         });
   }
 
   public void addNew(Lines<Skill> lines, LeagueEntity league) {
     List<SkillEntity> existingEntities = dataAccessService.findSkillsByLeague(league);
     List<SkillEntity> newEntities = lines.getLines().stream()
-        .filter(skill -> existingEntities.stream()
-            .noneMatch(entity ->
-                entity.getName().equals(skill.getName()) &&
-                    entity.getGemLevel() == skill.getGemLevel() &&
-                    entity.getGemQuality() == skill.getGemQuality() &&
-                    entity.getVariant().equals(skill.getVariant()) &&
-                    entity.getCorrupted() == skill.isCorrupted()
-            ))
+        .filter(skill -> existingEntities.stream().noneMatch(entity -> skillEntityMapper.matches(skill, entity)))
         .map(skill -> {
           SkillEntity entity = new SkillEntity();
           entity.setName(skill.getName());
