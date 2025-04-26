@@ -31,15 +31,15 @@ jobs:
         uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
       - name: 🟢Start Application
         run: |
-          chmod +x run_app.sh
-          run_app.sh
+          chmod +x run_app
+          run_app
         shell: bash
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - name: 🛑Stop Application
         run: |
-          chmod +x stop_app.sh
-          stop_app.sh
+          chmod +x stop_app
+          stop_app
         shell: bash
       - name: 📦Packing test artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
