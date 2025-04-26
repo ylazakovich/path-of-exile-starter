@@ -3,10 +3,9 @@ FROM eclipse-temurin:17.0.15_6-jdk@sha256:324122d7274b03f0b0ea58b46c4dbea15f1861
 ARG MODULE
 WORKDIR /app
 
-COPY lombok.config ./
-COPY config ./config
-COPY gradlew settings.gradle build.gradle ./
+COPY gradlew settings.gradle build.gradle lombok.config ./
 COPY gradle ./gradle
+COPY config ./config
 
 COPY modules/${MODULE} ./modules/${MODULE}
 
@@ -17,8 +16,8 @@ ARG MODULE
 ARG PORT
 WORKDIR /app
 
-COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar app.jar
+COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar ${MODULE}.jar
 
 EXPOSE ${PORT}
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "${MODULE}.jar"]
