@@ -43,16 +43,21 @@ Then
 
 **Option 2**
 
-Run via console 
+Run via console
+
 ```bash
 ./run_app.sh
 ```
+
 When want to restart your app
+
 1. stop application via console
-2. start application via console
+
 ```bash
 ./stop_app.sh
 ```
+
+2. start application via console
 
 Then \
 Bot is ready for working
