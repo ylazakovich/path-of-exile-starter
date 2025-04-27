@@ -1,9 +1,6 @@
 package io.starter.service;
 
-import java.util.Objects;
-
 import io.starter.entity.LeagueEntity;
-import io.starter.entity.RateEntity;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,12 +17,9 @@ public class RateService {
 
   public double toDivineEquivalent(double chaosEquivalent,
                                    LeagueEntity league) {
-    final String item = "Divine Orb";
-    RateEntity entity = dataAccessService.findRateByNameAndLeague(item, league);
-    if (Objects.isNull(entity)) {
-      return 0;
-    }
-    return chaosEquivalent / entity.getChaosEquivalent();
+    return dataAccessService.findRateByNameAndLeague("Divine Orb", league)
+        .map(rate -> chaosEquivalent / rate.getChaosEquivalent())
+        .orElse(0.0);
   }
 }
 

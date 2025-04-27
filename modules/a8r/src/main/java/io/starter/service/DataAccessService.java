@@ -36,8 +36,8 @@ public class DataAccessService {
   }
 
   @Transactional(readOnly = true)
-  public RateEntity findRateByNameAndLeague(String name, LeagueEntity league) {
-    return ratesRepository.findByNameAndLeagueId(name, league);
+  public Optional<RateEntity> findRateByNameAndLeague(String name, LeagueEntity league) {
+    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league));
   }
 
   @Transactional(readOnly = true)
@@ -48,6 +48,11 @@ public class DataAccessService {
   @Transactional(readOnly = true)
   public Optional<LeagueEntity> findLeagueById(Long id) {
     return leaguesRepository.findById(id);
+  }
+
+  @Transactional(readOnly = true)
+  public LeagueEntity findLeagueByName(String name) {
+    return leaguesRepository.findByName(name);
   }
 
   @Transactional

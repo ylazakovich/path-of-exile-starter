@@ -91,10 +91,11 @@ public class CallbackAnswerService {
     int end = Math.min(start + itemsPerPage, skills.size());
     final StringBuilder builder = new StringBuilder();
     for (int i = start; i < end; i++) {
+      long chaosEquivalentProfit = Math.round(skills.get(i).getChaosEquivalentProfit());
       builder
           .append(skills.get(i).getName())
           .append(Constants.General.SEPARATER)
-          .append(Math.round(skills.get(i).getChaosEquivalentProfit()))
+          .append("%d %s".formatted(chaosEquivalentProfit, "c"))
           .append(StringUtils.LF);
     }
     return builder.toString();

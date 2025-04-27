@@ -6,36 +6,33 @@ import java.util.Objects;
 import io.starter.dto.AnalyzedSkillDto;
 import io.starter.dto.SkillDto;
 import io.starter.entity.LeagueEntity;
-import io.starter.repo.LeaguesRepository;
-import io.starter.repo.SkillsRepository;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class AnalyzerService {
 
-  private final SkillsRepository skillsRepository;
-  private final LeaguesRepository leaguesRepository;
+  private final DataAccessService dataAccessService;
 
-  public AnalyzerService(SkillsRepository skillsRepository,
-                         LeaguesRepository leaguesRepository) {
-    this.skillsRepository = skillsRepository;
-    this.leaguesRepository = leaguesRepository;
+  public AnalyzerService(DataAccessService dataAccessService) {
+    this.dataAccessService = dataAccessService;
   }
 
   public List<AnalyzedSkillDto> analyze(String league) {
-    LeagueEntity leagueEntity = leaguesRepository.findByName(league);
-    List<SkillDto> data = SkillDto.convertToList(skillsRepository.findAllByLeagueId(leagueEntity));
+    LeagueEntity leagueEntity = dataAccessService.findLeagueByName(league);
+    List<SkillDto> data = SkillDto.convertToList(dataAccessService.findSkillsByLeague(leagueEntity));
     List<SkillDto> maxQualitySkills = data.stream()
         .filter(skillDto -> skillDto.getVariant().equals("1/20") && !skillDto.isCorrupted())
         .toList();
     List<SkillDto> maxLevelSkills = data.stream()
         .filter(skillDto -> skillDto.getVariant().equals("20") && !skillDto.isCorrupted())
         .toList();
-    return subtract(maxQualitySkills, maxLevelSkills);
+    return subtract(maxQualitySkills, maxLevelSkills, leagueEntity);
   }
 
-  private static List<AnalyzedSkillDto> subtract(List<SkillDto> quality, List<SkillDto> level) {
+  private List<AnalyzedSkillDto> subtract(List<SkillDto> quality,
+                                          List<SkillDto> level,
+                                          LeagueEntity leagueEntity) {
     return quality.stream()
         .filter(qlt -> level.stream()
             .anyMatch(lvl -> lvl.getName().equals(qlt.getName())))
@@ -48,8 +45,10 @@ public class AnalyzerService {
             String name = qlt.getName();
             double maxQualityPrice = qlt.getChaosEquivalent();
             double maxLevelPrice = matchingLevelGem.getChaosEquivalent();
-            // TODO: craftCost should read from currency table
-            return new AnalyzedSkillDto(leagueId, name, 1.0, maxQualityPrice - maxLevelPrice);
+            AnalyzedSkillDto result = new AnalyzedSkillDto(leagueId, name, 1.0, maxQualityPrice - maxLevelPrice);
+            dataAccessService.findRateByNameAndLeague("Gemcutter's Prism", leagueEntity)
+                .ifPresent(result::setChaosEquivalentPrice);
+            return result;
           }
           return null;
         }).toList();
