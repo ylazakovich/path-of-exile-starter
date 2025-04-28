@@ -33,6 +33,4 @@ public class SkillEntity implements Serializable {
   @JoinColumn(name = "league_id")
   public @NonNull LeagueEntity leagueId;
   public @NonNull String name;
-  public @NonNull Double chaosEquivalentPrice;
-  public @NonNull Double chaosEquivalentProfit;
 }

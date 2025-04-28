@@ -28,8 +28,8 @@ public class SkillDao {
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getName());
-      skill.setChaosEquivalentPrice(entity.getChaosEquivalentPrice());
-      skill.setChaosEquivalentProfit(entity.getChaosEquivalentProfit());
+//      skill.setChaosEquivalentPrice(entity.getChaosEquivalentPrice());
+//      skill.setChaosEquivalentProfit(entity.getChaosEquivalentProfit());
       return skill;
     }).toList();
   }
@@ -39,9 +39,9 @@ public class SkillDao {
       final List<SkillEntity> entities = skills.stream()
           .map(skill -> new SkillEntity(
               league,
-              skill.getName(),
-              skill.getChaosEquivalentPrice(),
-              skill.getChaosEquivalentProfit()
+              skill.getName()
+//              skill.getChaosEquivalentPrice(),
+//              skill.getChaosEquivalentProfit()
           )).toList();
       skillRepository.saveAll(entities);
     }
@@ -54,8 +54,8 @@ public class SkillDao {
             .filter(entity -> entity.getName().equals(skill.getName()))
             .findFirst()
             .ifPresent(matchedEntity -> {
-                  matchedEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
-                  matchedEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
+//                  matchedEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
+//                  matchedEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
                 }
             )
     );
@@ -70,9 +70,10 @@ public class SkillDao {
         .forEach(skill -> {
           SkillEntity skillEntity = new SkillEntity(
               league,
-              skill.getName(),
-              skill.getChaosEquivalentPrice(),
-              skill.getChaosEquivalentProfit());
+              skill.getName()
+//              skill.getChaosEquivalentPrice(),
+//              skill.getChaosEquivalentProfit()
+          );
           entitiesOnAdding.add(skillEntity);
         });
     skillRepository.saveAll(entitiesOnAdding);

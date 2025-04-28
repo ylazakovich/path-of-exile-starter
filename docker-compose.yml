@@ -1,5 +1,5 @@
 services:
-  mariadb-core:
+  mariadb:
     image: mariadb:11.2.6@sha256:ff87d49107a1e4878c63c3a3132bfdf628e6732879b8e4ceb72e041206d3aece
     restart: always
     healthcheck:
@@ -8,31 +8,42 @@ services:
       timeout: 5s
       retries: 5
 
+  flyway:
+    image: flyway/flyway:11.8.0
+    environment:
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_BASELINE_ON_MIGRATE: true
+      FLYWAY_BASELINE_VERSION: 0
+      FLYWAY_URL: jdbc:mariadb://mariadb:3306/mariadb
+      FLYWAY_USER: root
+      FLYWAY_PASSWORD: root
+    volumes:
+      - ./migrations:/flyway/sql
+    command: migrate
+    depends_on:
+      mariadb:
+        condition: service_healthy
+
   a8r:
     depends_on:
-      a8r-mariadb:
+      mariadb:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
       interval: 5s
       timeout: 1s
       retries: 60
 
-  a8r-mariadb:
-    extends:
-      service: mariadb-core
-
   telegram:
     depends_on:
-      telegram-mariadb:
+      mariadb:
         condition: service_healthy
+      flyway:
+        condition: service_completed_successfully
       a8r:
         condition: service_healthy
 
-  telegram-mariadb:
-    extends:
-      service: mariadb-core
-
 volumes:
-  a8r_mariadb_data:
-  telegram_mariadb_data:
+  mariadb_data:

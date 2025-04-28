@@ -8,7 +8,7 @@ services:
         PORT: 8080
     ports: ["8080:8080"]
     environment:
-      DATABASE_HOST: a8r-mariadb
+      DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
 
   telegram:
@@ -20,22 +20,14 @@ services:
         PORT: 5050
     ports: ["5050:5050"]
     environment:
-      DATABASE_HOST: telegram-mariadb
+      DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
       A8R_BASE_URL: http://a8r:8080
 
-  a8r-mariadb:
+  mariadb:
     ports: ["3306:3306"]
     volumes:
-      - a8r_mariadb_data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
     environment:
-      MARIADB_DATABASE: a8r
-      MARIADB_ROOT_PASSWORD: root
-
-  telegram-mariadb:
-    ports: ["3307:3306"]
-    volumes:
-      - telegram_mariadb_data:/var/lib/mysql
-    environment:
-      MARIADB_DATABASE: telegram
+      MARIADB_DATABASE: mariadb
       MARIADB_ROOT_PASSWORD: root
