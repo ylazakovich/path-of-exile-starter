@@ -10,6 +10,7 @@ import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,7 +47,7 @@ public class DatabaseController {
   private void loadRates(LeagueEntity league) {
     log.info("Loading rates for: {}", league.getName());
     poeNinjaService.getRates(league.getName())
-        .subscribe(data -> databaseNinjaService.loadCurrency(data.getBody(), league));
+        .subscribe(response -> databaseNinjaService.loadCurrency(response.getBody(), league));
   }
 
   @PostMapping("/load/skills")
@@ -57,7 +58,7 @@ public class DatabaseController {
   private void loadSkills(LeagueEntity league) {
     log.info("Loading skills for: {}", league.getName());
     poeNinjaService.getSkills(league.getName())
-        .subscribe(data -> databaseNinjaService.loadSkills(data.getBody(), league));
+        .subscribe(response -> databaseNinjaService.loadSkills(response.getBody(), league));
   }
 
   @GetMapping ("/leagues")
@@ -68,31 +69,33 @@ public class DatabaseController {
   @PostMapping("/load/leagues")
   public void loadLeagues() {
     log.info("Loading leagues");
-    pathOfExileService.getAllLeagues().subscribe(data -> databasePathOfExileService.load(data.getBody()));
+    pathOfExileService.getAllLeagues().subscribe(response -> databasePathOfExileService.load(response.getBody()));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void updateRates() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getRates(league.getName())
-            .subscribe(data -> databaseNinjaService.updateCurrencies(data.getBody(), league)));
+            .subscribe(response -> databaseNinjaService.updateCurrencies(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
   public void updateSkills() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(data -> databaseNinjaService.updateSkills(data.getBody(), league)));
+            .subscribe(response -> databaseNinjaService.updateSkills(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void addNewSkills() {
     databasePathOfExileService.readAll()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(data -> databaseNinjaService.addNew(Objects.requireNonNull(data.getBody()), league)));
+            .subscribe(response -> databaseNinjaService.addNew(Objects.requireNonNull(response.getBody()), league)));
   }
 
+  @SneakyThrows(InterruptedException.class)
   public void loading() {
+    Thread.sleep(2_000);
     loadRates();
     loadSkills();
   }

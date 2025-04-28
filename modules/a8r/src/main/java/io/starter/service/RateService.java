@@ -1,32 +1,25 @@
 package io.starter.service;
 
-import java.util.Objects;
-
 import io.starter.entity.LeagueEntity;
-import io.starter.entity.RateEntity;
-import io.starter.repo.RatesRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RateService {
 
-  private final RatesRepository ratesRepository;
+  private final DataAccessService dataAccessService;
 
-  public RateService(RatesRepository ratesRepository) {
-    this.ratesRepository = ratesRepository;
+  @Autowired
+  public RateService(DataAccessService dataAccessService) {
+    this.dataAccessService = dataAccessService;
   }
 
-  @Transactional
-  public double convertChaosToDivineEquivalent(double chaosEquivalent,
-                                               LeagueEntity league) {
-    final String item = "Divine Orb";
-    RateEntity entity = ratesRepository.findByNameAndLeagueId(item, league);
-    if (Objects.isNull(entity)) {
-      return 0;
-    }
-    return chaosEquivalent / entity.getChaosEquivalent();
+  public double toDivineEquivalent(double chaosEquivalent,
+                                   LeagueEntity league) {
+    return dataAccessService.findRateByNameAndLeague("Divine Orb", league)
+        .map(rate -> chaosEquivalent / rate.getChaosEquivalent())
+        .orElse(0.0);
   }
 }
 

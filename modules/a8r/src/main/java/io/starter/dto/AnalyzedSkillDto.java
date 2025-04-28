@@ -1,5 +1,7 @@
 package io.starter.dto;
 
+import io.starter.entity.RateEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,8 +17,13 @@ import lombok.ToString;
 @ToString
 public class AnalyzedSkillDto {
 
-  private Long league_id;
+  private Long leagueId;
   private String name;
   private double chaosEquivalentPrice;
   private double chaosEquivalentProfit;
+
+  public AnalyzedSkillDto setChaosEquivalentPrice(RateEntity rateEntity) {
+    this.chaosEquivalentPrice = rateEntity.getChaosEquivalent();
+    return this;
+  }
 }

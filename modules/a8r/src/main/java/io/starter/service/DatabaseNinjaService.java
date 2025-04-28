@@ -1,55 +1,64 @@
 package io.starter.service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import io.starter.dao.RatesDao;
-import io.starter.dao.SkillsDao;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.RateEntity;
 import io.starter.entity.SkillEntity;
+import io.starter.mapper.SkillEntityMapper;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
-import io.starter.repo.RatesRepository;
-import io.starter.repo.SkillsRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class DatabaseNinjaService {
 
-  private final SkillsDao skillsDao;
   private final RatesDao ratesDao;
-  private final SkillsRepository skillsRepository;
-  private final RatesRepository ratesRepository;
+  private final DataAccessService dataAccessService;
+  private final RateService rateService;
+  private final SkillEntityMapper skillEntityMapper;
 
   @Autowired
-  public DatabaseNinjaService(SkillsDao skillsDao,
-                              RatesDao ratesDao,
-                              SkillsRepository skillsRepository,
-                              RatesRepository ratesRepository) {
-    this.skillsDao = skillsDao;
+  public DatabaseNinjaService(RatesDao ratesDao,
+                              DataAccessService dataAccessService,
+                              RateService rateService,
+                              SkillEntityMapper skillEntityMapper) {
     this.ratesDao = ratesDao;
-    this.skillsRepository = skillsRepository;
-    this.ratesRepository = ratesRepository;
+    this.dataAccessService = dataAccessService;
+    this.rateService = rateService;
+    this.skillEntityMapper = skillEntityMapper;
   }
 
   public void loadCurrency(Lines<Currency> lines, LeagueEntity league) {
-    if (ratesRepository.findAllByLeagueId(league).isEmpty() && !lines.getLines().isEmpty()) {
+    if (dataAccessService.findRatesByLeague(league).isEmpty() && !lines.getLines().isEmpty()) {
       ratesDao.saveAll(lines, league.getId());
     }
   }
 
   public void loadSkills(Lines<Skill> lines, LeagueEntity league) {
-    if (skillsRepository.findAllByLeagueId(league).isEmpty() && !lines.getLines().isEmpty()) {
-      skillsDao.saveAll(lines, league.getId());
+    if (dataAccessService.findSkillsByLeague(league).isEmpty() && !lines.getLines().isEmpty()) {
+      dataAccessService.findLeagueById(league.getId())
+          .flatMap(leagueEntity -> {
+            List<SkillEntity> entityList = skillEntityMapper.apply(lines);
+            entityList.forEach(skillEntity -> {
+              skillEntity.setLeagueId(leagueEntity);
+              skillEntity.setDivineEquivalent(rateService.toDivineEquivalent(skillEntity.getChaosEquivalent(), league));
+            });
+            dataAccessService.saveSkills(entityList);
+            return Optional.empty();
+          });
     }
   }
 
   public void updateCurrencies(Lines<Currency> lines, LeagueEntity league) {
-    List<RateEntity> entitiesOnUpdate = ratesRepository.findAllByLeagueId(league);
+    List<RateEntity> entitiesOnUpdate = dataAccessService.findRatesByLeague(league);
     entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
         .filter(currency -> currency.getName().equals(entity.getName()))
         .findFirst()
@@ -59,7 +68,7 @@ public class DatabaseNinjaService {
   }
 
   public void updateSkills(Lines<Skill> lines, LeagueEntity league) {
-    List<SkillEntity> entitiesOnUpdate = skillsRepository.findAllByLeagueId(league);
+    List<SkillEntity> entitiesOnUpdate = dataAccessService.findSkillsByLeague(league);
     entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
         .filter(skill -> skill.getName().equals(entity.getName())
             && skill.getGemLevel() == entity.getGemLevel()
@@ -68,21 +77,21 @@ public class DatabaseNinjaService {
         .findFirst()
         .ifPresent(skill -> entity.setChaosEquivalent(skill.getChaosEquivalent()))
     );
-    skillsDao.saveAll(entitiesOnUpdate, league.getId());
+    dataAccessService.findLeagueById(league.getId())
+        .ifPresent(leagueEntity -> {
+          entitiesOnUpdate.forEach(entity -> {
+            entity.setLeagueId(leagueEntity);
+            entity.setDivineEquivalent(rateService.toDivineEquivalent(entity.getChaosEquivalent(), league));
+          });
+          dataAccessService.saveSkills(entitiesOnUpdate);
+        });
   }
 
   public void addNew(Lines<Skill> lines, LeagueEntity league) {
-    List<SkillEntity> allEntities = skillsRepository.findAllByLeagueId(league);
-    List<SkillEntity> entitiesOnAdding = new ArrayList<>();
-    lines.getLines().stream()
-        .filter(skill -> allEntities.stream()
-            .noneMatch(entity -> entity.getName().equals(skill.getName()) &&
-                entity.getGemLevel() == skill.getGemLevel() &&
-                entity.getGemQuality() == skill.getGemQuality() &&
-                entity.getVariant().equals(skill.getVariant()) &&
-                entity.getCorrupted() == skill.isCorrupted()
-            ))
-        .forEach(skill -> {
+    List<SkillEntity> existingEntities = dataAccessService.findSkillsByLeague(league);
+    List<SkillEntity> newEntities = lines.getLines().stream()
+        .filter(skill -> existingEntities.stream().noneMatch(entity -> skillEntityMapper.matches(skill, entity)))
+        .map(skill -> {
           SkillEntity entity = new SkillEntity();
           entity.setName(skill.getName());
           entity.setVariant(skill.getVariant());
@@ -90,8 +99,11 @@ public class DatabaseNinjaService {
           entity.setGemQuality(skill.getGemQuality());
           entity.setCorrupted(skill.isCorrupted());
           entity.setChaosEquivalent(skill.getChaosEquivalent());
-          entitiesOnAdding.add(entity);
-        });
-    skillsDao.saveAll(entitiesOnAdding, league.getId());
+          entity.setDivineEquivalent(rateService.toDivineEquivalent(skill.getChaosEquivalent(), league));
+          entity.setLeagueId(league);
+          return entity;
+        })
+        .toList();
+    dataAccessService.saveSkills(newEntities);
   }
 }

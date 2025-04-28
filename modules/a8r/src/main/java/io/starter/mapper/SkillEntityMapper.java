@@ -27,4 +27,12 @@ public class SkillEntityMapper implements Function<Lines<Skill>, List<SkillEntit
             0.0))
         .toList();
   }
+
+  public boolean matches(Skill skill, SkillEntity entity) {
+    return skill.getName().equals(entity.getName())
+        && skill.getGemLevel() == entity.getGemLevel()
+        && skill.getGemQuality() == entity.getGemQuality()
+        && skill.getVariant().equals(entity.getVariant())
+        && skill.isCorrupted() == entity.getCorrupted();
+  }
 }

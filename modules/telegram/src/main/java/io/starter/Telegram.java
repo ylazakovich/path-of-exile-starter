@@ -13,7 +13,6 @@ public class Telegram {
 
   public static void main(String[] args) {
     ConfigurableApplicationContext context = SpringApplication.run(Telegram.class, args);
-    context.getBean(DatabaseService.class).loadLeagues();
-    context.getBean(DatabaseService.class).loadSkills();
+    context.getBean(DatabaseService.class).loading();
   }
 }
