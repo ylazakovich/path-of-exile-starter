@@ -25,8 +25,24 @@ jobs:
           java-version: "21"
       - name: 🔨Build with Gradle
         uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
+      - name: 🟢Start Application
+        run: ./run_app.sh
+        shell: bash
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
+      - name: 🐳 Collecting logs from all docker containers
+        uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
+        with:
+          dest: logs
+      - name: 🛑Stop Application
+        run: ./stop_app.sh
+        shell: bash
+      - name: 📦 Packing docker compose logs as artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: docker-logs
+          retention-days: 3
+          path: logs
       - name: 🔬Run Test Coverage
         run: ./gradlew jacocoTestReport
       - name: 🔨Generate JaCoCo Badge
