@@ -7,7 +7,5 @@ dependencies {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-tomcat"
     }
     implementation("javax.xml.bind:jaxb-api:$jaxb")
-    implementation("org.flywaydb:flyway-core:$flyway")
-    implementation("org.flywaydb:flyway-mysql:$flyway")
     runtimeOnly("io.netty:netty-all:$netty")
 }

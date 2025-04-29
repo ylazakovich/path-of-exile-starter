@@ -9,5 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface SkillsRepository extends JpaRepository<SkillEntity, Long> {
 
-  List<SkillEntity> findAllByLeagueId(LeagueEntity league);
+  List<SkillEntity> findAllByLeague(LeagueEntity league);
+
+  SkillEntity findByLeagueAndNameAndVariant(LeagueEntity league, String name, String variant);
 }

@@ -2,15 +2,13 @@ server:
   port: 5050
 
 spring:
-  flyway:
-    baseline-on-migrate: true
-    baseline-version: 0
-    locations: classpath:db/migration/common,classpath:db/migration/${ENV_VARIABLE}
-
   datasource:
-    url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3307}/telegram
+    url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/mariadb
     username: root
     password: root
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
 
   jpa:
     hibernate:

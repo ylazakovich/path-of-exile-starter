@@ -23,7 +23,7 @@ public class LeagueEntityMapper implements Function<List<League>, List<LeagueEnt
   public List<LeagueEntity> apply(List<League> data) {
     return data.stream()
         .map(league -> {
-          LeagueEntity leagueEntity = Optional.ofNullable(repo.findByName(league.getId())).orElse(new LeagueEntity());
+          LeagueEntity leagueEntity = Optional.ofNullable(repo.findByName(league.getId())).orElseGet(LeagueEntity::new);
           leagueEntity.setName(league.getId());
           return leagueEntity;
         })

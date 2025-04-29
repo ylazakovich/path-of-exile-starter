@@ -19,11 +19,11 @@ public class AnalyzerServiceTests {
   private final AnalyzerService analyzerService = mock();
 
   @Test
-  void testServiceAnalyzeMethod() {
+  void testServiceAnalyzeSkillsMethod() {
     final List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
-    when(analyzerService.analyze(queryParam)).thenReturn(expectedList);
+    when(analyzerService.analyzeSkills(queryParam)).thenReturn(expectedList);
 
-    List<AnalyzedSkillDto> actualList = analyzerService.analyze(queryParam);
+    List<AnalyzedSkillDto> actualList = analyzerService.analyzeSkills(queryParam);
     AnalyzedSkillDto actualSkill = Objects.requireNonNull(actualList.stream().findAny().orElse(null));
     double actualProfit = actualSkill.getChaosEquivalentProfit();
     double actualPrice = actualSkill.getChaosEquivalentPrice();

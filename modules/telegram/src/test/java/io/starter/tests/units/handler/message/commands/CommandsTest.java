@@ -1,10 +1,10 @@
 package io.starter.tests.units.handler.message.commands;
 
-import io.starter.telegram.constants.Constants;
-import io.starter.telegram.constants.League;
-import io.starter.telegram.entity.LeagueEntity;
-import io.starter.telegram.handler.UpdateHandler;
-import io.starter.telegram.model.telegram.TelegramFacade;
+import io.starter.constants.Constants;
+import io.starter.constants.League;
+import io.starter.entity.LeagueEntity;
+import io.starter.handler.UpdateHandler;
+import io.starter.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.message.BaseMessageTest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -12,9 +12,9 @@ import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.testng.annotations.Test;
 
-import static io.starter.telegram.cache.state.MessageState.SETTINGS;
-import static io.starter.telegram.cache.state.MessageState.START;
-import static io.starter.telegram.cache.state.MessageState.WELCOME;
+import static io.starter.cache.state.MessageState.SETTINGS;
+import static io.starter.cache.state.MessageState.START;
+import static io.starter.cache.state.MessageState.WELCOME;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;

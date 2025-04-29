@@ -1,12 +1,14 @@
 package io.starter.controller;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
 import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
+import io.starter.service.AnalyzerService;
+import io.starter.service.DataAccessService;
 import io.starter.service.DatabaseNinjaService;
-import io.starter.service.DatabasePathOfExileService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
@@ -24,79 +26,123 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class DatabaseController {
 
-  private final DatabasePathOfExileService databasePathOfExileService;
+  private final DataAccessService dataAccessService;
   private final DatabaseNinjaService databaseNinjaService;
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
+  private final AnalyzerService analyzerService;
 
-  public DatabaseController(DatabasePathOfExileService databasePathOfExileService,
+  public DatabaseController(DataAccessService dataAccessService,
                             DatabaseNinjaService databaseNinjaService,
                             PoeNinjaService poeNinjaService,
-                            PathOfExileService pathOfExileService) {
-    this.databasePathOfExileService = databasePathOfExileService;
+                            PathOfExileService pathOfExileService,
+                            AnalyzerService analyzerService) {
+    this.dataAccessService = dataAccessService;
     this.databaseNinjaService = databaseNinjaService;
     this.poeNinjaService = poeNinjaService;
     this.pathOfExileService = pathOfExileService;
+    this.analyzerService = analyzerService;
   }
 
   @PostMapping("/load/rates")
   public void loadRates() {
-    databasePathOfExileService.readAll().forEach(this::loadRates);
+    dataAccessService.findLeagues().forEach(this::loadRates);
   }
 
   private void loadRates(LeagueEntity league) {
-    log.info("Loading rates for: {}", league.getName());
     poeNinjaService.getRates(league.getName())
-        .subscribe(response -> databaseNinjaService.loadCurrency(response.getBody(), league));
+        .subscribe(response -> {
+          databaseNinjaService.loadCurrency(response.getBody(), league);
+          log.info("{} - Loaded {} Rates",
+              league.getName(),
+              dataAccessService.findRatesByLeague(league).size()
+          );
+        });
   }
 
   @PostMapping("/load/skills")
   public void loadSkills() {
-    databasePathOfExileService.readAll().forEach(this::loadSkills);
+    dataAccessService.findLeagues().forEach(this::loadSkills);
   }
 
   private void loadSkills(LeagueEntity league) {
-    log.info("Loading skills for: {}", league.getName());
     poeNinjaService.getSkills(league.getName())
-        .subscribe(response -> databaseNinjaService.loadSkills(response.getBody(), league));
+        .subscribe(response -> {
+          databaseNinjaService.loadSkills(response.getBody(), league);
+          log.info("{} - Loaded {} Skills",
+              league.getName(),
+              dataAccessService.findSkillsByLeague(league).size()
+          );
+        });
   }
 
-  @GetMapping ("/leagues")
+  @GetMapping("/leagues")
   public ResponseEntity<List<LeagueEntity>> getLeagues() {
-    return ResponseEntity.ok(databasePathOfExileService.readAll());
+    return ResponseEntity.ok(dataAccessService.findLeagues());
   }
 
   @PostMapping("/load/leagues")
   public void loadLeagues() {
-    log.info("Loading leagues");
-    pathOfExileService.getAllLeagues().subscribe(response -> databasePathOfExileService.load(response.getBody()));
+    pathOfExileService.getAllLeagues().subscribe(response -> {
+      dataAccessService.saveLeagues(response.getBody());
+      log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
+    });
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void updateRates() {
-    databasePathOfExileService.readAll()
+    dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getRates(league.getName())
             .subscribe(response -> databaseNinjaService.updateCurrencies(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
   public void updateSkills() {
-    databasePathOfExileService.readAll()
+    dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
             .subscribe(response -> databaseNinjaService.updateSkills(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void addNewSkills() {
-    databasePathOfExileService.readAll()
+    dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
             .subscribe(response -> databaseNinjaService.addNew(Objects.requireNonNull(response.getBody()), league)));
   }
 
+  public void loadProcessedSkills() {
+    dataAccessService.findLeagues().forEach(
+        league -> {
+          dataAccessService.addProcessedSkills(league, analyzerService.analyzeSkills(league.getName()));
+          log.info("{} - Processed {} Skills",
+              league.getName(),
+              dataAccessService.findProcessedSkillsByLeague(league).size()
+          );
+        }
+    );
+  }
+
+  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
+  private void addNewProcessedSkills() {
+    dataAccessService.findLeagues()
+        .forEach(league ->
+            dataAccessService.addNewProcessedSkill(league, analyzerService.analyzeSkills(league.getName())));
+  }
+
+  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
+  private void updateProcessedSkills() {
+    dataAccessService.findLeagues()
+        .forEach(league ->
+            dataAccessService.updateProcessedSkills(league, analyzerService.analyzeSkills(league.getName())));
+  }
+
   @SneakyThrows(InterruptedException.class)
   public void loading() {
-    Thread.sleep(2_000);
+    loadLeagues();
+    Thread.sleep(Duration.ofSeconds(2));
     loadRates();
     loadSkills();
+    Thread.sleep(Duration.ofSeconds(10));
+    loadProcessedSkills();
   }
 }

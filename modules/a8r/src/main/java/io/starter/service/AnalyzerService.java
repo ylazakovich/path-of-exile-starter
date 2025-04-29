@@ -18,7 +18,7 @@ public class AnalyzerService {
     this.dataAccessService = dataAccessService;
   }
 
-  public List<AnalyzedSkillDto> analyze(String league) {
+  public List<AnalyzedSkillDto> analyzeSkills(String league) {
     LeagueEntity leagueEntity = dataAccessService.findLeagueByName(league);
     List<SkillDto> data = SkillDto.convertToList(dataAccessService.findSkillsByLeague(leagueEntity));
     List<SkillDto> maxQualitySkills = data.stream()

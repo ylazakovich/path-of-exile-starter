@@ -3,7 +3,5 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux:$spring")
     implementation("org.hibernate.orm:hibernate-jcache:$hibernate")
     implementation("org.mariadb.jdbc:mariadb-java-client:$mariadb")
-    implementation("org.flywaydb:flyway-core:$flyway")
-    implementation("org.flywaydb:flyway-mysql:$flyway")
     runtimeOnly("io.netty:netty-all:$netty")
 }
