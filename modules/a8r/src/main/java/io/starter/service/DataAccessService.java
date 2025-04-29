@@ -46,8 +46,8 @@ public class DataAccessService {
   }
 
   @Transactional(readOnly = true)
-  public SkillEntity findSkillByNameAndLeague(LeagueEntity league, String name) {
-    return skillsRepository.findByLeagueAndName(league, name);
+  public SkillEntity findSkillBylLeagueAndNameAndVariant(LeagueEntity league, String name, String variant) {
+    return skillsRepository.findByLeagueAndNameAndVariant(league, name, variant);
   }
 
   @Transactional(readOnly = true)
@@ -99,7 +99,7 @@ public class DataAccessService {
           .map(skill -> {
             ProcessedSkillEntity skillEntity = new ProcessedSkillEntity();
             skillEntity.setLeague(league);
-            skillEntity.setSkill(findSkillByNameAndLeague(league, skill.getName()));
+            skillEntity.setSkill(findSkillBylLeagueAndNameAndVariant(league, skill.getName(), "1/20"));
             skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
             skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
             return skillEntity;
@@ -113,7 +113,8 @@ public class DataAccessService {
     List<ProcessedSkillEntity> entitiesOnUpdate = processedSkillsRepository.findAllByLeague(league);
     analyzedSkills.forEach(skill ->
         entitiesOnUpdate.stream()
-            .filter(entity -> entity.getSkill().equals(findSkillByNameAndLeague(league, skill.getName())))
+            .filter(entity ->
+                entity.getSkill().equals(findSkillBylLeagueAndNameAndVariant(league, skill.getName(), "1/20")))
             .findFirst()
             .ifPresent(matchedEntity -> {
                   matchedEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
@@ -133,7 +134,7 @@ public class DataAccessService {
         .forEach(skill -> {
           ProcessedSkillEntity skillEntity = new ProcessedSkillEntity();
           skillEntity.setLeague(league);
-          skillEntity.setSkill(findSkillByNameAndLeague(league, skill.getName()));
+          skillEntity.setSkill(findSkillBylLeagueAndNameAndVariant(league, skill.getName(), "1/20"));
           skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
           skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
           entitiesOnAdding.add(skillEntity);

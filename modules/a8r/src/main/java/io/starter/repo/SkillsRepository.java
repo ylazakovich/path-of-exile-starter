@@ -11,5 +11,5 @@ public interface SkillsRepository extends JpaRepository<SkillEntity, Long> {
 
   List<SkillEntity> findAllByLeague(LeagueEntity league);
 
-  SkillEntity findByLeagueAndName(LeagueEntity league, String name);
+  SkillEntity findByLeagueAndNameAndVariant(LeagueEntity league, String name, String variant);
 }
