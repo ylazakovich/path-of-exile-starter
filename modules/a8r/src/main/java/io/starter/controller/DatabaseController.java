@@ -1,5 +1,6 @@
 package io.starter.controller;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 
@@ -50,11 +51,13 @@ public class DatabaseController {
 
   private void loadRates(LeagueEntity league) {
     poeNinjaService.getRates(league.getName())
-        .subscribe(response -> databaseNinjaService.loadCurrency(response.getBody(), league));
-    log.info("{} - Loaded {} Rates",
-        league.getName(),
-        dataAccessService.findRatesByLeague(league).size()
-    );
+        .subscribe(response -> {
+          databaseNinjaService.loadCurrency(response.getBody(), league);
+          log.info("{} - Loaded {} Rates",
+              league.getName(),
+              dataAccessService.findRatesByLeague(league).size()
+          );
+        });
   }
 
   @PostMapping("/load/skills")
@@ -64,11 +67,13 @@ public class DatabaseController {
 
   private void loadSkills(LeagueEntity league) {
     poeNinjaService.getSkills(league.getName())
-        .subscribe(response -> databaseNinjaService.loadSkills(response.getBody(), league));
-    log.info("{} - Loaded {} Skills",
-        league.getName(),
-        dataAccessService.findSkillsByLeague(league).size()
-    );
+        .subscribe(response -> {
+          databaseNinjaService.loadSkills(response.getBody(), league);
+          log.info("{} - Loaded {} Skills",
+              league.getName(),
+              dataAccessService.findSkillsByLeague(league).size()
+          );
+        });
   }
 
   @GetMapping("/leagues")
@@ -78,8 +83,10 @@ public class DatabaseController {
 
   @PostMapping("/load/leagues")
   public void loadLeagues() {
-    pathOfExileService.getAllLeagues().subscribe(response -> dataAccessService.saveLeagues(response.getBody()));
-    log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
+    pathOfExileService.getAllLeagues().subscribe(response -> {
+      dataAccessService.saveLeagues(response.getBody());
+      log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
+    });
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
@@ -131,9 +138,11 @@ public class DatabaseController {
 
   @SneakyThrows(InterruptedException.class)
   public void loading() {
-    Thread.sleep(2_000);
+    loadLeagues();
+    Thread.sleep(Duration.ofSeconds(1));
     loadRates();
     loadSkills();
+    Thread.sleep(Duration.ofSeconds(1));
     loadProcessedSkills();
   }
 }
