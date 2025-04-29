@@ -139,10 +139,10 @@ public class DatabaseController {
   @SneakyThrows(InterruptedException.class)
   public void loading() {
     loadLeagues();
-    Thread.sleep(Duration.ofSeconds(1));
+    Thread.sleep(Duration.ofSeconds(2));
     loadRates();
     loadSkills();
-    Thread.sleep(Duration.ofSeconds(1));
+    Thread.sleep(Duration.ofSeconds(10));
     loadProcessedSkills();
   }
 }
