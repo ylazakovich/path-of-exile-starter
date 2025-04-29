@@ -1,4 +1,4 @@
-name: "Check formatting"
+name: "Run prettier"
 on:
   push:
     branches: [main]

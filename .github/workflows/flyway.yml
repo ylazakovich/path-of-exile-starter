@@ -1,0 +1,24 @@
+name: "Run flyway"
+on:
+  pull_request:
+    paths:
+      - 'migrations/**'
+      - '.github/scripts/compose/run_flyway.sh'
+  push:
+    paths:
+      - 'migrations/**'
+      - '.github/scripts/compose/run_flyway.sh'
+
+jobs:
+  check-flyway:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔨Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: 🐳 Check flyway
+        run: ./.github/scripts/compose/run_flyway.sh
+        shell: bash
+      - name: 🐳 Collecting logs from all docker containers
+        uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
+        with:
+          dest: logs

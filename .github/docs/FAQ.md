@@ -46,7 +46,7 @@ Then
 Run via console
 
 ```bash
-./run_app
+./run_app.sh
 ```
 
 When want to restart your app
@@ -54,7 +54,7 @@ When want to restart your app
 1. stop application via console
 
 ```bash
-./stop_app
+./stop_app.sh
 ```
 
 2. start application via console
