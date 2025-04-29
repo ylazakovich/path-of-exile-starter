@@ -45,5 +45,9 @@ services:
       a8r:
         condition: service_healthy
 
+  ngrok:
+    image: ngrok/ngrok:3
+    command: http host.docker.internal:5050
+
 volumes:
   mariadb_data:

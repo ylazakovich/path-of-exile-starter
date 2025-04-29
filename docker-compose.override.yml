@@ -31,3 +31,8 @@ services:
     environment:
       MARIADB_DATABASE: mariadb
       MARIADB_ROOT_PASSWORD: root
+
+  ngrok:
+    environment:
+      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+    ports: ["4040:4040"]
