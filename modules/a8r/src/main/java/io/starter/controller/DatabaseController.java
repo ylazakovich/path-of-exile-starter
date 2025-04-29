@@ -49,9 +49,12 @@ public class DatabaseController {
   }
 
   private void loadRates(LeagueEntity league) {
-    log.info("Loading rates for: {}", league.getName());
     poeNinjaService.getRates(league.getName())
         .subscribe(response -> databaseNinjaService.loadCurrency(response.getBody(), league));
+    log.info("{} - Loaded {} Rates",
+        league.getName(),
+        dataAccessService.findRatesByLeague(league).size()
+    );
   }
 
   @PostMapping("/load/skills")
@@ -60,9 +63,12 @@ public class DatabaseController {
   }
 
   private void loadSkills(LeagueEntity league) {
-    log.info("Loading skills for: {}", league.getName());
     poeNinjaService.getSkills(league.getName())
         .subscribe(response -> databaseNinjaService.loadSkills(response.getBody(), league));
+    log.info("{} - Loaded {} Skills",
+        league.getName(),
+        dataAccessService.findSkillsByLeague(league).size()
+    );
   }
 
   @GetMapping("/leagues")
@@ -72,8 +78,8 @@ public class DatabaseController {
 
   @PostMapping("/load/leagues")
   public void loadLeagues() {
-    log.info("Loading leagues");
     pathOfExileService.getAllLeagues().subscribe(response -> dataAccessService.saveLeagues(response.getBody()));
+    log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
@@ -100,8 +106,11 @@ public class DatabaseController {
   public void loadProcessedSkills() {
     dataAccessService.findLeagues().forEach(
         league -> {
-          log.info("Processing Skills - {} league", league.getName());
           dataAccessService.addProcessedSkills(league, analyzerService.analyzeSkills(league.getName()));
+          log.info("{} - Processed {} Skills",
+              league.getName(),
+              dataAccessService.findProcessedSkillsByLeague(league).size()
+          );
         }
     );
   }
