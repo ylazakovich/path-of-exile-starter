@@ -1,11 +1,11 @@
 package io.starter.tests.units.handler.message;
 
-import io.starter.telegram.cache.CallbackCache;
-import io.starter.telegram.cache.MessageCache;
-import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.service.CallbackAnswerService;
-import io.starter.telegram.service.MessageAnswerService;
-import io.starter.telegram.service.SettingsService;
+import io.starter.cache.CallbackCache;
+import io.starter.cache.MessageCache;
+import io.starter.dao.UserDao;
+import io.starter.service.CallbackAnswerService;
+import io.starter.service.MessageAnswerService;
+import io.starter.service.SettingsService;
 import io.starter.tests.BaseTest;
 
 import org.telegram.telegrambots.meta.api.objects.Update;

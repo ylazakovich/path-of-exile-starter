@@ -1,12 +1,12 @@
 package io.starter.tests.units.handler.callback;
 
-import io.starter.telegram.cache.CallbackCache;
-import io.starter.telegram.cache.MessageCache;
-import io.starter.telegram.dao.SkillDao;
-import io.starter.telegram.dao.UserDao;
-import io.starter.telegram.service.CallbackAnswerService;
-import io.starter.telegram.service.MessageAnswerService;
-import io.starter.telegram.service.SettingsService;
+import io.starter.cache.CallbackCache;
+import io.starter.cache.MessageCache;
+import io.starter.dao.UserDao;
+import io.starter.service.CallbackAnswerService;
+import io.starter.service.DataAccessService;
+import io.starter.service.MessageAnswerService;
+import io.starter.service.SettingsService;
 import io.starter.tests.BaseTest;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 public abstract class BaseCallbackTest extends BaseTest {
 
   protected final SettingsService settingsService = mock(SettingsService.class);
-  protected final SkillDao skillDao = mock(SkillDao.class);
+  protected final DataAccessService dataAccessService = mock(DataAccessService.class);
   protected final UserDao userDao = mock(UserDao.class);
   protected final MaybeInaccessibleMessage message = mock(MaybeInaccessibleMessage.class);
   protected final CallbackQuery callbackQuery = mock(CallbackQuery.class);
@@ -31,7 +31,7 @@ public abstract class BaseCallbackTest extends BaseTest {
   protected final User user = mock(User.class);
 
   protected final CallbackAnswerService callbackAnswerService = spy(new CallbackAnswerService(
-      skillDao,
+      dataAccessService,
       userDao,
       settingsService));
   protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(settingsService));

@@ -3,14 +3,14 @@ package io.starter.tests.units.handler.callback.skills;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import io.starter.cache.state.CallbackState;
+import io.starter.constants.Constants;
+import io.starter.constants.League;
 import io.starter.dataproviders.CallbackHandlerProvider;
-import io.starter.telegram.cache.state.CallbackState;
-import io.starter.telegram.constants.Constants;
-import io.starter.telegram.constants.League;
-import io.starter.telegram.entity.LeagueEntity;
-import io.starter.telegram.handler.UpdateHandler;
-import io.starter.telegram.model.aggregator.Skill;
-import io.starter.telegram.model.telegram.TelegramFacade;
+import io.starter.entity.LeagueEntity;
+import io.starter.handler.UpdateHandler;
+import io.starter.model.aggregator.Skill;
+import io.starter.model.telegram.TelegramFacade;
 import io.starter.tests.units.handler.callback.BaseCallbackTest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -91,7 +91,7 @@ public class InteractionsTest extends BaseCallbackTest {
     when(callbackQuery.getData()).thenReturn(state.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
     when(userDao.readLeague(user)).thenReturn(leagueEntity);
-    when(skillDao.readAll(leagueEntity)).thenReturn(skills);
+    when(dataAccessService.findAllSkills(leagueEntity)).thenReturn(skills);
     when(userDao.readSkillPage(user)).thenReturn(page);
     doNothing().when(userDao).saveSkillPage(user, page);
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
