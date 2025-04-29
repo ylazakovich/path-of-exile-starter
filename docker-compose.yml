@@ -9,7 +9,7 @@ services:
       retries: 5
 
   flyway:
-    image: flyway/flyway:11.8.0
+    image: flyway/flyway:11.8.0@sha256:5bd8150c77e83a7b886824fd71947b249cbc777af6dc9c2428850e7df961ca05
     environment:
       FLYWAY_LOCATIONS: filesystem:/flyway/sql
       FLYWAY_BASELINE_ON_MIGRATE: true
