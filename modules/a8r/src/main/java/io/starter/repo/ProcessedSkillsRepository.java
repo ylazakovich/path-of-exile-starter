@@ -9,5 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProcessedSkillsRepository extends JpaRepository<ProcessedSkillEntity, Long> {
 
-  List<ProcessedSkillEntity> findAllByLeagueId(LeagueEntity league);
+  List<ProcessedSkillEntity> findAllByLeague(LeagueEntity league);
 }

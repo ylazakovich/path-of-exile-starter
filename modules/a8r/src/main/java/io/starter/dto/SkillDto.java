@@ -32,7 +32,7 @@ public class SkillDto {
   public static List<SkillDto> convertToList(List<SkillEntity> entities) {
     return entities.stream()
         .map(entity -> new SkillDto(
-            entity.getLeagueId().getId(),
+            entity.getLeague().getId(),
             entity.getName(),
             entity.getVariant(),
             entity.getCorrupted(),

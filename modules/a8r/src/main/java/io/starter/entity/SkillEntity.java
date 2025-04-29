@@ -33,7 +33,7 @@ public class SkillEntity implements Serializable {
   private Long id;
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "league_id")
-  private @NonNull LeagueEntity leagueId;
+  private @NonNull LeagueEntity league;
   private @NonNull String name;
   private @NonNull String variant;
   private @NonNull Boolean corrupted;

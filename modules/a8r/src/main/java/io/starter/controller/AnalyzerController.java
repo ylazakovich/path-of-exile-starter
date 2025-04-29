@@ -27,6 +27,9 @@ public class AnalyzerController {
   }
 
   private List<AnalyzedSkillDto> getSkillsByLeagueWithExpectedProfit(long value, String league) {
-    return analyzerService.analyzeSkills(league).stream().filter(skill -> skill.getChaosEquivalentProfit() >= value).toList();
+    return analyzerService.analyzeSkills(league)
+        .stream()
+        .filter(skill -> skill.getChaosEquivalentProfit() >= value)
+        .toList();
   }
 }

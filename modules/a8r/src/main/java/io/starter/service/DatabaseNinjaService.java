@@ -48,7 +48,7 @@ public class DatabaseNinjaService {
           .flatMap(leagueEntity -> {
             List<SkillEntity> entityList = skillEntityMapper.apply(lines);
             entityList.forEach(skillEntity -> {
-              skillEntity.setLeagueId(leagueEntity);
+              skillEntity.setLeague(leagueEntity);
               skillEntity.setDivineEquivalent(rateService.toDivineEquivalent(skillEntity.getChaosEquivalent(), league));
             });
             dataAccessService.saveSkills(entityList);
@@ -80,7 +80,7 @@ public class DatabaseNinjaService {
     dataAccessService.findLeagueById(league.getId())
         .ifPresent(leagueEntity -> {
           entitiesOnUpdate.forEach(entity -> {
-            entity.setLeagueId(leagueEntity);
+            entity.setLeague(leagueEntity);
             entity.setDivineEquivalent(rateService.toDivineEquivalent(entity.getChaosEquivalent(), league));
           });
           dataAccessService.saveSkills(entitiesOnUpdate);
@@ -100,7 +100,7 @@ public class DatabaseNinjaService {
           entity.setCorrupted(skill.isCorrupted());
           entity.setChaosEquivalent(skill.getChaosEquivalent());
           entity.setDivineEquivalent(rateService.toDivineEquivalent(skill.getChaosEquivalent(), league));
-          entity.setLeagueId(league);
+          entity.setLeague(league);
           return entity;
         })
         .toList();

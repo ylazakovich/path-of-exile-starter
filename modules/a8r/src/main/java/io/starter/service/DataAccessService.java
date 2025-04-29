@@ -42,17 +42,17 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public List<SkillEntity> findSkillsByLeague(LeagueEntity league) {
-    return skillsRepository.findAllByLeagueId(league);
+    return skillsRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
-  public SkillEntity findSkillByName(String name) {
-    return skillsRepository.findByName(name);
+  public SkillEntity findSkillByNameAndLeague(LeagueEntity league, String name) {
+    return skillsRepository.findByLeagueAndName(league, name);
   }
 
   @Transactional(readOnly = true)
   public List<ProcessedSkillEntity> findProcessedSkillsByLeague(LeagueEntity league) {
-    return processedSkillsRepository.findAllByLeagueId(league);
+    return processedSkillsRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
@@ -99,7 +99,7 @@ public class DataAccessService {
           .map(skill -> {
             ProcessedSkillEntity skillEntity = new ProcessedSkillEntity();
             skillEntity.setLeague(league);
-            skillEntity.setSkill(findSkillByName(skill.getName()));
+            skillEntity.setSkill(findSkillByNameAndLeague(league, skill.getName()));
             skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
             skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
             return skillEntity;
@@ -110,10 +110,10 @@ public class DataAccessService {
 
   @Transactional
   public void updateProcessedSkills(LeagueEntity league, List<AnalyzedSkillDto> analyzedSkills) {
-    List<ProcessedSkillEntity> entitiesOnUpdate = processedSkillsRepository.findAllByLeagueId(league);
+    List<ProcessedSkillEntity> entitiesOnUpdate = processedSkillsRepository.findAllByLeague(league);
     analyzedSkills.forEach(skill ->
         entitiesOnUpdate.stream()
-            .filter(entity -> entity.getSkill().equals(skillsRepository.findByName(skill.getName())))
+            .filter(entity -> entity.getSkill().equals(findSkillByNameAndLeague(league, skill.getName())))
             .findFirst()
             .ifPresent(matchedEntity -> {
                   matchedEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
@@ -133,7 +133,7 @@ public class DataAccessService {
         .forEach(skill -> {
           ProcessedSkillEntity skillEntity = new ProcessedSkillEntity();
           skillEntity.setLeague(league);
-          skillEntity.setSkill(findSkillByName(skill.getName()));
+          skillEntity.setSkill(findSkillByNameAndLeague(league, skill.getName()));
           skillEntity.setChaosEquivalentPrice(skill.getChaosEquivalentPrice());
           skillEntity.setChaosEquivalentProfit(skill.getChaosEquivalentProfit());
           entitiesOnAdding.add(skillEntity);
