@@ -34,5 +34,5 @@ services:
 
   ngrok:
     environment:
-      - NGROK_AUTHTOKEN=${NGROK_AUTHTOKEN}
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
     ports: ["4040:4040"]
