@@ -1,0 +1,22 @@
+[
+  {
+    "httpRequest": {
+      "path": "/fact"
+    },
+    "httpResponse": {
+      "body": {
+        "fact": "Cats purr at the same frequency as an idling diesel engine, about 26 cycles per second.",
+        "length": 87
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/users"
+    },
+    "httpResponseTemplate": {
+      "templateType": "VELOCITY",
+      "template": "{\"body\":{\"name\":\"my_login\",\"job\":\"my_password\",\"id\":\"19\",\"createdAt\":\"$!now_iso_8601\"},\"statusCode\":201}"
+    }
+  }
+]
