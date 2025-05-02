@@ -43,6 +43,13 @@ services:
   mock-server:
     image: mockserver/mockserver:5.15.0
     command: -logLevel DEBUG -serverPort 1080 --verbose
+    healthcheck:
+      test: >
+        sh -c "if wget -qO- --server-response http://localhost:1080/mockserver/dashboard 2>&1 | grep -q 'HTTP/1.1 200';
+        then exit 0; else exit 1; fi"
+      interval: 5s
+      timeout: 1s
+      retries: 60
 
 volumes:
   mariadb_data:

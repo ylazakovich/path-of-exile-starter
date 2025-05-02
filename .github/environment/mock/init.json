@@ -1,0 +1,23 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/hello"
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "body": "Hello from mock!"
+    }
+  },
+  {
+    "httpRequest": {
+      "method": ".*",
+      "path": ".*"
+    },
+    "httpForward": {
+      "host": "poe.ninja",
+      "port": 443,
+      "scheme": "HTTPS"
+    }
+  }
+]

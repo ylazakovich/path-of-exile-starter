@@ -5,13 +5,20 @@ import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 
+import io.netty.handler.ssl.SslContext;
+import org.mockserver.logging.MockServerLogger;
+import org.mockserver.socket.tls.NettySslContextFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.tcp.SslProvider;
+import reactor.netty.transport.ProxyProvider;
 
 @Service
 public class PoeNinjaService {
@@ -19,7 +26,23 @@ public class PoeNinjaService {
   private final WebClient client;
 
   public PoeNinjaService() {
+
+    SslContext sslContext = new NettySslContextFactory(new MockServerLogger(getClass()))
+        .createClientSslContext(false, false);
+
     this.client = WebClient.builder()
+        .clientConnector(
+            new ReactorClientHttpConnector(
+                HttpClient
+                    .create()
+                    .secure(SslProvider.builder().sslContext(sslContext).build())
+                    .proxy(proxy -> proxy
+                        .type(ProxyProvider.Proxy.HTTP)
+                        .host("localhost")
+                        .port(1080)
+                    )
+            )
+        )
         .baseUrl(NinjaConfig.BASE_URL)
         .exchangeStrategies(ExchangeStrategies
             .builder()

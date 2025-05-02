@@ -51,7 +51,8 @@ services:
   mock-server:
     environment:
       MOCKSERVER_WATCH_INITIALIZATION_JSON: true
-      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/expectation.json
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/init.json
+      MOCKSERVER_USE_BOUNCY_CASTLE_FOR_KEY_AND_CERTIFICATE_GENERATION: true
     volumes:
-      - ./.github/environment/mock/expectation.json:/config/expectation.json
+      - ./.github/environment/mock/init.json:/config/init.json
     ports: ["1080:1080"]
