@@ -10,15 +10,6 @@ services:
 
   flyway:
     image: flyway/flyway:11.8.0@sha256:5bd8150c77e83a7b886824fd71947b249cbc777af6dc9c2428850e7df961ca05
-    environment:
-      FLYWAY_LOCATIONS: filesystem:/flyway/sql
-      FLYWAY_BASELINE_ON_MIGRATE: true
-      FLYWAY_BASELINE_VERSION: 0
-      FLYWAY_URL: jdbc:mariadb://mariadb:3306/mariadb
-      FLYWAY_USER: root
-      FLYWAY_PASSWORD: root
-    volumes:
-      - ./migrations:/flyway/sql
     command: migrate
     depends_on:
       mariadb:
@@ -48,6 +39,10 @@ services:
   ngrok:
     image: ngrok/ngrok:3
     command: http host.docker.internal:5050
+
+  mock-server:
+    image: mockserver/mockserver:5.15.0
+    command: -logLevel DEBUG -serverPort 1080 --verbose
 
 volumes:
   mariadb_data:

@@ -2,11 +2,11 @@ name: "Run flyway"
 on:
   pull_request:
     paths:
-      - "migrations/**"
+      - ".github/environment/migrations/**"
       - ".github/scripts/compose/run_flyway.sh"
   push:
     paths:
-      - "migrations/**"
+      - ".github/environment/migrations/**"
       - ".github/scripts/compose/run_flyway.sh"
 
 jobs:
