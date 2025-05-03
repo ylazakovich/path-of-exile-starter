@@ -1,0 +1,10 @@
+### Extracted expectations
+PUT http://localhost:1080/mockserver/retrieve
+Content-Type: application/json
+
+{
+  "httpRequest": {
+    "method": ".*",
+    "path": ".*"
+  }
+}
