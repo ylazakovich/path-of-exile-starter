@@ -54,5 +54,5 @@ services:
       MOCKSERVER_INITIALIZATION_JSON_PATH: /config/init.json
     volumes:
       - ./.github/environment/mock/init.json:/config/init.json
-      - ./.github/environment/mock/expectations:/config
+      - ./.github/environment/mock/expectations:/config/expectations
     ports: ["1080:1080"]

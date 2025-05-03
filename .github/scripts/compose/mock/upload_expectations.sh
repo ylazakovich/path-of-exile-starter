@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MOCKSERVER_URL=${1:-http://localhost:1080}
-DIR=${2:-expectations}
+DIR=${2:-.github/environment/mock/expectations}
 
 for file in "$DIR"/*.json; do
   echo "Uploading $file..."
