@@ -1,4 +1,4 @@
-### Extracted expectations
+### Extracted recorded expectations
 PUT http://localhost:1080/mockserver/retrieve
 Content-Type: application/json
 
