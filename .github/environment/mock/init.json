@@ -1,18 +1,11 @@
 [
   {
     "httpRequest": {
-      "method": "GET",
-      "path": "/hello"
-    },
-    "httpResponse": {
-      "statusCode": 200,
-      "body": "Hello from mock!"
-    }
-  },
-  {
-    "httpRequest": {
       "method": ".*",
-      "path": ".*"
+      "path": ".*",
+      "headers": {
+        "Host": [ "poe.ninja" ]
+      }
     },
     "httpForward": {
       "host": "poe.ninja",
