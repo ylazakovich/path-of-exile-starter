@@ -16,10 +16,8 @@ subprojects {
     apply plugin: 'com.github.spotbugs'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
-    apply plugin: 'jacoco'
 }
 
-apply from: 'gradle/coverage.gradle'
 apply from: 'gradle/compilation.gradle'
 apply from: 'gradle/code-analysis.gradle'
 apply from: 'gradle/dependencies.gradle'
