@@ -11,14 +11,14 @@ jobs:
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - name: 🟢Start Application
+      - name: 🟢Start compose
         run: ./.github/scripts/compose/run_app.sh
         shell: bash
       - name: 🐳 Collecting logs from all docker containers
         uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
         with:
           dest: logs
-      - name: 🛑Stop Application
+      - name: 🛑Stop compose
         run: ./.github/scripts/compose/stop_app.sh
         shell: bash
       - name: 📦 Packing docker compose logs as artifact
