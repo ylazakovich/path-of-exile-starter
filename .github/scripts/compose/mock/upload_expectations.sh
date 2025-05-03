@@ -10,4 +10,4 @@ for file in "$DIR"/*.json; do
     -H "Content-Type: application/json"
 done
 
-echo "✅ All expectations uploaded."
+printf "\n✅ All expectations uploaded.\n"
