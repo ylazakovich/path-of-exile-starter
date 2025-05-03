@@ -2,26 +2,27 @@ package io.starter.service;
 
 import java.util.List;
 
-import io.starter.config.PathOfExileConfig;
+import io.starter.config.PathOfExileConfiguration;
 import io.starter.model.path_of_exile.League;
+import io.starter.shared.AbstractWebClientService;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class PathOfExileService {
+public class PathOfExileService extends AbstractWebClientService {
+
+  private static final PathOfExileConfiguration CONFIG = ConfigFactory
+      .create(PathOfExileConfiguration.class, System.getProperties());
 
   private static final String LEAGUES = "api/leagues";
 
-  private final WebClient client;
-
   public PathOfExileService() {
-    this.client = WebClient.builder()
-        .baseUrl(PathOfExileConfig.BASE_URL)
-        .build();
+    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl());
+
   }
 
   public Mono<ResponseEntity<List<League>>> getAllLeagues() {

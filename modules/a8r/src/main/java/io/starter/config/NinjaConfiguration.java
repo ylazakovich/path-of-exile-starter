@@ -21,4 +21,8 @@ public interface NinjaConfiguration extends Config {
   @Key("NINJA_CURRENCY_ROUTE")
   @DefaultValue("/api/data/currencyoverview")
   String currencyRoute();
+
+  @Key("NINJA_USE_MOCK_SERVER_AS_PROXY")
+  @DefaultValue("false")
+  Boolean useMockServerAsProxy();
 }
