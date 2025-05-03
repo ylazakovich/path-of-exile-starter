@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  check-flyway:
+  check-mock-server:
     runs-on: ubuntu-latest
     steps:
       - name: 🔨Checkout
