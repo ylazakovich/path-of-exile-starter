@@ -35,7 +35,7 @@ public class PoeNinjaService {
             new ReactorClientHttpConnector(
                 HttpClient
                     .create()
-                    .secure(SslProvider.builder().sslContext(sslContext.createClientSslContext(true, true)).build())
+                    .secure(SslProvider.builder().sslContext(sslContext.createClientSslContext(true, false)).build())
                     .proxy(proxy -> proxy
                         .type(ProxyProvider.Proxy.HTTP)
                         .host("localhost")
