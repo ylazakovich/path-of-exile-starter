@@ -44,7 +44,7 @@ services:
     image: mockserver/mockserver:5.15.0
     command: >
       -logLevel DEBUG 
-      -serverPort 1080 
+      -serverPort 1080
 
 volumes:
   mariadb_data:

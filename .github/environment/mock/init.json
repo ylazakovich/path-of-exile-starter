@@ -4,7 +4,7 @@
       "method": ".*",
       "path": ".*",
       "headers": {
-        "Host": [ "poe.ninja" ]
+        "Host": ["poe.ninja"]
       }
     },
     "httpForward": {
