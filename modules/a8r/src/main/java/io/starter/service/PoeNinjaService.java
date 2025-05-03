@@ -5,7 +5,7 @@ import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 
-import io.netty.handler.ssl.SslContext;
+import org.mockserver.configuration.Configuration;
 import org.mockserver.logging.MockServerLogger;
 import org.mockserver.socket.tls.NettySslContextFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -26,16 +26,16 @@ public class PoeNinjaService {
   private final WebClient client;
 
   public PoeNinjaService() {
-
-    SslContext sslContext = new NettySslContextFactory(new MockServerLogger(getClass()))
-        .createClientSslContext(false, false);
-
+    MockServerLogger mockServerLogger = new MockServerLogger(getClass());
+    Configuration configuration = Configuration.configuration();
+    boolean forServer = false;
+    NettySslContextFactory sslContext = new NettySslContextFactory(configuration, mockServerLogger, forServer);
     this.client = WebClient.builder()
         .clientConnector(
             new ReactorClientHttpConnector(
                 HttpClient
                     .create()
-                    .secure(SslProvider.builder().sslContext(sslContext).build())
+                    .secure(SslProvider.builder().sslContext(sslContext.createClientSslContext(true, true)).build())
                     .proxy(proxy -> proxy
                         .type(ProxyProvider.Proxy.HTTP)
                         .host("localhost")
