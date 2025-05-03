@@ -9,3 +9,8 @@ Content-Type: application/json
     "path": ".*"
   }
 }
+
+### Path of exile - GET /api/leagues
+GET http://localhost:1080/api/leagues
+Host: www.pathofexile.com
+Accept: application/json

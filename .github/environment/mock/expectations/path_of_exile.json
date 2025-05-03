@@ -1,0 +1,57 @@
+[
+  {
+    "httpRequest": {
+      "method": "GET",
+      "path": "/api/leagues",
+      "headers": {
+        "host": ["www.pathofexile.com"],
+        "content-length": ["0"],
+        "Accept": ["application/json"]
+      }
+    },
+    "httpResponse": {
+      "statusCode": 200,
+      "body": [
+        {
+          "id": "Standard",
+          "name": "Standard",
+          "realm": "pc",
+          "url": "https://www.pathofexile.com/ladders/league/Standard",
+          "startAt": "2013-01-23T21:00:00Z",
+          "endAt": null,
+          "description": "The default game mode.",
+          "category": {
+            "id": "Standard"
+          },
+          "registerAt": "2019-09-06T19:00:00Z",
+          "delveEvent": true,
+          "rules": []
+        },
+        {
+          "id": "Hardcore",
+          "name": "Hardcore",
+          "realm": "pc",
+          "url": "https://www.pathofexile.com/ladders/league/Hardcore",
+          "startAt": "2013-01-23T21:00:00Z",
+          "endAt": null,
+          "description": "A character killed in the Hardcore league is moved to the Standard league.",
+          "category": {
+            "id": "Standard"
+          },
+          "registerAt": "2019-09-06T19:00:00Z",
+          "delveEvent": true,
+          "rules": [
+            {
+              "id": "Hardcore",
+              "name": "Hardcore",
+              "description": "A character killed in Hardcore is moved to its parent league."
+            }
+          ]
+        }
+      ],
+      "headers": {
+        "Content-Type": ["application/json"]
+      }
+    }
+  }
+]
