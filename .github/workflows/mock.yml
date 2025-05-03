@@ -12,7 +12,9 @@ jobs:
       - name: 🔨Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - name: 🐳 Check mock server
-        run: ./.github/scripts/compose/run_mock_server.sh
+        run: >
+          ./.github/scripts/compose/mock/run_mock_server.sh
+          ./.github/scripts/compose/mock/upload_expectations.sh
         shell: bash
       - name: 🐳 Collecting logs from all docker containers
         uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
