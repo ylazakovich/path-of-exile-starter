@@ -3,28 +3,18 @@
     "method": "GET",
     "path": "/api/data/currencyoverview",
     "queryStringParameters": {
-      "league": [
-        "Standard"
-      ],
-      "type": [
-        "Currency"
-      ]
+      "league": ["Standard"],
+      "type": ["Currency"]
     },
     "headers": {
-      "Accept": [
-        "application/json"
-      ],
-      "Host": [
-        "poe.ninja"
-      ]
+      "Accept": ["application/json"],
+      "Host": ["poe.ninja"]
     }
   },
   "httpResponse": {
     "statusCode": 200,
     "headers": {
-      "Content-Type": [
-        "application/json"
-      ]
+      "Content-Type": ["application/json"]
     },
     "body": {
       "lines": [
