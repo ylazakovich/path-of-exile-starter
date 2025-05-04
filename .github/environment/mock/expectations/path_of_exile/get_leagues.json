@@ -11,6 +11,9 @@
     },
     "httpResponse": {
       "statusCode": 200,
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
       "body": [
         {
           "id": "Standard",
@@ -48,10 +51,7 @@
             }
           ]
         }
-      ],
-      "headers": {
-        "Content-Type": ["application/json"]
-      }
+      ]
     }
   }
 ]

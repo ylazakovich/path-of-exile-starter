@@ -15,7 +15,7 @@ public interface NinjaConfiguration extends Config {
   String baseUrl();
 
   @Key("NINJA_REAL_URL")
-  @DefaultValue("https://www.pathofexile.com")
+  @DefaultValue("https://poe.ninja")
   String realUrl();
 
   @Key("NINJA_ITEM_ROUTE")

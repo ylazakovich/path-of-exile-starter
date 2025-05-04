@@ -1,0 +1,51 @@
+{
+  "httpRequest": {
+    "method": "GET",
+    "path": "/api/data/itemoverview",
+    "queryStringParameters": {
+      "league": [
+        "Standard"
+      ],
+      "type": [
+        "SkillGem"
+      ]
+    },
+    "headers": {
+      "Accept": [
+        "application/json"
+      ],
+      "Host": [
+        "poe.ninja"
+      ]
+    }
+  },
+  "httpResponse": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type": [
+        "application/json"
+      ]
+    },
+    "body": {
+      "lines": [
+        {
+          "name": "Faster Attacks Support",
+          "variant": "1/20",
+          "corrupted": false,
+          "chaosValue": 106.15,
+          "exaltedValue": 2.2
+        },
+        {
+          "name": "Faster Attacks Support",
+          "variant": "20",
+          "corrupted": false,
+          "chaosValue": 75.41,
+          "exaltedValue": 1.56
+        }
+      ]
+    }
+  },
+  "times": {
+    "unlimited": true
+  }
+}
