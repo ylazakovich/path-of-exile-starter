@@ -20,7 +20,7 @@ public class PoeNinjaService extends AbstractWebClientService {
       ConfigFactory.create(NinjaConfiguration.class, System.getProperties());
 
   public PoeNinjaService() {
-    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl());
+    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
   }
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
