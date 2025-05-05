@@ -1,0 +1,77 @@
+{
+  "httpRequest": {
+    "method": "GET",
+    "path": "/api/data/currencyoverview",
+    "queryStringParameters": {
+      "league": ["Standard"],
+      "type": ["Currency"]
+    },
+    "headers": {
+      "Accept": ["application/json"],
+      "Host": ["poe.ninja"]
+    }
+  },
+  "httpResponse": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type": ["application/json"]
+    },
+    "body": {
+      "lines": [
+        {
+          "currencyTypeName": "Gemcutter's Prism",
+          "pay": {
+            "id": 17,
+            "league_id": 9,
+            "pay_currency_id": 17,
+            "get_currency_id": 2,
+            "sample_exchange_rate": 0.09038461538461539,
+            "value": 1,
+            "data_point_count": 15,
+            "includes_secondary": false,
+            "listing_count": 150
+          },
+          "receive": {
+            "id": 2,
+            "league_id": 9,
+            "pay_currency_id": 2,
+            "get_currency_id": 17,
+            "sample_exchange_rate": 10.84,
+            "value": 1,
+            "data_point_count": 15,
+            "includes_secondary": false,
+            "listing_count": 150
+          }
+        },
+        {
+          "currencyTypeName": "Divine Orb",
+          "pay": {
+            "id": 6,
+            "league_id": 9,
+            "pay_currency_id": 6,
+            "get_currency_id": 2,
+            "sample_exchange_rate": 0.009722222222222222,
+            "value": 1,
+            "data_point_count": 15,
+            "includes_secondary": false,
+            "listing_count": 150
+          },
+          "receive": {
+            "id": 2,
+            "league_id": 9,
+            "pay_currency_id": 2,
+            "get_currency_id": 6,
+            "sample_exchange_rate": 102.85714285714286,
+            "value": 1,
+            "data_point_count": 15,
+            "includes_secondary": false,
+            "listing_count": 150
+          }
+        }
+      ]
+    }
+  },
+  "times": {
+    "unlimited": true
+  }
+}

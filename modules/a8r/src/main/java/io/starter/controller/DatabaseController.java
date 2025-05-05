@@ -8,7 +8,7 @@ import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
 import io.starter.service.AnalyzerService;
 import io.starter.service.DataAccessService;
-import io.starter.service.DatabaseNinjaService;
+import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
@@ -27,18 +27,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class DatabaseController {
 
   private final DataAccessService dataAccessService;
-  private final DatabaseNinjaService databaseNinjaService;
+  private final NinjaDataSyncService ninjaDataSyncService;
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
   private final AnalyzerService analyzerService;
 
   public DatabaseController(DataAccessService dataAccessService,
-                            DatabaseNinjaService databaseNinjaService,
+                            NinjaDataSyncService ninjaDataSyncService,
                             PoeNinjaService poeNinjaService,
                             PathOfExileService pathOfExileService,
                             AnalyzerService analyzerService) {
     this.dataAccessService = dataAccessService;
-    this.databaseNinjaService = databaseNinjaService;
+    this.ninjaDataSyncService = ninjaDataSyncService;
     this.poeNinjaService = poeNinjaService;
     this.pathOfExileService = pathOfExileService;
     this.analyzerService = analyzerService;
@@ -52,7 +52,7 @@ public class DatabaseController {
   private void loadRates(LeagueEntity league) {
     poeNinjaService.getRates(league.getName())
         .subscribe(response -> {
-          databaseNinjaService.loadCurrency(response.getBody(), league);
+          ninjaDataSyncService.loadCurrency(response.getBody(), league);
           log.info("{} - Loaded {} Rates",
               league.getName(),
               dataAccessService.findRatesByLeague(league).size()
@@ -68,7 +68,7 @@ public class DatabaseController {
   private void loadSkills(LeagueEntity league) {
     poeNinjaService.getSkills(league.getName())
         .subscribe(response -> {
-          databaseNinjaService.loadSkills(response.getBody(), league);
+          ninjaDataSyncService.loadSkills(response.getBody(), league);
           log.info("{} - Loaded {} Skills",
               league.getName(),
               dataAccessService.findSkillsByLeague(league).size()
@@ -93,21 +93,21 @@ public class DatabaseController {
   public void updateRates() {
     dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getRates(league.getName())
-            .subscribe(response -> databaseNinjaService.updateCurrencies(response.getBody(), league)));
+            .subscribe(response -> ninjaDataSyncService.updateCurrencies(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
   public void updateSkills() {
     dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(response -> databaseNinjaService.updateSkills(response.getBody(), league)));
+            .subscribe(response -> ninjaDataSyncService.updateSkills(response.getBody(), league)));
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void addNewSkills() {
     dataAccessService.findLeagues()
         .forEach(league -> poeNinjaService.getSkills(league.getName())
-            .subscribe(response -> databaseNinjaService.addNew(Objects.requireNonNull(response.getBody()), league)));
+            .subscribe(response -> ninjaDataSyncService.addNew(Objects.requireNonNull(response.getBody()), league)));
   }
 
   public void loadProcessedSkills() {

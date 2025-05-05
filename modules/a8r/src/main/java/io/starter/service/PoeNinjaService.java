@@ -1,39 +1,31 @@
 package io.starter.service;
 
-import io.starter.config.NinjaConfig;
+import io.starter.config.NinjaConfiguration;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
+import io.starter.shared.AbstractWebClientService;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.ExchangeStrategies;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 @Service
-public class PoeNinjaService {
+public class PoeNinjaService extends AbstractWebClientService {
 
-  private final WebClient client;
+  private static final NinjaConfiguration CONFIG =
+      ConfigFactory.create(NinjaConfiguration.class, System.getProperties());
 
   public PoeNinjaService() {
-    this.client = WebClient.builder()
-        .baseUrl(NinjaConfig.BASE_URL)
-        .exchangeStrategies(ExchangeStrategies
-            .builder()
-            .codecs(
-                codecs -> codecs
-                    .defaultCodecs()
-                    .maxInMemorySize(8 * 100 * 1024 * 1024))
-            .build())
-        .build();
+    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
   }
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
     return client.get()
-        .uri("%s?%s".formatted(NinjaConfig.ITEM_ROUTE, "league=%s&type=SkillGem".formatted(league)))
+        .uri("%s?%s".formatted(CONFIG.itemRoute(), "league=%s&type=SkillGem".formatted(league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .toEntity(new ParameterizedTypeReference<>() {
@@ -42,7 +34,7 @@ public class PoeNinjaService {
 
   public Mono<ResponseEntity<Lines<Currency>>> getRates(String league) {
     return client.get()
-        .uri("%s?%s".formatted(NinjaConfig.CURRENCY_ROUTE, "league=%s&type=Currency".formatted(league)))
+        .uri("%s?%s".formatted(CONFIG.currencyRoute(), "league=%s&type=Currency".formatted(league)))
         .accept(MediaType.APPLICATION_JSON)
         .retrieve()
         .toEntity(new ParameterizedTypeReference<>() {

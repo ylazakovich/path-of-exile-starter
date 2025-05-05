@@ -26,7 +26,7 @@ jobs:
       - name: 🔨Build with Gradle
         uses: gradle/actions/setup-gradle@06832c7b30a0129d7fb559bcc6e43d26f6374244 # v4
       - name: 🟢Start Application
-        run: ./run_app.sh
+        run: ./.github/scripts/compose/run_app.sh
         shell: bash
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
@@ -35,7 +35,7 @@ jobs:
         with:
           dest: logs
       - name: 🛑Stop Application
-        run: ./stop_app.sh
+        run: ./.github/scripts/compose/stop_app.sh
         shell: bash
       - name: 📦 Packing docker compose logs as artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -43,13 +43,6 @@ jobs:
           name: docker-logs
           retention-days: 3
           path: logs
-      - name: 🔬Run Test Coverage
-        run: ./gradlew jacocoTestReport
-      - name: 🔨Generate JaCoCo Badge
-        uses: cicirello/jacoco-badge-generator@f33476a5a3fd5a4f77cb5eef2ebe728c1dd5b921 # v2
-        with:
-          generate-branches-badge: true
-          jacoco-csv-file: "**/build/reports/jacoco/test/jacocoTestReport.csv"
       - name: 📦Packing test results as artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
@@ -59,10 +52,3 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
-      - name: 📦 Packing coverage results as artifact
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        if: always()
-        with:
-          name: coverage-report-linux-${{ matrix.gradle-task }}
-          retention-days: 3
-          path: "**/build/reports/jacoco/test/html"

@@ -19,6 +19,8 @@ ext {
     restAssured = '5.5.1'
     awaitility = '4.3.0'
     spotbugs_annotation = '4.9.3'
+    mock_server_netty = '5.15.0'
+    bouncy_castle = '1.80'
 }
 
 subprojects {

@@ -1,13 +1,10 @@
 # PATH OF EXILE STARTER
 
-## Build Status
-
+![Mock server Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/mock.yml/badge.svg)
 ![Lint Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/lint.yml/badge.svg)
 ![Flyway Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/flyway.yml/badge.svg)
 ![Compose Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/compose.yml/badge.svg)
 ![Test Status](https://github.com/ylazakovich/path-of-exile-starter/actions/workflows/test.yml/badge.svg)
-
-## Additional Information
 
 [![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg?logo=telegram)](https://t.me/poe_consultant_bot)
 [![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate&style=flat)](https://renovatebot.com/)

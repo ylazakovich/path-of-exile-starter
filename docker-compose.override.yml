@@ -31,3 +31,24 @@ services:
     environment:
       MARIADB_DATABASE: mariadb
       MARIADB_ROOT_PASSWORD: root
+
+  ngrok:
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN}
+    ports: ["4040:4040"]
+
+  flyway:
+    environment:
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
+      FLYWAY_BASELINE_ON_MIGRATE: true
+      FLYWAY_BASELINE_VERSION: 0
+      FLYWAY_URL: jdbc:mariadb://mariadb:3306/mariadb
+      FLYWAY_USER: root
+      FLYWAY_PASSWORD: root
+    volumes:
+      - ./.github/environment/migrations:/flyway/sql
+
+  mock-server:
+    volumes:
+      - ./.github/environment/mock/expectations:/config/expectations
+    ports: ["1080:1080"]

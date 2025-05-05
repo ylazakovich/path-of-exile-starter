@@ -1,0 +1,33 @@
+### Extracted recorded expectations
+PUT http://localhost:1080/mockserver/retrieve
+Content-Type: application/json
+
+{
+  "type": "RECORDED_EXPECTATIONS",
+  "httpRequest": {
+    "method": ".*",
+    "path": ".*"
+  }
+}
+
+### Mocked Path of exile - GET /api/leagues
+GET http://localhost:1080/api/leagues
+Host: www.pathofexile.com
+Accept: application/json
+
+### Path of exile - GET /api/leagues
+GET http://pathofexile.com/api/leagues
+Accept: application/json
+
+### Path of Exile - GET /api/data/currencyoverview
+GET https://poe.ninja/api/data/currencyoverview?league=Standard&type=Currency
+Accept: application/json
+
+### Mocked poe.ninja - GET /api/data/currencyoverview
+GET http://localhost:1080/api/data/currencyoverview?league=Standard&type=Currency
+Host: poe.ninja
+Accept: application/json
+
+### Path of Exile - GET /api/data/itemoverview
+GET https://poe.ninja/api/data/itemoverview?league=Standard&type=SkillGem
+Accept: application/json

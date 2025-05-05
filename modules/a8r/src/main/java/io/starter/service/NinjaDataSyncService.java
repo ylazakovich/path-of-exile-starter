@@ -1,7 +1,6 @@
 package io.starter.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import io.starter.dao.RatesDao;
 import io.starter.entity.LeagueEntity;
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class DatabaseNinjaService {
+public class NinjaDataSyncService {
 
   private final RatesDao ratesDao;
   private final DataAccessService dataAccessService;
@@ -26,7 +25,7 @@ public class DatabaseNinjaService {
   private final SkillEntityMapper skillEntityMapper;
 
   @Autowired
-  public DatabaseNinjaService(RatesDao ratesDao,
+  public NinjaDataSyncService(RatesDao ratesDao,
                               DataAccessService dataAccessService,
                               RateService rateService,
                               SkillEntityMapper skillEntityMapper) {
@@ -45,14 +44,13 @@ public class DatabaseNinjaService {
   public void loadSkills(Lines<Skill> lines, LeagueEntity league) {
     if (dataAccessService.findSkillsByLeague(league).isEmpty() && !lines.getLines().isEmpty()) {
       dataAccessService.findLeagueById(league.getId())
-          .flatMap(leagueEntity -> {
+          .ifPresent(leagueEntity -> {
             List<SkillEntity> entityList = skillEntityMapper.apply(lines);
             entityList.forEach(skillEntity -> {
               skillEntity.setLeague(leagueEntity);
               skillEntity.setDivineEquivalent(rateService.toDivineEquivalent(skillEntity.getChaosEquivalent(), league));
             });
             dataAccessService.saveSkills(entityList);
-            return Optional.empty();
           });
     }
   }

@@ -4,4 +4,7 @@ dependencies {
     implementation("org.hibernate.orm:hibernate-jcache:$hibernate")
     implementation("org.mariadb.jdbc:mariadb-java-client:$mariadb")
     runtimeOnly("io.netty:netty-all:$netty")
+    implementation("org.mock-server:mockserver-netty:$mock_server_netty")
+    implementation("org.bouncycastle:bcprov-jdk18on:$bouncy_castle")
+    implementation("org.bouncycastle:bcpkix-jdk18on:$bouncy_castle")
 }

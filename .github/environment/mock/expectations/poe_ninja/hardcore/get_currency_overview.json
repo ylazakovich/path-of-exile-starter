@@ -1,0 +1,26 @@
+{
+  "httpRequest": {
+    "method": "GET",
+    "path": "/api/data/currencyoverview",
+    "queryStringParameters": {
+      "league": ["Hardcore"],
+      "type": ["Currency"]
+    },
+    "headers": {
+      "Accept": ["application/json"],
+      "Host": ["poe.ninja"]
+    }
+  },
+  "httpResponse": {
+    "statusCode": 200,
+    "headers": {
+      "Content-Type": ["application/json"]
+    },
+    "body": {
+      "lines": []
+    }
+  },
+  "times": {
+    "unlimited": true
+  }
+}
