@@ -9,7 +9,7 @@ COPY modules/${MODULE} ./modules/${MODULE}
 
 RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
 
-FROM eclipse-temurin:21.0.7_6-jre@sha256:f08ebc4aae836b96ec861a89b5187260a9bca54ad87255ca55eddbf097b444f5
+FROM eclipse-temurin:21.0.7_6-jre@sha256:3e08d54ec5a8780227a87ef2458a26c27c4b110e4443d25f055fbe2f96907139
 ARG MODULE
 ARG PORT
 WORKDIR /app
