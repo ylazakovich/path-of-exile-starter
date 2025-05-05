@@ -1,7 +1,6 @@
 package io.starter.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import io.starter.dao.RatesDao;
 import io.starter.entity.LeagueEntity;

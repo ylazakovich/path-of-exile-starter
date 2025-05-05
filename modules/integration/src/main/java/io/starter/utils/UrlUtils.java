@@ -1,6 +1,7 @@
 package io.starter.utils;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class UrlUtils {
    */
   @SneakyThrows(MalformedURLException.class)
   public URL convertToUrl(String url) {
-    return new URL(url);
+    return URI.create(url).toURL();
   }
 
   /**
