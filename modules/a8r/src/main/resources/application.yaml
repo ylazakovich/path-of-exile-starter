@@ -21,3 +21,6 @@ spring:
           use_second_level_cache: true
           region:
             factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+
+  mustache:
+    check-template-location: false

@@ -9,7 +9,7 @@ services:
       retries: 5
 
   flyway:
-    image: flyway/flyway:11.8.0@sha256:5bd8150c77e83a7b886824fd71947b249cbc777af6dc9c2428850e7df961ca05
+    image: flyway/flyway:11.8.1@sha256:b001b9463f6db9612e58c198a6dbc6a4315e8201a430d407a38e6a32210f39b8
     command: migrate
     depends_on:
       mariadb:
@@ -37,11 +37,11 @@ services:
         condition: service_healthy
 
   ngrok:
-    image: ngrok/ngrok:3
+    image: ngrok/ngrok:3@sha256:8d2d2b134398d186934140626bfa1638e6ae079dc8dd4aaac88707e309406880
     command: http host.docker.internal:5050
 
   mock-server:
-    image: mockserver/mockserver:5.15.0
+    image: mockserver/mockserver:5.15.0@sha256:0f9ef78c94894ac3e70135d156193b25e23872575d58e2228344964273b4af6b
     command: >
       -logLevel DEBUG 
       -serverPort 1080
