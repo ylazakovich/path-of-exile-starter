@@ -3,7 +3,7 @@ ext {
     lombok = '1.18.38'
     telegram = '8.3.0'
     spring = '3.4.5'
-    hibernate_orm = '6.6.13.Final'
+    hibernate_orm = '6.6.14.Final'
     hibernate_validator = '8.0.1.Final'
     mariadb = '3.5.3'
     mockito = '5.17.0'
