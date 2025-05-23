@@ -2,7 +2,7 @@ ext {
     netty = '4.2.1.Final'
     lombok = '1.18.38'
     telegram = '8.3.0'
-    spring = '3.4.6'
+    spring = '3.5.0'
     hibernate_orm = '7.0.0.Final'
     hibernate_validator = '9.0.0.Final'
     mariadb = '3.5.3'
