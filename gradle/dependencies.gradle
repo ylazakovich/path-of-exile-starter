@@ -22,6 +22,7 @@ ext {
     spotbugs_annotation = '4.9.3'
     mock_server_netty = '5.15.0'
     bouncy_castle = '1.81'
+    spotbug = '4.9.3'
 }
 
 subprojects {
@@ -32,6 +33,12 @@ subprojects {
             mavenContent {
                 snapshotsOnly()
             }
+        }
+    }
+
+    dependencyManagement {
+        dependencies {
+            dependency ("com.github.spotbugs:spotbugs-annotations:${spotbug}")
         }
     }
 
