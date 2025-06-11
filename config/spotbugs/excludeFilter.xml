@@ -1,90 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <FindBugsFilter>
-  <Match>
-    <Bug code="MS,RV,ST,DE,Nm,NP,It,UuF,DC,RCN,EI2"/>
-    <Bug pattern="EI_EXPOSE_REP"/>
-  </Match>
-  <Match>
-    <Bug pattern="NM_CLASS_NOT_EXCEPTION"/>
-  </Match>
-  <Match>
-    <Bug pattern="THROWS_METHOD_THROWS_RUNTIMEEXCEPTION"/>
-  </Match>
-  <Match>
-    <Bug pattern="THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION"/>
-  </Match>
-  <Match>
-    <Bug pattern="THROWS_METHOD_THROWS_CLAUSE_THROWABLE"/>
-  </Match>
-  <Match>
-    <Bug pattern="EI_EXPOSE_REP"/>
-  </Match>
-  <Match>
-    <Bug pattern="MS_EXPOSE_REP"/>
-  </Match>
-  <Match>
-    <Bug pattern="EI_EXPOSE_REP2"/>
-  </Match>
-  <Match>
-    <Bug pattern="MS_SHOULD_BE_FINAL"/>
-  </Match>
-  <Match>
-    <Class name="~.*\.*Test"/>
-    <Bug code="SS"/>
-  </Match>
-  <Match>
-    <Class name="~.*\.*Test"/>
-    <Bug pattern="RV_RETURN_VALUE_IGNORED"/>
-  </Match>
-  <Match>
-    <Class name="~.*\.*Test"/>
-    <Bug pattern="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"/>
-  </Match>
-  <Match>
-    <Class name="~.*\.*TestPage"/>
-    <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
-  </Match>
-  <Match>
-    <Class name="~.*\.*TestPage"/>
-    <Bug pattern="UUF_UNUSED_FIELD"/>
-  </Match>
-  <Match>
-    <Class name="com.codeborne.selenide.Configuration"/>
-    <Bug pattern="MS_CANNOT_BE_FINAL"/>
-  </Match>
-  <Match>
-    <Class name="com.codeborne.selenide.impl.SelenideElementIterator"/>
-    <Bug pattern="IT_NO_SUCH_ELEMENT"/>
-  </Match>
-  <Match>
-    <Class name="com.codeborne.selenide.commands.Exists"/>
-    <Bug pattern="RV_RETURN_VALUE_IGNORED"/>
-  </Match>
-  <Match>
-    <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
-  </Match>
-  <Match>
-    <Bug pattern="SS_SHOULD_BE_STATIC"/>
-  </Match>
-  <Match>
-    <Bug pattern="RV_EXCEPTION_NOT_THROWN"/>
-  </Match>
-  <Match>
-    <Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE"/>
-  </Match>
-  <Match>
-    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES"/>
-  </Match>
-  <Match>
-    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_METHOD_NAMES"/>
-  </Match>
-  <Match>
-    <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_FIELD_NAMES"/>
-  </Match>
-  <Match>
-    <Bug pattern="CT_CONSTRUCTOR_THROW"/>
-  </Match>
-  <Match>
-    <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE"/>
-  </Match>
+    <Match>
+        <Bug code="MS,RV,ST,DE,Nm,NP,It,UuF,DC,RCN,EI2"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="NM_CLASS_NOT_EXCEPTION"/>
+    </Match>
+    <Match>
+        <Bug pattern="THROWS_METHOD_THROWS_RUNTIMEEXCEPTION"/>
+    </Match>
+    <Match>
+        <Bug pattern="THROWS_METHOD_THROWS_CLAUSE_BASIC_EXCEPTION"/>
+    </Match>
+    <Match>
+        <Bug pattern="THROWS_METHOD_THROWS_CLAUSE_THROWABLE"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="MS_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Bug pattern="EI_EXPOSE_REP2"/>
+    </Match>
+    <Match>
+        <Bug pattern="MS_SHOULD_BE_FINAL"/>
+    </Match>
+    <Match>
+        <Class name="~.*\.*Test"/>
+        <Bug code="SS"/>
+    </Match>
+    <Match>
+        <Class name="~.*\.*Test"/>
+        <Bug pattern="RV_RETURN_VALUE_IGNORED"/>
+    </Match>
+    <Match>
+        <Class name="~.*\.*Test"/>
+        <Bug pattern="RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"/>
+    </Match>
+    <Match>
+        <Class name="~.*\.*TestPage"/>
+        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="~.*\.*TestPage"/>
+        <Bug pattern="UUF_UNUSED_FIELD"/>
+    </Match>
+    <Match>
+        <Class name="com.codeborne.selenide.Configuration"/>
+        <Bug pattern="MS_CANNOT_BE_FINAL"/>
+    </Match>
+    <Match>
+        <Class name="com.codeborne.selenide.impl.SelenideElementIterator"/>
+        <Bug pattern="IT_NO_SUCH_ELEMENT"/>
+    </Match>
+    <Match>
+        <Class name="com.codeborne.selenide.commands.Exists"/>
+        <Bug pattern="RV_RETURN_VALUE_IGNORED"/>
+    </Match>
+    <Match>
+        <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
+    <Match>
+        <Bug pattern="SS_SHOULD_BE_STATIC"/>
+    </Match>
+    <Match>
+        <Bug pattern="RV_EXCEPTION_NOT_THROWN"/>
+    </Match>
+    <Match>
+        <Bug pattern="PA_PUBLIC_PRIMITIVE_ATTRIBUTE"/>
+    </Match>
+    <Match>
+        <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_CLASS_NAMES"/>
+    </Match>
+    <Match>
+        <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_METHOD_NAMES"/>
+    </Match>
+    <Match>
+        <Bug pattern="PI_DO_NOT_REUSE_PUBLIC_IDENTIFIERS_FIELD_NAMES"/>
+    </Match>
+    <Match>
+        <Bug pattern="CT_CONSTRUCTOR_THROW"/>
+    </Match>
+    <Match>
+        <Bug pattern="VA_FORMAT_STRING_USES_NEWLINE"/>
+    </Match>
+    <Match>
+        <Bug pattern="US_USELESS_SUPPRESSION_ON_CLASS"/>
+    </Match>
+    <Match>
+        <Bug pattern="US_USELESS_SUPPRESSION_ON_FIELD"/>
+    </Match>
+    <Match>
+        <Bug pattern="US_USELESS_SUPPRESSION_ON_METHOD"/>
+    </Match>
 </FindBugsFilter>
