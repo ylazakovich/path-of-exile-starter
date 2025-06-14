@@ -33,7 +33,7 @@ services:
         condition: service_healthy
       flyway:
         condition: service_completed_successfully
-      a8r:
+      spring-webflux-aggregator:
         condition: service_healthy
 
   ngrok:

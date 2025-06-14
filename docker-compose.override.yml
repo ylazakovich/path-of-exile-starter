@@ -22,7 +22,7 @@ services:
     environment:
       DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
-      A8R_BASE_URL: http://a8r:8080
+      A8R_BASE_URL: http://spring-webflux-aggregator:8080
 
   mariadb:
     ports: ["3306:3306"]
