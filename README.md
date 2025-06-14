@@ -24,7 +24,7 @@
 - Manage your own Settings over bot
 - Pagination
 - High level test coverage (units, integrations)
-- Using MockServer 
+- Using MockServer
 
 ## 🖥️ Quick start
 
