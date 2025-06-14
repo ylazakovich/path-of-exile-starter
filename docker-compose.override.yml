@@ -1,28 +1,28 @@
 services:
-  a8r:
+  spring-webflux-aggregator:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        MODULE: a8r
+        MODULE: spring-webflux-aggregator
         PORT: 8080
     ports: ["8080:8080"]
     environment:
       DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
 
-  telegram:
+  spring-telegram-webhook:
     build:
       context: .
       dockerfile: Dockerfile
       args:
-        MODULE: telegram
+        MODULE: spring-telegram-webhook
         PORT: 5050
     ports: ["5050:5050"]
     environment:
       DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
-      A8R_BASE_URL: http://a8r:8080
+      A8R_BASE_URL: http://spring-webflux-aggregator:8080
 
   mariadb:
     ports: ["3306:3306"]

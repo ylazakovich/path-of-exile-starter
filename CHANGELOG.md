@@ -2,9 +2,9 @@
 
 ## 1.0.0 (under construction)
 
-### A8R
+### Spring Webflux Aggregator
 
-### Telegram
+### Spring Telegram Webhook
 
 - handle Message command /start
 
