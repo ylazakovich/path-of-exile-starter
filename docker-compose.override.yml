@@ -4,7 +4,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        MODULE: a8r
+        MODULE: spring-webflux-aggregator
         PORT: 8080
     ports: ["8080:8080"]
     environment:
@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        MODULE: telegram
+        MODULE: spring-telegram-webhook
         PORT: 5050
     ports: ["5050:5050"]
     environment:

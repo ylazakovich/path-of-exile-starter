@@ -23,6 +23,8 @@
 - Use https://poe.ninja/ as the main data aggregator
 - Manage your own Settings over bot
 - Pagination
+- High level test coverage (units, integrations)
+- Using MockServer 
 
 ## 🖥️ Quick start
 
