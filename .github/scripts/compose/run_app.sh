@@ -17,8 +17,8 @@ error() {
 
 echo "Starting application..."
 SERVICES=(
-  "a8r"
-  "telegram"
+  "spring-webflux-aggregator"
+  "spring-telegram-webhook"
 )
 docker compose up -d --quiet-pull "${SERVICES[@]}" || {
   error "Docker compose has not started"

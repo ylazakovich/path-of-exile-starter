@@ -15,7 +15,7 @@ services:
       mariadb:
         condition: service_healthy
 
-  a8r:
+  spring-webflux-aggregator:
     depends_on:
       mariadb:
         condition: service_healthy
@@ -27,7 +27,7 @@ services:
       timeout: 1s
       retries: 60
 
-  telegram:
+  spring-telegram-webhook:
     depends_on:
       mariadb:
         condition: service_healthy
