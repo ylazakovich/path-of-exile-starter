@@ -1,8 +1,11 @@
 ext {
+    reactor_core = '3.7.7'
+    reactor_netty = '1.2.7'
     netty = '4.2.2.Final'
     lombok = '1.18.38'
     telegram = '9.0.0'
     spring = '3.5.0'
+    spring_web = '6.2.8'
     hibernate_orm = '7.0.2.Final'
     hibernate_validator = '9.0.1.Final'
     mariadb = '3.5.3'
@@ -23,6 +26,8 @@ ext {
     mock_server_netty = '5.15.0'
     bouncy_castle = '1.81'
     spotbug = '4.9.3'
+    jakarta_persistence_api= '3.2.0'
+    jackson = '2.19.0'
 }
 
 subprojects {

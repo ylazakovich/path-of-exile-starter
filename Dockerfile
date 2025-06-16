@@ -6,6 +6,7 @@ COPY gradlew settings.gradle build.gradle lombok.config ./
 COPY gradle ./gradle
 COPY config ./config
 COPY modules/${MODULE} ./modules/${MODULE}
+COPY shared ./shared
 
 RUN ./gradlew modules:${MODULE}:bootJar -x test --no-daemon
 
