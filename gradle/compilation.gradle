@@ -9,7 +9,7 @@ subprojects {
   }
 
   jar {
-    enabled = false
+    enabled = true
   }
 
   tasks.withType(JavaCompile).configureEach {
