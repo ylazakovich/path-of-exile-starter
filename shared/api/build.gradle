@@ -1,0 +1,7 @@
+dependencies {
+    implementation("org.springframework:spring-web:6.2.8")
+    implementation("org.springframework:spring-webflux:6.2.8")
+    implementation("io.projectreactor:reactor-core:3.7.7")
+    implementation("io.projectreactor.netty:reactor-netty:1.2.7")
+    implementation("org.mock-server:mockserver-netty:$mock_server_netty")
+}

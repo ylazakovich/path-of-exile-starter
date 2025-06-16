@@ -2,6 +2,7 @@ package io.starter.client;
 
 import java.net.URI;
 
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
 import org.mockserver.configuration.Configuration;
@@ -15,6 +16,7 @@ import reactor.netty.transport.ProxyProvider;
 
 public abstract class AbstractWebClientService {
 
+  @Getter
   protected final WebClient client;
 
   protected AbstractWebClientService(boolean useProxy, String baseUrl, String realUrl) {
