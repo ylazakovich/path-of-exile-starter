@@ -14,7 +14,7 @@ classes
 
 # Ignore all binary files
 modules/*/bin
-statics/bin
+shared/bin
 
 # Lombok
 **/src/main/generated/
