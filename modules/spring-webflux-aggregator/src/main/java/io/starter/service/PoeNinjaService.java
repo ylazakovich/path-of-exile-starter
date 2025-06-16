@@ -1,10 +1,10 @@
 package io.starter.service;
 
+import io.starter.client.AbstractWebClientService;
 import io.starter.config.NinjaConfiguration;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
-import io.starter.shared.AbstractWebClientService;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.core.ParameterizedTypeReference;

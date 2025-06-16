@@ -1,4 +1,4 @@
-package io.starter.shared;
+package io.starter.client;
 
 import java.net.URI;
 

@@ -2,9 +2,9 @@ package io.starter.service;
 
 import java.util.List;
 
+import io.starter.client.AbstractWebClientService;
 import io.starter.config.PathOfExileConfiguration;
 import io.starter.model.path_of_exile.League;
-import io.starter.shared.AbstractWebClientService;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.http.MediaType;
