@@ -88,6 +88,7 @@ public class InteractionsTest extends BaseCallbackTest {
     int lastPage = (int) Math.ceil((double) skills.size() / 10);
     int page = faker.number().numberBetween(1, lastPage);
 
+    when(leagueEntity.getName()).thenReturn("Testing League");
     when(callbackQuery.getData()).thenReturn(state.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
     when(userDao.readLeague(user)).thenReturn(leagueEntity);
