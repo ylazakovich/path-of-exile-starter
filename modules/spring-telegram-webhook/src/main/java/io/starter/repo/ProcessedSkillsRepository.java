@@ -13,4 +13,8 @@ public interface ProcessedSkillsRepository extends JpaRepository<ProcessedSkillE
   List<ProcessedSkillEntity> findAllByLeague(LeagueEntity league);
 
   List<ProcessedSkillEntity> findAllByLeague(LeagueEntity league, Sort sort);
+
+  List<ProcessedSkillEntity> findAllByLeagueAndChaosEquivalentProfitGreaterThan(LeagueEntity league,
+                                                                                double chaosEquivalentProfit,
+                                                                                Sort sort);
 }

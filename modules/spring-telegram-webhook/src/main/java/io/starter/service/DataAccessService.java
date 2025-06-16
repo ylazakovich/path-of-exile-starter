@@ -23,7 +23,8 @@ public class DataAccessService {
 
   public List<Skill> findAllSkills(LeagueEntity league) {
     final String column = "chaosEquivalentProfit";
-    List<ProcessedSkillEntity> all = processedSkillsRepository.findAllByLeague(league, Sort.by(Sort.Direction.DESC, column));
+    List<ProcessedSkillEntity> all = processedSkillsRepository
+        .findAllByLeagueAndChaosEquivalentProfitGreaterThan(league, 0.0, Sort.by(Sort.Direction.DESC, column));
     return all.stream().map(entity -> {
       Skill skill = new Skill();
       skill.setName(entity.getSkill().getName());

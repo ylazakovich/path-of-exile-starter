@@ -51,15 +51,15 @@ public class CallbackAnswerService {
     int page = userDao.readSkillPage(from);
     String inlineMessage = StringUtils.EMPTY;
     if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
-      inlineMessage = toPaginatedMessage(page, skills);
+      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {
       page = checkAndSyncPage(++page, skills);
-      inlineMessage = toPaginatedMessage(page, skills);
+      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_PREVIOUS) {
       page = checkAndSyncPage(--page, skills);
-      inlineMessage = toPaginatedMessage(page, skills);
+      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
     }
     userDao.saveSkillPage(from, page);
     InlineKeyboardMarkup keyboard = onClickSkills(page);
@@ -83,20 +83,27 @@ public class CallbackAnswerService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  // TODO: create task for realizing paginated message over Fabric Pattern
-  private String toPaginatedMessage(int page, List<Skill> skills) {
+  private String toPaginatedMessage(int page, List<Skill> skills, LeagueEntity league) {
     final int itemsPerPage = 10;
     int start = (page - 1) * itemsPerPage;
     int end = Math.min(start + itemsPerPage, skills.size());
     final StringBuilder builder = new StringBuilder();
+    String leagueName = league.getName();
+    int totalWidth = 52;
+    int nameLength = leagueName.length();
+    int innerWidth = totalWidth - 2;
+    int leftPad = (innerWidth - nameLength - 2) / 2;
+    int rightPad = innerWidth - nameLength - 2 - leftPad;
+    String topBorder = "┌" + "─".repeat(leftPad) + " " + leagueName + " " + "─".repeat(rightPad) + "┐";
+    builder.append("```").append("\n");
+    builder.append(topBorder).append("\n");
     for (int i = start; i < end; i++) {
       long chaosEquivalentProfit = Math.round(skills.get(i).getChaosEquivalentProfit());
-      builder
-          .append(skills.get(i).getName())
-          .append(Constants.General.SEPARATER)
-          .append("%d %s".formatted(chaosEquivalentProfit, "c"))
-          .append(StringUtils.LF);
+      String line = String.format("│ %-38s : %5d c │", skills.get(i).getName(), chaosEquivalentProfit);
+      builder.append(line).append("\n");
     }
+    builder.append("└").append("─".repeat(totalWidth - 2)).append("┘").append("\n");
+    builder.append("```");
     return builder.toString();
   }
 
