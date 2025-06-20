@@ -4,7 +4,7 @@ ext {
     netty = '4.2.2.Final'
     lombok = '1.18.38'
     telegram = '9.0.0'
-    spring = '3.5.1'
+    spring = '3.5.2'
     spring_web = '6.2.8'
     hibernate_orm = '7.0.2.Final'
     hibernate_validator = '9.0.1.Final'
