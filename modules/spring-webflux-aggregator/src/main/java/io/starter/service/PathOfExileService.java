@@ -31,7 +31,7 @@ public class PathOfExileService extends AbstractWebClientService {
         LEAGUES,
         Map.of(),
         Map.of(),
-        new ParameterizedTypeReference<List<League>>() {
+        new ParameterizedTypeReference<>() {
         }
     );
   }
