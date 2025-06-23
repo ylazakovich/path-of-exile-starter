@@ -21,6 +21,9 @@ public class LeagueEntityMapper implements Function<List<League>, List<LeagueEnt
 
   @Override
   public List<LeagueEntity> apply(List<League> data) {
+    if (data == null || data.isEmpty()) {
+      return List.of();
+    }
     return data.stream()
         .map(league -> {
           LeagueEntity leagueEntity = Optional.ofNullable(repo.findByName(league.getId())).orElseGet(LeagueEntity::new);

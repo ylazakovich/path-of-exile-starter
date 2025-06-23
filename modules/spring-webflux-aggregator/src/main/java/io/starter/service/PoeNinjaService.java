@@ -1,5 +1,7 @@
 package io.starter.service;
 
+import java.util.Map;
+
 import io.starter.client.AbstractWebClientService;
 import io.starter.config.NinjaConfiguration;
 import io.starter.model.ninja.Currency;
@@ -8,7 +10,6 @@ import io.starter.model.ninja.Skill;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -24,21 +25,23 @@ public class PoeNinjaService extends AbstractWebClientService {
   }
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
-    return client.get()
-        .uri("%s?%s".formatted(CONFIG.itemRoute(), "league=%s&type=SkillGem".formatted(league)))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .toEntity(new ParameterizedTypeReference<>() {
-        });
+    return get(
+        CONFIG.itemRoute(),
+        Map.of("league", league, "type", "SkillGem"),
+        Map.of(),
+        new ParameterizedTypeReference<>() {
+        }
+    );
   }
 
   public Mono<ResponseEntity<Lines<Currency>>> getRates(String league) {
-    return client.get()
-        .uri("%s?%s".formatted(CONFIG.currencyRoute(), "league=%s&type=Currency".formatted(league)))
-        .accept(MediaType.APPLICATION_JSON)
-        .retrieve()
-        .toEntity(new ParameterizedTypeReference<>() {
-        });
+    return get(
+        CONFIG.currencyRoute(),
+        Map.of("league", league, "type", "Currency"),
+        Map.of(),
+        new ParameterizedTypeReference<>() {
+        }
+    );
   }
 }
 

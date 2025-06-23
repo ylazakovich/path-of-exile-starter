@@ -35,29 +35,37 @@ public class NinjaDataSyncService {
     this.skillEntityMapper = skillEntityMapper;
   }
 
+  private <T> List<T> safeLines(Lines<T> lines) {
+    return (lines != null && lines.getLines() != null)
+        ? lines.getLines()
+        : List.of();
+  }
+
   public void loadCurrency(Lines<Currency> lines, LeagueEntity league) {
-    if (dataAccessService.findRatesByLeague(league).isEmpty() && !lines.getLines().isEmpty()) {
+    List<Currency> currencyLines = safeLines(lines);
+    if (dataAccessService.findRatesByLeague(league).isEmpty() && !currencyLines.isEmpty()) {
       ratesDao.saveAll(lines, league.getId());
     }
   }
 
   public void loadSkills(Lines<Skill> lines, LeagueEntity league) {
-    if (dataAccessService.findSkillsByLeague(league).isEmpty() && !lines.getLines().isEmpty()) {
-      dataAccessService.findLeagueById(league.getId())
-          .ifPresent(leagueEntity -> {
-            List<SkillEntity> entityList = skillEntityMapper.apply(lines);
-            entityList.forEach(skillEntity -> {
-              skillEntity.setLeague(leagueEntity);
-              skillEntity.setDivineEquivalent(rateService.toDivineEquivalent(skillEntity.getChaosEquivalent(), league));
-            });
-            dataAccessService.saveSkills(entityList);
-          });
+    List<Skill> skills = safeLines(lines);
+    if (dataAccessService.findSkillsByLeague(league).isEmpty() && !skills.isEmpty()) {
+      dataAccessService.findLeagueById(league.getId()).ifPresent(leagueEntity -> {
+        List<SkillEntity> entityList = skillEntityMapper.apply(lines);
+        entityList.forEach(skillEntity -> {
+          skillEntity.setLeague(leagueEntity);
+          skillEntity.setDivineEquivalent(rateService.toDivineEquivalent(skillEntity.getChaosEquivalent(), league));
+        });
+        dataAccessService.saveSkills(entityList);
+      });
     }
   }
 
   public void updateCurrencies(Lines<Currency> lines, LeagueEntity league) {
+    List<Currency> currencyLines = safeLines(lines);
     List<RateEntity> entitiesOnUpdate = dataAccessService.findRatesByLeague(league);
-    entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
+    entitiesOnUpdate.forEach(entity -> currencyLines.stream()
         .filter(currency -> currency.getName().equals(entity.getName()))
         .findFirst()
         .ifPresent(currency -> entity.setChaosEquivalent(currency.getChaosEquivalent()))
@@ -66,8 +74,9 @@ public class NinjaDataSyncService {
   }
 
   public void updateSkills(Lines<Skill> lines, LeagueEntity league) {
+    List<Skill> skillLines = safeLines(lines);
     List<SkillEntity> entitiesOnUpdate = dataAccessService.findSkillsByLeague(league);
-    entitiesOnUpdate.forEach(entity -> lines.getLines().stream()
+    entitiesOnUpdate.forEach(entity -> skillLines.stream()
         .filter(skill -> skill.getName().equals(entity.getName())
             && skill.getGemLevel() == entity.getGemLevel()
             && skill.getGemQuality() == entity.getGemQuality()
@@ -75,19 +84,18 @@ public class NinjaDataSyncService {
         .findFirst()
         .ifPresent(skill -> entity.setChaosEquivalent(skill.getChaosEquivalent()))
     );
-    dataAccessService.findLeagueById(league.getId())
-        .ifPresent(leagueEntity -> {
-          entitiesOnUpdate.forEach(entity -> {
-            entity.setLeague(leagueEntity);
-            entity.setDivineEquivalent(rateService.toDivineEquivalent(entity.getChaosEquivalent(), league));
-          });
-          dataAccessService.saveSkills(entitiesOnUpdate);
-        });
+    dataAccessService.findLeagueById(league.getId()).ifPresent(leagueEntity -> {
+      entitiesOnUpdate.forEach(entity -> {
+        entity.setLeague(leagueEntity);
+        entity.setDivineEquivalent(rateService.toDivineEquivalent(entity.getChaosEquivalent(), league));
+      });
+      dataAccessService.saveSkills(entitiesOnUpdate);
+    });
   }
 
   public void addNew(Lines<Skill> lines, LeagueEntity league) {
     List<SkillEntity> existingEntities = dataAccessService.findSkillsByLeague(league);
-    List<SkillEntity> newEntities = lines.getLines().stream()
+    List<SkillEntity> newEntities = safeLines(lines).stream()
         .filter(skill -> existingEntities.stream().noneMatch(entity -> skillEntityMapper.matches(skill, entity)))
         .map(skill -> {
           SkillEntity entity = new SkillEntity();
