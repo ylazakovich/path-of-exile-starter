@@ -75,7 +75,7 @@ public abstract class AbstractWebClientService {
   }
 
   private static ExchangeFilterFunction logExchange() {
-    int maxLogLength = 100; // TODO: move it to configuration via owner
+    int maxLogLength = 300; // TODO: move it to configuration via owner
     return ExchangeFilterFunction.ofRequestProcessor(request ->
         Mono.deferContextual(ctx -> {
           StringBuilder sb = new StringBuilder();

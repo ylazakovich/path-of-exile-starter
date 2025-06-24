@@ -1,7 +1,7 @@
 package io.starter.service;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import io.starter.client.AbstractWebClientService;
 import io.starter.config.PathOfExileConfiguration;
@@ -29,8 +29,8 @@ public class PathOfExileService extends AbstractWebClientService {
   public Mono<ResponseEntity<List<League>>> getAllLeagues() {
     return get(
         LEAGUES,
-        Map.of(),
-        Map.of(),
+        Collections.emptyMap(),
+        Collections.emptyMap(),
         new ParameterizedTypeReference<>() {
         }
     );

@@ -1,5 +1,6 @@
 package io.starter.service;
 
+import java.util.Collections;
 import java.util.Map;
 
 import io.starter.client.AbstractWebClientService;
@@ -28,7 +29,7 @@ public class PoeNinjaService extends AbstractWebClientService {
     return get(
         CONFIG.itemRoute(),
         Map.of("league", league, "type", "SkillGem"),
-        Map.of(),
+        Collections.emptyMap(),
         new ParameterizedTypeReference<>() {
         }
     );
@@ -38,7 +39,7 @@ public class PoeNinjaService extends AbstractWebClientService {
     return get(
         CONFIG.currencyRoute(),
         Map.of("league", league, "type", "Currency"),
-        Map.of(),
+        Collections.emptyMap(),
         new ParameterizedTypeReference<>() {
         }
     );
