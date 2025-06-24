@@ -3,6 +3,7 @@ package io.starter.service;
 import java.util.List;
 
 import io.starter.dao.RatesDao;
+import io.starter.dao.UniqueJewelsDao;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.RateEntity;
 import io.starter.entity.SkillEntity;
@@ -10,6 +11,7 @@ import io.starter.mapper.SkillEntityMapper;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
+import io.starter.model.ninja.UniqueJewel;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,16 +21,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class NinjaDataSyncService {
 
+  private final UniqueJewelsDao uniqueJewelsDao;
   private final RatesDao ratesDao;
   private final DataAccessService dataAccessService;
   private final RateService rateService;
   private final SkillEntityMapper skillEntityMapper;
 
   @Autowired
-  public NinjaDataSyncService(RatesDao ratesDao,
+  public NinjaDataSyncService(UniqueJewelsDao uniqueJewelsDao,
+                              RatesDao ratesDao,
                               DataAccessService dataAccessService,
                               RateService rateService,
                               SkillEntityMapper skillEntityMapper) {
+    this.uniqueJewelsDao = uniqueJewelsDao;
     this.ratesDao = ratesDao;
     this.dataAccessService = dataAccessService;
     this.rateService = rateService;
@@ -45,6 +50,13 @@ public class NinjaDataSyncService {
     List<Currency> currencyLines = safeLines(lines);
     if (dataAccessService.findRatesByLeague(league).isEmpty() && !currencyLines.isEmpty()) {
       ratesDao.saveAll(lines, league.getId());
+    }
+  }
+
+  public void loadUniqueJewels(Lines<UniqueJewel> lines, LeagueEntity league) {
+    List<UniqueJewel> jewelLines = safeLines(lines);
+    if (dataAccessService.findRatesByLeague(league).isEmpty() && !jewelLines.isEmpty()) {
+      uniqueJewelsDao.saveAll(lines, league.getId());
     }
   }
 

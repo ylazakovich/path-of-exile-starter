@@ -44,6 +44,22 @@ public class DatabaseController {
     this.analyzerService = analyzerService;
   }
 
+  @PostMapping("/load/jewels")
+  public void loadUniqueJewels() {
+    dataAccessService.findLeagues().forEach(this::loadUniqueJewels);
+  }
+
+  private void loadUniqueJewels(LeagueEntity league) {
+    poeNinjaService.getUniqueJewels(league.getName())
+        .subscribe(response -> {
+          ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
+          log.info("{} - Loaded {} Unique Jewels",
+              league.getName(),
+              dataAccessService.findUniqueJewelsByLeague(league).size()
+          );
+        });
+  }
+
   @PostMapping("/load/rates")
   public void loadRates() {
     dataAccessService.findLeagues().forEach(this::loadRates);
@@ -141,6 +157,8 @@ public class DatabaseController {
     loadLeagues();
     Thread.sleep(Duration.ofSeconds(2));
     loadRates();
+    // TODO: revert after preparing migration
+//    loadUniqueJewels();
     loadSkills();
     Thread.sleep(Duration.ofSeconds(10));
     loadProcessedSkills();
