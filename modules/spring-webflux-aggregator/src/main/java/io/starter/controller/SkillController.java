@@ -60,7 +60,9 @@ public class SkillController  {
     poeNinjaService.getSkills(league.getName())
         .subscribe(response -> {
           ninjaDataSyncService.loadSkills(response.getBody(), league);
-          log.info("{} - Skill - Loaded {} units", league.getName(), dataAccessService.findSkillsByLeague(league).size());
+          log.info("{} - Skill - Loaded {} units",
+              league.getName(),
+              dataAccessService.findSkillsByLeague(league).size());
         });
   }
 }

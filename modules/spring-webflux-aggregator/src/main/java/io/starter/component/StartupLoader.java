@@ -24,7 +24,6 @@ public class StartupLoader {
   private final AnalyzerService analyzerService;
 
   public void loadEverything() throws InterruptedException {
-    log.info("🚀 Starting full init...");
     pathOfExileService.getAllLeagues().subscribe(response -> {
       dataAccessService.saveLeagues(response.getBody());
       log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
@@ -33,23 +32,30 @@ public class StartupLoader {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getRates(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadCurrency(response.getBody(), league);
-          log.info("{} - Loaded {} Rates", league.getName(), dataAccessService.findRatesByLeague(league).size());
+          log.info("{} - Currency - Loaded {} units",
+              league.getName(),
+              dataAccessService.findRatesByLeague(league).size());
         }));
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getUniqueJewels(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
-          log.info("{} - Loaded {} Jewels", league.getName(), dataAccessService.findUniqueJewelsByLeague(league).size());
+          log.info("{} - Unique Jewel - Loaded {} units",
+              league.getName(),
+              dataAccessService.findUniqueJewelsByLeague(league).size());
         }));
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadSkills(response.getBody(), league);
-          log.info("{} - Loaded {} Skills", league.getName(), dataAccessService.findSkillsByLeague(league).size());
+          log.info("{} - Skill - Loaded {} units",
+              league.getName(),
+              dataAccessService.findSkillsByLeague(league).size());
         }));
     Thread.sleep(Duration.ofSeconds(10));
     dataAccessService.findLeagues().forEach(league -> {
       dataAccessService.addProcessedSkills(league, analyzerService.analyzeSkills(league.getName()));
-      log.info("{} - Processed {} Skills", league.getName(), dataAccessService.findProcessedSkillsByLeague(league).size());
+      log.info("{} - Processed Skill - Processed {} units",
+          league.getName(),
+          dataAccessService.findProcessedSkillsByLeague(league).size());
     });
-    log.info("✅ Full init completed.");
   }
 }
