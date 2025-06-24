@@ -50,7 +50,7 @@ public class SkillController  {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName())
             .subscribe(response -> {
-              ninjaDataSyncService.addNew(response.getBody(), league);
+              ninjaDataSyncService.addNewSkills(response.getBody(), league);
               log.info("{} - Skill - Schedule adding new", league.getName());
             })
     );

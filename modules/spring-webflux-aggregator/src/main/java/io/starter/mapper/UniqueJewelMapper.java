@@ -18,4 +18,8 @@ public class UniqueJewelMapper implements Function<Lines<UniqueJewel>, List<Uniq
         .map(skill -> new UniqueJewelEntity(skill.getName(), skill.getChaosEquivalent()))
         .toList();
   }
+
+  public boolean matches(UniqueJewel jewel, UniqueJewelEntity entity) {
+    return jewel.getName().equals(entity.getName());
+  }
 }
