@@ -23,6 +23,6 @@ public final class CurrencyGenerator {
     Currency currency = new Currency();
     currency.setName(faker.money().currency());
     currency.setChaosEquivalent(faker.number().randomDouble(1, 1, 5));
-    return null;
+    return currency;
   }
 }

@@ -33,12 +33,12 @@ public final class SkillGenerator {
   }
 
   public static AnalyzedSkillDto generateProcessedSkill() {
-    AnalyzedSkillDto dto = new AnalyzedSkillDto();
+    AnalyzedSkillDto processedSkill = new AnalyzedSkillDto();
     RateEntity rateEntity = new RateEntity();
     rateEntity.setChaosEquivalent(faker.number().randomDouble(1, 1, 5));
-    dto.setName(faker.harryPotter().spell());
-    dto.setChaosEquivalentPrice(rateEntity);
-    dto.setChaosEquivalentProfit(faker.number().randomDouble(5, 10, 1000));
-    return dto;
+    processedSkill.setName(faker.harryPotter().spell());
+    processedSkill.setChaosEquivalentPrice(rateEntity);
+    processedSkill.setChaosEquivalentProfit(faker.number().randomDouble(5, 10, 1000));
+    return processedSkill;
   }
 }
