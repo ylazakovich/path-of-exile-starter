@@ -157,8 +157,7 @@ public class DatabaseController {
     loadLeagues();
     Thread.sleep(Duration.ofSeconds(2));
     loadRates();
-    // TODO: revert after preparing migration
-//    loadUniqueJewels();
+    loadUniqueJewels();
     loadSkills();
     Thread.sleep(Duration.ofSeconds(10));
     loadProcessedSkills();

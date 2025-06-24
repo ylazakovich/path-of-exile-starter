@@ -55,7 +55,7 @@ public class NinjaDataSyncService {
 
   public void loadUniqueJewels(Lines<UniqueJewel> lines, LeagueEntity league) {
     List<UniqueJewel> jewelLines = safeLines(lines);
-    if (dataAccessService.findRatesByLeague(league).isEmpty() && !jewelLines.isEmpty()) {
+    if (dataAccessService.findUniqueJewelsByLeague(league).isEmpty() && !jewelLines.isEmpty()) {
       uniqueJewelsDao.saveAll(lines, league.getId());
     }
   }
