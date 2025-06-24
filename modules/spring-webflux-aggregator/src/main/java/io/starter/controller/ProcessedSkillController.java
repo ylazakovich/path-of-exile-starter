@@ -28,7 +28,9 @@ public class ProcessedSkillController {
   public void loadProcessedSkills() {
     dataAccessService.findLeagues().forEach(league -> {
       dataAccessService.addProcessedSkills(league, analyzerService.analyzeSkills(league.getName()));
-      log.info("{} - Processed {} Skills", league.getName(), dataAccessService.findProcessedSkillsByLeague(league).size());
+      log.info("{} - Processed Skill - Processed {} units",
+          league.getName(),
+          dataAccessService.findProcessedSkillsByLeague(league).size());
     });
   }
 

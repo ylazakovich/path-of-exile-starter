@@ -36,7 +36,9 @@ public class UniqueJewelController {
     poeNinjaService.getUniqueJewels(league.getName())
         .subscribe(response -> {
           ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
-          log.info("{} - Loaded {} Unique Jewels", league.getName(), dataAccessService.findUniqueJewelsByLeague(league).size());
+          log.info("{} - Unique Jewel - Loaded {} units",
+              league.getName(),
+              dataAccessService.findUniqueJewelsByLeague(league).size());
         });
   }
 }

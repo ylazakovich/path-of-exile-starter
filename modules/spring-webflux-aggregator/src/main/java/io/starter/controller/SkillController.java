@@ -38,7 +38,10 @@ public class SkillController  {
   public void updateSkills() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName())
-            .subscribe(response -> ninjaDataSyncService.updateSkills(response.getBody(), league))
+            .subscribe(response -> {
+              ninjaDataSyncService.updateSkills(response.getBody(), league);
+              log.info("{} - Skill - Schedule updating", league.getName());
+            })
     );
   }
 
@@ -46,7 +49,10 @@ public class SkillController  {
   public void addNewSkills() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName())
-            .subscribe(response -> ninjaDataSyncService.addNew(response.getBody(), league))
+            .subscribe(response -> {
+              ninjaDataSyncService.addNew(response.getBody(), league);
+              log.info("{} - Skill - Schedule adding new", league.getName());
+            })
     );
   }
 
@@ -54,7 +60,7 @@ public class SkillController  {
     poeNinjaService.getSkills(league.getName())
         .subscribe(response -> {
           ninjaDataSyncService.loadSkills(response.getBody(), league);
-          log.info("{} - Loaded {} Skills", league.getName(), dataAccessService.findSkillsByLeague(league).size());
+          log.info("{} - Skill - Loaded {} units", league.getName(), dataAccessService.findSkillsByLeague(league).size());
         });
   }
 }
