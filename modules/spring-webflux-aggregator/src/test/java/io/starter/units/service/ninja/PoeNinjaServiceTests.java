@@ -3,7 +3,7 @@ package io.starter.units.service.ninja;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 import io.starter.service.PoeNinjaService;
-import io.starter.utils.Generator;
+import io.starter.utils.SkillGenerator;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,20 @@ public class PoeNinjaServiceTests {
 
   @Test
   void testServiceGetSkillsMethod() {
-    final Lines<Skill> expectedBody = Generator.generateLineWithSkills();
+    final Lines<Skill> expectedBody = SkillGenerator.generateLineWithSkills();
+    when(poeNinjaService.getSkills(LEAGUE)).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
+
+    poeNinjaService.getSkills(LEAGUE).subscribe(
+        actual -> {
+          assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
+          assertThat(actual.getBody()).isEqualTo(expectedBody);
+        }
+    );
+  }
+
+  @Test
+  void testServiceGetRatesMethod() {
+    final Lines<Skill> expectedBody = SkillGenerator.generateLineWithSkills();
     when(poeNinjaService.getSkills(LEAGUE)).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
 
     poeNinjaService.getSkills(LEAGUE).subscribe(
