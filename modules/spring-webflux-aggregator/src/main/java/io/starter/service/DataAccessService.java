@@ -19,12 +19,10 @@ import io.starter.repo.RatesRepository;
 import io.starter.repo.SkillsRepository;
 import io.starter.repo.UniqueJewelsRepository;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Log4j2
 @Service
 public class DataAccessService {
 
@@ -93,20 +91,25 @@ public class DataAccessService {
   }
 
   @Transactional
-  public void saveUniqueJewels(List<UniqueJewelEntity> uniqueJewels) {
-    uniqueJewelsRepository.saveAll(uniqueJewels);
+  public void saveUniqueJewels(List<UniqueJewelEntity> uniqueJewelEntityList) {
+    uniqueJewelsRepository.saveAll(uniqueJewelEntityList);
   }
 
   @Transactional
-  public void saveSkills(List<SkillEntity> skills) {
-    skillsRepository.saveAll(skills);
+  public void saveSkills(List<SkillEntity> skillEntityList) {
+    skillsRepository.saveAll(skillEntityList);
   }
 
   @Transactional
   public void saveLeagues(List<League> data) {
-    LeagueEntityMapper mapper = new LeagueEntityMapper(leaguesRepository);
+    LeagueEntityMapper mapper = new LeagueEntityMapper(this);
     List<LeagueEntity> entityList = mapper.apply(data);
     leaguesRepository.saveAll(entityList);
+  }
+
+  @Transactional
+  public void saveRates(List<RateEntity> rateEntityList) {
+    ratesRepository.saveAll(rateEntityList);
   }
 
   @Transactional

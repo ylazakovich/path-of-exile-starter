@@ -6,17 +6,17 @@ import java.util.function.Function;
 
 import io.starter.entity.LeagueEntity;
 import io.starter.model.path_of_exile.League;
-import io.starter.repo.LeaguesRepository;
+import io.starter.service.DataAccessService;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class LeagueEntityMapper implements Function<List<League>, List<LeagueEntity>> {
 
-  private final LeaguesRepository repo;
+  private final DataAccessService dataAccessService;
 
-  public LeagueEntityMapper(LeaguesRepository repo) {
-    this.repo = repo;
+  public LeagueEntityMapper(DataAccessService dataAccessService) {
+    this.dataAccessService = dataAccessService;
   }
 
   @Override
@@ -26,7 +26,9 @@ public class LeagueEntityMapper implements Function<List<League>, List<LeagueEnt
     }
     return data.stream()
         .map(league -> {
-          LeagueEntity leagueEntity = Optional.ofNullable(repo.findByName(league.getId())).orElseGet(LeagueEntity::new);
+          LeagueEntity leagueEntity = Optional
+              .ofNullable(dataAccessService.findLeagueByName(league.getId()))
+              .orElseGet(LeagueEntity::new);
           leagueEntity.setName(league.getId());
           return leagueEntity;
         })
