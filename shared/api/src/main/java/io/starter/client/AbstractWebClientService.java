@@ -11,6 +11,9 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpHeaders;
+import org.mockserver.configuration.Configuration;
+import org.mockserver.logging.MockServerLogger;
+import org.mockserver.socket.tls.NettySslContextFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
@@ -53,7 +56,11 @@ public abstract class AbstractWebClientService {
             .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(8 * 1024 * 1024))
             .build());
     if (useProxy) {
+      MockServerLogger mockServerLogger = new MockServerLogger(getClass());
+      Configuration configuration = Configuration.configuration();
+      NettySslContextFactory sslContext = new NettySslContextFactory(configuration, mockServerLogger, false);
       HttpClient proxyClient = HttpClient.create()
+          .secure(sslSpec -> sslSpec.sslContext(sslContext.createClientSslContext(true, false)))
           .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080));
       builder.clientConnector(new ReactorClientHttpConnector(proxyClient));
     }
@@ -68,7 +75,7 @@ public abstract class AbstractWebClientService {
   }
 
   private static ExchangeFilterFunction logExchange() {
-    int maxLogLength = 100;
+    int maxLogLength = 100; // TODO: move it to configuration via owner
     return ExchangeFilterFunction.ofRequestProcessor(request ->
         Mono.deferContextual(ctx -> {
           StringBuilder sb = new StringBuilder();
