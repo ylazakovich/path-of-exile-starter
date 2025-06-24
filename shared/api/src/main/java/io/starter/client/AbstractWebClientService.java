@@ -1,7 +1,11 @@
 package io.starter.client;
 
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
+
+import io.starter.util.BodyWithSize;
+import io.starter.util.CapturedResponse;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -10,12 +14,14 @@ import org.apache.http.HttpHeaders;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
@@ -62,38 +68,68 @@ public abstract class AbstractWebClientService {
   }
 
   private static ExchangeFilterFunction logExchange() {
-    return ExchangeFilterFunction.ofRequestProcessor(request -> Mono.deferContextual(ctx -> {
-      StringBuilder sb = new StringBuilder();
-      sb.append("\n==================== [HTTP Request] ====================\n");
-      sb.append("> ").append(request.method()).append(" ").append(request.url()).append("\n");
-      request.headers().forEach((key, values) -> values.forEach(val ->
-          sb.append("> ").append(key).append(": ").append(val).append("\n")
-      ));
-      return Mono.just(request).contextWrite(c -> c.put("requestLog", sb));
-    })).andThen(ExchangeFilterFunction.ofResponseProcessor(response -> Mono.deferContextual(ctx -> {
-      StringBuilder sb = ctx.getOrDefault("requestLog", new StringBuilder());
-      sb.append("==================== [HTTP Response] ===================\n");
-      sb.append("< Status: ").append(response.statusCode().value()).append(" ").append("\n");
-      response.headers().asHttpHeaders().forEach((key, values) -> values.forEach(val ->
-          sb.append("< ").append(key).append(": ").append(val).append("\n")
-      ));
-      return captureBodySize(response).flatMap(bodySize -> {
-        sb.append("--------------------------------------------------------\n");
-        sb.append("Body size: ").append(bodySize).append(" bytes\n");
-        sb.append("========================================================");
-        log.debug(sb.toString());
-        return Mono.just(response);
-      });
-    })));
+    int maxLogLength = 100;
+    return ExchangeFilterFunction.ofRequestProcessor(request ->
+        Mono.deferContextual(ctx -> {
+          StringBuilder sb = new StringBuilder();
+          sb.append("\n==================== [HTTP Request] ====================\n");
+          sb.append("> ").append(request.method()).append(" ").append(request.url()).append("\n");
+          request.headers().forEach((key, values) ->
+              values.forEach(val -> sb.append("> ").append(key).append(": ").append(val).append("\n"))
+          );
+          return Mono.just(request).contextWrite(c -> c.put("requestLog", sb));
+        })
+    ).andThen(ExchangeFilterFunction.ofResponseProcessor(response ->
+        Mono.deferContextual(ctx -> captureBodyWithSize(response)
+            .flatMap(captured -> {
+              BodyWithSize body = captured.body();
+              StringBuilder sb = ctx.getOrDefault("requestLog", new StringBuilder());
+              sb.append("==================== [HTTP Response] ===================\n");
+              sb.append("< Status: ").append(captured.response().statusCode().value()).append("\n");
+              captured.response().headers().asHttpHeaders().forEach((key, values) ->
+                  values.forEach(val -> sb.append("< ").append(key).append(": ").append(val).append("\n"))
+              );
+              sb.append("--------------------------------------------------------\n");
+              sb.append("Body size: ").append(body.size()).append(" bytes\n");
+              sb.append(truncateBody(body.content(), maxLogLength)).append("\n");
+              sb.append("========================================================");
+              log.debug(sb.toString());
+              return Mono.just(captured.response());
+            })
+        )
+    ));
   }
 
-  private static Mono<Integer> captureBodySize(ClientResponse response) {
+  private static Mono<CapturedResponse<BodyWithSize>> captureBodyWithSize(ClientResponse response) {
     return response.bodyToFlux(DataBuffer.class)
         .map(dataBuffer -> {
-          int size = dataBuffer.readableByteCount();
+          byte[] bytes = new byte[dataBuffer.readableByteCount()];
+          dataBuffer.read(bytes);
           DataBufferUtils.release(dataBuffer);
-          return size;
+          return bytes;
         })
-        .reduce(Integer::sum);
+        .collectList()
+        .map(byteArrays -> {
+          int totalSize = byteArrays.stream().mapToInt(b -> b.length).sum();
+          String bodyStr = byteArrays.stream()
+              .map(bytes -> new String(bytes, StandardCharsets.UTF_8))
+              .reduce("", String::concat);
+          byte[] allBytes = byteArrays.stream()
+              .reduce(new byte[0], (acc, bytes) -> {
+                byte[] merged = new byte[acc.length + bytes.length];
+                System.arraycopy(acc, 0, merged, 0, acc.length);
+                System.arraycopy(bytes, 0, merged, acc.length, bytes.length);
+                return merged;
+              });
+          DataBuffer buffer = new DefaultDataBufferFactory().wrap(allBytes);
+          ClientResponse mutated = response.mutate().body(Flux.just(buffer)).build();
+          return new CapturedResponse<>(mutated, new BodyWithSize(bodyStr, totalSize));
+        });
+  }
+
+  private static String truncateBody(String body, int maxLength) {
+    if (body == null) return "";
+    if (body.length() <= maxLength) return body;
+    return body.substring(0, maxLength) + "... (truncated)";
   }
 }
