@@ -19,7 +19,7 @@ public class PathOfExileService extends AbstractWebClientService {
   private static final PathOfExileConfiguration CONFIG = ConfigFactory
       .create(PathOfExileConfiguration.class, System.getProperties());
 
-  private static final String LEAGUES = "api/leagues";
+  private static final String LEAGUES = "/api/leagues";
 
   public PathOfExileService() {
     super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());

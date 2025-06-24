@@ -18,14 +18,6 @@ public interface NinjaConfiguration extends Config {
   @DefaultValue("https://poe.ninja")
   String realUrl();
 
-  @Key("NINJA_ITEM_ROUTE")
-  @DefaultValue("/api/data/itemoverview")
-  String itemRoute();
-
-  @Key("NINJA_CURRENCY_ROUTE")
-  @DefaultValue("/api/data/currencyoverview")
-  String currencyRoute();
-
   @Key("NINJA_USE_MOCK_SERVER_AS_PROXY")
   @DefaultValue("false")
   Boolean useMockServerAsProxy();

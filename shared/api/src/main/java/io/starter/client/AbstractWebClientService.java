@@ -2,6 +2,7 @@ package io.starter.client;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Map;
 
 import io.starter.util.BodyWithSize;
@@ -39,6 +40,12 @@ public abstract class AbstractWebClientService {
   protected AbstractWebClientService(boolean useProxy, String baseUrl, String realUrl) {
     this.client = buildWebClient(useProxy, baseUrl, realUrl);
     this.executor = new RequestExecutor(client);
+  }
+
+  protected <T> Mono<ResponseEntity<T>> get(String path,
+                                            Map<String, String> queryParams,
+                                            ParameterizedTypeReference<T> responseType) {
+    return get(path, queryParams, Collections.emptyMap(), responseType);
   }
 
   protected <T> Mono<ResponseEntity<T>> get(String path,
