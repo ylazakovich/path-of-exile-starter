@@ -7,9 +7,11 @@ import io.starter.config.NinjaConfiguration;
 import io.starter.model.ninja.Currency;
 import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
+import io.starter.model.ninja.UniqueJewel;
 import io.starter.type.CurrencyTypeReference;
 import io.starter.type.SkillTypeReference;
 import io.starter.type.TypeRefFactory;
+import io.starter.type.UniqueJewelTypeReference;
 
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +33,10 @@ public class PoeNinjaService extends AbstractWebClientService {
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
     return fetch(ITEMS, league, "SkillGem", SkillTypeReference::new);
+  }
+
+  public Mono<ResponseEntity<Lines<UniqueJewel>>> getUniqueJewels(String league) {
+    return fetch(ITEMS, league, "UniqueJewel", UniqueJewelTypeReference::new);
   }
 
   public Mono<ResponseEntity<Lines<Currency>>> getRates(String league) {
