@@ -11,14 +11,12 @@ import io.starter.service.PoeNinjaService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Log4j2
-public class StartupLoader implements ApplicationRunner {
+public class StartupLoader {
 
   private final DataAccessService dataAccessService;
   private final NinjaDataSyncService ninjaDataSyncService;
@@ -26,8 +24,7 @@ public class StartupLoader implements ApplicationRunner {
   private final PathOfExileService pathOfExileService;
   private final AnalyzerService analyzerService;
 
-  @SneakyThrows(InterruptedException.class)
-  public void loadEverything() {
+  public void loadEverything() throws InterruptedException {
     log.info("🚀 Starting full init...");
     pathOfExileService.getAllLeagues().subscribe(response -> {
       dataAccessService.saveLeagues(response.getBody());
@@ -55,10 +52,5 @@ public class StartupLoader implements ApplicationRunner {
       log.info("{} - Processed {} Skills", league.getName(), dataAccessService.findProcessedSkillsByLeague(league).size());
     });
     log.info("✅ Full init completed.");
-  }
-
-  @Override
-  public void run(ApplicationArguments args) {
-    loadEverything();
   }
 }
