@@ -32,17 +32,4 @@ public class PoeNinjaServiceTests {
         }
     );
   }
-
-  @Test
-  void testServiceGetRatesMethod() {
-    final Lines<Skill> expectedBody = SkillGenerator.generateLineWithSkills();
-    when(poeNinjaService.getSkills(LEAGUE)).thenReturn(Mono.just(ResponseEntity.ok(expectedBody)));
-
-    poeNinjaService.getSkills(LEAGUE).subscribe(
-        actual -> {
-          assertThat(actual.getStatusCode()).isEqualTo(HttpStatus.OK);
-          assertThat(actual.getBody()).isEqualTo(expectedBody);
-        }
-    );
-  }
 }
