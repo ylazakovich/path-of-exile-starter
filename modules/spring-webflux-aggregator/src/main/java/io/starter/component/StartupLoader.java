@@ -9,7 +9,6 @@ import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
