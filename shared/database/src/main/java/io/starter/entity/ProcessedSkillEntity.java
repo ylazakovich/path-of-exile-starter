@@ -6,20 +6,20 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@ToString
 @Entity
 @Table(name = "processed_skills")
-@EqualsAndHashCode(callSuper = true)
-public class ProcessedSkillEntity extends Identity {
-
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
-  @JoinColumn(name = "league_id", nullable = false)
-  private LeagueEntity league;
+public class ProcessedSkillEntity extends WithJoinLeague {
 
   @ManyToOne(fetch = FetchType.EAGER, optional = false)
   @JoinColumn(name = "skill_id", nullable = false)

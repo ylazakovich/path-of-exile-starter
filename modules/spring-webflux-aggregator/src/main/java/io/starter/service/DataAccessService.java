@@ -47,7 +47,7 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public List<SkillEntity> findSkillsByLeague(LeagueEntity league) {
-    return skillsRepository.findAllByLeague(league);
+    return skillsRepository.findAllByLeagueId(league.getId());
   }
 
   @Transactional(readOnly = true)
@@ -62,17 +62,17 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public Optional<RateEntity> findRateByNameAndLeague(String name, LeagueEntity league) {
-    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league));
+    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league.getId()));
   }
 
   @Transactional(readOnly = true)
   public List<RateEntity> findRatesByLeague(LeagueEntity league) {
-    return ratesRepository.findAllByLeagueId(league);
+    return ratesRepository.findAllByLeagueId(league.getId());
   }
 
   @Transactional(readOnly = true)
   public List<UniqueJewelEntity> findUniqueJewelsByLeague(LeagueEntity league) {
-    return uniqueJewelsRepository.findAllByLeagueId(league);
+    return uniqueJewelsRepository.findAllByLeagueId(league.getId());
   }
 
   @Transactional(readOnly = true)

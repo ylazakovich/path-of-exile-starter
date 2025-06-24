@@ -31,14 +31,14 @@ public class RatesDao {
     dataAccessService.findLeagueById(id)
         .flatMap(league -> {
           List<RateEntity> entityList = mapper.apply(data);
-          entityList.forEach(entity -> entity.setLeagueId(league));
+          entityList.forEach(entity -> entity.setLeague(league));
           dataAccessService.saveRates(entityList);
           return Optional.empty();
         });
   }
 
   public void saveAll(List<RateEntity> entities, Long id) {
-    entities.forEach(entity -> entity.setLeagueId(dataAccessService.findLeagueById(id).orElseThrow()));
+    entities.forEach(entity -> entity.setLeague(dataAccessService.findLeagueById(id).orElseThrow()));
     dataAccessService.saveRates(entities);
   }
 }

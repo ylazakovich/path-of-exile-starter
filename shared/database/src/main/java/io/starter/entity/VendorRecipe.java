@@ -15,9 +15,10 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @Entity
-@Table(name = "unique_jewels")
-public class UniqueJewelEntity extends WithJoinLeague {
+@Table(name = "vendor_recipes")
+public class VendorRecipe extends WithJoinLeague {
 
-  private @NotNull String name;
-  private @NotNull Double chaosEquivalent;
+  private @NotNull String itemName;
+  private @NotNull Double craftCost;
+  private @NotNull Double sellPrice;
 }

@@ -50,13 +50,13 @@ public class UserDao {
                          League setting) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(setting.id);
-    userEntity.setLeagueId(leagueEntity);
+    userEntity.setLeague(leagueEntity);
     save(userEntity);
   }
 
   public LeagueEntity readLeague(User user) {
     UserEntity entity = userRepository.findByUserId(user.getId());
-    return entity.getLeagueId();
+    return entity.getLeague();
   }
 
   public int readSkillPage(User user) {
@@ -75,7 +75,7 @@ public class UserDao {
     LeagueEntity leagueEntity = leagueRepository.findById(9L);
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
-      userEntity.setLeagueId(leagueEntity);
+      userEntity.setLeague(leagueEntity);
       userEntity.setUserId(user.getId());
       userEntity.setFirstName(user.getFirstName());
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
