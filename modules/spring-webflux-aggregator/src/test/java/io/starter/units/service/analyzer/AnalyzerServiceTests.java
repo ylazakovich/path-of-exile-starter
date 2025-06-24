@@ -5,7 +5,7 @@ import java.util.Objects;
 
 import io.starter.dto.AnalyzedSkillDto;
 import io.starter.service.AnalyzerService;
-import io.starter.utils.Generator;
+import io.starter.utils.SkillGenerator;
 
 import org.testng.annotations.Test;
 
@@ -20,7 +20,7 @@ public class AnalyzerServiceTests {
 
   @Test
   void testServiceAnalyzeSkillsMethod() {
-    final List<AnalyzedSkillDto> expectedList = List.of(Generator.generateAnalyzedSkill());
+    final List<AnalyzedSkillDto> expectedList = List.of(SkillGenerator.generateProcessedSkill());
     when(analyzerService.analyzeSkills(queryParam)).thenReturn(expectedList);
 
     List<AnalyzedSkillDto> actualList = analyzerService.analyzeSkills(queryParam);

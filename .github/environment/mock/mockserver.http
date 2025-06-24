@@ -31,3 +31,7 @@ Accept: application/json
 ### Path of Exile - GET /api/data/itemoverview
 GET https://poe.ninja/api/data/itemoverview?league=Standard&type=SkillGem
 Accept: application/json
+
+### Path of Exile - GET /api/data/itemoverview
+GET https://poe.ninja/api/data/itemoverview?league=Standard&type=UniqueJewel
+Accept: application/json

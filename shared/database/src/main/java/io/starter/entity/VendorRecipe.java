@@ -15,14 +15,10 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @Entity
-@Table(name = "skills")
-public class SkillEntity extends WithJoinLeague {
+@Table(name = "vendor_recipes")
+public class VendorRecipe extends WithJoinLeague {
 
-  private @NotNull String name;
-  private @NotNull String variant;
-  private @NotNull Boolean corrupted;
-  private @NotNull Integer gemLevel;
-  private @NotNull Integer gemQuality;
-  private @NotNull Double chaosEquivalent;
-  private @NotNull Double divineEquivalent;
+  private @NotNull String itemName;
+  private @NotNull Double craftCost;
+  private @NotNull Double sellPrice;
 }

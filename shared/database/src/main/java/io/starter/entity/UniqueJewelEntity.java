@@ -15,14 +15,9 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @Entity
-@Table(name = "skills")
-public class SkillEntity extends WithJoinLeague {
+@Table(name = "unique_jewels")
+public class UniqueJewelEntity extends WithJoinLeague {
 
   private @NotNull String name;
-  private @NotNull String variant;
-  private @NotNull Boolean corrupted;
-  private @NotNull Integer gemLevel;
-  private @NotNull Integer gemQuality;
   private @NotNull Double chaosEquivalent;
-  private @NotNull Double divineEquivalent;
 }

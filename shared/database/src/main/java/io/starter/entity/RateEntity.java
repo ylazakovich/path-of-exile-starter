@@ -1,29 +1,23 @@
 package io.starter.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Data
 @NoArgsConstructor
-@RequiredArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @ToString
 @Entity
 @Table(name = "rates")
-public class RateEntity extends Identity {
+public class RateEntity extends WithJoinLeague {
 
-  @ManyToOne(fetch = FetchType.EAGER, optional = false)
-  @JoinColumn(name = "league_id")
-  private @NonNull LeagueEntity leagueId;
-  private @NonNull String name;
-  private @NonNull Double chaosEquivalent;
+  private @NotNull String name;
+  private @NotNull Double chaosEquivalent;
 }

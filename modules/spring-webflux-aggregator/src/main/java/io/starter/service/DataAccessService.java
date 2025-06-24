@@ -10,41 +10,44 @@ import io.starter.entity.LeagueEntity;
 import io.starter.entity.ProcessedSkillEntity;
 import io.starter.entity.RateEntity;
 import io.starter.entity.SkillEntity;
+import io.starter.entity.UniqueJewelEntity;
 import io.starter.mapper.LeagueEntityMapper;
 import io.starter.model.path_of_exile.League;
 import io.starter.repo.LeaguesRepository;
 import io.starter.repo.ProcessedSkillsRepository;
 import io.starter.repo.RatesRepository;
 import io.starter.repo.SkillsRepository;
+import io.starter.repo.UniqueJewelsRepository;
 
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Log4j2
 @Service
 public class DataAccessService {
 
   private final ProcessedSkillsRepository processedSkillsRepository;
   private final SkillsRepository skillsRepository;
   private final RatesRepository ratesRepository;
+  private final UniqueJewelsRepository uniqueJewelsRepository;
   private final LeaguesRepository leaguesRepository;
 
   @Autowired
   public DataAccessService(LeaguesRepository leaguesRepository,
                            SkillsRepository skillsRepository,
                            ProcessedSkillsRepository processedSkillsRepository,
+                           UniqueJewelsRepository uniqueJewelsRepository,
                            RatesRepository ratesRepository) {
     this.leaguesRepository = leaguesRepository;
     this.skillsRepository = skillsRepository;
+    this.uniqueJewelsRepository = uniqueJewelsRepository;
     this.ratesRepository = ratesRepository;
     this.processedSkillsRepository = processedSkillsRepository;
   }
 
   @Transactional(readOnly = true)
   public List<SkillEntity> findSkillsByLeague(LeagueEntity league) {
-    return skillsRepository.findAllByLeague(league);
+    return skillsRepository.findAllByLeagueId(league.getId());
   }
 
   @Transactional(readOnly = true)
@@ -59,12 +62,17 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public Optional<RateEntity> findRateByNameAndLeague(String name, LeagueEntity league) {
-    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league));
+    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league.getId()));
   }
 
   @Transactional(readOnly = true)
   public List<RateEntity> findRatesByLeague(LeagueEntity league) {
-    return ratesRepository.findAllByLeagueId(league);
+    return ratesRepository.findAllByLeagueId(league.getId());
+  }
+
+  @Transactional(readOnly = true)
+  public List<UniqueJewelEntity> findUniqueJewelsByLeague(LeagueEntity league) {
+    return uniqueJewelsRepository.findAllByLeagueId(league.getId());
   }
 
   @Transactional(readOnly = true)
@@ -83,15 +91,25 @@ public class DataAccessService {
   }
 
   @Transactional
-  public void saveSkills(List<SkillEntity> skills) {
-    skillsRepository.saveAll(skills);
+  public void saveUniqueJewels(List<UniqueJewelEntity> uniqueJewelEntityList) {
+    uniqueJewelsRepository.saveAll(uniqueJewelEntityList);
+  }
+
+  @Transactional
+  public void saveSkills(List<SkillEntity> skillEntityList) {
+    skillsRepository.saveAll(skillEntityList);
   }
 
   @Transactional
   public void saveLeagues(List<League> data) {
-    LeagueEntityMapper mapper = new LeagueEntityMapper(leaguesRepository);
+    LeagueEntityMapper mapper = new LeagueEntityMapper(this);
     List<LeagueEntity> entityList = mapper.apply(data);
     leaguesRepository.saveAll(entityList);
+  }
+
+  @Transactional
+  public void saveRates(List<RateEntity> rateEntityList) {
+    ratesRepository.saveAll(rateEntityList);
   }
 
   @Transactional

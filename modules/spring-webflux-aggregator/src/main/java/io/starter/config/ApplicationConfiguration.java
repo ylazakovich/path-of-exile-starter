@@ -8,17 +8,9 @@ import static org.aeonbits.owner.Config.Sources;
 
 @LoadPolicy(LoadType.MERGE)
 @Sources({"system:env", "classpath:local_resources/application.properties"})
-public interface NinjaConfiguration extends Config {
+public interface ApplicationConfiguration extends Config {
 
-  @Key("NINJA_BASE_URL")
-  @DefaultValue("https://poe.ninja")
-  String baseUrl();
-
-  @Key("NINJA_REAL_URL")
-  @DefaultValue("https://poe.ninja")
-  String realUrl();
-
-  @Key("NINJA_USE_MOCK_SERVER_AS_PROXY")
-  @DefaultValue("false")
-  Boolean useMockServerAsProxy();
+  @Key("START_UP_LOADER_ENABLED")
+  @DefaultValue("true")
+  Boolean startupLoaderEnabled();
 }
