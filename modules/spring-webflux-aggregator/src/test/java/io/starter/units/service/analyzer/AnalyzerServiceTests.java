@@ -20,7 +20,7 @@ public class AnalyzerServiceTests {
 
   @Test
   void testServiceAnalyzeSkillsMethod() {
-    final List<AnalyzedSkillDto> expectedList = List.of(SkillGenerator.generateAnalyzedSkill());
+    final List<AnalyzedSkillDto> expectedList = List.of(SkillGenerator.generateProcessedSkill());
     when(analyzerService.analyzeSkills(queryParam)).thenReturn(expectedList);
 
     List<AnalyzedSkillDto> actualList = analyzerService.analyzeSkills(queryParam);

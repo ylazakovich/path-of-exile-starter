@@ -17,11 +17,11 @@ public final class SkillGenerator {
     // utility class
   }
 
-  public static Lines<Skill> generateLineWithSkills() {
-    return new Lines<>(Collections.singletonList(generateSkill()));
+  public static Lines<Skill> generateLines() {
+    return new Lines<>(Collections.singletonList(generate()));
   }
 
-  public static Skill generateSkill() {
+  public static Skill generate() {
     Skill skill = new Skill();
     skill.setName(faker.harryPotter().spell());
     skill.setVariant(faker.tire().aspectRatio());
@@ -32,7 +32,7 @@ public final class SkillGenerator {
     return skill;
   }
 
-  public static AnalyzedSkillDto generateAnalyzedSkill() {
+  public static AnalyzedSkillDto generateProcessedSkill() {
     AnalyzedSkillDto dto = new AnalyzedSkillDto();
     RateEntity rateEntity = new RateEntity();
     rateEntity.setChaosEquivalent(faker.number().randomDouble(1, 1, 5));

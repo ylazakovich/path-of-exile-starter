@@ -15,11 +15,11 @@ public final class UniqueJewelGenerator {
     // utility class
   }
 
-  public static Lines<UniqueJewel> generateLineWithSkills() {
-    return new Lines<>(Collections.singletonList(generateUniqueJewel()));
+  public static Lines<UniqueJewel> generateLines() {
+    return new Lines<>(Collections.singletonList(generate()));
   }
 
-  public static UniqueJewel generateUniqueJewel() {
+  public static UniqueJewel generate() {
     UniqueJewel uniqueJewel = new UniqueJewel();
     uniqueJewel.setName(faker.harryPotter().book());
     uniqueJewel.setChaosEquivalent(faker.number().randomDouble(1, 1, 5));
