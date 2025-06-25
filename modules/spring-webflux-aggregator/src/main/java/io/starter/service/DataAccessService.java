@@ -11,6 +11,7 @@ import io.starter.entity.ProcessedSkillEntity;
 import io.starter.entity.RateEntity;
 import io.starter.entity.SkillEntity;
 import io.starter.entity.UniqueJewelEntity;
+import io.starter.entity.VendorRecipeEntity;
 import io.starter.mapper.LeagueEntityMapper;
 import io.starter.model.path_of_exile.League;
 import io.starter.repo.LeaguesRepository;
@@ -66,8 +67,18 @@ public class DataAccessService {
   }
 
   @Transactional(readOnly = true)
+  public UniqueJewelEntity findUniqueJewelByLeague(String name, LeagueEntity league) {
+    return uniqueJewelsRepository.findByNameAndLeague(name, league);
+  }
+
+  @Transactional(readOnly = true)
   public Optional<LeagueEntity> findLeagueById(Long id) {
     return leaguesRepository.findById(id);
+  }
+
+  @Transactional(readOnly = true)
+  public Optional<VendorRecipeEntity> findVendorRecipeByNameAndLeague(String value, LeagueEntity league) {
+    return vendorRecipeRepository.findByLeagueAndName(league, value);
   }
 
   @Transactional(readOnly = true)
@@ -100,6 +111,11 @@ public class DataAccessService {
   @Transactional
   public void saveRates(List<RateEntity> rateEntityList) {
     ratesRepository.saveAll(rateEntityList);
+  }
+
+  @Transactional
+  public void saveVendorRecipe(VendorRecipeEntity entity) {
+    vendorRecipeRepository.save(entity);
   }
 
   @Transactional

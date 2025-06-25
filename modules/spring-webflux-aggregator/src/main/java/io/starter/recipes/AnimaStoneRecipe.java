@@ -37,12 +37,6 @@ public class AnimaStoneRecipe implements Recipe<UniqueJewel, UniqueJewel> {
   }
 
   @Override
-  public List<UniqueJewel> required() {
-    return REQUIRED_JEWEL_NAMES.stream()
-        .map(name -> new UniqueJewel(name, 0.0))
-        .toList();
-  }
-
   public double profit(List<UniqueJewel> ingredients) {
     double cost = ingredients.stream()
         .mapToDouble(UniqueJewel::getChaosEquivalent)

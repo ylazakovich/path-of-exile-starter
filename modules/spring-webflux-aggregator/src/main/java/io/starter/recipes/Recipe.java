@@ -7,5 +7,5 @@ public interface Recipe<I, O> {
 
   O craft(List<I> ingredients);
 
-  List<I> required();
+  double profit(List<I> ingredients);
 }
