@@ -16,9 +16,9 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "vendor_recipes")
-public class VendorRecipe extends WithJoinLeague {
+public class VendorRecipeEntity extends WithJoinLeague {
 
-  private @NotNull String itemName;
-  private @NotNull Double craftCost;
-  private @NotNull Double sellPrice;
+  private @NotNull String name;
+  private @NotNull Double chaosEquivalentPrice;
+  private @NotNull Double chaosEquivalentProfit;
 }
