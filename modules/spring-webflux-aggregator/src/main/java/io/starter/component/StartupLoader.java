@@ -2,7 +2,7 @@ package io.starter.component;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import io.starter.entity.UniqueJewelEntity;
@@ -32,11 +32,24 @@ public class StartupLoader {
   private final VendorRecipeService vendorRecipeService;
 
   public void loadEverything() throws InterruptedException {
+    stageLeagues();
+    Thread.sleep(Duration.ofSeconds(2));
+    stageCurrencies();
+    stageUniqueJewels();
+    stageSkills();
+    Thread.sleep(Duration.ofSeconds(10));
+    stageProcessedSkills();
+    stageAnimaStoneRecipes();
+  }
+
+  private void stageLeagues() {
     pathOfExileService.getAllLeagues().subscribe(response -> {
       dataAccessService.saveLeagues(response.getBody());
       log.info("Loaded {} leagues", dataAccessService.findLeagues().size());
     });
-    Thread.sleep(Duration.ofSeconds(2));
+  }
+
+  private void stageCurrencies() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getRates(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadCurrency(response.getBody(), league);
@@ -44,6 +57,9 @@ public class StartupLoader {
               league.getName(),
               dataAccessService.findRatesByLeague(league).size());
         }));
+  }
+
+  private void stageUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getUniqueJewels(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
@@ -51,6 +67,10 @@ public class StartupLoader {
               league.getName(),
               dataAccessService.findUniqueJewelsByLeague(league).size());
         }));
+
+  }
+
+  private void stageSkills() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName()).subscribe(response -> {
           ninjaDataSyncService.loadSkills(response.getBody(), league);
@@ -58,27 +78,31 @@ public class StartupLoader {
               league.getName(),
               dataAccessService.findSkillsByLeague(league).size());
         }));
-    Thread.sleep(Duration.ofSeconds(10));
+  }
+
+  private void stageProcessedSkills() {
     dataAccessService.findLeagues().forEach(league -> {
       dataAccessService.addProcessedSkills(league, skillDeltaService.analyzeSkills(league.getName()));
       log.info("{} - Processed Skill - Processed {} units",
           league.getName(),
           dataAccessService.findProcessedSkillsByLeague(league).size());
-      UniqueJewelEntity animaStone =
-          dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league);
-      if (Objects.nonNull(animaStone)) {
-        List<UniqueJewelEntity> ingredients = Stream.of(
-            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
-            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
-            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
-        ).filter(Objects::nonNull).toList();
-        AnimaStoneRecipe animaStoneRecipe =
-            new AnimaStoneRecipe(Objects.requireNonNullElse(animaStone.getChaosEquivalent(), 0.0));
-        boolean saved = vendorRecipeService.saveAnimaStoneRecipe(league, animaStoneRecipe, ingredients);
-        if (saved) {
-          log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
-        }
-      }
+    });
+  }
+
+  private void stageAnimaStoneRecipes() {
+    dataAccessService.findLeagues().forEach(league -> {
+      dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
+          .ifPresent(jewel -> {
+            List<UniqueJewelEntity> ingredients = Stream.of(
+                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
+                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
+                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
+                ).flatMap(Optional::stream)
+                .toList();
+            AnimaStoneRecipe animaStoneRecipe = new AnimaStoneRecipe(jewel.getName(), league, jewel.getChaosEquivalent());
+            vendorRecipeService.saveAnimaStoneRecipe(animaStoneRecipe, ingredients);
+            log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
+          });
     });
   }
 }

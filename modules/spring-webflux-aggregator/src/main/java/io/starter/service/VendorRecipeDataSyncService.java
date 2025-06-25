@@ -21,4 +21,8 @@ public class VendorRecipeDataSyncService {
           return null;
         });
   }
+
+  public void save(VendorRecipeEntity entity) {
+    dataAccessService.saveVendorRecipe(entity);
+  }
 }

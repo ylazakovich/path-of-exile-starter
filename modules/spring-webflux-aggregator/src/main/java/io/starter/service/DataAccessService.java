@@ -67,7 +67,7 @@ public class DataAccessService {
   }
 
   @Transactional(readOnly = true)
-  public UniqueJewelEntity findUniqueJewelByLeague(String name, LeagueEntity league) {
+  public Optional<UniqueJewelEntity> findUniqueJewelByLeague(String name, LeagueEntity league) {
     return uniqueJewelsRepository.findByNameAndLeague(name, league);
   }
 

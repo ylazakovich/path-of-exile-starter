@@ -1,8 +1,8 @@
 package io.starter.service;
 
 import java.util.List;
+import java.util.Optional;
 
-import io.starter.entity.LeagueEntity;
 import io.starter.entity.UniqueJewelEntity;
 import io.starter.entity.VendorRecipeEntity;
 import io.starter.recipes.AnimaStoneRecipe;
@@ -14,14 +14,23 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VendorRecipeService {
 
+  private final DataAccessService dataAccessService;
   private final VendorRecipeDataSyncService vendorRecipeDataSyncService;
 
-  public boolean saveAnimaStoneRecipe(LeagueEntity league,
-                                      AnimaStoneRecipe recipe,
-                                      List<UniqueJewelEntity> ingredients) {
+  public void saveAnimaStoneRecipe(AnimaStoneRecipe recipe,
+                                   List<UniqueJewelEntity> ingredients) {
     VendorRecipeEntity entity = recipe.craft(ingredients);
-    entity.setLeague(league);
-    vendorRecipeDataSyncService.load(entity, league);
-    return true;
+    vendorRecipeDataSyncService.load(entity, recipe.getLeagueEntity());
+  }
+
+  public void updateAnimaStoneRecipe(AnimaStoneRecipe recipe,
+                                     List<UniqueJewelEntity> ingredients) {
+    dataAccessService.findVendorRecipeByNameAndLeague(recipe.getName(), recipe.getLeagueEntity())
+        .ifPresent(vendorRecipe -> {
+          VendorRecipeEntity updatedValues = recipe.craft(ingredients);
+          vendorRecipe.setChaosEquivalentPrice(updatedValues.getChaosEquivalentPrice());
+          vendorRecipe.setChaosEquivalentProfit(updatedValues.getChaosEquivalentProfit());
+          vendorRecipeDataSyncService.save(vendorRecipe);
+        });
   }
 }

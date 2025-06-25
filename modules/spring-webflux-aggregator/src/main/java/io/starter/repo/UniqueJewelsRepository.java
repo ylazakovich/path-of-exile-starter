@@ -1,6 +1,7 @@
 package io.starter.repo;
 
 import java.util.List;
+import java.util.Optional;
 
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.UniqueJewelEntity;
@@ -11,5 +12,5 @@ public interface UniqueJewelsRepository extends JpaRepository<UniqueJewelEntity,
 
   List<UniqueJewelEntity> findAllByLeague(LeagueEntity league);
 
-  UniqueJewelEntity findByNameAndLeague(String name, LeagueEntity league);
+  Optional<UniqueJewelEntity> findByNameAndLeague(String name, LeagueEntity league);
 }
