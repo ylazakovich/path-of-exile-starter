@@ -1,12 +1,19 @@
 package io.starter.component;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
+import io.starter.entity.UniqueJewelEntity;
+import io.starter.model.ninja.UniqueJewel;
+import io.starter.recipes.AnimaStoneRecipe;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 import io.starter.service.SkillDeltaService;
+import io.starter.service.VendorRecipeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -22,6 +29,7 @@ public class StartupLoader {
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
   private final SkillDeltaService skillDeltaService;
+  private final VendorRecipeService vendorRecipeService;
 
   public void loadEverything() throws InterruptedException {
     pathOfExileService.getAllLeagues().subscribe(response -> {
@@ -56,6 +64,21 @@ public class StartupLoader {
       log.info("{} - Processed Skill - Processed {} units",
           league.getName(),
           dataAccessService.findProcessedSkillsByLeague(league).size());
+      UniqueJewelEntity animaStone =
+          dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league);
+      if (Objects.nonNull(animaStone)) {
+        List<UniqueJewelEntity> ingredients = Stream.of(
+            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
+            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
+            dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
+        ).filter(Objects::nonNull).toList();
+        AnimaStoneRecipe animaStoneRecipe =
+            new AnimaStoneRecipe(Objects.requireNonNullElse(animaStone.getChaosEquivalent(), 0.0));
+        boolean saved = vendorRecipeService.saveAnimaStoneRecipe(league, animaStoneRecipe, ingredients);
+        if (saved) {
+          log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
+        }
+      }
     });
   }
 }

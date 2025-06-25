@@ -3,6 +3,7 @@ package io.starter.service;
 import java.util.List;
 
 import io.starter.entity.LeagueEntity;
+import io.starter.entity.UniqueJewelEntity;
 import io.starter.entity.VendorRecipeEntity;
 import io.starter.model.ninja.UniqueJewel;
 import io.starter.recipes.AnimaStoneRecipe;
@@ -16,7 +17,9 @@ public class VendorRecipeService {
 
   private final DataAccessService dataAccessService;
 
-  public void saveAnimaStoneRecipe(LeagueEntity league, AnimaStoneRecipe recipe, List<UniqueJewel> ingredients) {
+  public boolean saveAnimaStoneRecipe(LeagueEntity league,
+                                      AnimaStoneRecipe recipe,
+                                      List<UniqueJewelEntity> ingredients) {
     if (!recipe.matches(ingredients)) {
       throw new IllegalArgumentException("Invalid ingredients for Anima Stone recipe");
     }
@@ -30,11 +33,6 @@ public class VendorRecipeService {
     entity.setChaosEquivalentPrice(chaosEquivalentPrice);
     entity.setChaosEquivalentProfit(profit);
     dataAccessService.saveVendorRecipe(entity);
-  }
-
-  public boolean isAnimaRecipeSaved(LeagueEntity league) {
-    return dataAccessService
-        .findVendorRecipeByNameAndLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
-        .isPresent();
+    return true;
   }
 }
