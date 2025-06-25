@@ -1,5 +1,7 @@
 package io.starter.controller;
 
+import java.util.Objects;
+
 import io.starter.model.telegram.Telegram;
 
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,9 @@ public class WebhookController {
     if (update.hasCallbackQuery()) {
       CallbackQuery callbackQuery = update.getCallbackQuery();
       log.info("Telegram has catch callback with id ['{}']", callbackQuery.getId());
+    } else if (Objects.isNull(update.getMessage())) {
+      log.warn("Telegram has catch update without message {}", update);
+      return null;
     } else {
       Message message = update.getMessage();
       log.info("Telegram has catch message with id ['{}']", message.getMessageId());
