@@ -1,7 +1,6 @@
 package io.starter.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import io.starter.entity.UniqueJewelEntity;
 import io.starter.entity.VendorRecipeEntity;
