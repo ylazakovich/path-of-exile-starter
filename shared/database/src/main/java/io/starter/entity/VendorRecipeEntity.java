@@ -16,7 +16,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "vendor_recipes")
-public class VendorRecipe extends WithJoinLeague {
+public class VendorRecipeEntity extends WithJoinLeague {
 
   private @NotNull String name;
   private @NotNull Double chaosEquivalentPrice;
