@@ -23,13 +23,13 @@ public class SkillDeltaController {
   // TODO: Expected profit can be manage over telegram setting
   @GetMapping
   public List<AnalyzedSkillDto> getSkillsByLeague(@RequestParam(value = "league") String league) {
-    return getSkillsByLeagueWithExpectedProfit(10, league);
+    return getDataWithProfit(league);
   }
 
-  private List<AnalyzedSkillDto> getSkillsByLeagueWithExpectedProfit(long value, String league) {
+  private List<AnalyzedSkillDto> getDataWithProfit(String league) {
     return skillDeltaService.analyzeSkills(league)
         .stream()
-        .filter(skill -> skill.getChaosEquivalentProfit() >= value)
+        .filter(skill -> skill.getChaosEquivalentProfit() >= (long) 5)
         .toList();
   }
 }
