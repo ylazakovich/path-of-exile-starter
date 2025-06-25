@@ -18,12 +18,14 @@ import io.starter.repo.ProcessedSkillsRepository;
 import io.starter.repo.RatesRepository;
 import io.starter.repo.SkillsRepository;
 import io.starter.repo.UniqueJewelsRepository;
+import io.starter.repo.VendorRecipeRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class DataAccessService {
 
   private final ProcessedSkillsRepository processedSkillsRepository;
@@ -31,23 +33,11 @@ public class DataAccessService {
   private final RatesRepository ratesRepository;
   private final UniqueJewelsRepository uniqueJewelsRepository;
   private final LeaguesRepository leaguesRepository;
-
-  @Autowired
-  public DataAccessService(LeaguesRepository leaguesRepository,
-                           SkillsRepository skillsRepository,
-                           ProcessedSkillsRepository processedSkillsRepository,
-                           UniqueJewelsRepository uniqueJewelsRepository,
-                           RatesRepository ratesRepository) {
-    this.leaguesRepository = leaguesRepository;
-    this.skillsRepository = skillsRepository;
-    this.uniqueJewelsRepository = uniqueJewelsRepository;
-    this.ratesRepository = ratesRepository;
-    this.processedSkillsRepository = processedSkillsRepository;
-  }
+  private final VendorRecipeRepository vendorRecipeRepository;
 
   @Transactional(readOnly = true)
   public List<SkillEntity> findSkillsByLeague(LeagueEntity league) {
-    return skillsRepository.findAllByLeagueId(league.getId());
+    return skillsRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
@@ -62,17 +52,17 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public Optional<RateEntity> findRateByNameAndLeague(String name, LeagueEntity league) {
-    return Optional.ofNullable(ratesRepository.findByNameAndLeagueId(name, league.getId()));
+    return Optional.ofNullable(ratesRepository.findByNameAndLeague(name, league));
   }
 
   @Transactional(readOnly = true)
   public List<RateEntity> findRatesByLeague(LeagueEntity league) {
-    return ratesRepository.findAllByLeagueId(league.getId());
+    return ratesRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
   public List<UniqueJewelEntity> findUniqueJewelsByLeague(LeagueEntity league) {
-    return uniqueJewelsRepository.findAllByLeagueId(league.getId());
+    return uniqueJewelsRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
