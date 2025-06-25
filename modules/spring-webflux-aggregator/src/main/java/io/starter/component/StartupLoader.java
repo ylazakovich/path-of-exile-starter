@@ -2,11 +2,11 @@ package io.starter.component;
 
 import java.time.Duration;
 
-import io.starter.service.SkillDeltaService;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
+import io.starter.service.SkillDeltaService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
