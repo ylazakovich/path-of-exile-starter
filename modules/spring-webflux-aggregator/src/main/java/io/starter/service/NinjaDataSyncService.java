@@ -15,12 +15,13 @@ import io.starter.model.ninja.Lines;
 import io.starter.model.ninja.Skill;
 import io.starter.model.ninja.UniqueJewel;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class NinjaDataSyncService {
 
   private final UniqueJewelsDao uniqueJewelsDao;
@@ -29,21 +30,6 @@ public class NinjaDataSyncService {
   private final RateService rateService;
   private final SkillEntityMapper skillEntityMapper;
   private final UniqueJewelMapper uniqueJewelMapper;
-
-  @Autowired
-  public NinjaDataSyncService(UniqueJewelsDao uniqueJewelsDao,
-                              RatesDao ratesDao,
-                              DataAccessService dataAccessService,
-                              RateService rateService,
-                              SkillEntityMapper skillEntityMapper,
-                              UniqueJewelMapper uniqueJewelMapper) {
-    this.uniqueJewelsDao = uniqueJewelsDao;
-    this.ratesDao = ratesDao;
-    this.dataAccessService = dataAccessService;
-    this.rateService = rateService;
-    this.skillEntityMapper = skillEntityMapper;
-    this.uniqueJewelMapper = uniqueJewelMapper;
-  }
 
   private <T> List<T> safeLines(Lines<T> lines) {
     return (lines != null && lines.getLines() != null)

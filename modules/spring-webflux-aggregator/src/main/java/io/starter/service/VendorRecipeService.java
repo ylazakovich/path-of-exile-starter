@@ -14,14 +14,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VendorRecipeService {
 
-  private final DataAccessService dataAccessService;
+  private final VendorRecipeDataSyncService vendorRecipeDataSyncService;
 
   public boolean saveAnimaStoneRecipe(LeagueEntity league,
                                       AnimaStoneRecipe recipe,
                                       List<UniqueJewelEntity> ingredients) {
     VendorRecipeEntity entity = recipe.craft(ingredients);
     entity.setLeague(league);
-    dataAccessService.saveVendorRecipe(entity);
+    vendorRecipeDataSyncService.load(entity, league);
     return true;
   }
 }
