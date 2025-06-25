@@ -10,11 +10,11 @@ import io.starter.entity.LeagueEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AnalyzerService {
+public class SkillDeltaService {
 
   private final DataAccessService dataAccessService;
 
-  public AnalyzerService(DataAccessService dataAccessService) {
+  public SkillDeltaService(DataAccessService dataAccessService) {
     this.dataAccessService = dataAccessService;
   }
 

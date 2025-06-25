@@ -2,7 +2,7 @@ package io.starter.component;
 
 import java.time.Duration;
 
-import io.starter.service.AnalyzerService;
+import io.starter.service.SkillDeltaService;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
@@ -21,7 +21,7 @@ public class StartupLoader {
   private final NinjaDataSyncService ninjaDataSyncService;
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
-  private final AnalyzerService analyzerService;
+  private final SkillDeltaService skillDeltaService;
 
   public void loadEverything() throws InterruptedException {
     pathOfExileService.getAllLeagues().subscribe(response -> {
@@ -52,7 +52,7 @@ public class StartupLoader {
         }));
     Thread.sleep(Duration.ofSeconds(10));
     dataAccessService.findLeagues().forEach(league -> {
-      dataAccessService.addProcessedSkills(league, analyzerService.analyzeSkills(league.getName()));
+      dataAccessService.addProcessedSkills(league, skillDeltaService.analyzeSkills(league.getName()));
       log.info("{} - Processed Skill - Processed {} units",
           league.getName(),
           dataAccessService.findProcessedSkillsByLeague(league).size());

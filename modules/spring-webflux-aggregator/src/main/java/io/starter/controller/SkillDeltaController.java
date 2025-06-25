@@ -3,7 +3,7 @@ package io.starter.controller;
 import java.util.List;
 
 import io.starter.dto.AnalyzedSkillDto;
-import io.starter.service.AnalyzerService;
+import io.starter.service.SkillDeltaService;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/analyzer")
-public class AnalyzerController {
+@RequestMapping("/skills/delta")
+public class SkillDeltaController {
 
-  private final AnalyzerService analyzerService;
+  private final SkillDeltaService skillDeltaService;
 
-  public AnalyzerController(AnalyzerService analyzerService) {
-    this.analyzerService = analyzerService;
+  public SkillDeltaController(SkillDeltaService skillDeltaService) {
+    this.skillDeltaService = skillDeltaService;
   }
 
   // TODO: Expected profit can be manage over telegram setting
-  @GetMapping("/analyze/skills")
+  @GetMapping
   public List<AnalyzedSkillDto> getSkillsByLeague(@RequestParam(value = "league") String league) {
     return getSkillsByLeagueWithExpectedProfit(10, league);
   }
 
   private List<AnalyzedSkillDto> getSkillsByLeagueWithExpectedProfit(long value, String league) {
-    return analyzerService.analyzeSkills(league)
+    return skillDeltaService.analyzeSkills(league)
         .stream()
         .filter(skill -> skill.getChaosEquivalentProfit() >= value)
         .toList();
