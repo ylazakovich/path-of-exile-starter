@@ -6,6 +6,7 @@ import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PoeNinjaService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,20 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/unique-jewels")
+@RequiredArgsConstructor
 @Log4j2
 public class UniqueJewelController {
 
   private final DataAccessService dataAccessService;
   private final PoeNinjaService poeNinjaService;
   private final NinjaDataSyncService ninjaDataSyncService;
-
-  public UniqueJewelController(DataAccessService dataAccessService,
-                               PoeNinjaService poeNinjaService,
-                               NinjaDataSyncService ninjaDataSyncService) {
-    this.dataAccessService = dataAccessService;
-    this.poeNinjaService = poeNinjaService;
-    this.ninjaDataSyncService = ninjaDataSyncService;
-  }
 
   @PostMapping("/load")
   public void loadUniqueJewels() {

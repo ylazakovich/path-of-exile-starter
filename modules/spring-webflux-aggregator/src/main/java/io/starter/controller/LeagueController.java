@@ -6,6 +6,7 @@ import io.starter.entity.LeagueEntity;
 import io.starter.service.DataAccessService;
 import io.starter.service.PathOfExileService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/leagues")
+@RequiredArgsConstructor
 @Log4j2
 public class LeagueController {
 
   private final DataAccessService dataAccessService;
   private final PathOfExileService pathOfExileService;
-
-  public LeagueController(DataAccessService dataAccessService, PathOfExileService pathOfExileService) {
-    this.dataAccessService = dataAccessService;
-    this.pathOfExileService = pathOfExileService;
-  }
 
   @GetMapping
   public ResponseEntity<List<LeagueEntity>> getLeagues() {

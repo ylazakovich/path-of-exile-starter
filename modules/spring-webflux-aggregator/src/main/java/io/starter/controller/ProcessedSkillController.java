@@ -4,6 +4,7 @@ import io.starter.config.ScheduleConfig;
 import io.starter.service.DataAccessService;
 import io.starter.service.SkillDeltaService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,17 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/processed-skills")
+@RequiredArgsConstructor
 @Log4j2
 public class ProcessedSkillController {
 
   private final DataAccessService dataAccessService;
   private final SkillDeltaService skillDeltaService;
-
-  public ProcessedSkillController(DataAccessService dataAccessService,
-                                  SkillDeltaService skillDeltaService) {
-    this.dataAccessService = dataAccessService;
-    this.skillDeltaService = skillDeltaService;
-  }
 
   @PostMapping("/load")
   public void loadProcessedSkills() {
