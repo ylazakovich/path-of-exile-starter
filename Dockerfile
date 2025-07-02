@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.7_6-jdk@sha256:2cc80b4288f6240734ecd1acae01d20afa56f86327b9ae207a9468363422c974 AS builder
+FROM eclipse-temurin:21.0.7_6-jdk@sha256:1c37779fe2f338d42a7bc8ac439920ef2bf7cebb7deb0970f5733219b17e9868 AS builder
 ARG MODULE
 WORKDIR /app
 
