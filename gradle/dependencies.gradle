@@ -15,7 +15,7 @@ ext {
     faker = '2.4.3'
     jaxb = '2.3.1'
     selenide = '7.9.3'
-    selenium = '4.33.0'
+    selenium = '4.34.0'
     aeonbits = "1.0.12"
     slf4j = '2.0.17'
     allure = '2.29.1'
