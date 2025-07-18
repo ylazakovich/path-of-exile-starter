@@ -37,7 +37,7 @@ services:
         condition: service_healthy
 
   ngrok:
-    image: ngrok/ngrok:3@sha256:143bc4bf0fce234a258ac695ebd3adf7366bd7bacde773df84bb3b97dc88ad40
+    image: ngrok/ngrok:3@sha256:a374d3dcbb67236a3b23222132caa687a5ca218226f53722032e757c9c102bfe
     command: http host.docker.internal:5050
 
   mock-server:
