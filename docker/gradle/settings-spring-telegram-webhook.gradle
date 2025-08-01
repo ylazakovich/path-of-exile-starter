@@ -1,0 +1,5 @@
+rootProject.name = 'path-of-exile-starter-telegram'
+
+include ':modules:spring-telegram-webhook'
+include ':shared:database'
+include ':shared:api'

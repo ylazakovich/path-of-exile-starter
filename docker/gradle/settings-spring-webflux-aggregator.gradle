@@ -1,0 +1,5 @@
+rootProject.name = 'path-of-exile-starter-webflux'
+
+include ':modules:spring-webflux-aggregator'
+include ':shared:database'
+include ':shared:api'
