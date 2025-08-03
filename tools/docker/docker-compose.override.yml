@@ -1,7 +1,7 @@
 services:
   spring-webflux-aggregator:
     build:
-      context: .
+      context: ../../
       dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-webflux-aggregator
@@ -13,7 +13,7 @@ services:
 
   spring-telegram-webhook:
     build:
-      context: .
+      context: ../../
       dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-telegram-webhook
