@@ -1,2 +1,5 @@
 #!/bin/bash
-docker compose -f tools/docker/docker-compose.yml down -v
+docker compose \
+  -f tools/docker/docker-compose.yml \
+  -f tools/docker/docker-compose.override.yml \
+   down -v
