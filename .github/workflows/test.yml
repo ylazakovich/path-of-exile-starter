@@ -28,6 +28,8 @@ jobs:
       - name: 🟢Start Application
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
+        env:
+          GRADLE_OPTS: -Dorg.gradle.console=plain
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
       - name: 🐳 Collecting logs from all docker containers

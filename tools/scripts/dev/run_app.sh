@@ -21,10 +21,6 @@ SERVICES=(
   "spring-telegram-webhook"
 )
 
-if [ "$CI" = "true" ]; then
-  export GRADLE_OPTS="-Dorg.gradle.console=plain"
-fi
-
 docker compose \
   -f tools/docker/docker-compose.yml \
   -f tools/docker/docker-compose.override.yml \
