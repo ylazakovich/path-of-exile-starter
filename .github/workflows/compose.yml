@@ -16,8 +16,6 @@ jobs:
       - name: 🟢Start compose
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
-        env:
-          GRADLE_OPTS: -Dorg.gradle.console=plain
       - name: 🐳 Collecting logs from all docker containers
         uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
         with:

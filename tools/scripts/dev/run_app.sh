@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [[ "${CI:-}" == "true" ]]; then
+  export GRADLE_OPTS="-Dorg.gradle.console=plain"
+else
+  export GRADLE_OPTS="-Dorg.gradle.console=rich"
+fi
+
 # Blue
 info() {
   echo -e "\033[1;34mInfo: $1\033[0m"
