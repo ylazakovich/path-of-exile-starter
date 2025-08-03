@@ -2,7 +2,7 @@ services:
   spring-webflux-aggregator:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-webflux-aggregator
         PORT: 8080
@@ -14,7 +14,7 @@ services:
   spring-telegram-webhook:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-telegram-webhook
         PORT: 5050
@@ -46,9 +46,9 @@ services:
       FLYWAY_USER: root
       FLYWAY_PASSWORD: root
     volumes:
-      - ./.github/environment/migrations:/flyway/sql
+      - ./environment/migrations:/flyway/sql
 
   mock-server:
     volumes:
-      - ./.github/environment/mock/expectations:/config/expectations
+      - ./environment/mock/expectations:/config/expectations
     ports: ["1080:1080"]

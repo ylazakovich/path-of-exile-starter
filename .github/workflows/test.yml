@@ -26,7 +26,7 @@ jobs:
       - name: 🔨Build with Gradle
         uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4
       - name: 🟢Start Application
-        run: ./.github/scripts/compose/run_app.sh
+        run: ./tools/scripts/dev/run_app.sh
         shell: bash
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
@@ -35,7 +35,7 @@ jobs:
         with:
           dest: logs
       - name: 🛑Stop Application
-        run: ./.github/scripts/compose/stop_app.sh
+        run: ./tools/scripts/dev/stop_app.sh
         shell: bash
       - name: 📦 Packing docker compose logs as artifact
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

@@ -7,7 +7,7 @@ WORKDIR /app
 COPY gradlew gradle.properties build.gradle lombok.config ./
 COPY gradle ./gradle
 COPY config ./config
-COPY docker/gradle/settings-${MODULE}.gradle settings.gradle
+COPY tools/docker/gradle/settings-${MODULE}.gradle settings.gradle
 
 COPY modules/${MODULE} ./modules/${MODULE}
 COPY shared ./shared

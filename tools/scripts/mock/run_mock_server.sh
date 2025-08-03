@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "🚀 Starting MockServer container..."
-docker compose up -d --quiet-pull mock-server
+docker compose -f tools/docker/docker-compose.yml up -d --quiet-pull mock-server
 
 sleep=2
 max_count=30

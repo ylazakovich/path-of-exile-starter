@@ -1,7 +1,7 @@
 #!/bin/bash
 
 MOCKSERVER_URL=${1:-http://localhost:1080}
-DIR=${2:-.github/environment/mock/expectations}
+DIR=${2:-.tools/environment/mock/expectations}
 
 find "$DIR" -type f -name "*.json" | while read -r file; do
   printf "\n⏳ Uploading '%s'\n" "$file"
