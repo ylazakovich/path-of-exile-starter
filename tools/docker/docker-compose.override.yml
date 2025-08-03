@@ -1,11 +1,12 @@
 services:
   spring-webflux-aggregator:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../../
+      dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-webflux-aggregator
         PORT: 8080
+        GRADLE_OPTS: ${GRADLE_OPTS}
     ports: ["8080:8080"]
     environment:
       DATABASE_HOST: mariadb
@@ -13,11 +14,12 @@ services:
 
   spring-telegram-webhook:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ../../
+      dockerfile: tools/docker/Dockerfile
       args:
         MODULE: spring-telegram-webhook
         PORT: 5050
+        GRADLE_OPTS: ${GRADLE_OPTS}
     ports: ["5050:5050"]
     environment:
       DATABASE_HOST: mariadb
@@ -46,9 +48,9 @@ services:
       FLYWAY_USER: root
       FLYWAY_PASSWORD: root
     volumes:
-      - ./.github/environment/migrations:/flyway/sql
+      - ${PWD}/tools/environment/migrations:/flyway/sql
 
   mock-server:
     volumes:
-      - ./.github/environment/mock/expectations:/config/expectations
+      - ${PWD}/tools/environment/mock/expectations:/config/expectations
     ports: ["1080:1080"]

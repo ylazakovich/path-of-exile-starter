@@ -13,7 +13,7 @@
 
 - [Quick start](#-quick-start)
 - [Features](#-features)
-- [FAQ](.github/docs/FAQ.md#-faq)
+- [FAQ](docs/FAQ.md#-faq)
 
 ## 🚀 Features
 
@@ -32,4 +32,4 @@
 2. Service is able to provide you positions for trade
 3. You are able to manage it over Telegram
 
-![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/.github/docs/preview.gif)
+![preview](https://github.com/ylazakovich/path-of-exile-starter/blob/main/docs/preview.gif)

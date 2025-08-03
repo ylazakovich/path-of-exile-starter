@@ -20,7 +20,11 @@ SERVICES=(
   "spring-webflux-aggregator"
   "spring-telegram-webhook"
 )
-docker compose up -d --quiet-pull "${SERVICES[@]}" || {
+
+docker compose \
+  -f tools/docker/docker-compose.yml \
+  -f tools/docker/docker-compose.override.yml \
+  up -d --quiet-pull "${SERVICES[@]}" || {
   error "Docker compose has not started"
   exit 1
 }
