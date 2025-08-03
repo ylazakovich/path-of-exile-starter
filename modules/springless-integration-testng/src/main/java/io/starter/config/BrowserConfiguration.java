@@ -13,7 +13,7 @@ public interface BrowserConfiguration extends Config {
   @Key("REMOTE_URL")
   String remoteUrl();
 
-  @Key("IS_REMOTE")
+  @Key("CI")
   @DefaultValue("false")
   Boolean isRemote();
 }
