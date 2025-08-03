@@ -6,6 +6,7 @@ services:
       args:
         MODULE: spring-webflux-aggregator
         PORT: 8080
+        GRADLE_OPTS: ${GRADLE_OPTS}
     ports: ["8080:8080"]
     environment:
       DATABASE_HOST: mariadb
@@ -18,6 +19,7 @@ services:
       args:
         MODULE: spring-telegram-webhook
         PORT: 5050
+        GRADLE_OPTS: ${GRADLE_OPTS}
     ports: ["5050:5050"]
     environment:
       DATABASE_HOST: mariadb
