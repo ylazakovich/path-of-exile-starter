@@ -46,9 +46,9 @@ services:
       FLYWAY_USER: root
       FLYWAY_PASSWORD: root
     volumes:
-      - ./tools/environment/migrations:/flyway/sql
+      - ${PWD}/tools/environment/migrations:/flyway/sql
 
   mock-server:
     volumes:
-      - ./tools/environment/mock/expectations:/config/expectations
+      - ${PWD}/tools/environment/mock/expectations:/config/expectations
     ports: ["1080:1080"]
