@@ -25,7 +25,7 @@ ext {
     spotbugs_annotation = '4.9.4'
     mock_server_netty = '5.15.0'
     bouncy_castle = '1.81'
-    spotbug = '4.9.3'
+    spotbug = '4.9.4'
     jakarta_persistence_api= '3.2.0'
     jackson = '2.19.2'
 }
