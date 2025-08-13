@@ -1,7 +1,7 @@
 ext {
     reactor_core = '3.7.9'
     reactor_netty = '1.2.9'
-    netty = '4.2.3.Final'
+    netty = '4.2.4.Final'
     lombok = '1.18.38'
     telegram = '9.0.0'
     spring = '3.5.4'
