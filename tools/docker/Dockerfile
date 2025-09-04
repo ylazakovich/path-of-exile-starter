@@ -17,7 +17,7 @@ COPY shared ./shared
 RUN ./gradlew modules:${MODULE}:bootJar --no-daemon --build-cache -x test
 
 # ---------- Runtime stage ----------
-FROM eclipse-temurin:21.0.8_9-jre@sha256:19ec9faa4bbefbb9538ff237d08d24853ea9ce97bd3213b609be1dcbb76757c6
+FROM eclipse-temurin:21.0.8_9-jre@sha256:2f696f62306d28d32cce2ea6bbb2f2f5b8df736adcc019be61d0f90ce88f07d5
 
 ARG MODULE
 ARG PORT
