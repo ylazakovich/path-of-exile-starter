@@ -3,7 +3,7 @@ ext {
     reactor_netty = '1.2.9'
     netty = '4.2.5.Final'
     lombok = '1.18.40'
-    telegram = '9.0.0'
+    telegram = '9.1.0'
     spring = '3.5.5'
     spring_web = '6.2.10'
     hibernate_orm = '7.1.0.Final'
