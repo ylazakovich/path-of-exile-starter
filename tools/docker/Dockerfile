@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM eclipse-temurin:21.0.8_9-jdk@sha256:2b9cd724df3c0797032bfcfebd268ba89e80a77e93c791c4cecd4d5e1202e027 AS builder
+FROM eclipse-temurin:21.0.8_9-jdk@sha256:40f9bb2bba5571ed0bb8d16f089afd2dbabb0d5fd727767c311330b8c604f4b0 AS builder
 
 ARG MODULE
 ARG GRADLE_OPTS
