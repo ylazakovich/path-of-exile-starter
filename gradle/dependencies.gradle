@@ -10,7 +10,7 @@ ext {
     hibernate_validator = '9.0.1.Final'
     mariadb = '3.5.6'
     mockito = '5.20.0'
-    assertJ = '3.27.5'
+    assertJ = '3.27.6'
     testng = '7.11.0'
     faker = '2.5.0'
     jaxb = '2.3.1'
