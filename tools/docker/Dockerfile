@@ -16,10 +16,10 @@ COPY shared ./shared
 RUN ./gradlew modules:${MODULE}:bootJar --no-daemon --build-cache -x test
 
 # ---------- Busybox stage ----------
-FROM --platform=$TARGETPLATFORM busybox:1.36.1 AS bb
+FROM busybox:1.36.1 AS bb
 
 # ---------- Runtime stage ----------
-FROM --platform=$TARGETPLATFORM eclipse-temurin:25-jre@sha256:74d5c631e5db5a44e7f5a2dd49f93f0c6f7b8c22c1dc1b8e1caec7009872c5c3
+FROM eclipse-temurin:25-jre@sha256:74d5c631e5db5a44e7f5a2dd49f93f0c6f7b8c22c1dc1b8e1caec7009872c5c3
 
 ARG MODULE
 ARG PORT
