@@ -30,8 +30,6 @@ COPY --from=bb /bin/busybox /bin/busybox
 # jar
 COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar /app/app.jar
 
-RUN adduser --uid 1000 --disabled-password --gecos "" appuser || true
-
 EXPOSE ${PORT}
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
