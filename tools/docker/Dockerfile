@@ -31,7 +31,6 @@ COPY --from=bb /bin/busybox /bin/busybox
 COPY --from=builder /app/modules/${MODULE}/build/libs/*.jar /app/app.jar
 
 RUN adduser --uid 1000 --disabled-password --gecos "" appuser || true
-USER 1000
 
 EXPOSE ${PORT}
 
