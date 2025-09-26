@@ -22,7 +22,7 @@ jobs:
         with:
           distribution: "temurin"
           cache: "gradle"
-          java-version: "21"
+          java-version: "25"
       - name: 🔨Build with Gradle
         uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4
       - name: 🟢Start Application
