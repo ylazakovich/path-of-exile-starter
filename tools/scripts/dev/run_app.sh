@@ -22,10 +22,21 @@ error() {
 }
 
 echo "Starting application..."
+
 SERVICES=(
   "spring-webflux-aggregator"
   "spring-telegram-webhook"
 )
+
+export DOCKER_BUILDKIT=1
+
+HOST_PLATFORM="$(docker info --format '{{.OSType}}/{{.Architecture}}' || true)"
+if [[ -n "${HOST_PLATFORM}" ]]; then
+  export DOCKER_DEFAULT_PLATFORM="${HOST_PLATFORM}"
+  info "Using local platform: ${DOCKER_DEFAULT_PLATFORM}"
+else
+  warning "Failed to determine host platform — compose will choose an appropriate one automatically."
+fi
 
 docker compose \
   -f tools/docker/docker-compose.yml \

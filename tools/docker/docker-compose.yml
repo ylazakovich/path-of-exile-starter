@@ -22,9 +22,9 @@ services:
       flyway:
         condition: service_completed_successfully
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ping"]
+      test: ["CMD", "busybox", "wget", "-q", "-O", "/dev/null", "http://localhost:8080/health/ping"]
       interval: 5s
-      timeout: 1s
+      timeout: 5s
       retries: 60
 
   spring-telegram-webhook:
