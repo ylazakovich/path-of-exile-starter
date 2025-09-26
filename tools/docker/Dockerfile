@@ -16,7 +16,7 @@ COPY shared ./shared
 RUN ./gradlew modules:${MODULE}:bootJar --no-daemon --build-cache -x test
 
 # ---------- Busybox stage ----------
-FROM busybox:1.36.1 AS bb
+FROM busybox:1.36.1@sha256:4b8407fadd8100c61b097d63efe992b2c033e7d371c9117f7a9462fe87e31176 AS bb
 
 # ---------- Runtime stage ----------
 FROM eclipse-temurin:25-jre@sha256:74d5c631e5db5a44e7f5a2dd49f93f0c6f7b8c22c1dc1b8e1caec7009872c5c3
