@@ -19,7 +19,7 @@ RUN ./gradlew modules:${MODULE}:bootJar --no-daemon --build-cache -x test
 FROM busybox:1.37.0@sha256:d82f458899c9696cb26a7c02d5568f81c8c8223f8661bb2a7988b269c8b9051e AS bb
 
 # ---------- Runtime stage ----------
-FROM eclipse-temurin:25-jre@sha256:74d5c631e5db5a44e7f5a2dd49f93f0c6f7b8c22c1dc1b8e1caec7009872c5c3
+FROM eclipse-temurin:25-jre@sha256:19263dd178aad1bae2b00bf3594b6c8626381c8a159cfe1fade4b20e387a9559
 
 ARG MODULE
 ARG PORT
