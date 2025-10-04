@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM --platform=$BUILDPLATFORM eclipse-temurin:25-jdk@sha256:21f6c51087c4fa7775b802c9d2ca7e3319eedf32e95ee94cac44a6d0f543a83f AS builder
+FROM --platform=$BUILDPLATFORM eclipse-temurin:25-jdk@sha256:c39999d5331eacc2ca5d0e571cdf841e5c18cdd195762e7b0a05bc6fa7c85a96 AS builder
 
 ARG MODULE
 ARG GRADLE_OPTS
