@@ -12,7 +12,7 @@ ext {
     mockito = '5.20.0'
     assertJ = '3.27.6'
     testng = '7.11.0'
-    faker = '2.5.1'
+    faker = '2.5.2'
     jaxb = '2.3.1'
     selenide = '7.11.1'
     selenium = '4.36.0'
