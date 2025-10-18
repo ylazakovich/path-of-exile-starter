@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 if [[ "${CI:-}" == "true" ]]; then
   export GRADLE_OPTS="-Dorg.gradle.console=plain"
@@ -6,20 +7,9 @@ else
   export GRADLE_OPTS="-Dorg.gradle.console=rich"
 fi
 
-# Blue
-info() {
-  echo -e "\033[1;34mInfo: $1\033[0m"
-}
-
-# Yellow
-warning() {
-  echo -e "\033[1;33mWarning: $1\033[0m"
-}
-
-# Red
-error() {
-  echo -e "\033[1;31mError: $1\033[0m"
-}
+info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
+warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
+error() { echo -e "\033[1;31mError: $1\033[0m"; }
 
 echo "Starting application..."
 
@@ -35,38 +25,48 @@ if [[ -n "${HOST_PLATFORM}" ]]; then
   export DOCKER_DEFAULT_PLATFORM="${HOST_PLATFORM}"
   info "Using local platform: ${DOCKER_DEFAULT_PLATFORM}"
 else
-  warning "Failed to determine host platform — compose will choose an appropriate one automatically."
+  warning "Failed to determine host platform — compose will choose automatically."
 fi
 
-docker compose \
-  -f tools/docker/docker-compose.yml \
-  -f tools/docker/docker-compose.override.yml \
-  up -d --quiet-pull "${SERVICES[@]}" || {
-  error "Docker compose has not started"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+
+if REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)"; then
+  :
+else
+  REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+fi
+
+COMPOSE_FILE_A="$REPO_ROOT/tools/docker/docker-compose.yml"
+COMPOSE_FILE_B="$REPO_ROOT/tools/docker/docker-compose.override.yml"
+
+if [[ ! -f "$COMPOSE_FILE_A" ]]; then
+  error "File not found: $COMPOSE_FILE_A"
   exit 1
-}
+fi
+if [[ ! -f "$COMPOSE_FILE_B" ]]; then
+  warning "File not found: $COMPOSE_FILE_B — using only $COMPOSE_FILE_A"
+fi
 
-echo "Checking health status of services..."
-for service in "${SERVICES[@]}"; do
-  container_id=$(docker ps --format "{{.ID}} {{.Names}}" | grep -E "^.*$service(-1)$" | awk '{print $1}')
-  if [ -z "$container_id" ]; then
-    continue
-  fi
+if ! MERGED_SERVICES="$(docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config --services 2>/dev/null)"; then
+  error "Failed to parse docker compose configuration."
+  docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config || true
+  exit 1
+fi
 
-  health_check=$(docker inspect --format='{{json .State.Health}}' "$container_id" 2>/dev/null || echo "null")
-  if [ "$health_check" == "null" ]; then
-    warning "Healthcheck is not configured for service '$service'."
-    continue
-  fi
+if [[ -z "$MERGED_SERVICES" ]]; then
+  warning "No services returned by 'docker compose config --services'. Will fallback to SERVICES array after start."
+fi
 
-  status=$(docker inspect --format='{{.State.Health.Status}}' "$container_id" 2>/dev/null || echo "unknown")
-  if [ "$status" == "healthy" ]; then
-    info "Service '$service' is healthy."
-  else
-    warning "Service '$service' is not healthy (State.Health.Status: $status). Showing logs:"
-    docker inspect --format='{{json .State.Health}}' "$container_id" | jq
-    error "Service '$service' healthcheck failed!!!"
-    exit 1
-  fi
-done
-echo "Application started successfully!"
+CMD=( docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" )
+if [[ -f "$COMPOSE_FILE_B" ]]; then
+  CMD+=( -f "$COMPOSE_FILE_B" )
+fi
+CMD+=( up -d --quiet-pull )
+CMD+=( "${SERVICES[@]}" )
+
+SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
+
+info "Launch command: ${CMD[*]}"
+
+export SERVICES_LIST
+source "$REPO_ROOT/tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
