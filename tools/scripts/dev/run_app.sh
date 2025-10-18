@@ -1,3 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
 if [[ "${CI:-}" == "true" ]]; then
   export GRADLE_OPTS="-Dorg.gradle.console=plain"
 else
@@ -25,8 +28,11 @@ else
   warning "Failed to determine host platform — compose will choose automatically."
 fi
 
-COMPOSE_FILE_A="tools/docker/docker-compose.yml"
-COMPOSE_FILE_B="tools/docker/docker-compose.override.yml"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+COMPOSE_FILE_A="$REPO_ROOT/tools/docker/docker-compose.yml"
+COMPOSE_FILE_B="$REPO_ROOT/tools/docker/docker-compose.override.yml"
 
 if [[ ! -f "$COMPOSE_FILE_A" ]]; then
   error "File not found: $COMPOSE_FILE_A"
@@ -36,31 +42,26 @@ if [[ ! -f "$COMPOSE_FILE_B" ]]; then
   warning "File not found: $COMPOSE_FILE_B — using only $COMPOSE_FILE_A"
 fi
 
-if ! MERGED_SERVICES="$(docker compose -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config --services 2>/dev/null)"; then
+if ! MERGED_SERVICES="$(docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config --services 2>/dev/null)"; then
   error "Failed to parse docker compose configuration."
-  docker compose -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config || true
+  docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config || true
   exit 1
 fi
 
 if [[ -z "$MERGED_SERVICES" ]]; then
-  error "No services found in the merged configuration."
-  exit 1
+  warning "No services returned by 'docker compose config --services'. Will fallback to SERVICES array after start."
 fi
 
-for srv in "${SERVICES[@]}"; do
-  if ! grep -qx "$srv" <<<"$MERGED_SERVICES"; then
-    warning "Service '$srv' not found in merged compose. Available: $(tr '\n' ' ' <<<"$MERGED_SERVICES")"
-  fi
-done
-
-CMD=( docker compose -f "$COMPOSE_FILE_A" )
+CMD=( docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" )
 if [[ -f "$COMPOSE_FILE_B" ]]; then
   CMD+=( -f "$COMPOSE_FILE_B" )
 fi
 CMD+=( up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
-CMD_STR="$(printf '%q ' "${CMD[@]}")"
+SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
 
-info "Launch command: $CMD_STR"
-source ./tools/scripts/dev/docker_health_check.sh "$CMD_STR"
+info "Launch command: ${CMD[*]}"
+
+export SERVICES_LIST
+source "$REPO_ROOT/tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"

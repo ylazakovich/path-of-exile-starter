@@ -1,3 +1,6 @@
+#!/bin/bash
+set -euo pipefail
+
 HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-120}"
 
 info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
@@ -6,47 +9,50 @@ error() { echo -e "\033[1;31mError: $1\033[0m"; }
 
 join_quoted() {
   local out=() a
-  for a in "$@"; do
-    printf -v a '%q' "$a"
-    out+=("$a")
-  done
+  for a in "$@"; do printf -v a '%q' "$a"; out+=("$a"); done
   printf '%s' "${out[*]}"
 }
 
-extract_compose_files_from_args() {
+extract_compose_files_and_project_dir() {
   local -a args=("$@")
   local -a files=()
+  local project=""
   local i
   for ((i=0; i<${#args[@]}; i++)); do
-    if [[ "${args[i]}" == "-f" ]]; then
-      if (( i+1 < ${#args[@]} )); then
-        files+=("${args[i+1]}")
-        ((i++))
-      fi
+    if [[ "${args[i]}" == "-f" && $((i+1)) -lt ${#args[@]} ]]; then
+      files+=("${args[i+1]}"); ((i++)); continue
+    fi
+    if [[ "${args[i]}" == "--project-directory" && $((i+1)) -lt ${#args[@]} ]]; then
+      project="${args[i+1]}"; ((i++)); continue
     fi
   done
-  if (( ${#files[@]} == 0 )); then
-    files=("docker-compose.yml")
-  fi
-  printf '%s\n' "${files[@]}"
+  if (( ${#files[@]} == 0 )); then files=("docker-compose.yml"); fi
+  printf '%s\0' "$project" "${files[@]}"
 }
 
-build_compose_config_cmd() {
+build_compose_cmd_array() {
+  local project="$1"; shift
   local -a files=("$@")
   local -a cmd=(docker compose)
-  local f
-  for f in "${files[@]}"; do
-    cmd+=(-f "$f")
-  done
-  cmd+=(config --services)
+  if [[ -n "$project" ]]; then cmd+=(--project-directory "$project"); fi
+  local f; for f in "${files[@]}"; do cmd+=(-f "$f"); done
   printf '%s\0' "${cmd[@]}"
 }
 
-get_services() {
+get_services_via_config() {
+  local project="$1"; shift
   local -a files=("$@")
-  local -a cfg_cmd
-  IFS=$'\0' read -r -d '' -a cfg_cmd < <(build_compose_config_cmd "${files[@]}")
-  "${cfg_cmd[@]}" 2>/dev/null
+  local -a base
+  IFS=$'\0' read -r -d '' -a base < <(build_compose_cmd_array "$project" "${files[@]}")
+  "${base[@]}" config --services 2>/dev/null
+}
+
+get_services_via_ps() {
+  local project="$1"; shift
+  local -a files=("$@")
+  local -a base
+  IFS=$'\0' read -r -d '' -a base < <(build_compose_cmd_array "$project" "${files[@]}")
+  "${base[@]}" ps --services 2>/dev/null || true
 }
 
 wait_for_container_health() {
@@ -56,10 +62,7 @@ wait_for_container_health() {
   local waited=0
   local hc
   hc="$(docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null || echo "")"
-  if [[ -z "$hc" || "$hc" == "null" ]]; then
-    echo "NO_HEALTHCHECK"
-    return 0
-  fi
+  if [[ -z "$hc" || "$hc" == "null" ]]; then echo "NO_HEALTHCHECK"; return 0; fi
   while :; do
     local status
     status="$(docker inspect --format='{{.State.Health.Status}}' "$cid" 2>/dev/null || echo "unknown")"
@@ -67,13 +70,8 @@ wait_for_container_health() {
       healthy) echo "healthy"; return 0 ;;
       unhealthy) echo "unhealthy"; return 0 ;;
       starting|unknown)
-        if (( waited >= timeout )); then
-          echo "$status"
-          return 0
-        fi
-        sleep "$interval"
-        waited=$((waited+interval))
-        ;;
+        if (( waited >= timeout )); then echo "$status"; return 0; fi
+        sleep "$interval"; waited=$((waited+interval)) ;;
       *) echo "$status"; return 0 ;;
     esac
   done
@@ -127,14 +125,9 @@ execute() {
   local -a cmd_args=()
   while (( $# > 0 )); do
     case "$1" in
-      --timeout=*)
-        HEALTH_TIMEOUT="${1#*=}"; shift ;;
-      --timeout|-t)
-        shift
-        if (( $# == 0 )); then error "Missing value for --timeout"; exit 1; fi
-        HEALTH_TIMEOUT="$1"; shift ;;
-      *)
-        cmd_args+=("$1"); shift ;;
+      --timeout=*) HEALTH_TIMEOUT="${1#*=}"; shift ;;
+      --timeout|-t) shift; if (( $# == 0 )); then error "Missing value for --timeout"; exit 1; fi; HEALTH_TIMEOUT="$1"; shift ;;
+      *) cmd_args+=("$1"); shift ;;
     esac
   done
 
@@ -147,22 +140,42 @@ execute() {
     IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
   fi
 
-  local -a compose_files
-  mapfile -t compose_files < <(extract_compose_files_from_args "${cmd_args[@]}")
+  local project
+  local -a files
+  IFS=$'\0' read -r -d '' project -a files < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
 
   echo
   info "Using global healthcheck timeout (per service): ${HEALTH_TIMEOUT}s"
   echo
 
   local services
-  if ! services="$(get_services "${compose_files[@]}" || true)"; then
-    error "Failed to parse docker compose configuration."
-    docker compose $(printf ' -f %q' "${compose_files[@]}") config || true
+  services="$(get_services_via_config "$project" "${files[@]}" || true)"
+
+  if [[ -z "$services" && -n "${SERVICES_LIST:-}" ]]; then
+    warning "No services returned by 'config --services'. Falling back to SERVICES_LIST."
+    services="$SERVICES_LIST"
+  fi
+
+  if [[ -z "$services" ]]; then
+    warning "No services from config; will start first, then read 'compose ps --services'."
+  fi
+
+  local display_cmd
+  display_cmd="$(join_quoted "${cmd_args[@]}")"
+  info "Launch command: $display_cmd"
+
+  if ! "${cmd_args[@]}" >/dev/null 2>&1; then
+    error "Docker compose has not started"
     exit 1
   fi
 
   if [[ -z "$services" ]]; then
-    error "No services found in $(printf '%s ' "${compose_files[@]}")."
+    services="$(get_services_via_ps "$project" "${files[@]}" || true)"
+  fi
+
+  if [[ -z "$services" ]]; then
+    error "Could not determine services even after start."
+    docker compose $( [[ -n "$project" ]] && printf ' --project-directory %q' "$project" ) $(printf ' -f %q' "${files[@]}") config || true
     exit 1
   fi
 
@@ -174,17 +187,8 @@ execute() {
     [[ -n "$line" ]] || continue
     printf "  %2d. %s\n" "$idx" "$line"
     idx=$((idx+1))
-  done <<<"$services"
+  done <<<"$(tr ' ' '\n' <<<"$services")"
   printf '──────────────────────────────────────────────\n\n'
-
-  local display_cmd
-  display_cmd="$(join_quoted "${cmd_args[@]}")"
-  info "Launch command: $display_cmd"
-
-  if ! "${cmd_args[@]}" >/dev/null 2>&1; then
-    error "Docker compose has not started"
-    exit 1
-  fi
 
   echo "Checking health status of services..."
   local svc
