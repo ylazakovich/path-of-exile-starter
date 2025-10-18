@@ -28,56 +28,11 @@ else
   warning "Failed to determine host platform — compose will choose automatically."
 fi
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-if REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)"; then
-  :
-else
-  REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
-fi
-
-WORK_ROOT="/home/runner/work"
-TOOLS_TARGET="$WORK_ROOT/tools"
-mkdir -p "$WORK_ROOT"
-if [[ -e "$TOOLS_TARGET" && ! -L "$TOOLS_TARGET" && ! -d "$TOOLS_TARGET" ]]; then
-  rm -f "$TOOLS_TARGET"
-fi
-if [[ ! -e "$TOOLS_TARGET" ]]; then
-  ln -s "$REPO_ROOT/tools" "$TOOLS_TARGET"
-fi
-
 COMPOSE_FILE_A="tools/docker/docker-compose.yml"
 COMPOSE_FILE_B="tools/docker/docker-compose.override.yml"
 
-if [[ ! -f "$REPO_ROOT/$COMPOSE_FILE_A" ]]; then
-  error "File not found: $REPO_ROOT/$COMPOSE_FILE_A"
-  exit 1
-fi
-if [[ ! -f "$REPO_ROOT/$COMPOSE_FILE_B" ]]; then
-  warning "File not found: $REPO_ROOT/$COMPOSE_FILE_B — using only $COMPOSE_FILE_A"
-fi
-
-PROFILES_ARG=()
-if [[ -n "${COMPOSE_PROFILES:-}" ]]; then
-  IFS=',' read -r -a __profiles <<<"$COMPOSE_PROFILES"
-  for p in "${__profiles[@]}"; do PROFILES_ARG+=( --profile "$p" ); done
-fi
-
-CMD=( docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" )
-if [[ -f "$REPO_ROOT/$COMPOSE_FILE_B" ]]; then
-  CMD+=( -f "$COMPOSE_FILE_B" )
-fi
-CMD+=( "${PROFILES_ARG[@]}" up -d --quiet-pull )
+CMD=( docker compose -f "$COMPOSE_FILE_A" )
+CMD+=( -f "$COMPOSE_FILE_B" )
 CMD+=( "${SERVICES[@]}" )
 
-SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
-export SERVICES_LIST
-
-pushd "$REPO_ROOT" >/dev/null
-if ! MERGED_SERVICES="$(docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config --services 2>/dev/null)"; then
-  warning "Unable to parse merged compose config; will rely on SERVICES_LIST/fallbacks."
-elif [[ -z "$MERGED_SERVICES" ]]; then
-  warning "No services returned by 'docker compose config --services'. Falling back to SERVICES_LIST."
-fi
-
 source "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
-popd >/dev/null
