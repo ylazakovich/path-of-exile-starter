@@ -29,7 +29,12 @@ else
 fi
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+
+if REPO_ROOT="$(git -C "$SCRIPT_DIR" rev-parse --show-toplevel 2>/dev/null)"; then
+  :
+else
+  REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+fi
 
 COMPOSE_FILE_A="$REPO_ROOT/tools/docker/docker-compose.yml"
 COMPOSE_FILE_B="$REPO_ROOT/tools/docker/docker-compose.override.yml"
