@@ -7,11 +7,7 @@ info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
 warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
 error() { echo -e "\033[1;31mError: $1\033[0m"; }
 
-join_quoted() {
-  local out=() a
-  for a in "$@"; do printf -v a '%q' "$a"; out+=("$a"); done
-  printf '%s' "${out[*]}"
-}
+join_quoted() { local out=() a; for a in "$@"; do printf -v a '%q' "$a"; out+=("$a"); done; printf '%s' "${out[*]}"; }
 
 extract_compose_files_and_project_dir() {
   local -a args=("$@")
@@ -19,12 +15,8 @@ extract_compose_files_and_project_dir() {
   local project=""
   local i
   for ((i=0; i<${#args[@]}; i++)); do
-    if [[ "${args[i]}" == "-f" && $((i+1)) -lt ${#args[@]} ]]; then
-      files+=("${args[i+1]}"); ((i++)); continue
-    fi
-    if [[ "${args[i]}" == "--project-directory" && $((i+1)) -lt ${#args[@]} ]]; then
-      project="${args[i+1]}"; ((i++)); continue
-    fi
+    if [[ "${args[i]}" == "-f" && $((i+1)) -lt ${#args[@]} ]]; then files+=("${args[i+1]}"); ((i++)); continue; fi
+    if [[ "${args[i]}" == "--project-directory" && $((i+1)) -lt ${#args[@]} ]]; then project="${args[i+1]}"; ((i++)); continue; fi
   done
   if (( ${#files[@]} == 0 )); then files=("docker-compose.yml"); fi
   printf '%s\0' "$project" "${files[@]}"
@@ -136,17 +128,13 @@ execute() {
     exit 1
   fi
 
-  if (( ${#cmd_args[@]} == 1 )); then
-    IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
-  fi
+  if (( ${#cmd_args[@]} == 1 )); then IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"; fi
 
- local -a proj_and_files=()
- while IFS= read -r -d '' item; do
-   proj_and_files+=("$item")
- done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
+  local -a proj_and_files=()
+  while IFS= read -r -d '' item; do proj_and_files+=("$item"); done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
 
- local project="${proj_and_files[0]:-}"
- local -a files=("${proj_and_files[@]:1}")
+  local project="${proj_and_files[0]:-}"
+  local -a files=("${proj_and_files[@]:1}")
 
   echo
   info "Using global healthcheck timeout (per service): ${HEALTH_TIMEOUT}s"
@@ -160,15 +148,11 @@ execute() {
     services="$SERVICES_LIST"
   fi
 
-  if [[ -z "$services" ]]; then
-    warning "No services from config; will start first, then read 'compose ps --services'."
-  fi
-
   local display_cmd
   display_cmd="$(join_quoted "${cmd_args[@]}")"
   info "Launch command: $display_cmd"
 
-  if ! "${cmd_args[@]}" >/dev/null; then
+  if ! "${cmd_args[@]}" >/dev/null 2>&1; then
     error "Docker compose has not started"
     exit 1
   fi
