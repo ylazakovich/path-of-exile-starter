@@ -16,8 +16,8 @@ jobs:
       - name: Debug
         shell: bash
         run: |
-          docker compose -f tools/docker/docker-compose.yml -f tools/docker/docker-compose.override.yml config > /tmp/merged.yml
-          grep -n 'source:' /tmp/merged.yml | grep environment
+          git grep -n --no-index '/home/runner/work/tools' || true
+          git grep -n --no-index -E '\$\{(RUNNER_WORKSPACE|GITHUB_WORKSPACE)[^}]*\}' || true
       - name: 🟢Start compose
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
