@@ -35,6 +35,16 @@ else
   REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
 fi
 
+WORK_ROOT="/home/runner/work"
+TOOLS_TARGET="$WORK_ROOT/tools"
+mkdir -p "$WORK_ROOT"
+if [[ -e "$TOOLS_TARGET" && ! -L "$TOOLS_TARGET" && ! -d "$TOOLS_TARGET" ]]; then
+  rm -f "$TOOLS_TARGET"
+fi
+if [[ ! -e "$TOOLS_TARGET" ]]; then
+  ln -s "$REPO_ROOT/tools" "$TOOLS_TARGET"
+fi
+
 COMPOSE_FILE_A="tools/docker/docker-compose.yml"
 COMPOSE_FILE_B="tools/docker/docker-compose.override.yml"
 
