@@ -68,6 +68,7 @@ fi
 CMD+=( up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
-info "Launch command: ${CMD[*]}"
+CMD_STR="$(printf '%q ' "${CMD[@]}")"
 
-source ./tools/scripts/dev/docker_health_check.sh "${CMD[@]}"
+info "Launch command: $CMD_STR"
+source ./tools/scripts/dev/docker_health_check.sh "$CMD_STR"
