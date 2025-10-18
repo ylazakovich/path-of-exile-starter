@@ -168,7 +168,7 @@ execute() {
   display_cmd="$(join_quoted "${cmd_args[@]}")"
   info "Launch command: $display_cmd"
 
-  if ! "${cmd_args[@]}" >/dev/null 2>&1; then
+  if ! "${cmd_args[@]}" >/dev/null; then
     error "Docker compose has not started"
     exit 1
   fi

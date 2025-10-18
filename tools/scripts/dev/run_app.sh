@@ -74,7 +74,5 @@ CMD+=( "${SERVICES[@]}" )
 
 SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
 
-info "Launch command: ${CMD[*]}"
-
 export SERVICES_LIST
 source "$REPO_ROOT/tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
