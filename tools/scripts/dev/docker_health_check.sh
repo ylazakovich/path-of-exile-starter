@@ -140,9 +140,13 @@ execute() {
     IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
   fi
 
-  local project
-  local -a files
-  IFS=$'\0' read -r -d '' project -a files < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
+ local -a proj_and_files=()
+ while IFS= read -r -d '' item; do
+   proj_and_files+=("$item")
+ done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
+
+ local project="${proj_and_files[0]:-}"
+ local -a files=("${proj_and_files[@]:1}")
 
   echo
   info "Using global healthcheck timeout (per service): ${HEALTH_TIMEOUT}s"
