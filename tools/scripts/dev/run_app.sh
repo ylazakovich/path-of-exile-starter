@@ -62,8 +62,6 @@ CMD+=( "${SERVICES[@]}" )
 SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
 export SERVICES_LIST
 
-info "Launch command: ${CMD[*]}"
-
 pushd "$REPO_ROOT" >/dev/null
 # Пытаемся получить список сервисов из объединённого конфига (для ранней диагностики)
 if ! MERGED_SERVICES="$(docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" ${COMPOSE_FILE_B:+-f "$COMPOSE_FILE_B"} config --services 2>/dev/null)"; then
