@@ -1,9 +1,9 @@
 name: "Run docker compose"
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 env:
   CI: true
 
@@ -13,11 +13,6 @@ jobs:
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - name: Debug
-        shell: bash
-        run: |
-          git grep -n --no-index '/home/runner/work/tools' || true
-          git grep -n --no-index -E '\$\{(RUNNER_WORKSPACE|GITHUB_WORKSPACE)[^}]*\}' || true
       - name: 🟢Start compose
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
