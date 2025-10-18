@@ -43,7 +43,7 @@ get_services_via_config() {
   local project="$1"; shift
   local -a files=("$@")
   local -a base
-  IFS=$'\0' read -r -d '' -a base < <(build_compose_cmd_array "$project" "${files[@]}")
+  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" config --services 2>/dev/null
 }
 
@@ -51,7 +51,7 @@ get_services_via_ps() {
   local project="$1"; shift
   local -a files=("$@")
   local -a base
-  IFS=$'\0' read -r -d '' -a base < <(build_compose_cmd_array "$project" "${files[@]}")
+  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" ps --services 2>/dev/null || true
 }
 

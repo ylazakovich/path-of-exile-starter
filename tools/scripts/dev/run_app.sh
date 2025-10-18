@@ -57,11 +57,19 @@ if [[ -z "$MERGED_SERVICES" ]]; then
   warning "No services returned by 'docker compose config --services'. Will fallback to SERVICES array after start."
 fi
 
+PROFILES_ARG=()
+if [[ -n "${COMPOSE_PROFILES:-}" ]]; then
+  IFS=',' read -r -a __profiles <<<"$COMPOSE_PROFILES"
+  for p in "${__profiles[@]}"; do
+    PROFILES_ARG+=( --profile "$p" )
+  done
+fi
+
 CMD=( docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" )
 if [[ -f "$COMPOSE_FILE_B" ]]; then
   CMD+=( -f "$COMPOSE_FILE_B" )
 fi
-CMD+=( up -d --quiet-pull )
+CMD+=( "${PROFILES_ARG[@]}" up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
 SERVICES_LIST="$(printf '%s ' "${SERVICES[@]}")"
