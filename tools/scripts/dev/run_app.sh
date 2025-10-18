@@ -62,6 +62,21 @@ if [[ -n "${COMPOSE_PROFILES:-}" ]]; then
   for p in "${__profiles[@]}"; do PROFILES_ARG+=( --profile "$p" ); done
 fi
 
+WORK_ROOT="/home/runner/work"
+TOOLS_TARGET="$WORK_ROOT/tools"
+
+if [[ ! -d "$WORK_ROOT" ]]; then
+  mkdir -p "$WORK_ROOT"
+fi
+
+if [[ -e "$TOOLS_TARGET" && ! -L "$TOOLS_TARGET" && ! -d "$TOOLS_TARGET" ]]; then
+  rm -f "$TOOLS_TARGET"
+fi
+
+if [[ ! -e "$TOOLS_TARGET" ]]; then
+  ln -s "$REPO_ROOT/tools" "$TOOLS_TARGET"
+fi
+
 CMD=( docker compose --project-directory "$REPO_ROOT" -f "$COMPOSE_FILE_A" )
 if [[ -f "$COMPOSE_FILE_B" ]]; then
   CMD+=( -f "$COMPOSE_FILE_B" )
