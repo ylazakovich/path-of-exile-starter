@@ -33,6 +33,7 @@ COMPOSE_FILE_B="tools/docker/docker-compose.override.yml"
 
 CMD=( docker compose -f "$COMPOSE_FILE_A" )
 CMD+=( -f "$COMPOSE_FILE_B" )
+CMD+=( up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
 source "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
