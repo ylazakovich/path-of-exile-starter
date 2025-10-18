@@ -13,6 +13,83 @@ jobs:
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: Environment info
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "PWD=$(pwd)"
+          echo "Listing repo root:"
+          ls -la
+          echo
+          echo "Docker versions:"
+          docker version
+          docker compose version
+
+      - name: Set COMPOSE_PROFILES (optional)
+        if: ${{ inputs.compose_profiles != '' }}
+        shell: bash
+        run: |
+          echo "COMPOSE_PROFILES=${{ inputs.compose_profiles }}" | tee -a "$GITHUB_ENV"
+          echo "COMPOSE_PROFILES set to: ${{ inputs.compose_profiles }}"
+
+      - name: Generate merged compose config
+        shell: bash
+        run: |
+          set -euxo pipefail
+          docker compose \
+            -f tools/docker/docker-compose.yml \
+            -f tools/docker/docker-compose.override.yml \
+            config > /tmp/merged-compose.yml
+          echo "Merged config at /tmp/merged-compose.yml"
+          wc -l /tmp/merged-compose.yml
+          echo "First 60 lines of merged config:"
+          head -n 60 /tmp/merged-compose.yml || true
+
+      - name: Grep for absolute path and runner vars
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "=== GREP in merged config ==="
+            grep -n "/home/runner/work/tools" /tmp/merged-compose.yml || true
+            echo
+            echo "=== GREP in source compose files (runner vars / absolute paths) ==="
+            grep -nE 'RUNNER_WORKSPACE|GITHUB_WORKSPACE|COMPOSE_PROJECT_DIR|/home/runner/work' tools/docker/docker-compose*.yml || true
+            echo
+            echo "=== GREP whole tools/docker tree for absolute path usage ==="
+            grep -n "/home/runner/work/tools" -R tools/docker/ || true
+          } | tee /tmp/compose-debug-grep.txt
+
+      - name: Show context around matches (merged config)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "=== Context (±3 lines) in merged config for /home/runner/work/tools ==="
+          grep -nC3 "/home/runner/work/tools" /tmp/merged-compose.yml || true
+
+      - name: Try docker compose ps --services (sanity)
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Services from merged compose (if any):"
+          docker compose \
+            -f tools/docker/docker-compose.yml \
+            -f tools/docker/docker-compose.override.yml \
+            ps --services || true
+
+      - name: (Optional) Attempt docker compose build for a service
+        if: ${{ inputs.build_service != '' }}
+        shell: bash
+        run: |
+          set -euxo pipefail
+          echo "Attempting build for service: ${{ inputs.build_service }}"
+          docker compose \
+            -f tools/docker/docker-compose.yml \
+            -f tools/docker/docker-compose.override.yml \
+            build --progress=plain "${{ inputs.build_service }}" || true        
+        
+
       - name: 🟢Start compose
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
