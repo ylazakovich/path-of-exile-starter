@@ -1,9 +1,9 @@
 name: "Run docker compose"
 on:
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 env:
   CI: true
 
@@ -13,6 +13,11 @@ jobs:
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+      - name: Debug
+        shell: bash
+        run: |
+          docker compose -f tools/docker/docker-compose.yml -f tools/docker/docker-compose.override.yml config > /tmp/merged.yml
+          grep -n 'source:' /tmp/merged.yml | grep environment
       - name: 🟢Start compose
         run: ./tools/scripts/dev/run_app.sh
         shell: bash
