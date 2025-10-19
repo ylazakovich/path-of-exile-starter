@@ -54,7 +54,7 @@ get_services_via_config() {
   local -a files=("$@")
   local -a base
   readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
-    "${base[@]}" ps --services --all 2>/dev/null || true
+  "${base[@]}" config --services 2>/dev/null
 }
 
 get_services_via_ps() {
@@ -63,7 +63,7 @@ get_services_via_ps() {
   local -a files=("$@")
   local -a base
   readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
-  "${base[@]}" ps --services 2>/dev/null || true
+  "${base[@]}" ps --services --all 2>/dev/null || true
 }
 
 get_ps_json() {
@@ -333,23 +333,21 @@ execute() {
 
   local started_services="" up_services="" completed_ok_services="" exited_bad_services=""
   if command -v jq >/dev/null 2>&1; then
-    local -a base
-    readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
     local ps_json
-    ps_json="$("${base[@]}" ps --format json 2>/dev/null || true)"
+    ps_json="$(get_ps_json "$project" "${files[@]}" || true)"
 
-    if [[ -n "$ps_json" && "$ps_json" =~ ^[{[] ]]; then
+    if [[ -n "$ps_json" ]]; then
       started_services="$(
-        jq -sr 'map(.Service) | unique | join(" ")' <<<"$ps_json"
+        jq -sr 'map(select(type=="object") | .Service) | unique | join(" ")' <<<"$ps_json"
       )"
       up_services="$(
-        jq -sr 'map(select((.State // .Status)=="running") | .Service) | unique | join(" ")' <<<"$ps_json"
+        jq -sr 'map(select(type=="object" and ((.State // .Status)=="running")) | .Service) | unique | join(" ")' <<<"$ps_json"
       )"
       completed_ok_services="$(
-        jq -sr 'map(select((.State // .Status)=="exited" and ((.ExitCode // 0)|tostring)=="0") | .Service) | unique | join(" ")' <<<"$ps_json"
+        jq -sr 'map(select(type=="object" and ((.State // .Status)=="exited") and ((.ExitCode // 0)|tostring)=="0") | .Service) | unique | join(" ")' <<<"$ps_json"
       )"
       exited_bad_services="$(
-        jq -sr 'map(select((.State // .Status)=="exited" and ((.ExitCode // 0)|tostring)!="0") | .Service) | unique | join(" ")' <<<"$ps_json"
+        jq -sr 'map(select(type=="object" and ((.State // .Status)=="exited") and ((.ExitCode // 0)|tostring)!="0") | .Service) | unique | join(" ")' <<<"$ps_json"
       )"
     fi
   fi
