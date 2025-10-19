@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
-HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-120}"
+DOCKER_HEALTH_TIMEOUT="${DOCKER_HEALTH_TIMEOUT:-120}"
 
 info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
 warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
@@ -49,7 +49,7 @@ get_services_via_ps() {
 
 wait_for_container_health() {
   local cid="$1"
-  local timeout="${2:-$HEALTH_TIMEOUT}"
+  local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
   local interval=2
   local waited=0
   local hc
@@ -71,7 +71,7 @@ wait_for_container_health() {
 
 check_service_health() {
   local service="$1"
-  local timeout="${2:-$HEALTH_TIMEOUT}"
+  local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
   local failed=0
   local any=0
   local -a cids=()
@@ -130,18 +130,38 @@ execute() {
   local -a cmd_args=()
   while (( $# > 0 )); do
     case "$1" in
-      --timeout=*) HEALTH_TIMEOUT="${1#*=}"; shift ;;
-      --timeout|-t) shift; if (( $# == 0 )); then error "Missing value for --timeout"; exit 1; fi; HEALTH_TIMEOUT="$1"; shift ;;
+      --timeout=*) DOCKER_HEALTH_TIMEOUT="${1#*=}"; shift ;;
+      --timeout|-t) shift; if (( $# == 0 )); then error "Missing value for --timeout"; exit 1; fi; DOCKER_HEALTH_TIMEOUT="$1"; shift ;;
       *) cmd_args+=("$1"); shift ;;
     esac
   done
 
-  if ! [[ "$HEALTH_TIMEOUT" =~ ^[0-9]+$ ]]; then
-    error "Invalid timeout value: '$HEALTH_TIMEOUT'"
+  if ! [[ "$DOCKER_HEALTH_TIMEOUT" =~ ^[0-9]+$ ]]; then
+    error "Invalid timeout value: '$DOCKER_HEALTH_TIMEOUT'"
     exit 1
   fi
 
-  if (( ${#cmd_args[@]} == 1 )); then IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"; fi
+  if (( ${#cmd_args[@]} == 1 )); then
+    IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
+  fi
+
+  local has_up=false
+  local has_wait=false
+  local has_wait_timeout=false
+  local a
+  for a in "${cmd_args[@]}"; do
+    [[ "$a" == "up" ]] && has_up=true
+    [[ "$a" == "--wait" ]] && has_wait=true
+    [[ "$a" == "--wait-timeout" || "$a" == --wait-timeout=* ]] && has_wait_timeout=true
+  done
+  if $has_up; then
+    if ! $has_wait; then
+      cmd_args+=( --wait )
+    fi
+    if ! $has_wait_timeout; then
+      cmd_args+=( --wait-timeout 120 )
+    fi
+  fi
 
   local -a proj_and_files=()
   while IFS= read -r -d '' item; do proj_and_files+=("$item"); done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
@@ -150,7 +170,7 @@ execute() {
   local -a files=("${proj_and_files[@]:1}")
 
   echo
-  info "Using global healthcheck timeout (per service): ${HEALTH_TIMEOUT}s"
+  info "Using global healthcheck timeout (per service): ${DOCKER_HEALTH_TIMEOUT}s"
   echo
 
   local services
@@ -196,12 +216,11 @@ execute() {
   while IFS= read -r svc; do
     [ -n "$svc" ] || continue
     if docker ps -q --filter "label=com.docker.compose.service=$svc" | grep -q .; then
-      if ! check_service_health "$svc" "$HEALTH_TIMEOUT"; then
+      if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
         exit 1
       fi
     fi
   done
   echo "Application started successfully!"
 }
-
 execute "$@"
