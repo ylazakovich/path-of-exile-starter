@@ -277,10 +277,7 @@ execute() {
     exit 1
   fi
 
-  # Do not attempt to re-split a single string into args; it breaks quoted values.
-  # if ((${#cmd_args[@]} == 1)); then
-  #   IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
-  # fi
+  # Intentionally avoid re-splitting a single string into args; it breaks quoted values.
 
   local has_up=false has_wait=false has_wait_timeout=false a
   for a in "${cmd_args[@]}"; do
@@ -315,9 +312,10 @@ execute() {
   print_command_pretty "${cmd_args[@]}"
 
   if ! output="$("${cmd_args[@]}" 2>&1)"; then
-    error "Docker compose failed to start:"
+    rc=$?
+    error "Docker compose failed to start (exit $rc):"
     printf '%s\n' "$output"
-    exit 1
+    exit "$rc"
   fi
 
   if [[ -z "$services" ]]; then
