@@ -122,15 +122,20 @@ wait_for_container_health() {
   done
 }
 
-check_service_health() {
+check_service_health() check_service_health() {
   local service="$1"
   local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
   local failed=0
   local any=0
   local -a cids=()
   local waited_c=0 interval_c=2
+  local project_filter=()
+  if [[ -n "${COMPOSE_PROJECT_NAME:-}" ]]; then
+    project_filter+=(--filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}")
+  fi
+
   while :; do
-    mapfile -t cids < <(docker ps -q --filter "label=com.docker.compose.service=$service")
+    mapfile -t cids < <(docker ps -q "${project_filter[@]}" --filter "label=com.docker.compose.service=$service")
     if ((${#cids[@]} > 0)); then
       break
     fi
@@ -140,6 +145,7 @@ check_service_health() {
     sleep "$interval_c"
     waited_c=$((waited_c + interval_c))
   done
+
   local cid result
   for cid in "${cids[@]}"; do
     [[ -n "$cid" ]] || continue
@@ -175,6 +181,7 @@ check_service_health() {
       failed=1
     fi
   done
+
   if ((any == 0)); then
     warning "Service '$service' has no running containers yet; skipping healthcheck for it."
   fi
@@ -307,6 +314,9 @@ execute() {
   while IFS= read -r -d '' item; do proj_and_files+=("$item"); done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
   local project="${proj_and_files[0]:-}"
   local -a files=("${proj_and_files[@]:1}")
+  if [[ -z "${COMPOSE_PROJECT_NAME:-}" && -n "$project" ]]; then
+    export COMPOSE_PROJECT_NAME="$(basename "$project")"
+  fi
 
   echo
   info "Using global healthcheck timeout (per service): ${DOCKER_HEALTH_TIMEOUT}s"
