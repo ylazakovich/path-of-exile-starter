@@ -380,10 +380,13 @@ execute() {
     printf 'compose-fs:\n'
     local file
     for file in "${files[@]}"; do printf '  - %s\n' "$file"; done
-    printf '--- docker compose config ---\n'
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
     for file in "${files[@]}"; do diag+=(-f "$file"); done
+    printf '--- docker compose config --services ---\n'
+    "${diag[@]}" config --services || true
+    printf '--- docker compose config (full) ---\n'
+    "${diag[@]}" config || true
     printf '\n--- docker compose ps --all ---\n'
     "${diag[@]}" ps --all || true
     exit 1
