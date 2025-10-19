@@ -135,9 +135,9 @@ check_service_health() {
   local waited_c=0 interval_c=2
   local project_filter=()
   [[ -n "${COMPOSE_PROJECT_NAME:-}" ]] && project_filter+=(--filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}")
-mapfile -t cids < <(docker ps --no-trunc -q "${project_filter[@]}" --filter "label=com.docker.compose.service=$service")
-if ((${#cids[@]} > 0)); then
-    mapfile -t cids < <(docker ps -q "${project_filter[@]}" --filter "label=com.docker.compose.service=$service")
+
+  while :; do
+    mapfile -t cids < <(docker ps --no-trunc -q "${project_filter[@]}" --filter "label=com.docker.compose.service=$service")
     ((${#cids[@]} > 0)) && break
     ((waited_c >= timeout)) && break
     sleep "$interval_c"
