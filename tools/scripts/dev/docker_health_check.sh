@@ -127,18 +127,31 @@ wait_for_container_health() {
 check_service_health() {
   local service="$1"
   local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
-  local failed=0 any=0
-  local -a cids=()
-  local waited_c=0 interval_c=2
-  local project_filter=()
-  [[ -n "${COMPOSE_PROJECT_NAME:-}" ]] && project_filter+=(--filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}")
 
+  local failed=0 any=0
+  local -a cids=()                    # объявлен
+  local waited_c=0 interval_c=2
+
+  # фильтр по проекту — ОБЯЗАТЕЛЬНО объявляем массив в этом скоупе
+  local -a project_filter=()
+  if [[ -n "${COMPOSE_PROJECT_NAME:-}" ]]; then
+    project_filter+=( --filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}" )
+  fi
+
+  # ждём появления контейнеров сервиса
   while :; do
-    mapfile -t cids < <(docker ps --no-trunc -q "${project_filter[@]}" --filter "label=com.docker.compose.service=$service")
+    cids=()
+    # macOS-safe: без mapfile/readarray
+    while IFS= read -r cid; do
+      [[ -n "$cid" ]] && cids+=( "$cid" )
+    done < <(docker ps --no-trunc -q \
+             ${project_filter+"${project_filter[@]}"} \
+             --filter "label=com.docker.compose.service=$service")
+
     ((${#cids[@]} > 0)) && break
-    ((waited_c >= timeout)) && break
+    (( waited_c >= timeout )) && break
     sleep "$interval_c"
-    waited_c=$((waited_c + interval_c))
+    waited_c=$(( waited_c + interval_c ))
   done
 
   local cid result
@@ -146,6 +159,7 @@ check_service_health() {
     [[ -n "$cid" ]] || continue
     any=1
     result="$(wait_for_container_health "$cid" "$timeout")"
+
     if [[ "$result" == "NO_HEALTHCHECK" ]]; then
       warning "Healthcheck is not configured for service '$service' (container $cid)."
       continue
@@ -177,11 +191,13 @@ check_service_health() {
     fi
   done
 
-  ((any == 0)) && warning "Service '$service' has no running containers yet; skipping healthcheck for it."
-  ((failed != 0)) && {
+  if (( any == 0 )); then
+    warning "Service '$service' has no running containers yet; skipping healthcheck for it."
+  fi
+  if (( failed != 0 )); then
     error "Service '$service' healthcheck failed!!!"
     return 1
-  }
+  fi
   return 0
 }
 
