@@ -75,7 +75,18 @@ check_service_health() {
   local failed=0
   local any=0
   local -a cids=()
-  mapfile -t cids < <(docker ps -q --filter "label=com.docker.compose.service=$service")
+  local waited_c=0 interval_c=2
+  while :; do
+    mapfile -t cids < <(docker ps -q --filter "label=com.docker.compose.service=$service")
+    if (( ${#cids[@]} > 0 )); then
+      break
+    fi
+    if (( waited_c >= timeout )); then
+      break
+    fi
+    sleep "$interval_c"
+    waited_c=$((waited_c+interval_c))
+  done
   local cid result
   for cid in "${cids[@]}"; do
     [[ -n "$cid" ]] || continue
