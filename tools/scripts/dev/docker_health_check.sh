@@ -326,9 +326,14 @@ execute() {
   }
 
   if [[ -z "$services" ]]; then
-    services="$(get_services_via_ps "$project" "${files[@]}" || true)"
-  fi
-  if [[ -z "$services" ]]; then
+      for f in "${files[@]}"; do diag+=(-f "$f"); done
+      {
+        printf '--- docker compose config ---\n'
+        "${diag[@]}" config || true
+        printf '\n--- docker compose ps --all ---\n'
+        "${diag[@]}" ps --all || true
+      }
+      exit 1
     error "Could not determine services even after start."
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
