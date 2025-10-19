@@ -271,7 +271,10 @@ execute() {
 
   if [[ -z "$services" ]]; then
     error "Could not determine services even after start."
-    docker compose $( [[ -n "$project" ]] && printf ' --project-directory %q' "$project" ) $(printf ' -f %q' "${files[@]}") config || true
+      local -a diag=(docker compose)
+      if [[ -n "$project" ]]; then diag+=(--project-directory "$project"); fi
+      local f; for f in "${files[@]}"; do diag+=(-f "$f"); done
+      "${diag[@]}" config || true
     exit 1
   fi
 
