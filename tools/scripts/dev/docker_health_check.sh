@@ -121,15 +121,70 @@ check_service_health() {
   return 0
 }
 
-print_command() {
-  local -a arr=( "$@" )
+print_command_pretty() {
+  local -a a=( "$@" )
   echo -e "\033[1;34mInfo: Launch command:\033[0m"
-  local last=$(( ${#arr[@]} - 1 ))
-  local i
-  for (( i=0; i<last; i++ )); do
-    printf '  %q \\\n' "${arr[i]}"
+
+  local lines=()
+  local i=0
+
+  if (( ${#a[@]} >= 2 )) && [[ "${a[0]}" == "docker" && "${a[1]}" == "compose" ]]; then
+    lines+=( "docker compose" )
+    i=2
+  fi
+
+  while (( i < ${#a[@]} )); do
+    case "${a[i]}" in
+      -f|--file|--profile|--project-directory|--wait-timeout|--project-name|-p)
+        if (( i+1 < ${#a[@]} )); then
+          lines+=( "  ${a[i]} ${a[i+1]}" )
+          i=$((i+2))
+        else
+          lines+=( "  ${a[i]}" )
+          i=$((i+1))
+        fi
+        ;;
+      up)
+        local seg=( "up" )
+        i=$((i+1))
+        while (( i < ${#a[@]} )); do
+          case "${a[i]}" in
+            -[a-zA-Z]*|--[a-zA-Z0-9_-]*)
+              if [[ "${a[i]}" == "--wait-timeout" || "${a[i]}" == "--profile" || "${a[i]}" == "--project-directory" || "${a[i]}" == "-f" || "${a[i]}" == "--file" || "${a[i]}" == "--project-name" || "${a[i]}" == "-p" ]]; then
+                break
+              fi
+              seg+=( "${a[i]}" )
+              i=$((i+1))
+              ;;
+            *)
+              break
+              ;;
+          esac
+        done
+        lines+=( "  ${seg[*]}" )
+        ;;
+      *)
+        if [[ "${a[i]}" != -* ]]; then
+          local svcs=()
+          while (( i < ${#a[@]} )) && [[ "${a[i]}" != -* ]]; do
+            svcs+=( "${a[i]}" )
+            i=$((i+1))
+          done
+          lines+=( "  ${svcs[*]}" )
+        else
+          lines+=( "  ${a[i]}" )
+          i=$((i+1))
+        fi
+        ;;
+    esac
   done
-  printf '  %q\n' "${arr[last]}"
+
+  local last=$(( ${#lines[@]} - 1 ))
+  local j
+  for (( j=0; j<last; j++ )); do
+    printf '%s \\\n' "${lines[j]}"
+  done
+  printf '%s\n' "${lines[last]}"
 }
 
 execute() {
@@ -192,7 +247,7 @@ execute() {
     services="$SERVICES_LIST"
   fi
 
-  print_command "${cmd_args[@]}"
+  print_command_pretty "${cmd_args[@]}"
 
   if ! "${cmd_args[@]}" >/dev/null; then
     error "Docker compose has not started"
