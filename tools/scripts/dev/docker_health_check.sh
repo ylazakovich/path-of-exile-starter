@@ -313,16 +313,18 @@ execute() {
 
   {
     tmp_out="$(mktemp -t compose_out.XXXXXX)"
+    cleanup_tmp() { rm -f "$tmp_out"; }
+    trap cleanup_tmp EXIT INT TERM
     # Stream to terminal for transparency; keep a copy for failure diagnostics
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       rc=${PIPESTATUS[0]}
       error "Docker compose failed to start (exit $rc):"
       printf '--- docker compose output (last 200 lines) ---\n'
       tail -n 200 "$tmp_out" || true
-      rm -f "$tmp_out"
       exit "$rc"
     fi
-    rm -f "$tmp_out"
+    cleanup_tmp
+    trap - EXIT INT TERM
   }
 
   if [[ -z "$services" ]]; then
