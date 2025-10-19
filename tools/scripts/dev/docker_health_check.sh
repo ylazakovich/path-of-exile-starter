@@ -315,9 +315,10 @@ execute() {
   print_command_pretty "${cmd_args[@]}"
 
   if ! output="$("${cmd_args[@]}" 2>&1)"; then
-    error "Docker compose failed to start:"
+    rc=$?
+    error "Docker compose failed to start (exit $rc):"
     printf '%s\n' "$output"
-    exit 1
+    exit "$rc"
   fi
 
   if [[ -z "$services" ]]; then
