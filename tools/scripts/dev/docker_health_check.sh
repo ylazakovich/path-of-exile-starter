@@ -54,20 +54,18 @@ build_compose_cmd_array() {
 }
 
 get_services_via_config() {
-  local project="$1"
-  shift
+  local project="$1"; shift
   local -a files=("$@")
-  local -a base
-  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  local -a base=()
+  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" config --services 2>/dev/null
 }
 
 get_services_via_ps() {
-  local project="$1"
-  shift
+  local project="$1"; shift
   local -a files=("$@")
-  local -a base
-  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  local -a base=()
+  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
   local out
   if ! out="$("${base[@]}" ps --services --all 2>/dev/null)"; then
     error "Failed to list services via 'docker compose ps'. Check project directory and compose files."
@@ -78,11 +76,10 @@ get_services_via_ps() {
 }
 
 get_ps_json() {
-  local project="$1"
-  shift
+  local project="$1"; shift
   local -a files=("$@")
-  local -a base
-  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  local -a base=()
+  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" ps --format json --all 2>/dev/null
 }
 
