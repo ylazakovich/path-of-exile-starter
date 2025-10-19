@@ -289,16 +289,14 @@ execute() {
   done <<<"$(tr ' ' '\n' <<<"$services")"
   printf '──────────────────────────────────────────────\n\n'
 
-  echo "Checking health status of services..."
-  local svc
-  while IFS= read -r svc; do
-    [ -n "$svc" ] || continue
-    if docker ps -q --filter "label=com.docker.compose.service=$svc" | grep -q .; then
-      if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
-        exit 1
-      fi
-    fi
-  done
-  echo "Application started successfully!"
+ echo "Checking health status of services..."
+ local svc
+ while IFS= read -r svc; do
+   [[ -n "$svc" ]] || continue
+   if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
+     exit 1
+   fi
+ done <<<"$(tr ' ' '\n' <<<"$services")"
+ echo "Application started successfully!"
 }
 execute "$@"
