@@ -66,6 +66,15 @@ get_services_via_ps() {
   "${base[@]}" ps --services 2>/dev/null || true
 }
 
+get_ps_json() {
+  local project="$1"
+  shift
+  local -a files=("$@")
+  local -a base
+  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  "${base[@]}" ps --format json 2>/dev/null
+}
+
 wait_for_container_health() {
   local cid="$1"
   local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
@@ -272,27 +281,19 @@ execute() {
     IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
   fi
 
-  local has_up=false
-  local has_wait=false
-  local has_wait_timeout=false
-  local a
+  local has_up=false has_wait=false has_wait_timeout=false a
   for a in "${cmd_args[@]}"; do
     [[ "$a" == "up" ]] && has_up=true
     [[ "$a" == "--wait" ]] && has_wait=true
     [[ "$a" == "--wait-timeout" || "$a" == --wait-timeout=* ]] && has_wait_timeout=true
   done
   if $has_up; then
-    if ! $has_wait; then
-      cmd_args+=(--wait)
-    fi
-    if ! $has_wait_timeout; then
-      cmd_args+=(--wait-timeout 120)
-    fi
+    $has_wait || cmd_args+=(--wait)
+    $has_wait_timeout || cmd_args+=(--wait-timeout 120)
   fi
 
   local -a proj_and_files=()
   while IFS= read -r -d '' item; do proj_and_files+=("$item"); done < <(extract_compose_files_and_project_dir "${cmd_args[@]}")
-
   local project="${proj_and_files[0]:-}"
   local -a files=("${proj_and_files[@]:1}")
 
@@ -302,7 +303,6 @@ execute() {
 
   local services
   services="$(get_services_via_config "$project" "${files[@]}" || true)"
-
   if [[ -z "$services" && -n "${SERVICES_LIST:-}" ]]; then
     warning "No services returned by 'config --services'. Falling back to SERVICES_LIST."
     services="$SERVICES_LIST"
@@ -328,26 +328,52 @@ execute() {
     exit 1
   fi
 
-  started_services="$(get_services_via_ps "$project" "${files[@]}" || true)"
-  to_check="$started_services"
-  [[ -z "$to_check" ]] && to_check="$services"
+  local started_services="" up_services="" completed_ok_services="" exited_bad_services=""
+  if command -v jq >/dev/null 2>&1; then
+    local -a base
+    readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+    local ps_json
+    ps_json="$("${base[@]}" ps --format json 2>/dev/null || true)"
+    if [[ -n "$ps_json" ]]; then
+      started_services="$(jq -r '.[].Service' <<<"$ps_json" | sort -u | xargs)"
+      up_services="$(jq -r '.[] | select(.State=="running") | .Service' <<<"$ps_json" | sort -u | xargs)"
+      completed_ok_services="$(jq -r '.[] | select(.State=="exited" and (.ExitCode|tostring)=="0") | .Service' <<<"$ps_json" | sort -u | xargs)"
+      exited_bad_services="$(jq -r '.[] | select(.State=="exited" and (.ExitCode|tostring)!="0") | .Service' <<<"$ps_json" | sort -u | xargs)"
+    fi
+  fi
+  [[ -z "$started_services" ]] && started_services="$(get_services_via_ps "$project" "${files[@]}" || true)"
+
+  local to_check="$up_services"
+  [[ -z "$to_check" ]] && to_check="$started_services"
 
   printf '──────────────────────────────────────────────\n'
   info "Detected services:"
   printf '──────────────────────────────────────────────\n'
-  idx=1
+  local idx=1 line tag
   while IFS= read -r line; do
     [[ -n "$line" ]] || continue
-    if echo " $started_services " | grep -qw "$line"; then
-      printf "  %2d. %s  [UP]\n" "$idx" "$line"
-    else
-      printf "  %2d. %s  [SKIP]\n" "$idx" "$line"
+    tag="[SKIP]"
+    if echo " $up_services " | grep -qw "$line"; then
+      tag="[UP]"
+    elif echo " $completed_ok_services " | grep -qw "$line"; then
+      tag="[DONE]"
+    elif echo " $exited_bad_services " | grep -qw "$line"; then
+      tag="[EXIT-FAIL]"
+    elif echo " $started_services " | grep -qw "$line"; then
+      tag="[STARTED]"
     fi
+    printf "  %2d. %s  %s\n" "$idx" "$line" "$tag"
     idx=$((idx + 1))
   done <<<"$(tr ' ' '\n' <<<"$services")"
   printf '──────────────────────────────────────────────\n\n'
 
-  echo "Checking health status of services (started only)..."
+  if [[ -n "$exited_bad_services" ]]; then
+    error "Some one-shot services exited with non-zero code: $exited_bad_services"
+    exit 1
+  fi
+
+  echo "Checking health status of services (running only)..."
+  local svc
   while IFS= read -r svc; do
     [[ -n "$svc" ]] || continue
     if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
