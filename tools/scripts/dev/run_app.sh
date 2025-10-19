@@ -36,4 +36,8 @@ CMD+=( -f "$COMPOSE_FILE_B" )
 CMD+=( up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
+if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
+  export DOCKER_HEALTH_TIMEOUT
+fi
+
 bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
