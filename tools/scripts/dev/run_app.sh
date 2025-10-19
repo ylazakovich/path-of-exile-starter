@@ -38,22 +38,22 @@ if [[ ! -f "$COMPOSE_FILE_B" ]]; then
   warning "File not found: $COMPOSE_FILE_B — using only $COMPOSE_FILE_A"
 fi
 
-declare -a CMD=( docker compose -f "$COMPOSE_FILE_A" )
-[[ -f "$COMPOSE_FILE_B" ]] && CMD+=( -f "$COMPOSE_FILE_B" )
+declare -a CMD=(docker compose -f "$COMPOSE_FILE_A")
+[[ -f "$COMPOSE_FILE_B" ]] && CMD+=(-f "$COMPOSE_FILE_B")
 
 if [[ -n "${COMPOSE_PROFILES:-}" ]]; then
   IFS=',' read -r -a __profiles <<<"$COMPOSE_PROFILES"
   for p in "${__profiles[@]}"; do
-    [[ -n "$p" ]] && CMD+=( --profile "$p" )
+    [[ -n "$p" ]] && CMD+=(--profile "$p")
   done
 fi
 
-CMD+=( up -d --quiet-pull )
-CMD+=( "${SERVICES[@]}" )
+CMD+=(up -d --quiet-pull)
+CMD+=("${SERVICES[@]}")
 
 declare -a extra_args=()
 if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
-  extra_args+=( --timeout "$DOCKER_HEALTH_TIMEOUT" )
+  extra_args+=(--timeout "$DOCKER_HEALTH_TIMEOUT")
 fi
 
 if ! bash "$SCRIPT_DIR/docker_health_check.sh" \
