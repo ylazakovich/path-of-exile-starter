@@ -363,7 +363,7 @@ execute() {
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       local rc_left=${PIPESTATUS[0]:-1}
       error "Docker compose failed to start (exit $rc_left):"
-      printf '--- docker compose output (last 200 lines) ---\n'
+      printf '%s\n' '--- docker compose output (last 200 lines) ---'
       tail -n 200 -- "$tmp_out" || true
       exit "$rc_left"
     fi
@@ -374,7 +374,7 @@ execute() {
   # 4.6 if nothing declared — show diag and stop
   if [[ -z "$services" ]]; then
     error "Could not determine services even after start."
-    printf '--- diagnostics ---\n'
+    printf '%s\n' '--- diagnostics ---\n'
     printf 'COMPOSE_PROJECT_NAME=%s\n' "${COMPOSE_PROJECT_NAME:-<unset>}"
     printf 'project-directory=%s\n' "${project:-<unset>}"
     printf 'compose-fs:\n'
@@ -383,9 +383,9 @@ execute() {
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
     for file in "${files[@]}"; do diag+=(-f "$file"); done
-    printf '--- docker compose config --services ---\n'
+    printf '%s\n' '--- docker compose config --services ---\n'
     "${diag[@]}" config --services || true
-    printf '--- docker compose config (full) ---\n'
+    printf '%s\n' '--- docker compose config (full) ---\n'
     "${diag[@]}" config || true
     printf '\n--- docker compose ps --all ---\n'
     "${diag[@]}" ps --all || true
