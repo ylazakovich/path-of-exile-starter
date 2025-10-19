@@ -27,7 +27,7 @@ extract_compose_files_and_project_dir() {
   local project=""
   local i
   for ((i = 0; i < ${#args[@]}; i++)); do
-    if [[ "${args[i]}" == "-f" && $((i + 1)) -lt ${#args[@]} ]]; then
+    if [[ "${args[i]}" == "-file" && $((i + 1)) -lt ${#args[@]} ]]; then
       files+=("${args[i + 1]}")
       ((i++))
       continue
@@ -48,8 +48,8 @@ build_compose_cmd_array() {
   local -a files=("$@")
   local -a cmd=(docker compose)
   [[ -n "$project" ]] && cmd+=(--project-directory "$project")
-  local f
-  for f in "${files[@]}"; do cmd+=(-f "$f"); done
+  local file
+  for file in "${files[@]}"; do cmd+=(-file "$file"); done
   printf '%s\0' "${cmd[@]}"
 }
 
@@ -202,7 +202,7 @@ print_command_pretty() {
   q() { printf %q "$1"; }
   while ((i < ${#a[@]})); do
     case "${a[i]}" in
-      -f | --file | --profile | --project-directory | --wait-timeout | --project-name | -p)
+      -file | --file | --profile | --project-directory | --wait-timeout | --project-name | -p)
         if ((i + 1 < ${#a[@]})); then
           lines+=("  $(q "${a[i]}") $(q "${a[i + 1]}")")
           i=$((i + 2))
@@ -217,7 +217,7 @@ print_command_pretty() {
         while ((i < ${#a[@]})); do
           case "${a[i]}" in
             -[a-zA-Z]* | --[a-zA-Z0-9_-]*)
-              case "${a[i]}" in --wait-timeout | --profile | --project-directory | -f | --file | --project-name | -p) break ;; esac
+              case "${a[i]}" in --wait-timeout | --profile | --project-directory | -file | --file | --project-name | -p) break ;; esac
               seg+=("$(q "${a[i]}")")
               i=$((i + 1))
               ;;
@@ -277,7 +277,7 @@ print_detected_services_table() {
 execute() {
   # 4.1 parse args
   if (($# < 1)); then
-    error "No docker command provided. Example: docker compose -f a.yml up -d [--timeout N|-t N]"
+    error "No docker command provided. Example: docker compose -file a.yml up -d [--timeout N|-t N]"
     exit 1
   fi
   local -a cmd_args=()
@@ -345,7 +345,7 @@ execute() {
       error "Failed to create temporary file for logging."
       exit 1
     }
-    cleanup_tmp() { rm -f -- "$tmp_out"; }
+    cleanup_tmp() { rm -file -- "$tmp_out"; }
     trap cleanup_tmp EXIT
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       local rc_left=${PIPESTATUS[0]:-1}
@@ -361,12 +361,16 @@ execute() {
   # 4.6 if nothing declared — show diag and stop
   if [[ -z "$services" ]]; then
     error "Could not determine services even after start."
+    printf '--- diagnostics ---\n'
+    printf 'COMPOSE_PROJECT_NAME=%s\n' "${COMPOSE_PROJECT_NAME:-<unset>}"
+    printf 'project-directory=%s\n' "${project:-<unset>}"
+    printf 'compose-files:\n'
+    local file
+    for file in "${files[@]}"; do printf '  - %s\n' "$file"; done
+    printf '--- docker compose config ---\n'
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
-    local f
-    for f in "${files[@]}"; do diag+=(-f "$f"); done
-    printf '--- docker compose config ---\n'
-    "${diag[@]}" config || true
+    for file in "${files[@]}"; do diag+=(-file "$file"); done
     printf '\n--- docker compose ps --all ---\n'
     "${diag[@]}" ps --all || true
     exit 1
