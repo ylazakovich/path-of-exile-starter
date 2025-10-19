@@ -374,21 +374,25 @@ execute() {
   # 4.6 if nothing declared — show diag and stop
   if [[ -z "$services" ]]; then
     error "Could not determine services even after start."
-    printf '%s\n' '--- diagnostics ---\n'
+    printf '\n──────────────────────────────────────────────\n'
+    printf '🔍  Diagnostics summary\n'
+    printf '──────────────────────────────────────────────\n'
     printf 'COMPOSE_PROJECT_NAME=%s\n' "${COMPOSE_PROJECT_NAME:-<unset>}"
-    printf 'project-directory=%s\n' "${project:-<unset>}"
-    printf 'compose-fs:\n'
+    printf 'COMPOSE_PROFILES=%s\n' "${COMPOSE_PROFILES:-<unset>}"
+    printf 'compose-files:\n'
     local file
-    for file in "${files[@]}"; do printf '  - %s\n' "$file"; done
-    local -a diag=(docker compose)
-    [[ -n "$project" ]] && diag+=(--project-directory "$project")
-    for file in "${files[@]}"; do diag+=(-f "$file"); done
-    printf '%s\n' '--- docker compose config --services ---\n'
-    "${diag[@]}" config --services || true
-    printf '%s\n' '--- docker compose config (full) ---\n'
-    "${diag[@]}" config || true
+    for file in "${files[@]:-}"; do printf '  - %s\n' "$file"; done
+    local -a diag=()
+    diag+=(docker compose)
+    [[ -n "${project:-}" ]] && diag+=(--project-directory "$project")
+    for file in "${files[@]:-}"; do diag+=(-f "$file"); done
     printf '\n--- docker compose ps --all ---\n'
-    "${diag[@]}" ps --all || true
+    "${diag[@]}" ps --all 2>&1 || true
+    printf '\n--- docker compose ls (all projects) ---\n'
+    docker compose ls 2>/dev/null || true
+    printf '\n--- docker ps --all (global) ---\n'
+    docker ps --all --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' 2>/dev/null || true
+    printf '\n──────────────────────────────────────────────\n'
     exit 1
   fi
 
