@@ -277,9 +277,10 @@ execute() {
     exit 1
   fi
 
-  if ((${#cmd_args[@]} == 1)); then
-    IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
-  fi
+  # Do not attempt to re-split a single string into args; it breaks quoted values.
+  # if ((${#cmd_args[@]} == 1)); then
+  #   IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
+  # fi
 
   local has_up=false has_wait=false has_wait_timeout=false a
   for a in "${cmd_args[@]}"; do
