@@ -360,6 +360,11 @@ execute() {
   printf '──────────────────────────────────────────────\n'
   info "Detected services:"
   printf '──────────────────────────────────────────────\n'
+  local maxlen=0
+  while IFS= read -r line; do
+    [[ -n "$line" ]] || continue
+    ((${#line} > maxlen)) && maxlen=${#line}
+  done <<<"$(tr ' ' '\n' <<<"$services")"
   local idx=1 line tag
   while IFS= read -r line; do
     [[ -n "$line" ]] || continue
@@ -373,7 +378,7 @@ execute() {
     elif echo " $started_services " | grep -qw "$line"; then
       tag="[STARTED]"
     fi
-    printf "  %2d. %s  %s\n" "$idx" "$line" "$tag"
+    printf "  %2d. %-*s  %s\n" "$idx" "$maxlen" "$line" "$tag"
     idx=$((idx + 1))
   done <<<"$(tr ' ' '\n' <<<"$services")"
   printf '──────────────────────────────────────────────\n\n'
