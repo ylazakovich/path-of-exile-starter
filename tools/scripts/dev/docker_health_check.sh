@@ -74,8 +74,11 @@ check_service_health() {
   local timeout="${2:-$HEALTH_TIMEOUT}"
   local failed=0
   local any=0
+  local -a cids=()
+  mapfile -t cids < <(docker ps -q --filter "label=com.docker.compose.service=$service")
   local cid result
-  for cid in $(docker ps -q --filter "label=com.docker.compose.service=$service"); do
+  for cid in "${cids[@]}"; do
+    [[ -n "$cid" ]] || continue
     any=1
     result="$(wait_for_container_health "$cid" "$timeout")"
     if [[ "$result" == "NO_HEALTHCHECK" ]]; then
