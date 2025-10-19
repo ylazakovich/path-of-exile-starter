@@ -36,4 +36,4 @@ CMD+=( -f "$COMPOSE_FILE_B" )
 CMD+=( up -d --quiet-pull )
 CMD+=( "${SERVICES[@]}" )
 
-+bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
+bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
