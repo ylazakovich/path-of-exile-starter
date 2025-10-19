@@ -54,7 +54,7 @@ get_services_via_config() {
   local -a files=("$@")
   local -a base
   readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
-  "${base[@]}" config --services 2>/dev/null
+    "${base[@]}" ps --services --all 2>/dev/null || true
 }
 
 get_services_via_ps() {
@@ -71,7 +71,7 @@ get_ps_json() {
   shift
   local -a files=("$@")
   local -a base
-  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  readarray -d '' -t base < <(build_compose_cmd_ "${base[@]}" ps --format json --all 2>/dev/null
   "${base[@]}" ps --format json 2>/dev/null
 }
 
