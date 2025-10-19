@@ -36,6 +36,8 @@ CMD+=(-f "$COMPOSE_FILE_B")
 CMD+=(up -d --quiet-pull)
 CMD+=("${SERVICES[@]}")
 
+extra_args=()
+
 if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
   extra_args+=(--timeout "$DOCKER_HEALTH_TIMEOUT")
 fi
