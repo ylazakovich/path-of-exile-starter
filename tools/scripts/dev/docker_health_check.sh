@@ -316,19 +316,22 @@ execute() {
   print_command_pretty "${cmd_args[@]}"
 
   {
-    tmp_out="$(mktemp -t compose_out.XXXXXX)"
-    cleanup_tmp() { rm -f "$tmp_out"; }
-    trap cleanup_tmp EXIT INT TERM
+    tmp_out="$(mktemp -t compose_out.XXXXXX)" || {
+      error "Failed to create temporary file for logging."
+      exit 1
+    }
+    cleanup_tmp() { rm -f -- "$tmp_out"; }
+    trap cleanup_tmp EXIT
     # Stream to terminal for transparency; keep a copy for failure diagnostics
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       rc=${PIPESTATUS[0]}
       error "Docker compose failed to start (exit $rc):"
       printf '--- docker compose output (last 200 lines) ---\n'
-      tail -n 200 "$tmp_out" || true
+      tail -n 200 -- "$tmp_out" || true
       exit "$rc"
     fi
     cleanup_tmp
-    trap - EXIT INT TERM
+    trap - EXIT
   }
 
   if [[ -z "$services" ]]; then
