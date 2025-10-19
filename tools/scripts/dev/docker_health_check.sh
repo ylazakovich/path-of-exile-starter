@@ -187,8 +187,7 @@ check_service_health() {
 
 print_command_pretty() {
   local -a a=("$@")
-  echo -e "\033[1;34mInfo: Launch command:\033[0m"
-
+  info "Info: Launch command:"
   local lines=()
   local i=0
 
