@@ -363,8 +363,23 @@ execute() {
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       local rc_left=${PIPESTATUS[0]:-1}
       error "Docker compose failed to start (exit $rc_left):"
-      printf '%s\n' '--- docker compose output (last 200 lines) ---'
+      printf '%s\n' "--- docker compose output (last 200 lines) ---"
       tail -n 200 -- "$tmp_out" || true
+      echo
+      info "Analyzing failed containers..."
+      echo "──────────────────────────────────────────────"
+      docker ps -a --format 'table {{.Names}}\t{{.Status}}\t{{.Image}}' |
+        grep -E 'Exited|Dead' || info "No exited containers found."
+
+      echo
+      while IFS= read -r failed; do
+        [[ -z "$failed" ]] && continue
+        printf '\n--- logs for %s ---\n' "$failed"
+        docker logs --tail=30 "$failed" 2>/dev/null || true
+      done < <(docker ps -a --format '{{.Names}} {{.State.ExitCode}}' | awk '$2 != 0 {print $1}')
+      echo
+      info "Additional diagnostic summary:"
+      docker inspect -f 'Container={{.Name}} ExitCode={{.State.ExitCode}} Status={{.State.Status}} Health={{.State.Health.Status}}' $(docker ps -aq) 2>/dev/null | sed 's/^/  /'
       exit "$rc_left"
     fi
     cleanup_tmp
