@@ -41,7 +41,7 @@ if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
   extra_args+=(--timeout "$DOCKER_HEALTH_TIMEOUT")
 fi
 
-if ! bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}" "${extra_args[@]}"; then
+if ! bash "$SCRIPT_DIR/docker_health_check.sh" "${CMD[@]}" "${extra_args[@]}"; then
   error "Application failed to start successfully."
   exit 1
 fi
