@@ -311,17 +311,29 @@ execute() {
 
   print_command_pretty "${cmd_args[@]}"
 
-  if ! output="$("${cmd_args[@]}" 2>&1)"; then
-    rc=$?
-    error "Docker compose failed to start (exit $rc):"
-    printf '%s\n' "$output"
-    exit "$rc"
-  fi
+  {
+    tmp_out="$(mktemp -t compose_out.XXXXXX)"
+    # Stream to terminal for transparency; keep a copy for failure diagnostics
+    if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
+      rc=${PIPESTATUS[0]}
+      error "Docker compose failed to start (exit $rc):"
+      printf '--- docker compose output (last 200 lines) ---\n'
+      tail -n 200 "$tmp_out" || true
+      rm -f "$tmp_out"
+      exit "$rc"
+    fi
+    rm -f "$tmp_out"
+  }
 
   if [[ -z "$services" ]]; then
-    services="$(get_services_via_ps "$project" "${files[@]}" || true)"
-  fi
-  if [[ -z "$services" ]]; then
+      for f in "${files[@]}"; do diag+=(-f "$f"); done
+      {
+        printf '--- docker compose config ---\n'
+        "${diag[@]}" config || true
+        printf '\n--- docker compose ps --all ---\n'
+        "${diag[@]}" ps --all || true
+      }
+      exit 1
     error "Could not determine services even after start."
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
