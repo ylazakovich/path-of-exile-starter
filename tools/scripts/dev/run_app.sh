@@ -7,9 +7,9 @@ else
   export GRADLE_OPTS="-Dorg.gradle.console=rich"
 fi
 
-info()    { echo -e "\033[1;34mInfo: $1\033[0m"; }
+info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
 warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
-error()   { echo -e "\033[1;31mError: $1\033[0m"; }
+error() { echo -e "\033[1;31mError: $1\033[0m"; }
 
 echo "Starting application..."
 
@@ -31,10 +31,10 @@ fi
 COMPOSE_FILE_A="tools/docker/docker-compose.yml"
 COMPOSE_FILE_B="tools/docker/docker-compose.override.yml"
 
-CMD=( docker compose -f "$COMPOSE_FILE_A" )
-CMD+=( -f "$COMPOSE_FILE_B" )
-CMD+=( up -d --quiet-pull )
-CMD+=( "${SERVICES[@]}" )
+CMD=(docker compose -f "$COMPOSE_FILE_A")
+CMD+=(-f "$COMPOSE_FILE_B")
+CMD+=(up -d --quiet-pull)
+CMD+=("${SERVICES[@]}")
 
 if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
   export DOCKER_HEALTH_TIMEOUT
