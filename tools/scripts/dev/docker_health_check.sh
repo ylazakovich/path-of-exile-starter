@@ -258,45 +258,52 @@ execute() {
     services="$SERVICES_LIST"
   fi
 
-  print_command_pretty "${cmd_args[@]}"
+    print_command_pretty "${cmd_args[@]}"
 
-  if ! "${cmd_args[@]}" >/dev/null; then
-    error "Docker compose has not started"
-    exit 1
-  fi
+    if ! "${cmd_args[@]}" >/dev/null; then
+      error "Docker compose has not started"
+      exit 1
+    fi
 
-  if [[ -z "$services" ]]; then
-    services="$(get_services_via_ps "$project" "${files[@]}" || true)"
-  fi
-
-  if [[ -z "$services" ]]; then
-    error "Could not determine services even after start."
+    if [[ -z "$services" ]]; then
+      services="$(get_services_via_ps "$project" "${files[@]}" || true)"
+    fi
+    if [[ -z "$services" ]]; then
+      error "Could not determine services even after start."
       local -a diag=(docker compose)
-      if [[ -n "$project" ]]; then diag+=(--project-directory "$project"); fi
+      [[ -n "$project" ]] && diag+=(--project-directory "$project")
       local f; for f in "${files[@]}"; do diag+=(-f "$f"); done
       "${diag[@]}" config || true
-    exit 1
-  fi
+      exit 1
+    fi
 
-  printf '──────────────────────────────────────────────\n'
-  info "Detected services:"
-  printf '──────────────────────────────────────────────\n'
-  local idx=1 line
-  while IFS= read -r line; do
-    [[ -n "$line" ]] || continue
-    printf "  %2d. %s\n" "$idx" "$line"
-    idx=$((idx+1))
-  done <<<"$(tr ' ' '\n' <<<"$services")"
-  printf '──────────────────────────────────────────────\n\n'
+    started_services="$(get_services_via_ps "$project" "${files[@]}" || true)"
+    to_check="$started_services"
+    [[ -z "$to_check" ]] && to_check="$services"
 
- echo "Checking health status of services..."
- local svc
- while IFS= read -r svc; do
-   [[ -n "$svc" ]] || continue
-   if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
-     exit 1
-   fi
- done <<<"$(tr ' ' '\n' <<<"$services")"
- echo "Application started successfully!"
+    printf '──────────────────────────────────────────────\n'
+    info "Detected services:"
+    printf '──────────────────────────────────────────────\n'
+    idx=1
+    while IFS= read -r line; do
+      [[ -n "$line" ]] || continue
+      if echo " $started_services " | grep -qw "$line"; then
+        printf "  %2d. %s  [UP]\n" "$idx" "$line"
+      else
+        printf "  %2d. %s  [SKIP]\n" "$idx" "$line"
+      fi
+      idx=$((idx+1))
+    done <<<"$(tr ' ' '\n' <<<"$services")"
+    printf '──────────────────────────────────────────────\n\n'
+
+    echo "Checking health status of services (started only)..."
+    while IFS= read -r svc; do
+      [[ -n "$svc" ]] || continue
+      if ! check_service_health "$svc" "$DOCKER_HEALTH_TIMEOUT"; then
+        exit 1
+      fi
+    done <<<"$(tr ' ' '\n' <<<"$to_check")"
+
+    echo "Application started successfully!"
 }
 execute "$@"
