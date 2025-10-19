@@ -290,7 +290,10 @@ execute() {
   done
   if $has_up; then
     $has_wait || cmd_args+=(--wait)
-    $has_wait_timeout || cmd_args+=(--wait-timeout 120)
+    if ! $has_wait_timeout; then
+      # Use the same timeout knob for compose wait-timeout
+      cmd_args+=(--wait-timeout "$DOCKER_HEALTH_TIMEOUT")
+    fi
   fi
 
   local -a proj_and_files=()
