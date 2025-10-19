@@ -310,8 +310,9 @@ execute() {
 
   print_command_pretty "${cmd_args[@]}"
 
-  if ! "${cmd_args[@]}" >/dev/null; then
-    error "Docker compose has not started"
+  if ! output="$("${cmd_args[@]}" 2>&1)"; then
+    error "Docker compose failed to start:"
+    printf '%s\n' "$output"
     exit 1
   fi
 
