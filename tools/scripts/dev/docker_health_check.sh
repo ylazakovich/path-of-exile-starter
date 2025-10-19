@@ -122,7 +122,7 @@ wait_for_container_health() {
   done
 }
 
-check_service_health() check_service_health() {
+check_service_health() {
   local service="$1"
   local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
   local failed=0
