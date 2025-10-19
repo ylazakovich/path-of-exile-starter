@@ -277,9 +277,10 @@ execute() {
     exit 1
   fi
 
-  if ((${#cmd_args[@]} == 1)); then
-    IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
-  fi
+  # Do not attempt to re-split a single string into args; it breaks quoted values.
+  # if ((${#cmd_args[@]} == 1)); then
+  #   IFS=' ' read -r -a cmd_args <<<"${cmd_args[0]}"
+  # fi
 
   local has_up=false has_wait=false has_wait_timeout=false a
   for a in "${cmd_args[@]}"; do
@@ -289,7 +290,10 @@ execute() {
   done
   if $has_up; then
     $has_wait || cmd_args+=(--wait)
-    $has_wait_timeout || cmd_args+=(--wait-timeout 120)
+    if ! $has_wait_timeout; then
+      # Use the same timeout knob for compose wait-timeout
+      cmd_args+=(--wait-timeout "$DOCKER_HEALTH_TIMEOUT")
+    fi
   fi
 
   local -a proj_and_files=()
@@ -310,8 +314,9 @@ execute() {
 
   print_command_pretty "${cmd_args[@]}"
 
-  if ! "${cmd_args[@]}" >/dev/null; then
-    error "Docker compose has not started"
+  if ! output="$("${cmd_args[@]}" 2>&1)"; then
+    error "Docker compose failed to start:"
+    printf '%s\n' "$output"
     exit 1
   fi
 
