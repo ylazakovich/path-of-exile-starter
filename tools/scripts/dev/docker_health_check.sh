@@ -68,6 +68,10 @@ get_services_via_ps() {
     error "Failed to list services via 'docker compose ps'. Check project directory and compose files."
     return 1
   fi
+  # If no services, avoid emitting a blank line which may be misinterpreted
+  if [[ -z "${out//[[:space:]]/}" ]]; then
+    return 1
+  fi
   printf '%s\n' "$out"
 }
 
