@@ -27,7 +27,7 @@ extract_compose_files_and_project_dir() {
   local project=""
   local i
   for ((i = 0; i < ${#args[@]}; i++)); do
-    if [[ "${args[i]}" == "-file" && $((i + 1)) -lt ${#args[@]} ]]; then
+    if [[ "${args[i]}" == "-f" && $((i + 1)) -lt ${#args[@]} ]]; then
       files+=("${args[i + 1]}")
       ((i++))
       continue
