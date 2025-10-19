@@ -71,8 +71,8 @@ get_ps_json() {
   shift
   local -a files=("$@")
   local -a base
-  readarray -d '' -t base < <(build_compose_cmd_ "${base[@]}" ps --format json --all 2>/dev/null
-  "${base[@]}" ps --format json 2>/dev/null
+  readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
+  "${base[@]}" ps --format json --all 2>/dev/null
 }
 
 wait_for_container_health() {
