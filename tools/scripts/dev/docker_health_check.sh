@@ -54,18 +54,20 @@ build_compose_cmd_array() {
 }
 
 get_services_via_config() {
-  local project="$1"; shift
+  local project="$1"
+  shift
   local -a files=("$@")
   local -a base=()
-  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
+  while IFS= read -r -d '' x; do base+=("$x"); done < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" config --services 2>/dev/null
 }
 
 get_services_via_ps() {
-  local project="$1"; shift
+  local project="$1"
+  shift
   local -a files=("$@")
   local -a base=()
-  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
+  while IFS= read -r -d '' x; do base+=("$x"); done < <(build_compose_cmd_array "$project" "${files[@]}")
   local out
   if ! out="$("${base[@]}" ps --services --all 2>/dev/null)"; then
     error "Failed to list services via 'docker compose ps'. Check project directory and compose files."
@@ -76,10 +78,11 @@ get_services_via_ps() {
 }
 
 get_ps_json() {
-  local project="$1"; shift
+  local project="$1"
+  shift
   local -a files=("$@")
   local -a base=()
-  while IFS= read -r -d '' x; do base+=( "$x" ); done < <(build_compose_cmd_array "$project" "${files[@]}")
+  while IFS= read -r -d '' x; do base+=("$x"); done < <(build_compose_cmd_array "$project" "${files[@]}")
   "${base[@]}" ps --format json --all 2>/dev/null
 }
 
@@ -129,29 +132,26 @@ check_service_health() {
   local timeout="${2:-$DOCKER_HEALTH_TIMEOUT}"
 
   local failed=0 any=0
-  local -a cids=()                    # объявлен
+  local -a cids=()
   local waited_c=0 interval_c=2
 
-  # фильтр по проекту — ОБЯЗАТЕЛЬНО объявляем массив в этом скоупе
   local -a project_filter=()
   if [[ -n "${COMPOSE_PROJECT_NAME:-}" ]]; then
-    project_filter+=( --filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}" )
+    project_filter+=(--filter "label=com.docker.compose.project=${COMPOSE_PROJECT_NAME}")
   fi
 
-  # ждём появления контейнеров сервиса
   while :; do
     cids=()
-    # macOS-safe: без mapfile/readarray
     while IFS= read -r cid; do
-      [[ -n "$cid" ]] && cids+=( "$cid" )
+      [[ -n "$cid" ]] && cids+=("$cid")
     done < <(docker ps --no-trunc -q \
-             ${project_filter+"${project_filter[@]}"} \
-             --filter "label=com.docker.compose.service=$service")
+      ${project_filter+"${project_filter[@]}"} \
+      --filter "label=com.docker.compose.service=$service")
 
     ((${#cids[@]} > 0)) && break
-    (( waited_c >= timeout )) && break
+    ((waited_c >= timeout)) && break
     sleep "$interval_c"
-    waited_c=$(( waited_c + interval_c ))
+    waited_c=$((waited_c + interval_c))
   done
 
   local cid result
@@ -191,10 +191,10 @@ check_service_health() {
     fi
   done
 
-  if (( any == 0 )); then
+  if ((any == 0)); then
     warning "Service '$service' has no running containers yet; skipping healthcheck for it."
   fi
-  if (( failed != 0 )); then
+  if ((failed != 0)); then
     error "Service '$service' healthcheck failed!!!"
     return 1
   fi
