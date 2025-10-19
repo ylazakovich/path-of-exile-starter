@@ -193,8 +193,9 @@ execute() {
 
   echo "Checking health status of services..."
   local svc
-  for svc in $services; do
-    if docker ps -q --filter "label=com.docker.compose.service=$svc" | grep -q . ; then
+  while IFS= read -r svc; do
+    [ -n "$svc" ] || continue
+    if docker ps -q --filter "label=com.docker.compose.service=$svc" | grep -q .; then
       if ! check_service_health "$svc" "$HEALTH_TIMEOUT"; then
         exit 1
       fi
