@@ -194,19 +194,22 @@ print_command_pretty() {
     i=2
   fi
 
+  q() { printf %q "$1"; }
+
   while ((i < ${#a[@]})); do
     case "${a[i]}" in
       -f | --file | --profile | --project-directory | --wait-timeout | --project-name | -p)
         if ((i + 1 < ${#a[@]})); then
-          lines+=("  ${a[i]} ${a[i + 1]}")
+          lines+=("  $(q "${a[i]}") $(q "${a[i + 1]}")")
           i=$((i + 2))
         else
-          lines+=("  ${a[i]}")
+          lines+=("  $(q "${a[i]}")")
           i=$((i + 1))
         fi
         ;;
       up)
-        local seg=("up")
+        local seg=()
+        seg+=("up")
         i=$((i + 1))
         while ((i < ${#a[@]})); do
           case "${a[i]}" in
@@ -214,7 +217,7 @@ print_command_pretty() {
               if [[ "${a[i]}" == "--wait-timeout" || "${a[i]}" == "--profile" || "${a[i]}" == "--project-directory" || "${a[i]}" == "-f" || "${a[i]}" == "--file" || "${a[i]}" == "--project-name" || "${a[i]}" == "-p" ]]; then
                 break
               fi
-              seg+=("${a[i]}")
+              seg+=("$(q "${a[i]}")")
               i=$((i + 1))
               ;;
             *)
@@ -228,12 +231,12 @@ print_command_pretty() {
         if [[ "${a[i]}" != -* ]]; then
           local svcs=()
           while ((i < ${#a[@]})) && [[ "${a[i]}" != -* ]]; do
-            svcs+=("${a[i]}")
+            svcs+=("$(q "${a[i]}")")
             i=$((i + 1))
           done
           lines+=("  ${svcs[*]}")
         else
-          lines+=("  ${a[i]}")
+          lines+=("  $(q "${a[i]}")")
           i=$((i + 1))
         fi
         ;;
