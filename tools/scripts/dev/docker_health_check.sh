@@ -334,13 +334,23 @@ execute() {
     readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
     local ps_json
     ps_json="$("${base[@]}" ps --format json 2>/dev/null || true)"
-    if [[ -n "$ps_json" ]]; then
-      started_services="$(jq -r '.[].Service' <<<"$ps_json" | sort -u | xargs)"
-      up_services="$(jq -r '.[] | select(.State=="running") | .Service' <<<"$ps_json" | sort -u | xargs)"
-      completed_ok_services="$(jq -r '.[] | select(.State=="exited" and (.ExitCode|tostring)=="0") | .Service' <<<"$ps_json" | sort -u | xargs)"
-      exited_bad_services="$(jq -r '.[] | select(.State=="exited" and (.ExitCode|tostring)!="0") | .Service' <<<"$ps_json" | sort -u | xargs)"
+
+    if [[ -n "$ps_json" && "$ps_json" =~ ^[{[] ]]; then
+      started_services="$(
+        jq -sr 'map(.Service) | unique | join(" ")' <<<"$ps_json"
+      )"
+      up_services="$(
+        jq -sr 'map(select((.State // .Status)=="running") | .Service) | unique | join(" ")' <<<"$ps_json"
+      )"
+      completed_ok_services="$(
+        jq -sr 'map(select((.State // .Status)=="exited" and ((.ExitCode // 0)|tostring)=="0") | .Service) | unique | join(" ")' <<<"$ps_json"
+      )"
+      exited_bad_services="$(
+        jq -sr 'map(select((.State // .Status)=="exited" and ((.ExitCode // 0)|tostring)!="0") | .Service) | unique | join(" ")' <<<"$ps_json"
+      )"
     fi
   fi
+
   [[ -z "$started_services" ]] && started_services="$(get_services_via_ps "$project" "${files[@]}" || true)"
 
   local to_check="$up_services"
