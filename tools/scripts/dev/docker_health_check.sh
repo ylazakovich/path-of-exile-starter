@@ -325,11 +325,12 @@ execute() {
     trap cleanup_tmp EXIT
     # Stream to terminal for transparency; keep a copy for failure diagnostics
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
-      rc=${PIPESTATUS[0]}
-      error "Docker compose failed to start (exit $rc):"
+      # Capture exit code from the left side of the pipe immediately and safely
+      local rc_left=${PIPESTATUS[0]:-1}
+      error "Docker compose failed to start (exit $rc_left):"
       printf '--- docker compose output (last 200 lines) ---\n'
       tail -n 200 -- "$tmp_out" || true
-      exit "$rc"
+      exit "$rc_left"
     fi
     cleanup_tmp
     trap - EXIT
