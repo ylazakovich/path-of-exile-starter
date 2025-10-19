@@ -37,7 +37,10 @@ CMD+=(up -d --quiet-pull)
 CMD+=("${SERVICES[@]}")
 
 if [[ -n "${DOCKER_HEALTH_TIMEOUT:-}" ]]; then
-  export DOCKER_HEALTH_TIMEOUT
+  extra_args+=(--timeout "$DOCKER_HEALTH_TIMEOUT")
 fi
 
-bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}"
+if ! bash "./tools/scripts/dev/docker_health_check.sh" "${CMD[@]}" "${extra_args[@]}"; then
+  error "Application failed to start successfully."
+  exit 1
+fi
