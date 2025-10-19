@@ -121,6 +121,17 @@ check_service_health() {
   return 0
 }
 
+print_command() {
+  local -a arr=( "$@" )
+  echo -e "\033[1;34mInfo: Launch command:\033[0m"
+  local last=$(( ${#arr[@]} - 1 ))
+  local i
+  for (( i=0; i<last; i++ )); do
+    printf '  %q \\\n' "${arr[i]}"
+  done
+  printf '  %q\n' "${arr[last]}"
+}
+
 execute() {
   if (( $# < 1 )); then
     error "No docker command provided. Example: docker compose -f a.yml up -d [--timeout N|-t N]"
@@ -181,9 +192,7 @@ execute() {
     services="$SERVICES_LIST"
   fi
 
-  local display_cmd
-  display_cmd="$(join_quoted "${cmd_args[@]}")"
-  info "Launch command: $display_cmd"
+  print_command "${cmd_args[@]}"
 
   if ! "${cmd_args[@]}" >/dev/null; then
     error "Docker compose has not started"

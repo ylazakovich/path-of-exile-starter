@@ -7,9 +7,9 @@ else
   export GRADLE_OPTS="-Dorg.gradle.console=rich"
 fi
 
-info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
+info()    { echo -e "\033[1;34mInfo: $1\033[0m"; }
 warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
-error() { echo -e "\033[1;31mError: $1\033[0m"; }
+error()   { echo -e "\033[1;31mError: $1\033[0m"; }
 
 echo "Starting application..."
 
