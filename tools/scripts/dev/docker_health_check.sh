@@ -63,7 +63,11 @@ get_services_via_ps() {
   local -a files=("$@")
   local -a base
   readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
-  "${base[@]}" ps --services --all 2>/dev/null || true
+  if ! out="$("${base[@]}" ps --services --all 2>/dev/null)"; then
+    error "Failed to list services via 'docker compose ps'. Check project directory and compose files."
+    return 1
+  fi
+  printf '%s\n' "$out"
 }
 
 get_ps_json() {
