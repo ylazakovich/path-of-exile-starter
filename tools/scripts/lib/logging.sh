@@ -5,9 +5,9 @@
 # ============================================================================
 
 # Colored log output with prefixes
-info() { echo -e "\033[1;36mℹ️  $*\033[0m"; }
-warning() { echo -e "\033[1;33m⚠️  $*\033[0m"; }
-error() { echo -e "\033[1;31m❌ $*\033[0m"; }
+info() { printf "\033[1;36mℹ️  %s\033[0m\n" "$*"; }
+warning() { printf "\033[1;33m⚠️  %s\033[0m\n" "$*"; }
+error() { printf "\033[1;31m❌ %s\033[0m\n" "$*"; }
 
 # Optional: fatal shortcut
 fatal() {
