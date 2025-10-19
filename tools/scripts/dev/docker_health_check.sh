@@ -63,7 +63,11 @@ get_services_via_ps() {
   local -a files=("$@")
   local -a base
   readarray -d '' -t base < <(build_compose_cmd_array "$project" "${files[@]}")
-  "${base[@]}" ps --services --all 2>/dev/null || true
+  if ! out="$("${base[@]}" ps --services --all 2>/dev/null)"; then
+    error "Failed to list services via 'docker compose ps'. Check project directory and compose files."
+    return 1
+  fi
+  printf '%s\n' "$out"
 }
 
 get_ps_json() {
@@ -313,33 +317,32 @@ execute() {
 
   {
     tmp_out="$(mktemp -t compose_out.XXXXXX)"
+    cleanup_tmp() { rm -f "$tmp_out"; }
+    trap cleanup_tmp EXIT INT TERM
     # Stream to terminal for transparency; keep a copy for failure diagnostics
     if ! "${cmd_args[@]}" 2>&1 | tee "$tmp_out"; then
       rc=${PIPESTATUS[0]}
       error "Docker compose failed to start (exit $rc):"
       printf '--- docker compose output (last 200 lines) ---\n'
       tail -n 200 "$tmp_out" || true
-      rm -f "$tmp_out"
       exit "$rc"
     fi
-    rm -f "$tmp_out"
+    cleanup_tmp
+    trap - EXIT INT TERM
   }
 
   if [[ -z "$services" ]]; then
-      for f in "${files[@]}"; do diag+=(-f "$f"); done
-      {
-        printf '--- docker compose config ---\n'
-        "${diag[@]}" config || true
-        printf '\n--- docker compose ps --all ---\n'
-        "${diag[@]}" ps --all || true
-      }
-      exit 1
     error "Could not determine services even after start."
     local -a diag=(docker compose)
     [[ -n "$project" ]] && diag+=(--project-directory "$project")
     local f
     for f in "${files[@]}"; do diag+=(-f "$f"); done
-    "${diag[@]}" config || true
+    {
+      printf '--- docker compose config ---\n'
+      "${diag[@]}" config || true
+      printf '\n--- docker compose ps --all ---\n'
+      "${diag[@]}" ps --all || true
+    }
     exit 1
   fi
 
