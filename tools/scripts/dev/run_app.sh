@@ -3,6 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/logging.sh"
+export COMPOSE_PROJECT_NAME="path-of-exile-starter"
 
 if [[ "${CI:-}" == "true" ]]; then
   export GRADLE_OPTS="-Dorg.gradle.console=plain"
