@@ -1,11 +1,10 @@
 #!/bin/bash
 set -euo pipefail
 
-DOCKER_HEALTH_TIMEOUT="${DOCKER_HEALTH_TIMEOUT:-120}"
+SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/../lib/logging.sh"
 
-info() { echo -e "\033[1;34mInfo: $1\033[0m"; }
-warning() { echo -e "\033[1;33mWarning: $1\033[0m"; }
-error() { echo -e "\033[1;31mError: $1\033[0m"; }
+DOCKER_HEALTH_TIMEOUT="${DOCKER_HEALTH_TIMEOUT:-120}"
 
 join_quoted() {
   local out=() a
