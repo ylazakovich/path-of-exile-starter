@@ -22,7 +22,7 @@ ext {
     httpcore5 = '5.3.6'
     restAssured = '5.5.6'
     awaitility = '4.3.0'
-    spotbugs_annotation = '4.9.7'
+    spotbugs_annotation = '4.9.8'
     mock_server_netty = '5.15.0'
     bouncy_castle = '1.82'
     spotbug = '4.9.7'
