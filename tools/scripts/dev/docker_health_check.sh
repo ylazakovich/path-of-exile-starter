@@ -88,13 +88,23 @@ check_service_health() {
     fi
     if [[ "$result" == "starting" || "$result" == "unknown" ]]; then
       warning "Service '$service' did not reach 'healthy' in ${timeout}s (container $cid). State.Health.Status: $result"
-      docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null | jq
+      if command -v jq >/dev/null 2>&1; then
+        docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null | jq
+      else
+        warning "'jq' not found; showing raw health JSON"
+        docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null
+      fi
       failed=1
       continue
     fi
     if [[ "$result" == "unhealthy" ]]; then
       warning "Service '$service' is unhealthy (container $cid). Showing health logs:"
-      docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null | jq
+      if command -v jq >/dev/null 2>&1; then
+        docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null | jq
+      else
+        warning "'jq' not found; showing raw health JSON"
+        docker inspect --format='{{json .State.Health}}' "$cid" 2>/dev/null
+      fi
       failed=1
     fi
   done
