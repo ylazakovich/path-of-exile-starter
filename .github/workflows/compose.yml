@@ -21,12 +21,14 @@ jobs:
         uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
         with:
           dest: logs
-      - name: 🛑Stop compose
-        run: ./tools/scripts/dev/stop_app.sh
-        shell: bash
       - name: 📦 Packing docker compose logs as artifact
+        if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: docker-logs
           retention-days: 3
           path: logs
+          if-no-files-found: warn
+      - name: 🛑Stop compose
+        run: ./tools/scripts/dev/stop_app.sh
+        shell: bash
