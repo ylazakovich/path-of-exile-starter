@@ -44,6 +44,7 @@ jobs:
           path: logs
           if-no-files-found: warn
       - name: 🛑Stop Application
+        if: always()
         run: ./tools/scripts/dev/stop_app.sh
         shell: bash
       - name: 📦Packing test results as artifact
