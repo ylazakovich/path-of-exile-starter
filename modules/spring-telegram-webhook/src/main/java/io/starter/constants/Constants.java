@@ -14,9 +14,8 @@ public class Constants {
   }
 
   public static class Start {
-
     public static final String SKILLS_GUIDE_LINK =
-        "https://github.com/ylazakovich/path-of-exile-starter/.github/docs/guides/how_to_interact_with_skills.md";
+        "https://github.com/ylazakovich/path-of-exile-starter/blob/main/docs/guides/how_to_interact_with_skills.md";
     public static final String SKILLS = "Skills";
     public static final String BLESSING = "Blessing Items";
   }
