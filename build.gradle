@@ -10,12 +10,15 @@ allprojects {
     version = '1.0.0-SNAPSHOT'
 }
 
-subprojects {
+subprojects { project ->
     apply plugin: 'java'
     apply plugin: 'checkstyle'
     apply plugin: 'com.github.spotbugs'
-    apply plugin: 'io.spring.dependency-management'
-    apply plugin: 'org.springframework.boot'
+
+    if (project.path != ':modules:springless-integration-testng') {
+        apply plugin: 'io.spring.dependency-management'
+        apply plugin: 'org.springframework.boot'
+    }
 }
 
 apply from: 'gradle/compilation.gradle'
