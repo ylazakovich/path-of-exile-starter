@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export COMPOSE_PROJECT_NAME="path-of-exile-starter"
+
 echo "🚀 Starting ngrok container..."
 docker compose \
   -f tools/docker/docker-compose.yml \
