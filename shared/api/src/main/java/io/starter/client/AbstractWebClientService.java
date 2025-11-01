@@ -78,10 +78,9 @@ public abstract class AbstractWebClientService {
             .codecs(codecs -> {
               codecs.defaultCodecs().maxInMemorySize(16 * 1024 * 1024);
               ObjectMapper objectMapper = new ObjectMapper();
-              codecs.defaultCodecs().jackson2JsonDecoder(
+              codecs.customCodecs().register(
                   new Jackson2JsonDecoder(
                       objectMapper,
-                      MediaType.APPLICATION_JSON,
                       MediaType.APPLICATION_OCTET_STREAM
                   )
               );
