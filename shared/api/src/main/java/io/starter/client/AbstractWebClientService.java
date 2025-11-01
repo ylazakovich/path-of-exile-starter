@@ -8,6 +8,7 @@ import java.util.Map;
 import io.starter.util.BodyWithSize;
 import io.starter.util.CapturedResponse;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -19,8 +20,10 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -56,24 +59,38 @@ public abstract class AbstractWebClientService {
   }
 
   private WebClient buildWebClient(boolean useProxy, String baseUrl, String realUrl) {
-    WebClient.Builder builder = WebClient.builder()
-        .baseUrl(baseUrl)
-        .filter(logExchange())
-        .exchangeStrategies(ExchangeStrategies.builder()
-            .codecs(codecs -> codecs.defaultCodecs().maxInMemorySize(8 * 1024 * 1024))
-            .build());
+    HttpClient httpClient = HttpClient.create().followRedirect(true);
     if (useProxy) {
       MockServerLogger mockServerLogger = new MockServerLogger(getClass());
       Configuration configuration = Configuration.configuration();
       NettySslContextFactory sslContext = new NettySslContextFactory(configuration, mockServerLogger, false);
-      HttpClient proxyClient = HttpClient.create()
+      httpClient = HttpClient.create()
           .secure(sslSpec -> sslSpec.sslContext(sslContext.createClientSslContext(true, false)))
-          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080));
-      builder.clientConnector(new ReactorClientHttpConnector(proxyClient));
+          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080))
+          .followRedirect(true);
     }
-    if (isMockServerUrl(baseUrl) && StringUtils.isNotBlank(realUrl)) {
+
+    WebClient.Builder builder = WebClient.builder()
+        .baseUrl(baseUrl)
+        .clientConnector(new org.springframework.http.client.reactive.ReactorClientHttpConnector(httpClient))
+        .filter(logExchange())
+        .exchangeStrategies(ExchangeStrategies.builder()
+            .codecs(codecs -> {
+              codecs.defaultCodecs().maxInMemorySize(16 * 1024 * 1024);
+              ObjectMapper objectMapper = new ObjectMapper();
+              codecs.defaultCodecs().jackson2JsonDecoder(
+                  new Jackson2JsonDecoder(
+                      objectMapper,
+                      MediaType.APPLICATION_JSON,
+                      MediaType.APPLICATION_OCTET_STREAM
+                  )
+              );
+            })
+            .build());
+    if (isMockServerUrl(baseUrl) && org.apache.commons.lang3.StringUtils.isNotBlank(realUrl)) {
       builder.defaultHeader(HttpHeaders.HOST, URI.create(realUrl).getHost());
     }
+    builder.defaultHeader("User-Agent", "starter-client/1.0");
     return builder.build();
   }
 
