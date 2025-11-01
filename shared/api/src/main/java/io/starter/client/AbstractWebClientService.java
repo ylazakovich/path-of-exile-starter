@@ -57,16 +57,16 @@ public abstract class AbstractWebClientService {
   }
 
   private WebClient buildWebClient(boolean useProxy, String baseUrl, String realUrl) {
-    HttpClient httpClient = HttpClient.create().followRedirect(true);
+    HttpClient httpClient = HttpClient.create();
     if (useProxy) {
       MockServerLogger mockServerLogger = new MockServerLogger(getClass());
       Configuration configuration = Configuration.configuration();
       NettySslContextFactory sslContext = new NettySslContextFactory(configuration, mockServerLogger, false);
-      httpClient = HttpClient.create()
+      httpClient = httpClient
           .secure(sslSpec -> sslSpec.sslContext(sslContext.createClientSslContext(true, false)))
-          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080))
-          .followRedirect(true);
+          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080));
     }
+    httpClient = httpClient.followRedirect(true);
 
     WebClient.Builder builder = WebClient.builder()
         .baseUrl(baseUrl)
