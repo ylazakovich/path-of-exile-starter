@@ -6,7 +6,7 @@ ext {
     telegram = '9.2.0'
     spring = '3.5.7'
     spring_web = '6.2.12'
-    hibernate_orm = '7.1.6.Final'
+    hibernate_orm = '7.1.7.Final'
     hibernate_validator = '9.0.1.Final'
     mariadb = '3.5.6'
     mockito = '5.20.0'
