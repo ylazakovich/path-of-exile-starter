@@ -1,5 +1,5 @@
 ext {
-    reactor_core = '3.7.12'
+    reactor_core = '3.8.0'
     reactor_netty = '1.2.11'
     netty = '4.2.7.Final'
     lombok = '1.18.42'
