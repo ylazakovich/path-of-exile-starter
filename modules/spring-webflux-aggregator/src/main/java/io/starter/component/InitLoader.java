@@ -22,7 +22,12 @@ public class InitLoader implements ApplicationRunner {
   public void run(ApplicationArguments args) {
     if (CONFIG.startupLoaderEnabled()) {
       LOG.info("🚀 Starting full init...");
-      startupLoader.loadEverything();
+      try {
+        startupLoader.loadEverything();
+      } catch (InterruptedException e) {
+        LOG.error("Startup interrupted.", e);
+        throw new RuntimeException(e);
+      }
       LOG.info("✅ Full init completed.");
     }
   }
