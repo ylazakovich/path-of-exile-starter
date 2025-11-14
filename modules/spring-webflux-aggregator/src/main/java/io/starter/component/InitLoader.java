@@ -26,6 +26,7 @@ public class InitLoader implements ApplicationRunner {
         startupLoader.loadEverything();
       } catch (InterruptedException e) {
         LOG.error("Startup interrupted.", e);
+        Thread.currentThread().interrupt();
         throw new RuntimeException(e);
       }
       LOG.info("✅ Full init completed.");
