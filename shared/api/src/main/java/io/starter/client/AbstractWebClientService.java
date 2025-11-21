@@ -8,8 +8,6 @@ import java.util.Map;
 import io.starter.util.BodyWithSize;
 import io.starter.util.CapturedResponse;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHeaders;
@@ -22,8 +20,9 @@ import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
+import org.springframework.util.MimeType;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -32,17 +31,18 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.transport.ProxyProvider;
+import tools.jackson.databind.json.JsonMapper;
 
 @Slf4j
 public abstract class AbstractWebClientService {
 
   @Getter
   protected final WebClient client;
-  protected final ObjectMapper objectMapper;
+  protected final JsonMapper jsonMapper;
   protected final RequestExecutor executor;
 
-  protected AbstractWebClientService(ObjectMapper objectMapper, boolean useProxy, String baseUrl, String realUrl) {
-    this.objectMapper = objectMapper;
+  protected AbstractWebClientService(JsonMapper jsonMapper, boolean useProxy, String baseUrl, String realUrl) {
+    this.jsonMapper = jsonMapper;
     this.client = buildWebClient(useProxy, baseUrl, realUrl);
     this.executor = new RequestExecutor(client);
   }
@@ -75,11 +75,15 @@ public abstract class AbstractWebClientService {
     ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
         .codecs(codecs -> {
           codecs.defaultCodecs().maxInMemorySize(16 * 1024 * 1024);
-          codecs.defaultCodecs().jackson2JsonDecoder(new Jackson2JsonDecoder(
-              objectMapper,
-              MediaType.APPLICATION_JSON, MediaType.APPLICATION_OCTET_STREAM)
+          codecs.defaultCodecs().jacksonJsonDecoder(
+              new JacksonJsonDecoder(
+                  jsonMapper,
+                  MediaType.APPLICATION_JSON,
+                  MediaType.APPLICATION_OCTET_STREAM)
           );
-          codecs.defaultCodecs().jackson2JsonEncoder(new Jackson2JsonEncoder(objectMapper));
+          codecs.defaultCodecs().jacksonJsonEncoder(
+              new JacksonJsonEncoder(jsonMapper)
+          );
         })
         .build();
 
