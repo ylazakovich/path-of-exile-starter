@@ -12,6 +12,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class PathOfExileService extends AbstractWebClientService {
@@ -21,9 +22,8 @@ public class PathOfExileService extends AbstractWebClientService {
 
   private static final String LEAGUES = "/api/leagues";
 
-  public PathOfExileService() {
-    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
-
+  public PathOfExileService(JsonMapper jsonMapper) {
+    super(jsonMapper, CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
   }
 
   public Mono<ResponseEntity<List<League>>> getAllLeagues() {

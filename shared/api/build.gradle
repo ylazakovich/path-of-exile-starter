@@ -7,6 +7,6 @@ dependencies {
     api("org.springframework:spring-webflux:${spring_web}")
     api("io.projectreactor:reactor-core:${reactor_core}")
     api("io.projectreactor.netty:reactor-netty:${reactor_netty}")
-    api("com.fasterxml.jackson.core:jackson-databind:${jackson}")
+    api("tools.jackson.core:jackson-databind:${jackson}")
     implementation("org.mock-server:mockserver-netty:$mock_server_netty")
 }

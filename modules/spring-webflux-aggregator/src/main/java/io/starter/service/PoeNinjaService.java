@@ -17,6 +17,7 @@ import org.aeonbits.owner.ConfigFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+import tools.jackson.databind.json.JsonMapper;
 
 @Service
 public class PoeNinjaService extends AbstractWebClientService {
@@ -27,8 +28,8 @@ public class PoeNinjaService extends AbstractWebClientService {
   private static final String ITEMS = "/api/data/itemoverview";
   private static final String CURRENCIES = "/api/data/currencyoverview";
 
-  public PoeNinjaService() {
-    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
+  public PoeNinjaService(JsonMapper jsonMapper) {
+    super(jsonMapper, CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
   }
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {

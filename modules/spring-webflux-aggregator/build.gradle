@@ -1,6 +1,8 @@
 dependencies {
     implementation project(':shared:api')
     implementation project(':shared:database')
+    implementation("org.glassfish:jakarta.el:$jakarta_el")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:$spring")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:$spring")
     implementation("org.mariadb.jdbc:mariadb-java-client:$mariadb")
     implementation("org.bouncycastle:bcprov-jdk18on:$bouncy_castle")
