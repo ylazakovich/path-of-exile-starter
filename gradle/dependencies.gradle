@@ -5,7 +5,7 @@ ext {
     lombok = '1.18.42'
     telegram = '9.2.0'
     spring = '3.5.8'
-    spring_web = '7.0.0'
+    spring_web = '7.0.1'
     hibernate_orm = '7.1.9.Final'
     hibernate_validator = '9.1.0.Final'
     mariadb = '3.5.6'
