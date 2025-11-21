@@ -7,6 +7,7 @@ import io.starter.client.AbstractWebClientService;
 import io.starter.config.PathOfExileConfiguration;
 import io.starter.model.path_of_exile.League;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
@@ -21,9 +22,8 @@ public class PathOfExileService extends AbstractWebClientService {
 
   private static final String LEAGUES = "/api/leagues";
 
-  public PathOfExileService() {
-    super(CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
-
+  public PathOfExileService(ObjectMapper objectMapper) {
+    super(objectMapper, CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
   }
 
   public Mono<ResponseEntity<List<League>>> getAllLeagues() {
