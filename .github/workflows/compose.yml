@@ -6,6 +6,8 @@ on:
     branches: [main]
 env:
   CI: true
+  GRADLE_OPTS: -Dorg.gradle.console=plain
+  COMPOSE_PROJECT_NAME: path-of-exile-starter
 
 jobs:
   check-docker-compose:
