@@ -17,6 +17,7 @@ jobs:
       - name: Run Docker Compose healthcheck
         uses: ylazakovich/compose-health-check-action@v0.1.0
         with:
+          compose-project-directory: ${{ github.workspace }}
           compose-files: |
             tools/docker/docker-compose.yml
             tools/docker/docker-compose.override.yml
