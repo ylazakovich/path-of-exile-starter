@@ -25,5 +25,7 @@ jobs:
           compose-files: |
             tools/docker/docker-compose.yml
             tools/docker/docker-compose.override.yml
-          services: flyway
+          services: |
+            mariadb
+            flyway
           timeout: "60"
