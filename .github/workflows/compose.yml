@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
       - name: Run Docker Compose healthcheck
-        uses: ylazakovich/compose-health-check-action@hotfix/v0.1.1
+        uses: ylazakovich/compose-health-check-action@hotfix/v1
         with:
           compose-files: |
             tools/docker/docker-compose.yml
@@ -26,9 +26,6 @@ jobs:
             spring-webflux-aggregator 
             spring-telegram-webhook
           timeout: "60"
-      #      - name: 🟢Start compose
-      #        run: ./tools/scripts/dev/run_app.sh
-      #        shell: bash
       - name: 🐳 Collecting logs from all docker containers
         if: always()
         uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
