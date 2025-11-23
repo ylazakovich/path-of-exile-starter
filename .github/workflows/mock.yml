@@ -16,4 +16,3 @@ jobs:
           ./tools/scripts/mock/run_mock_server.sh
           ./tools/scripts/mock/upload_expectations.sh
         shell: bash
-

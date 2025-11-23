@@ -25,4 +25,3 @@ jobs:
             tools/docker/docker-compose.override.yml
           services: flyway
           timeout: "60"
-
