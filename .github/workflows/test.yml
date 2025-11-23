@@ -36,6 +36,7 @@ jobs:
           services: |
             spring-webflux-aggregator 
             spring-telegram-webhook
+          additional-compose-args: "--quiet-pull"
           timeout: "120"
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
