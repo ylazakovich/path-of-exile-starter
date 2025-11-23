@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
       - name: 🐳 Check Docker Compose
-        uses: ylazakovich/compose-health-check-action@v1
+        uses: ylazakovich/compose-health-check-action@2962a1d4b41b1fd373fcc5c1fdd5b85819ddddf8 # v1
         with:
           compose-files: |
             tools/docker/docker-compose.yml
