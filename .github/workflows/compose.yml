@@ -16,7 +16,7 @@ jobs:
       - name: 🔨Checkout
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
-      - name: Run Docker Compose healthcheck
+      - name: 🐳 Check Docker Compose
         uses: ylazakovich/compose-health-check-action@v1
         with:
           compose-files: |
@@ -26,20 +26,4 @@ jobs:
             spring-webflux-aggregator 
             spring-telegram-webhook
           timeout: "60"
-      - name: 🐳 Collecting logs from all docker containers
-        if: always()
-        uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
-        with:
-          dest: logs
-      - name: 🛑Stop compose
-        if: always()
-        run: ./tools/scripts/dev/stop_app.sh
-        shell: bash
-      - name: 📦 Packing docker compose logs as artifact
-        if: always()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
-        with:
-          name: docker-logs
-          retention-days: 3
-          path: logs
-          if-no-files-found: warn
+

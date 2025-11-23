@@ -16,16 +16,4 @@ jobs:
           ./tools/scripts/mock/run_mock_server.sh
           ./tools/scripts/mock/upload_expectations.sh
         shell: bash
-      - name: 🐳 Collecting logs from all docker containers
-        uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
-        with:
-          dest: logs
-      - name: 🛑Stop compose
-        run: ./tools/scripts/dev/stop_app.sh
-        shell: bash
-      - name: 📦 Packing docker compose logs as artifact
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
-        with:
-          name: docker-logs
-          retention-days: 3
-          path: logs
+

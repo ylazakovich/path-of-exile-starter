@@ -25,28 +25,19 @@ jobs:
           java-version: "25"
       - name: 🔨Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
-      - name: 🟢Start Application
-        run: ./tools/scripts/dev/run_app.sh
-        shell: bash
+      - name: 🟢 Start Application
+        uses: ylazakovich/compose-health-check-action@v1
+        with:
+          compose-files: |
+            tools/docker/docker-compose.yml
+            tools/docker/docker-compose.override.yml
+          services: |
+            spring-webflux-aggregator 
+            spring-telegram-webhook
+          timeout: "60"
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
-      - name: 🐳 Collecting logs from all docker containers
-        if: always()
-        uses: jwalton/gh-docker-logs@2741064ab9d7af54b0b1ffb6076cf64c16f0220e # v2
-        with:
-          dest: logs
-      - name: 🛑Stop Application
-        if: always()
-        run: ./tools/scripts/dev/stop_app.sh
         shell: bash
-      - name: 📦 Packing docker compose logs as artifact
-        if: always()
-        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
-        with:
-          name: docker-logs
-          retention-days: 3
-          path: logs
-          if-no-files-found: warn
       - name: 📦Packing test results as artifact
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: always()
