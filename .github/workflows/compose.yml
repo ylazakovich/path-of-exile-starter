@@ -26,4 +26,3 @@ jobs:
             spring-webflux-aggregator 
             spring-telegram-webhook
           timeout: "120"
-          additional-compose-args: "--quiet-pull"
