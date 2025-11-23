@@ -15,9 +15,8 @@ jobs:
         uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
 
       - name: Run Docker Compose healthcheck
-        uses: ylazakovich/compose-health-check-action@v0.1.0
+        uses: ylazakovich/compose-health-check-action@hotfix/v0.1.1
         with:
-          compose-project-directory: ${{ github.workspace }}
           compose-files: |
             tools/docker/docker-compose.yml
             tools/docker/docker-compose.override.yml
