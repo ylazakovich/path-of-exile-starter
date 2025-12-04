@@ -35,10 +35,10 @@ jobs:
           cache: "gradle"
           java-version: "25"
       - name: 🔨Initialize CodeQL
-        uses: github/codeql-action/init@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
+        uses: github/codeql-action/init@fe4161a26a8629af62121b670040955b330f9af2 # v4
         with:
           languages: java
       - name: 🔨Autobuild
-        uses: github/codeql-action/autobuild@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
+        uses: github/codeql-action/autobuild@fe4161a26a8629af62121b670040955b330f9af2 # v4
       - name: 🔐Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@fdbfb4d2750291e159f0156def62b853c2798ca2 # v4
+        uses: github/codeql-action/analyze@fe4161a26a8629af62121b670040955b330f9af2 # v4
