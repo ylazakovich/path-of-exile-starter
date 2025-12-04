@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🔨Checkout
-        uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3 # v6
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: 🔬Check repository over Prettier
         uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
         with:
