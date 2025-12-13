@@ -19,7 +19,7 @@ ext {
     selenium = '4.37.0'
     aeonbits = "1.0.12"
     slf4j = '2.0.17'
-    allure = '2.31.0'
+    allure = '2.32.0'
     httpcore5 = '5.3.6'
     restAssured = '6.0.0'
     awaitility = '4.3.0'
