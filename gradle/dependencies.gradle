@@ -20,7 +20,7 @@ ext {
     aeonbits = "1.0.12"
     slf4j = '2.0.17'
     allure = '2.32.0'
-    httpcore5 = '5.3.6'
+    httpcore5 = '5.4'
     restAssured = '6.0.0'
     awaitility = '4.3.0'
     spotbugs_annotation = '4.9.8'
