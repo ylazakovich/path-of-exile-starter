@@ -9,7 +9,7 @@ services:
       retries: 5
 
   flyway:
-    image: flyway/flyway:11.19.0@sha256:6f033675cdef037aa8f4540939dd097715c5c3b6cacf93be68591fc6d0486616
+    image: flyway/flyway:11.19.1@sha256:7afc70d61f09d20333caaebd5d6661cd51d7ad075d415c3681d8a65722466b2a
     command: migrate
     depends_on:
       mariadb:
