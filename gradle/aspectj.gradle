@@ -1,6 +1,6 @@
 subprojects {
     ext {
-        aspectJ = "1.9.25"
+        aspectJ = "1.9.25.1"
     }
 
     configurations {
