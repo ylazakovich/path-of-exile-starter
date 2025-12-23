@@ -12,6 +12,6 @@ jobs:
       - name: 🔨Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
       - name: 🔬Check repository through Prettier
-        uses: creyD/prettier_action@v4.6
+        uses: creyD/prettier_action@f0d55233ed05f623422312b1a26784565b405574 # v4.6
         with:
           prettier_options: --check .
