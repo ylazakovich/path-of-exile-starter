@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
-      - name: 🔬Check repository over Prettier
-        uses: actionsx/prettier@3d9f7c3fa44c9cb819e68292a328d7f4384be206 # v3
+      - name: 🔬Check repository through Prettier
+        uses: creyD/prettier_action@v4.6
         with:
-          args: --check --ignore-unknown '**/*.*'
+          prettier_options: --check .
