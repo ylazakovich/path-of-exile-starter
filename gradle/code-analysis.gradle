@@ -4,7 +4,7 @@ def SpotBugsConfidence = classLoader.findLoadedClass('com.github.spotbugs.snom.C
 
 subprojects {
     checkstyle {
-        toolVersion = "12.3.0"
+        toolVersion = "12.3.1"
     }
 
     tasks.withType(Checkstyle).configureEach {
