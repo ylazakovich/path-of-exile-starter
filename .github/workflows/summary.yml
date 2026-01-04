@@ -17,7 +17,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           run-id: ${{ github.event.workflow_run.id }}
       - name: 🔬Report summary
-        uses: dorny/test-reporter@fe45e9537387dac839af0d33ba56eed8e24189e8 # v2
+        uses: dorny/test-reporter@b082adf0eced0765477756c2a610396589b8c637 # v2
         with:
           name: "🔬Test report: $1 $2"
           artifact: /test-report-(.*)-(.*)/
