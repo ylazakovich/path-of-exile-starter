@@ -8,6 +8,7 @@ env:
   CI: true
   GRADLE_OPTS: -Dorg.gradle.console=plain
   COMPOSE_PROJECT_NAME: path-of-exile-starter
+  DOCKER_HEALTH_LOG_LINES: 100
 
 jobs:
   run-tests-on-linux:
