@@ -6,14 +6,6 @@ import org.aeonbits.owner.Config;
 @Config.Sources({"system:env"})
 public interface AppConfiguration extends Config {
 
-  @Key("POE_NINJA_BASE_URL")
-  @DefaultValue("https://poe.ninja")
-  String poeNinjaBaseUrl();
-
-  @Key("TELEGRAM_BASE_URL")
-  @DefaultValue("https://web.telegram.org")
-  String telegramBaseUrl();
-
   @Key("A8R_BASE_URL")
   @DefaultValue("http://localhost:8080")
   String a8rBaseUrl();
@@ -27,8 +19,4 @@ public interface AppConfiguration extends Config {
   @Key("BOT_USERNAME")
   @DefaultValue("@poe_consultant_bot")
   String botUsername();
-
-  @Key("IS_NIGHTLY_RUN")
-  @DefaultValue("false")
-  Boolean isNightlyRun();
 }
