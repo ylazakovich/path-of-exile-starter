@@ -28,20 +28,18 @@ jobs:
       - name: 🔨 Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
       - name: 🟢 Start Application
-        uses: ylazakovich/compose-health-check-action@33c5b95f078b1f0844a722ae86396772af24692a # v2
+        uses: ylazakovich/compose-health-check-action@d2d6a1671208fcf0f455f8a4ffe3a87a9da13c74
         with:
-          compose-files: |
-            tools/docker/docker-compose.yml
-            tools/docker/docker-compose.override.yml
-          services: |
-            spring-webflux-aggregator 
-            spring-telegram-webhook
-          additional-compose-args: "--quiet-pull"
-          timeout: "120"
-      - name: 🚀Run the unit tests
+          docker-command: |
+            docker compose \
+              -f tools/docker/docker-compose.yml \
+              -f tools/docker/docker-compose.override.yml \
+              up -d --quiet-pull spring-webflux-aggregator spring-telegram-webhook
+          log-lines: 100
+      - name: 🚀 Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
-      - name: 📦Packing test results as artifact
+      - name: 📦 Packing test results as artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:

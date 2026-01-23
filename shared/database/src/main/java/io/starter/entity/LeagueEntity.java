@@ -23,5 +23,6 @@ public class LeagueEntity extends Identity {
   @Column(unique = true)
   private @NotNull String name;
   @Version
-  private Long version;
+  @Column(nullable = false)
+  private long version;
 }
