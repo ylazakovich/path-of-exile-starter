@@ -31,8 +31,7 @@ public class WebhookController {
   public BotApiMethod<?> onUpdateReceived(@RequestBody byte[] payload) {
     Update update;
     try {
-      String jsonPayload = new String(payload, StandardCharsets.UTF_8);
-      update = telegramObjectMapper.readValue(jsonPayload, Update.class);
+      update = telegramObjectMapper.readValue(payload, Update.class);
     } catch (Exception exception) {
       log.error("Failed to deserialize telegram update payload", exception);
       return null;
