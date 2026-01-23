@@ -7,8 +7,6 @@ on:
 env:
   CI: true
   GRADLE_OPTS: -Dorg.gradle.console=plain
-  COMPOSE_PROJECT_NAME: path-of-exile-starter
-  DOCKER_HEALTH_LOG_LINES: 100
 
 jobs:
   run-tests-on-linux:
@@ -29,16 +27,15 @@ jobs:
       - name: 🔨 Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
       - name: 🟢 Start Application
-        uses: ylazakovich/compose-health-check-action@33c5b95f078b1f0844a722ae86396772af24692a # v2
+        uses: ylazakovich/compose-health-check-action@e96e62ca536f44e7bea57d88250ee0a4f905e1b0 # v2
         with:
-          compose-files: |
-            tools/docker/docker-compose.yml
-            tools/docker/docker-compose.override.yml
-          services: |
-            spring-webflux-aggregator 
-            spring-telegram-webhook
-          additional-compose-args: "--quiet-pull"
-          timeout: "120"
+          docker-command: |
+            docker compose \
+              -f tools/docker/docker-compose.yml \
+              -f tools/docker/docker-compose.override.yml \
+              up -d --quiet-pull spring-webflux-aggregator spring-telegram-webhook
+          log-lines: 100
+          auto-apply-project-name: true
       - name: 🚀Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
