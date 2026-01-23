@@ -7,6 +7,7 @@ on:
 permissions:
   pull-requests: write
   checks: write
+  contents: write
 env:
   CI: true
   GRADLE_OPTS: -Dorg.gradle.console=plain
@@ -47,6 +48,7 @@ jobs:
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
       - name: 📊 Generate Allure report
+        id: allure-generate
         if: always()
         run: |
           set -euo pipefail
@@ -58,15 +60,44 @@ jobs:
           done < <(find . -type d -path "*/build/allure-results" -print0)
           if [ "$found" -eq 0 ]; then
             echo "No allure-results found, skipping report generation."
+            echo "found=0" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           npx --yes allure generate allure-results -o allure-report
+          echo "found=1" >> "$GITHUB_OUTPUT"
       - name: 🧾 Publish Allure summary to PR
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1'
         uses: allure-framework/allure-action@v0
         with:
           report-directory: "./allure-report"
           github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: 🌐 Publish Allure report to GitHub Pages
+        if: always() && github.ref == 'refs/heads/main' && steps.allure-generate.outputs.found == '1'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+      - name: 🌐 Publish Allure PR preview to GitHub Pages
+        if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./allure-report
+          destination_dir: pr-${{ github.event.pull_request.number }}
+      - name: 📝 Add Allure report link to PR
+        if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1'
+        uses: actions/github-script@v7
+        env:
+          ALLURE_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/
+        with:
+          script: |
+            const body = `Allure report: ${process.env.ALLURE_REPORT_URL}`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
       - name: 📦 Packing test results as artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
