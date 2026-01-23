@@ -1,1 +1,0 @@
-{"id":"e92ebd8116660b07d6ceef804965c666","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotCommandStart","name":"Bot should welcome user when he writes command '/start'","status":"passed","testResultsByEnv":{"default":"f8e1c16f6b004c2042c36d602d46bd81"}}
