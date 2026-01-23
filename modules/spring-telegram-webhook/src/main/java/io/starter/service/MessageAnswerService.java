@@ -46,9 +46,9 @@ public class MessageAnswerService {
     InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
         .generate(Constants.Start.SKILLS, CallbackState.SKILLS.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
-        .generate(Constants.Start.BLESSING, CallbackState.ITEMS_AFTER_BLESSING.value);
-    List<InlineKeyboardButton> buttons = List.of(button1, button2);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(buttons);
+        .generate(Constants.Start.VENDOR_RECIPES, CallbackState.VENDOR_RECIPES.value);
+    List<InlineKeyboardButton> row1 = List.of(button1, button2);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 

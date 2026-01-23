@@ -17,7 +17,14 @@ public class Constants {
     public static final String SKILLS_GUIDE_LINK =
         "https://github.com/ylazakovich/path-of-exile-starter/blob/main/docs/guides/how_to_interact_with_skills.md";
     public static final String SKILLS = "Skills";
-    public static final String BLESSING = "Blessing Items";
+    public static final String VENDOR_RECIPES = "Vendor Recipes";
+  }
+
+  public static class Recipes {
+    public static final String ANIMA_STONE = "The Anima Stone";
+    public static final String PRIMORDIAL_MIGHT = "Primordial Might";
+    public static final String PRIMORDIAL_HARMONY = "Primordial Harmony";
+    public static final String PRIMORDIAL_EMINENCE = "Primordial Eminence";
   }
 
   public static class Settings {

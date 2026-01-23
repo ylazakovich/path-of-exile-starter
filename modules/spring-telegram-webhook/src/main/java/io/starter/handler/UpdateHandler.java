@@ -51,6 +51,8 @@ public class UpdateHandler {
       case SETTING_STANDARD, SETTING_LEAGUE, SETTING_HARDCORE, SETTING_LEAGUE_HARDCORE
           -> callbackAnswerService.onClickSetting(callback);
       case SKILLS, REFRESH_SKILLS, SKILLS_PREVIOUS, SKILLS_NEXT -> callbackAnswerService.onClickSkills(callback);
+      case VENDOR_RECIPES -> callbackAnswerService.onClickVendorRecipes(callback);
+      case ANIMA_STONE, REFRESH_ANIMA_STONE -> callbackAnswerService.onClickAnimaStone(callback);
       default -> null;
     };
   }

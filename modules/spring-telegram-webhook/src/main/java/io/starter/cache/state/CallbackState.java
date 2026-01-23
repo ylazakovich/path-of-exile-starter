@@ -14,7 +14,9 @@ public enum CallbackState {
   SETTING_LEAGUE_HARDCORE("Pressing button with 'League Hardcore'"),
   SKILLS("Pressing button with 'Skills'"),
   REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
-  ITEMS_AFTER_BLESSING("Pressing button with 'Blessing Items'"),
+  VENDOR_RECIPES("Pressing button with 'Vendor Recipes'"),
+  ANIMA_STONE("Pressing button with 'Anima Stone'"),
+  REFRESH_ANIMA_STONE("Pressing button with 'Refresh' in Menu with 'Anima Stone'"),
   CURRENT("Pressing on current page"),
   SKILLS_NEXT("skills - Pressing NEXT"),
   SKILLS_PREVIOUS("skills - Pressing PREVIOUS");
