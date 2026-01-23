@@ -24,7 +24,9 @@ public class RegressionEntity implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   public Long id;
+  @Column(nullable = false)
   public String code;
   @JsonProperty("is_not_used")
+  @Column(nullable = false)
   public Boolean isNotUsed;
 }
