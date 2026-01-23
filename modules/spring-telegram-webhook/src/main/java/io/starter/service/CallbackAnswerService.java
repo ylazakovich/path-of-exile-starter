@@ -2,6 +2,7 @@ package io.starter.service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import io.starter.cache.state.CallbackState;
 import io.starter.constants.Constants;
@@ -9,6 +10,8 @@ import io.starter.constants.Emoji;
 import io.starter.constants.League;
 import io.starter.dao.UserDao;
 import io.starter.entity.LeagueEntity;
+import io.starter.entity.UniqueJewelEntity;
+import io.starter.entity.VendorRecipeEntity;
 import io.starter.generator.messages.EditMessageGenerator;
 import io.starter.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.generator.replykeyboard.buttons.InlineKeyboardButtonGenerator;
@@ -66,6 +69,22 @@ public class CallbackAnswerService {
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
+  public EditMessageText onClickVendorRecipes(CallbackQuery callbackQuery) {
+    InlineKeyboardMarkup keyboard = onClickVendorRecipes();
+    String inlineMessage = "Select a vendor recipe:";
+    return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
+  }
+
+  public EditMessageText onClickAnimaStone(CallbackQuery callbackQuery) {
+    User from = callbackQuery.getFrom();
+    LeagueEntity leagueEntity = userDao.readLeague(from);
+    Optional<VendorRecipeEntity> recipe = dataAccessService
+        .findVendorRecipeByNameAndLeague(Constants.Recipes.ANIMA_STONE, leagueEntity);
+    String inlineMessage = toAnimaStoneMessage(leagueEntity, recipe);
+    InlineKeyboardMarkup keyboard = onClickAnimaStone();
+    return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
+  }
+
   private InlineKeyboardMarkup onClickSkills(int page) {
     InlineKeyboardButton linkToGuide =
         InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
@@ -117,5 +136,95 @@ public class CallbackAnswerService {
       page = 1;
     }
     return page;
+  }
+
+  private String toAnimaStoneMessage(LeagueEntity league, Optional<VendorRecipeEntity> recipe) {
+    if (league == null) {
+      return "Anima Stone data is not available: league is not selected.";
+    }
+    if (recipe.isEmpty()) {
+      return "Anima Stone data is not available for league '%s'.".formatted(league.getName());
+    }
+    Optional<UniqueJewelEntity> might = dataAccessService
+        .findUniqueJewelByNameAndLeague(Constants.Recipes.PRIMORDIAL_MIGHT, league);
+    Optional<UniqueJewelEntity> harmony = dataAccessService
+        .findUniqueJewelByNameAndLeague(Constants.Recipes.PRIMORDIAL_HARMONY, league);
+    Optional<UniqueJewelEntity> eminence = dataAccessService
+        .findUniqueJewelByNameAndLeague(Constants.Recipes.PRIMORDIAL_EMINENCE, league);
+    return formatAnimaStoneMessage(
+        league.getName(),
+        recipe.get().getChaosEquivalentProfit(),
+        might.orElse(null),
+        harmony.orElse(null),
+        eminence.orElse(null)
+    );
+  }
+
+  private String formatAnimaStoneMessage(String leagueName,
+                                         Double profit,
+                                         UniqueJewelEntity might,
+                                         UniqueJewelEntity harmony,
+                                         UniqueJewelEntity eminence) {
+    final int totalWidth = 52;
+    int nameLength = leagueName.length();
+    int innerWidth = totalWidth - 2;
+    int leftPad = (innerWidth - nameLength - 2) / 2;
+    int rightPad = innerWidth - nameLength - 2 - leftPad;
+    String topBorder = "┌" + "─".repeat(leftPad) + " " + leagueName + " " + "─".repeat(rightPad) + "┐";
+    StringBuilder builder = new StringBuilder();
+    builder.append("```").append("\n");
+    builder.append(topBorder).append("\n");
+    builder.append(formatAnimaStoneLine("Anima Stone profit", formatChaosValue(profit))).append("\n");
+    builder.append(formatSectionDivider("Ingredients")).append("\n");
+    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_MIGHT, formatChaosValue(might))).append("\n");
+    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_HARMONY, formatChaosValue(harmony))).append("\n");
+    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_EMINENCE, formatChaosValue(eminence)))
+        .append("\n");
+    builder.append("└").append("─".repeat(totalWidth - 2)).append("┘").append("\n");
+    builder.append("```");
+    return builder.toString();
+  }
+
+  private String formatAnimaStoneLine(String label, String value) {
+    return String.format("│ %-38s : %7s │", label, value);
+  }
+
+  private String formatChaosValue(UniqueJewelEntity jewel) {
+    if (jewel == null || jewel.getChaosEquivalent() == null) {
+      return "n/a";
+    }
+    return "%d c".formatted(Math.round(jewel.getChaosEquivalent()));
+  }
+
+  private String formatChaosValue(Double value) {
+    if (value == null) {
+      return "n/a";
+    }
+    return "%d c".formatted(Math.round(value));
+  }
+
+  private String formatSectionDivider(String title) {
+    final int totalWidth = 52;
+    int innerWidth = totalWidth - 2;
+    int titleLength = title.length();
+    int leftPad = (innerWidth - titleLength - 2) / 2;
+    int rightPad = innerWidth - titleLength - 2 - leftPad;
+    return "│" + "─".repeat(leftPad) + " " + title + " " + "─".repeat(rightPad) + "│";
+  }
+
+  private InlineKeyboardMarkup onClickAnimaStone() {
+    InlineKeyboardButton refresh = InlineKeyboardButtonGenerator
+        .generate(Emoji.REPEAT.value, CallbackState.REFRESH_ANIMA_STONE.value);
+    List<InlineKeyboardButton> row = List.of(refresh);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row);
+    return InlineKeyboardGenerator.withRows(keyboard);
+  }
+
+  private InlineKeyboardMarkup onClickVendorRecipes() {
+    InlineKeyboardButton animaStone = InlineKeyboardButtonGenerator
+        .generate(Constants.Recipes.ANIMA_STONE, CallbackState.ANIMA_STONE.value);
+    List<InlineKeyboardButton> row = List.of(animaStone);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row);
+    return InlineKeyboardGenerator.withRows(keyboard);
   }
 }
