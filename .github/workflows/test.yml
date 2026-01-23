@@ -36,10 +36,10 @@ jobs:
               up -d --quiet-pull spring-webflux-aggregator spring-telegram-webhook
           log-lines: 100
           auto-apply-project-name: true
-      - name: 🚀Run the unit tests
+      - name: 🚀 Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
-      - name: 📦Packing test results as artifact
+      - name: 📦 Packing test results as artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
         with:
