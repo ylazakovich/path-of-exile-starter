@@ -35,7 +35,6 @@ jobs:
               -f tools/docker/docker-compose.override.yml \
               up -d --quiet-pull spring-webflux-aggregator spring-telegram-webhook
           log-lines: 100
-          auto-apply-project-name: true
       - name: 🚀 Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
