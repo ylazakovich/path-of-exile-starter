@@ -4,6 +4,9 @@ on:
     branches: [main]
   push:
     branches: [main]
+permissions:
+  pull-requests: write
+  checks: write
 env:
   CI: true
   GRADLE_OPTS: -Dorg.gradle.console=plain
@@ -25,6 +28,10 @@ jobs:
           distribution: "temurin"
           cache: "gradle"
           java-version: "25"
+      - name: 🔧 Set up Node.js for Allure CLI
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
       - name: 🔨 Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
       - name: 🟢 Start Application
@@ -39,6 +46,27 @@ jobs:
       - name: 🚀 Run the unit tests
         run: ./gradlew ${{ matrix.gradle-task }} --no-parallel --no-daemon --console=plain
         shell: bash
+      - name: 📊 Generate Allure report
+        if: always()
+        run: |
+          set -euo pipefail
+          mkdir -p allure-results
+          found=0
+          while IFS= read -r -d '' dir; do
+            found=1
+            cp -a "$dir/." allure-results/
+          done < <(find . -type d -path "*/build/allure-results" -print0)
+          if [ "$found" -eq 0 ]; then
+            echo "No allure-results found, skipping report generation."
+            exit 0
+          fi
+          npx --yes allure generate allure-results -o allure-report
+      - name: 🧾 Publish Allure summary to PR
+        if: always() && github.event_name == 'pull_request'
+        uses: allure-framework/allure-action@v0
+        with:
+          report-directory: "./allure-report"
+          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 📦 Packing test results as artifact
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         if: always()
@@ -48,3 +76,12 @@ jobs:
           path: |
             **/build/reports
             **/build/test-results
+      - name: 📦 Upload Allure report artifact
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        if: always()
+        with:
+          name: allure-report-linux-${{ matrix.gradle-task }}
+          retention-days: 3
+          if-no-files-found: warn
+          path: |
+            allure-report
