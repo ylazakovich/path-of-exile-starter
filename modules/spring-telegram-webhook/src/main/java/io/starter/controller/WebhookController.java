@@ -1,6 +1,5 @@
 package io.starter.controller;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 import io.starter.model.telegram.Telegram;
