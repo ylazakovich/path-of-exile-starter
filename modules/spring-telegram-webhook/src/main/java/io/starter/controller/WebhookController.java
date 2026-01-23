@@ -3,9 +3,9 @@ package io.starter.controller;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.starter.model.telegram.Telegram;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
