@@ -1,9 +1,9 @@
 name: "Run tests"
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
   push:
-    branches: [ main ]
+    branches: [main]
 permissions:
   pull-requests: write
   checks: write
@@ -24,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: [ "check" ]
+        gradle-task: ["check"]
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
