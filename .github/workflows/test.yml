@@ -36,7 +36,7 @@ jobs:
       - name: 🔨 Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
       - name: 🟢 Start Application
-        uses: ylazakovich/compose-health-check-action@d2d6a1671208fcf0f455f8a4ffe3a87a9da13c74
+        uses: ylazakovich/compose-health-check-action@3cb636a618a1c8e30ba6b014a2b7d2c5f635e61b
         with:
           docker-command: |
             docker compose \
