@@ -59,6 +59,23 @@ public abstract class AbstractWebClientService {
     return executor.get(path, queryParams, headers, responseType);
   }
 
+  private static String mockServerHost() {
+    String host = System.getenv("MOCK_SERVER_HOST");
+    return (host == null || host.isBlank()) ? "localhost" : host;
+  }
+
+  private static int mockServerPort() {
+    String port = System.getenv("MOCK_SERVER_PORT");
+    if (port == null || port.isBlank()) {
+      return 1080;
+    }
+    try {
+      return Integer.parseInt(port);
+    } catch (NumberFormatException e) {
+      return 1080;
+    }
+  }
+
   private WebClient buildWebClient(boolean useProxy, String baseUrl, String realUrl) {
     HttpClient httpClient = HttpClient.create();
     if (useProxy) {
@@ -67,7 +84,9 @@ public abstract class AbstractWebClientService {
       NettySslContextFactory sslContext = new NettySslContextFactory(configuration, mockServerLogger, false);
       httpClient = httpClient
           .secure(sslSpec -> sslSpec.sslContext(sslContext.createClientSslContext(true, false)))
-          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP).host("localhost").port(1080));
+          .proxy(proxy -> proxy.type(ProxyProvider.Proxy.HTTP)
+              .host(mockServerHost())
+              .port(mockServerPort()));
     }
     httpClient = httpClient.followRedirect(true);
 
@@ -100,7 +119,22 @@ public abstract class AbstractWebClientService {
   }
 
   private boolean isMockServerUrl(String url) {
-    return url.contains("localhost:1080") || url.contains("127.0.0.1:1080");
+    try {
+      URI uri = URI.create(url);
+      String host = uri.getHost();
+      int port = uri.getPort();
+      if (host == null) {
+        return false;
+      }
+      boolean hostMatches =
+          host.equalsIgnoreCase(mockServerHost())
+              || host.equalsIgnoreCase("localhost")
+              || host.equals("127.0.0.1");
+      boolean portMatches = port == mockServerPort() || port == 1080;
+      return hostMatches && portMatches;
+    } catch (IllegalArgumentException e) {
+      return false;
+    }
   }
 
   private static ExchangeFilterFunction logExchange() {

@@ -1,9 +1,9 @@
 name: "Run tests"
 on:
   pull_request:
-    branches: [main]
+    branches: [ main ]
   push:
-    branches: [main]
+    branches: [ main ]
 permissions:
   pull-requests: write
   checks: write
@@ -12,6 +12,11 @@ env:
   CI: true
   GRADLE_OPTS: -Dorg.gradle.console=plain
   COMPOSE_PROJECT_NAME: path-of-exile-starter
+  COMPOSE_PROFILES: mock
+  NINJA_USE_MOCK_SERVER_AS_PROXY: "true"
+  PATH_OF_EXILE_USE_MOCK_SERVER_AS_PROXY: "true"
+  MOCK_SERVER_HOST: mock-server
+  MOCK_SERVER_PORT: "1080"
 
 jobs:
   run-tests-on-linux:
@@ -19,7 +24,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        gradle-task: ["check"]
+        gradle-task: [ "check" ]
     steps:
       - name: 🔨Checkout
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6
@@ -35,6 +40,9 @@ jobs:
           node-version: "24"
       - name: 🔨 Build with Gradle
         uses: gradle/actions/setup-gradle@4d9f0ba0025fe599b4ebab900eb7f3a1d93ef4c2 # v5
+      - name: 🧪 Upload mock expectations
+        run: tools/scripts/mock/run_mock_server.sh
+        shell: bash
       - name: 🟢 Start Application
         uses: ylazakovich/compose-health-check-action@3cb636a618a1c8e30ba6b014a2b7d2c5f635e61b
         with:
@@ -42,6 +50,7 @@ jobs:
             docker compose \
               -f tools/docker/docker-compose.yml \
               -f tools/docker/docker-compose.override.yml \
+              --profile mock \
               up -d --quiet-pull spring-webflux-aggregator spring-telegram-webhook
           log-lines: 100
       - name: 🚀 Run the unit tests
