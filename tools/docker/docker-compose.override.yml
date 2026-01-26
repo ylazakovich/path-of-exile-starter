@@ -11,6 +11,10 @@ services:
     environment:
       DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
+      NINJA_USE_MOCK_SERVER_AS_PROXY: ${NINJA_USE_MOCK_SERVER_AS_PROXY:-false}
+      PATH_OF_EXILE_USE_MOCK_SERVER_AS_PROXY: ${PATH_OF_EXILE_USE_MOCK_SERVER_AS_PROXY:-false}
+      MOCK_SERVER_HOST: ${MOCK_SERVER_HOST:-mock-server}
+      MOCK_SERVER_PORT: ${MOCK_SERVER_PORT:-1080}
 
   spring-telegram-webhook:
     build:
