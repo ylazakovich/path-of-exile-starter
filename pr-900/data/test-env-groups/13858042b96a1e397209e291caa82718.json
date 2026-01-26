@@ -1,1 +1,1 @@
-{"id":"13858042b96a1e397209e291caa82718","fullName":"io.starter.tests.a8r.HealthCheckTest.testA8rHealthyState","name":"Spring service 'A8r' should be healthy","status":"broken","testResultsByEnv":{"default":"a03ba6e1ef22333223a0ac8e0d29780d"}}
+{"id":"13858042b96a1e397209e291caa82718","fullName":"io.starter.tests.a8r.HealthCheckTest.testA8rHealthyState","name":"Spring service 'A8r' should be healthy","status":"broken","testResultsByEnv":{"default":"706e81a5497e91f1a36ae18f3210bac8"}}
