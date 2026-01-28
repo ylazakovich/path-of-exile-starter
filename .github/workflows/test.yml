@@ -76,7 +76,7 @@ jobs:
           echo "found=1" >> "$GITHUB_OUTPUT"
       - name: 🧾 Publish Allure summary to PR
         if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1'
-        uses: allure-framework/allure-action@d83330ab1b8022523272800026668fa0fbd3e831 # v0
+        uses: allure-framework/allure-action@eb700c1a945605aa58c5ef8a53966ee96935c206 # v0
         with:
           report-directory: "./allure-report"
           github-token: ${{ secrets.GITHUB_TOKEN }}
