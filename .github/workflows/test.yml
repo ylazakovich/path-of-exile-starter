@@ -44,7 +44,7 @@ jobs:
         run: tools/scripts/mock/run_mock_server.sh
         shell: bash
       - name: 🟢 Start Application
-        uses: ylazakovich/compose-health-check-action@3cb636a618a1c8e30ba6b014a2b7d2c5f635e61b
+        uses: ylazakovich/compose-health-check-action@c51cc1ecbb58072cb82394ef94483308f68a71f3
         with:
           docker-command: |
             docker compose \
