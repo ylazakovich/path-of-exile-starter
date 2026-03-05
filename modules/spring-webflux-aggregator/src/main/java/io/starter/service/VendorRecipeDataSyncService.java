@@ -14,15 +14,16 @@ public class VendorRecipeDataSyncService {
 
   private final DataAccessService dataAccessService;
 
-  public void load(VendorRecipeEntity entity, LeagueEntity league) {
+  public void upsert(VendorRecipeEntity entity, LeagueEntity league) {
     dataAccessService.findVendorRecipeByNameAndLeague(entity.getName(), league)
-        .orElseGet(() -> {
-          dataAccessService.saveVendorRecipe(entity);
-          return null;
-        });
+        .ifPresentOrElse(existing -> {
+          existing.setChaosEquivalentPrice(entity.getChaosEquivalentPrice());
+          existing.setChaosEquivalentProfit(entity.getChaosEquivalentProfit());
+          dataAccessService.saveVendorRecipe(existing);
+        }, () -> dataAccessService.saveVendorRecipe(entity));
   }
 
-  public void save(VendorRecipeEntity entity) {
-    dataAccessService.saveVendorRecipe(entity);
+  public void deleteByNameAndLeague(String name, LeagueEntity league) {
+    dataAccessService.deleteVendorRecipeByNameAndLeague(name, league);
   }
 }

@@ -82,6 +82,11 @@ public class DataAccessService {
   }
 
   @Transactional(readOnly = true)
+  public List<VendorRecipeEntity> findVendorRecipesByLeague(LeagueEntity league) {
+    return vendorRecipeRepository.findAllByLeague(league);
+  }
+
+  @Transactional(readOnly = true)
   public LeagueEntity findLeagueByName(String name) {
     return leaguesRepository.findByName(name);
   }
@@ -116,6 +121,11 @@ public class DataAccessService {
   @Transactional
   public void saveVendorRecipe(VendorRecipeEntity entity) {
     vendorRecipeRepository.save(entity);
+  }
+
+  @Transactional
+  public void deleteVendorRecipeByNameAndLeague(String name, LeagueEntity league) {
+    vendorRecipeRepository.deleteByLeagueAndName(league, name);
   }
 
   @Transactional

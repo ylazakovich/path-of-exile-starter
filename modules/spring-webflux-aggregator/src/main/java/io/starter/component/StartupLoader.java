@@ -1,18 +1,13 @@
 package io.starter.component;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import io.starter.entity.UniqueJewelEntity;
-import io.starter.model.ninja.UniqueJewel;
-import io.starter.recipes.AnimaStoneRecipe;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 import io.starter.service.SkillDeltaService;
+import io.starter.service.VendorRecipeCalculatorService;
 import io.starter.service.VendorRecipeService;
 
 import lombok.RequiredArgsConstructor;
@@ -29,6 +24,7 @@ public class StartupLoader {
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
   private final SkillDeltaService skillDeltaService;
+  private final VendorRecipeCalculatorService vendorRecipeCalculatorService;
   private final VendorRecipeService vendorRecipeService;
 
   public void loadEverything() throws InterruptedException {
@@ -39,7 +35,7 @@ public class StartupLoader {
     stageSkills();
     Thread.sleep(Duration.ofSeconds(10));
     stageProcessedSkills();
-    stageAnimaStoneRecipes();
+    stageVendorRecipes();
   }
 
   private void stageLeagues() {
@@ -89,20 +85,10 @@ public class StartupLoader {
     });
   }
 
-  private void stageAnimaStoneRecipes() {
+  private void stageVendorRecipes() {
     dataAccessService.findLeagues().forEach(league -> {
-      dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
-          .ifPresent(jewel -> {
-            List<UniqueJewelEntity> ingredients = Stream.of(
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
-                ).flatMap(Optional::stream)
-                .toList();
-            AnimaStoneRecipe animaStoneRecipe = new AnimaStoneRecipe(jewel.getName(), league, jewel.getChaosEquivalent());
-            vendorRecipeService.saveAnimaStoneRecipe(animaStoneRecipe, ingredients);
-            log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
-          });
+      vendorRecipeService.syncVendorRecipes(vendorRecipeCalculatorService.calculateRecipesForLeague(league), league);
+      log.info("Vendor recipes loaded successfully for league '{}'", league.getName());
     });
   }
 }

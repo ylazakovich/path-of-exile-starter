@@ -24,3 +24,13 @@ spring:
 
   mustache:
     check-template-location: false
+
+vendor-recipes:
+  definitions:
+    - id: anima_stone
+      name: The Anima Stone
+      result-item-name: The Anima Stone
+      ingredients:
+        - Primordial Might
+        - Primordial Harmony
+        - Primordial Eminence
