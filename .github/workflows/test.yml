@@ -74,12 +74,6 @@ jobs:
           fi
           npx --yes allure generate allure-results -o allure-report
           echo "found=1" >> "$GITHUB_OUTPUT"
-      - name: 🧾 Publish Allure summary to PR
-        if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1'
-        uses: allure-framework/allure-action@c24234151c027cfee99e00eb6ec2dac1eb350414 # v0
-        with:
-          report-directory: "./allure-report"
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: 🌐 Publish Allure report to GitHub Pages
         if: always() && github.ref == 'refs/heads/main' && steps.allure-generate.outputs.found == '1'
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
