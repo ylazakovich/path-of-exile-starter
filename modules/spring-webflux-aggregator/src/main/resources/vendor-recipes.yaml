@@ -1,0 +1,81 @@
+vendor-recipes:
+  definitions:
+    - id: anima_stone
+      name: The Anima Stone
+      ingredients:
+        - name: Primordial Might
+          price-source: unique_item
+        - name: Primordial Harmony
+          price-source: unique_item
+        - name: Primordial Eminence
+          price-source: unique_item
+    - id: magna_eclipsis
+      name: Magna Eclipsis
+      ingredients:
+        - name: Invictus Solaris
+          price-source: unique_item
+        - name: Vix Lunaris
+          price-source: unique_item
+        - name: Orb of Fusing
+          price-source: currency
+    - id: lost_unity
+      name: Lost Unity
+      ingredients:
+        - name: The Will of Xoph
+          price-source: unique_item
+        - name: The Will of Tul
+          price-source: unique_item
+        - name: The Will of Esh
+          price-source: unique_item
+        - name: The Will of Uul-Netol
+          price-source: unique_item
+        - name: The Sundered Will
+          price-source: unique_item
+    - id: kingmaker
+      name: Kingmaker
+      ingredients:
+        - name: Soul Taker
+          price-source: unique_item
+        - name: Heartbreaker
+          price-source: unique_item
+        - name: Orb of Fusing
+          price-source: currency
+    - id: the_goddess_scorned
+      name: The Goddess Scorned
+      ingredients:
+        - name: The Goddess Bound
+          price-source: unique_item
+        - name: Blacksmith's Whetstone
+          quantity: 25
+          price-source: currency
+        - name: Combustion Support
+          price-source: skill_gem
+        - name: Orb of Fusing
+          price-source: currency
+    - id: duskdawn
+      name: Duskdawn
+      ingredients:
+        - name: Shade of Solaris
+          price-source: unique_item
+        - name: Light of Lunaris
+          price-source: unique_item
+        - name: Orb of Fusing
+          price-source: currency
+    - id: the_retch
+      name: The Retch
+      ingredients:
+        - name: Feastbind
+          price-source: unique_item
+        - name: Faminebind
+          price-source: unique_item
+        - name: Orb of Fusing
+          price-source: currency
+    - id: arborix
+      name: Arborix
+      ingredients:
+        - name: Grelwood Shank
+          price-source: unique_item
+        - name: Beltimber Blade
+          price-source: unique_item
+        - name: Orb of Fusing
+          price-source: currency

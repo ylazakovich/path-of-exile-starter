@@ -1,0 +1,38 @@
+name: "Publish documentation"
+on:
+  push:
+    branches: [main]
+    paths:
+      - "docs/**"
+      - "zensical.toml"
+      - ".github/workflows/docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  CI: true
+
+jobs:
+  publish-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🔨 Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@42375524f050d1f44f27db7f0c8af2eec5c8d5b0 # v6
+        with:
+          python-version: "3.12"
+      - name: 📦 Install Zensical
+        run: |
+          python -m pip install --upgrade pip
+          pip install zensical==0.0.24
+      - name: 🏗️ Build docs
+        run: zensical build
+      - name: 🌐 Publish docs to GitHub Pages root
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          keep_files: true

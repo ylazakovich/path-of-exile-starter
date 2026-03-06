@@ -2,17 +2,14 @@ package io.starter.component;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
-import io.starter.entity.UniqueJewelEntity;
-import io.starter.model.ninja.UniqueJewel;
-import io.starter.recipes.AnimaStoneRecipe;
+import io.starter.entity.VendorRecipeEntity;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
 import io.starter.service.PoeNinjaService;
 import io.starter.service.SkillDeltaService;
+import io.starter.service.VendorRecipeCalculatorService;
 import io.starter.service.VendorRecipeService;
 
 import lombok.RequiredArgsConstructor;
@@ -24,11 +21,20 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class StartupLoader {
 
+  private static final List<String> UNIQUE_ITEM_TYPES = List.of(
+      "UniqueJewel",
+      "UniqueArmour",
+      "UniqueAccessory",
+      "UniqueWeapon",
+      "UniqueFlask",
+      "UniqueMap"
+  );
   private final DataAccessService dataAccessService;
   private final NinjaDataSyncService ninjaDataSyncService;
   private final PoeNinjaService poeNinjaService;
   private final PathOfExileService pathOfExileService;
   private final SkillDeltaService skillDeltaService;
+  private final VendorRecipeCalculatorService vendorRecipeCalculatorService;
   private final VendorRecipeService vendorRecipeService;
 
   public void loadEverything() throws InterruptedException {
@@ -39,7 +45,7 @@ public class StartupLoader {
     stageSkills();
     Thread.sleep(Duration.ofSeconds(10));
     stageProcessedSkills();
-    stageAnimaStoneRecipes();
+    stageVendorRecipes();
   }
 
   private void stageLeagues() {
@@ -61,12 +67,13 @@ public class StartupLoader {
 
   private void stageUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
-        poeNinjaService.getUniqueJewels(league.getName()).subscribe(response -> {
-          ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
-          log.info("{} - Unique Jewel - Loaded {} units",
+        UNIQUE_ITEM_TYPES.forEach(type -> poeNinjaService.getUniqueItems(league.getName(), type).subscribe(response -> {
+          ninjaDataSyncService.addNewJewels(response.getBody(), league);
+          log.info("{} - {} - Loaded {} units",
               league.getName(),
+              type,
               dataAccessService.findUniqueJewelsByLeague(league).size());
-        }));
+        })));
 
   }
 
@@ -89,20 +96,26 @@ public class StartupLoader {
     });
   }
 
-  private void stageAnimaStoneRecipes() {
+  private void stageVendorRecipes() {
     dataAccessService.findLeagues().forEach(league -> {
-      dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
-          .ifPresent(jewel -> {
-            List<UniqueJewelEntity> ingredients = Stream.of(
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
-                    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
-                ).flatMap(Optional::stream)
-                .toList();
-            AnimaStoneRecipe animaStoneRecipe = new AnimaStoneRecipe(jewel.getName(), league, jewel.getChaosEquivalent());
-            vendorRecipeService.saveAnimaStoneRecipe(animaStoneRecipe, ingredients);
-            log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
-          });
+      List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
+      vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
+      int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
+      if (persistedRecipes == 0) {
+        log.warn(
+            "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+            league.getName(),
+            calculatedRecipes.size(),
+            persistedRecipes
+        );
+        return;
+      }
+      log.info(
+          "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
+          league.getName(),
+          calculatedRecipes.size(),
+          persistedRecipes
+      );
     });
   }
 }

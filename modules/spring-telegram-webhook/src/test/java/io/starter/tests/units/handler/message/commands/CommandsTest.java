@@ -1,6 +1,9 @@
 package io.starter.tests.units.handler.message.commands;
 
+import java.util.Optional;
+
 import io.starter.constants.Constants;
+import io.starter.constants.CurrencyDisplay;
 import io.starter.constants.League;
 import io.starter.entity.LeagueEntity;
 import io.starter.handler.UpdateHandler;
@@ -42,14 +45,19 @@ public class CommandsTest extends BaseMessageTest {
   void testWhenBotGotCommandExpandOptions() {
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
+    LeagueEntity leagueEntity = new LeagueEntity();
+    leagueEntity.setId(League.STANDARD.id);
 
     when(message.getText()).thenReturn(START.value);
+    when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    when(dataAccessService.findDivineOrbChaosRate(leagueEntity)).thenReturn(Optional.of(188.0));
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onClickStart(message);
     SendMessage actual = (SendMessage) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual.getText()).isEqualTo(Constants.General.QUESTION);
+    assertThat(actual.getReplyMarkup().toString()).contains("1 div = 188 c");
     assertThat(actual).isEqualTo(expected);
   }
 
@@ -62,15 +70,17 @@ public class CommandsTest extends BaseMessageTest {
     LeagueEntity leagueEntity = new LeagueEntity();
     leagueEntity.setId(League.STANDARD.id);
     when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    when(userDao.readCurrency(user)).thenReturn(CurrencyDisplay.CHAOS);
     String msg = Constants.Settings.ANSWER_FORMAT;
     String empty = StringUtils.EMPTY;
-    when(settingsService.generateInlineMessage(user)).thenReturn(msg.formatted("⭐", empty, empty, empty));
+    when(settingsService.generateInlineMessage(user))
+        .thenReturn(msg.formatted("⭐", empty, empty, empty, "⭐", empty));
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     SendMessage expected = messageAnswerService.onClickSettings(this.message);
     SendMessage actual = (SendMessage) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
-    assertThat(actual.getText()).contains("Your Current League");
+    assertThat(actual.getText()).contains("Current selection");
     assertThat(actual.getText()).doesNotContain("empty", "null");
     assertThat(actual).isEqualTo(expected);
   }

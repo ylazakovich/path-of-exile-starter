@@ -1,36 +1,29 @@
-## Status
+# Roadmap
 
-### Telegram
+## Telegram Module
 
-Realized Telegram bot over implementation with Spring Webhook
+| Feature                               |       Status       | Integration Tests |
+| ------------------------------------- | :----------------: | :---------------: |
+| Database + migration                  | :white_check_mark: |                   |
+| Subscribe webhook on startup          | :white_check_mark: |                   |
+| Save user info in DB                  | :white_check_mark: |                   |
+| Integration with Aggregator           | :white_check_mark: |                   |
+| Welcome message                       | :white_check_mark: |                   |
+| Main menu (Start, Settings, Feedback) | :white_check_mark: |                   |
+| Start -> Skills                       | :white_check_mark: |                   |
+| Start -> Refresh Skills               | :white_check_mark: |                   |
+| Start -> Blessing Items               |                    |                   |
+| Settings flows                        |                    |                   |
+| Feedback flows                        |                    |                   |
 
-| **Features**                                 |     **Status**     | **Integration Tests** |
-| -------------------------------------------- | :----------------: | :-------------------: |
-| Database + Migration                         | :white_check_mark: |                       |
-| Subscribe Webhook after application Start    | :white_check_mark: |                       |
-| Save user info in Database                   | :white_check_mark: |                       |
-| Integration with Aggregator                  | :white_check_mark: |                       |
-| Welcome message                              | :white_check_mark: |                       |
-| Menu with buttons: Start, Settings, Feedback | :white_check_mark: |                       |
-| Submenu for Start: Skills, Blessing items    | :white_check_mark: |                       |
-| Button Start                                 | :white_check_mark: |                       |
-| Button Skills                                | :white_check_mark: |                       |
-| Button Refresh Skills                        | :white_check_mark: |                       |
-| Button Blessing Items                        |                    |                       |
-| Button Settings                              |                    |                       |
-| Button Feedback                              |                    |                       |
+## Aggregator Module
 
-### Aggregator
-
-Spring service which aggregate data from the 3rd party places
-
-| **Features**                                  |     **Status**     |   **Unit Tests**   |
-| --------------------------------------------- | :----------------: | :----------------: |
-| Database + Migration                          | :white_check_mark: |                    |
-| Load data to Database after application start | :white_check_mark: |                    |
-| Update data in Database by CRON               | :white_check_mark: |                    |
-| Integration with PoeNinja                     | :white_check_mark: | :white_check_mark: |
-| Swagger                                       |                    |                    |
-| Analyzer                                      | :white_check_mark: |                    |
-| Analyze skill positions                       | :white_check_mark: | :white_check_mark: |
-| Analyze blessing positions                    |                    |                    |
+| Feature                         |       Status       |     Unit Tests     |
+| ------------------------------- | :----------------: | :----------------: |
+| Database + migration            | :white_check_mark: |                    |
+| Initial data loading on startup | :white_check_mark: |                    |
+| Scheduled updates               | :white_check_mark: |                    |
+| Integration with poe.ninja      | :white_check_mark: | :white_check_mark: |
+| Analyzer for skills             | :white_check_mark: | :white_check_mark: |
+| Analyzer for blessing items     |                    |                    |
+| Swagger API                     |                    |                    |

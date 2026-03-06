@@ -19,5 +19,11 @@ import lombok.ToString;
 public class UniqueJewelEntity extends WithJoinLeague {
 
   private @NotNull String name;
+  private Integer links;
   private @NotNull Double chaosEquivalent;
+
+  public UniqueJewelEntity(String name, Double chaosEquivalent) {
+    this.name = name;
+    this.chaosEquivalent = chaosEquivalent;
+  }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import io.starter.cache.state.CallbackState;
 import io.starter.constants.Constants;
+import io.starter.constants.CurrencyDisplay;
 import io.starter.constants.League;
 import io.starter.dao.UserDao;
 import io.starter.entity.LeagueEntity;
@@ -27,12 +28,19 @@ public class SettingsService {
 
   public String generateInlineMessage(User user) {
     LeagueEntity leagueEntity = userDao.readLeague(user);
+    CurrencyDisplay currencyDisplay = userDao.readCurrency(user);
     String empty = StringUtils.EMPTY;
+    String chaosSelected = currencyDisplay == CurrencyDisplay.CHAOS ? "⭐" : empty;
+    String divineSelected = currencyDisplay == CurrencyDisplay.DIVINE ? "⭐" : empty;
     return switch (League.byId(leagueEntity.getId())) {
-      case STANDARD -> Constants.Settings.ANSWER_FORMAT.formatted("⭐", empty, empty, empty);
-      case LEAGUE -> Constants.Settings.ANSWER_FORMAT.formatted(empty, "⭐", empty, empty);
-      case HARDCORE -> Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, "⭐", empty);
-      case LEAGUE_HARDCORE -> Constants.Settings.ANSWER_FORMAT.formatted(empty, empty, empty, "⭐");
+      case STANDARD -> Constants.Settings.ANSWER_FORMAT
+          .formatted("⭐", empty, empty, empty, chaosSelected, divineSelected);
+      case LEAGUE -> Constants.Settings.ANSWER_FORMAT
+          .formatted(empty, "⭐", empty, empty, chaosSelected, divineSelected);
+      case HARDCORE -> Constants.Settings.ANSWER_FORMAT
+          .formatted(empty, empty, "⭐", empty, chaosSelected, divineSelected);
+      case LEAGUE_HARDCORE -> Constants.Settings.ANSWER_FORMAT
+          .formatted(empty, empty, empty, "⭐", chaosSelected, divineSelected);
     };
   }
 
@@ -45,10 +53,15 @@ public class SettingsService {
         .generate(Constants.Settings.HARDCORE, CallbackState.SETTING_HARDCORE.value);
     InlineKeyboardButton button4 = InlineKeyboardButtonGenerator
         .generate(Constants.Settings.LEAGUE_HARDCORE, CallbackState.SETTING_LEAGUE_HARDCORE.value);
+    InlineKeyboardButton button5 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.CURRENCY_CHAOS, CallbackState.SETTING_CURRENCY_CHAOS.value);
+    InlineKeyboardButton button6 = InlineKeyboardButtonGenerator
+        .generate(Constants.Settings.CURRENCY_DIVINE, CallbackState.SETTING_CURRENCY_DIVINE.value);
 
     List<InlineKeyboardButton> row1 = List.of(button1, button2);
     List<InlineKeyboardButton> row2 = List.of(button3, button4);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2);
+    List<InlineKeyboardButton> row3 = List.of(button5, button6);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1, row2, row3);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 }

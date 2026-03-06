@@ -1,5 +1,7 @@
 package io.starter.controller;
 
+import java.util.List;
+
 import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
 import io.starter.service.DataAccessService;
@@ -19,21 +21,34 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class UniqueJewelController {
 
+  private static final List<String> UNIQUE_ITEM_TYPES = List.of(
+      "UniqueJewel",
+      "UniqueArmour",
+      "UniqueAccessory",
+      "UniqueWeapon",
+      "UniqueFlask",
+      "UniqueMap"
+  );
   private final DataAccessService dataAccessService;
   private final PoeNinjaService poeNinjaService;
   private final NinjaDataSyncService ninjaDataSyncService;
 
   @PostMapping("/load")
   public void loadUniqueJewels() {
-    dataAccessService.findLeagues().forEach(this::loadUniqueJewels);
+    dataAccessService.findLeagues().forEach(league ->
+        UNIQUE_ITEM_TYPES.forEach(type -> syncUniqueItems(league, type, true)));
   }
 
-  private void loadUniqueJewels(LeagueEntity league) {
-    poeNinjaService.getUniqueJewels(league.getName())
+  private void syncUniqueItems(LeagueEntity league, String type, boolean shouldUpdate) {
+    poeNinjaService.getUniqueItems(league.getName(), type)
         .subscribe(response -> {
-          ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
-          log.info("{} - Unique Jewel - Loaded {} units",
+          if (shouldUpdate) {
+            ninjaDataSyncService.updateJewels(response.getBody(), league);
+          }
+          ninjaDataSyncService.addNewJewels(response.getBody(), league);
+          log.info("{} - {} - Synced {} units",
               league.getName(),
+              type,
               dataAccessService.findUniqueJewelsByLeague(league).size());
         });
   }
@@ -41,22 +56,14 @@ public class UniqueJewelController {
   @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
   public void updateUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
-        poeNinjaService.getUniqueJewels(league.getName())
-            .subscribe(response -> {
-              ninjaDataSyncService.updateJewels(response.getBody(), league);
-              log.info("{} - Unique Jewel - Schedule updating", league.getName());
-            })
+        UNIQUE_ITEM_TYPES.forEach(type -> syncUniqueItems(league, type, true))
     );
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
   public void addNewUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
-        poeNinjaService.getUniqueJewels(league.getName())
-            .subscribe(response -> {
-              ninjaDataSyncService.addNewJewels(response.getBody(), league);
-              log.info("{} - Unique Jewel - Schedule adding new", league.getName());
-            })
+        UNIQUE_ITEM_TYPES.forEach(type -> syncUniqueItems(league, type, false))
     );
   }
 }

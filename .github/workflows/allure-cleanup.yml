@@ -38,7 +38,7 @@ jobs:
         if: steps.gh-pages.outputs.exists == '1' && github.event_name == 'pull_request'
         run: |
           set -euo pipefail
-          dir="pr-${{ github.event.pull_request.number }}"
+          dir="allure/pr-${{ github.event.pull_request.number }}"
           if [ ! -d "$dir" ]; then
             echo "Preview folder not found: $dir"
             exit 0
@@ -57,7 +57,7 @@ jobs:
           set -euo pipefail
           now=$(date +%s)
           removed=0
-          for dir in pr-*; do
+          for dir in allure/pr-*; do
             [ -d "$dir" ] || continue
             mtime=$(stat -c %Y "$dir")
             age_days=$(( (now - mtime) / 86400 ))

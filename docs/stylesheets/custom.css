@@ -1,0 +1,620 @@
+/* ============================================================
+   DARK THEME — Nord
+   Background: #2e3440 (Polar Night)
+   Surface:    #3b4252
+   Border:     #4c566a
+   Text:       #eceff4 / #d8dee9 / #e5e9f0
+   Accents:    #88c0d0 (frost), #81a1c1 (blue), #5e81ac (deep)
+   Aurora:     #a3be8c (green), #ebcb8b (yellow), #bf616a (red)
+   ============================================================ */
+
+[data-md-color-scheme="slate"] {
+  --md-default-bg-color: #2e3440;
+  --md-default-fg-color: #eceff4;
+  --md-default-fg-color--light: #d8dee9;
+  --md-default-fg-color--lighter: #e5e9f0;
+  --md-default-fg-color--lightest: #4c566a;
+
+  --md-primary-fg-color: #3b4252;
+  --md-primary-bg-color: #eceff4;
+
+  --md-accent-fg-color: #88c0d0;
+  --md-typeset-a-color: #88c0d0;
+
+  --md-code-bg-color: #3b4252;
+  --md-code-fg-color: #eceff4;
+
+  --md-typeset-color: #d8dee9;
+  --md-typeset-mark-color: rgba(235, 203, 139, 0.2);
+
+  --md-footer-bg-color: #2e3440;
+  --md-footer-bg-color--dark: #272c36;
+}
+
+[data-md-color-scheme="slate"] .md-header {
+  background: #2e3440;
+  border-bottom: 1px solid #4c566a;
+  box-shadow: none;
+}
+
+[data-md-color-scheme="slate"] .md-tabs {
+  background: #3b4252;
+  border-bottom: 1px solid #4c566a;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__link {
+  color: #d8dee9;
+  opacity: 0.7;
+}
+
+[data-md-color-scheme="slate"] .md-tabs__link--active,
+[data-md-color-scheme="slate"] .md-tabs__link:hover {
+  color: #88c0d0;
+  opacity: 1;
+}
+
+[data-md-color-scheme="slate"] .md-sidebar {
+  border-right: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-sidebar--secondary {
+  border-right: none;
+  border-left: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link {
+  color: #d8dee9;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link:hover {
+  color: #eceff4;
+}
+
+[data-md-color-scheme="slate"] .md-nav__link--active {
+  color: #88c0d0;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="slate"] .md-search__input {
+  background: #3b4252;
+  border: 1px solid #4c566a;
+  color: #eceff4;
+}
+
+[data-md-color-scheme="slate"] .md-footer {
+  background: #2e3440;
+  border-top: 1px solid #4c566a;
+  box-shadow: none;
+}
+
+[data-md-color-scheme="slate"] .md-footer-meta {
+  background: #272c36;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: #eceff4;
+}
+
+[data-md-color-scheme="slate"] .md-typeset h2 {
+  color: #e5e9f0;
+  border-bottom: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset hr {
+  border-color: #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background: #3b4252;
+  color: #88c0d0;
+  font-weight: 600;
+  border-bottom: 2px solid #4c566a;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) td {
+  border-bottom: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) tr:hover td {
+  background: rgba(136, 192, 208, 0.06);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition,
+[data-md-color-scheme="slate"] .md-typeset details {
+  background: #3b4252;
+  border-color: #4c566a;
+  box-shadow: none;
+}
+
+[data-md-color-scheme="slate"] .md-typeset pre > code {
+  border: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .highlight .filename {
+  background: #2e3440;
+  border-bottom: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li {
+  background: #3b4252;
+  border: 1px solid #434c5e;
+  box-shadow: none;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .grid.cards > ul > li:hover {
+  border-color: #88c0d0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+[data-md-color-scheme="slate"] .md-clipboard {
+  color: #4c566a;
+}
+
+[data-md-color-scheme="slate"] .md-clipboard:hover {
+  color: #88c0d0;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .md-typeset__table {
+  border: 1px solid #434c5e;
+}
+
+[data-md-color-scheme="slate"] .md-typeset code {
+  background: #3b4252;
+  color: #88c0d0;
+}
+
+/* ============================================================
+   LIGHT THEME — Solarized Light
+   Background: #fdf6e3 (base3)
+   Surface:    #eee8d5 (base2)
+   Border:     #d3cbb7
+   Text:       #657b83 (base00) / #586e75 (base01) / #073642 (base02)
+   Accents:    #268bd2 (blue), #2aa198 (cyan)
+   Others:     #859900 (green), #cb4b16 (orange), #dc322f (red)
+   ============================================================ */
+
+[data-md-color-scheme="default"] {
+  --md-default-bg-color: #fdf6e3;
+  --md-default-fg-color: #586e75;
+  --md-default-fg-color--light: #657b83;
+  --md-default-fg-color--lighter: #93a1a1;
+  --md-default-fg-color--lightest: #d3cbb7;
+
+  --md-primary-fg-color: #586e75;
+  --md-primary-bg-color: #fdf6e3;
+
+  --md-accent-fg-color: #268bd2;
+  --md-typeset-a-color: #268bd2;
+
+  --md-code-bg-color: #eee8d5;
+  --md-code-fg-color: #586e75;
+
+  --md-typeset-color: #586e75;
+  --md-typeset-mark-color: rgba(181, 137, 0, 0.15);
+}
+
+[data-md-color-scheme="default"] .md-header {
+  background: #586e75;
+  box-shadow: none;
+  border-bottom: 1px solid #4a6068;
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header .md-header__title {
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header .md-header__button,
+[data-md-color-scheme="default"] .md-header .md-header__topic,
+[data-md-color-scheme="default"] .md-header .md-logo,
+[data-md-color-scheme="default"] .md-header .md-icon,
+[data-md-color-scheme="default"] .md-header .md-search__icon,
+[data-md-color-scheme="default"] .md-header a {
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header .md-logo img,
+[data-md-color-scheme="default"] .md-header .md-header__button .md-icon {
+  color: #fdf6e3;
+  fill: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header svg {
+  fill: currentColor;
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header .md-source {
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-header .md-source__repository {
+  color: #fdf6e3;
+}
+
+[data-md-color-scheme="default"] .md-tabs {
+  background: #657b83;
+  border-bottom: 1px solid #4a6068;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link {
+  color: #eee8d5;
+  opacity: 0.8;
+}
+
+[data-md-color-scheme="default"] .md-tabs__link--active,
+[data-md-color-scheme="default"] .md-tabs__link:hover {
+  color: #fdf6e3;
+  opacity: 1;
+}
+
+[data-md-color-scheme="default"] .md-sidebar {
+  border-right: 1px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-sidebar--secondary {
+  border-right: none;
+  border-left: 1px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-nav__link {
+  color: #657b83;
+}
+
+[data-md-color-scheme="default"] .md-nav__link:hover {
+  color: #586e75;
+}
+
+[data-md-color-scheme="default"] .md-nav__link--active {
+  color: #268bd2;
+  font-weight: 600;
+}
+
+[data-md-color-scheme="default"] .md-search__input {
+  background: #eee8d5;
+  border: 1px solid #d3cbb7;
+  color: #586e75;
+}
+
+[data-md-color-scheme="default"] .md-footer {
+  background: #586e75;
+  border-top: 1px solid #4a6068;
+  box-shadow: none;
+  color: #eee8d5;
+}
+
+[data-md-color-scheme="default"] .md-footer a {
+  color: #eee8d5;
+}
+
+[data-md-color-scheme="default"] .md-footer svg {
+  fill: currentColor;
+  color: #eee8d5;
+}
+
+[data-md-color-scheme="default"] .md-footer-meta {
+  background: #4a6068;
+  color: #eee8d5;
+}
+
+[data-md-color-scheme="default"] .md-footer-nav__link {
+  color: #eee8d5;
+}
+
+[data-md-color-scheme="default"] .md-typeset h1 {
+  color: #073642;
+}
+
+[data-md-color-scheme="default"] .md-typeset h2 {
+  color: #073642;
+  border-bottom: 1px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset hr {
+  border-color: #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset table:not([class]) th {
+  background: #eee8d5;
+  color: #073642;
+  font-weight: 600;
+  border-bottom: 2px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset table:not([class]) td {
+  border-bottom: 1px solid #e6dfc9;
+}
+
+[data-md-color-scheme="default"] .md-typeset table:not([class]) tr:hover td {
+  background: rgba(38, 139, 210, 0.05);
+}
+
+[data-md-color-scheme="default"] .md-typeset .admonition,
+[data-md-color-scheme="default"] .md-typeset details {
+  background: #eee8d5;
+  border-color: #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset pre > code {
+  border: 1px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset code {
+  background: #eee8d5;
+  color: #2aa198;
+}
+
+[data-md-color-scheme="default"] .md-typeset .grid.cards > ul > li {
+  background: #eee8d5;
+  border: 1px solid #d3cbb7;
+}
+
+[data-md-color-scheme="default"] .md-typeset .grid.cards > ul > li:hover {
+  border-color: #268bd2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+[data-md-color-scheme="default"] .md-typeset .md-typeset__table {
+  border: 1px solid #d3cbb7;
+}
+
+/* ============================================================
+   SHARED STYLES
+   ============================================================ */
+
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.md-typeset h2 {
+  font-weight: 600;
+  margin-top: 2em;
+  padding-bottom: 0.3em;
+}
+
+.md-typeset .admonition,
+.md-typeset details {
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+.md-typeset code {
+  border-radius: 6px;
+}
+
+.md-typeset pre > code {
+  border-radius: 8px;
+}
+
+.md-typeset .md-typeset__table {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.md-typeset .grid.cards > ul > li {
+  border-radius: 12px;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.md-typeset .grid.cards > ul > li:hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   GLOBAL ATLAS BACKGROUND
+   ============================================================ */
+
+[data-md-color-scheme="slate"] .md-main {
+  background-color: #2e3440;
+  background-image:
+    radial-gradient(
+      circle at 22% 18%,
+      rgba(231, 190, 127, 0.08),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 78% 68%,
+      rgba(176, 116, 72, 0.1),
+      transparent 34%
+    ),
+    repeating-radial-gradient(
+      circle at 50% 56%,
+      rgba(216, 178, 117, 0.07) 0 1px,
+      transparent 1px 18px
+    ),
+    repeating-linear-gradient(
+      102deg,
+      rgba(209, 170, 109, 0.035) 0 2px,
+      transparent 2px 15px
+    ),
+    linear-gradient(145deg, rgba(43, 50, 64, 0.98), rgba(36, 41, 53, 0.97));
+  background-attachment: fixed;
+}
+
+[data-md-color-scheme="default"] .md-main {
+  background-color: #f3e7cc;
+  background-image:
+    radial-gradient(
+      circle at 20% 16%,
+      rgba(198, 150, 89, 0.2),
+      transparent 30%
+    ),
+    radial-gradient(
+      circle at 84% 72%,
+      rgba(163, 108, 69, 0.18),
+      transparent 34%
+    ),
+    repeating-radial-gradient(
+      circle at 52% 54%,
+      rgba(133, 95, 57, 0.1) 0 1px,
+      transparent 1px 18px
+    ),
+    repeating-linear-gradient(
+      102deg,
+      rgba(111, 82, 52, 0.06) 0 2px,
+      transparent 2px 15px
+    ),
+    linear-gradient(
+      145deg,
+      rgba(242, 226, 194, 0.98),
+      rgba(229, 206, 165, 0.96)
+    );
+  background-attachment: fixed;
+}
+
+[data-md-color-scheme="slate"] .md-main__inner,
+[data-md-color-scheme="default"] .md-main__inner {
+  background: transparent;
+}
+
+/* ============================================================
+   POE HERO BLOCK
+   Atlas/parchment-inspired background without external assets.
+   ============================================================ */
+
+.md-typeset .poe-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0.75rem 0 1.25rem;
+  padding: 1.2rem 1.25rem 1rem;
+  min-height: 9.5rem;
+  border-radius: 0.7rem;
+  border: 1px solid rgba(229, 183, 121, 0.42);
+  background:
+    radial-gradient(
+      circle at 14% 18%,
+      rgba(235, 193, 124, 0.22),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 84% 78%,
+      rgba(145, 86, 49, 0.25),
+      transparent 38%
+    ),
+    linear-gradient(130deg, #3d2f22 0%, #2b2119 52%, #241b15 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 0 90px rgba(0, 0, 0, 0.24),
+    0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.md-typeset .poe-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-radial-gradient(
+      circle at 60% 52%,
+      rgba(233, 199, 140, 0.22) 0 1px,
+      transparent 1px 14px
+    ),
+    repeating-linear-gradient(
+      12deg,
+      rgba(255, 230, 184, 0.08) 0 2px,
+      transparent 2px 10px
+    );
+  opacity: 0.78;
+  pointer-events: none;
+}
+
+.md-typeset .poe-hero::after {
+  content: "";
+  position: absolute;
+  right: -1.4rem;
+  top: -1.8rem;
+  width: 8.4rem;
+  height: 8.4rem;
+  border-radius: 50%;
+  border: 1px solid rgba(234, 194, 130, 0.36);
+  box-shadow:
+    0 0 0 1.15rem rgba(234, 194, 130, 0.16),
+    0 0 0 2.45rem rgba(234, 194, 130, 0.1),
+    0 0 0 3.85rem rgba(234, 194, 130, 0.06);
+  opacity: 0.82;
+  pointer-events: none;
+}
+
+.md-typeset .poe-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .poe-hero h3 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  color: #f4e7ce;
+}
+
+[data-md-color-scheme="slate"] .md-typeset .poe-hero p {
+  margin-bottom: 0;
+  color: #ead9b8;
+}
+
+[data-md-color-scheme="default"] .md-typeset .poe-hero {
+  border-color: rgba(136, 94, 55, 0.45);
+  background:
+    radial-gradient(
+      circle at 16% 18%,
+      rgba(203, 166, 108, 0.35),
+      transparent 34%
+    ),
+    radial-gradient(
+      circle at 86% 76%,
+      rgba(172, 117, 74, 0.28),
+      transparent 38%
+    ),
+    linear-gradient(135deg, #efe0bc 0%, #e3cfaa 54%, #d7bf95 100%);
+  box-shadow:
+    inset 0 0 0 1px rgba(110, 79, 49, 0.18),
+    inset 0 0 72px rgba(133, 94, 54, 0.14),
+    0 10px 24px rgba(88, 110, 117, 0.16);
+}
+
+[data-md-color-scheme="default"] .md-typeset .poe-hero::before {
+  background:
+    repeating-radial-gradient(
+      circle at 60% 52%,
+      rgba(106, 75, 44, 0.2) 0 1px,
+      transparent 1px 14px
+    ),
+    repeating-linear-gradient(
+      12deg,
+      rgba(88, 64, 41, 0.09) 0 2px,
+      transparent 2px 10px
+    );
+}
+
+[data-md-color-scheme="default"] .md-typeset .poe-hero::after {
+  border-color: rgba(132, 88, 49, 0.42);
+  box-shadow:
+    0 0 0 1.15rem rgba(132, 88, 49, 0.16),
+    0 0 0 2.45rem rgba(132, 88, 49, 0.1),
+    0 0 0 3.85rem rgba(132, 88, 49, 0.06);
+}
+
+[data-md-color-scheme="default"] .md-typeset .poe-hero h3 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  color: #4b351f;
+}
+
+[data-md-color-scheme="default"] .md-typeset .poe-hero p {
+  margin-bottom: 0;
+  color: #5f4730;
+}
+
+@media (max-width: 768px) {
+  .md-typeset .poe-hero {
+    min-height: auto;
+    padding: 0.95rem 0.95rem;
+  }
+
+  .md-typeset .poe-hero::after {
+    right: -2rem;
+    top: -2.4rem;
+  }
+}

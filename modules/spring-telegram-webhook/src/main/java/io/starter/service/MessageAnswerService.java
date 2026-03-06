@@ -6,6 +6,8 @@ import io.starter.cache.state.CallbackState;
 import io.starter.cache.state.MessageState;
 import io.starter.constants.Constants;
 import io.starter.constants.Emoji;
+import io.starter.dao.UserDao;
+import io.starter.entity.LeagueEntity;
 import io.starter.generator.messages.SendMessageGenerator;
 import io.starter.generator.replykeyboard.InlineKeyboardGenerator;
 import io.starter.generator.replykeyboard.ReplyKeyboardGenerator;
@@ -26,6 +28,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 public class MessageAnswerService {
 
   private final SettingsService settingsService;
+  private final UserDao userDao;
+  private final DataAccessService dataAccessService;
 
   public SendMessage onFirstStart(Message message) {
     List<String> line1 = List.of(MessageState.START.value, MessageState.SETTINGS.value);
@@ -38,18 +42,33 @@ public class MessageAnswerService {
 
   public SendMessage onClickStart(Message message) {
     String inlineMessage = Constants.General.QUESTION;
-    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickStart();
+    InlineKeyboardMarkup inlineKeyboard = keyboardOnClickStart(message);
     return SendMessageGenerator.generate(inlineMessage, message.getChatId(), inlineKeyboard);
   }
 
-  private InlineKeyboardMarkup keyboardOnClickStart() {
+  private InlineKeyboardMarkup keyboardOnClickStart(Message message) {
+    String skillsButtonText = resolveSkillsButtonText(message);
     InlineKeyboardButton button1 = InlineKeyboardButtonGenerator
-        .generate(Constants.Start.SKILLS, CallbackState.SKILLS.value);
+        .generate(skillsButtonText, CallbackState.SKILLS.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
         .generate(Constants.Start.VENDOR_RECIPES, CallbackState.VENDOR_RECIPES.value);
     List<InlineKeyboardButton> row1 = List.of(button1, button2);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1);
     return InlineKeyboardGenerator.withRows(keyboard);
+  }
+
+  private String resolveSkillsButtonText(Message message) {
+    try {
+      LeagueEntity league = userDao.readLeague(message.getFrom());
+      if (league == null) {
+        return Constants.Start.SKILLS;
+      }
+      return dataAccessService.findDivineOrbChaosRate(league)
+          .map(rate -> Constants.Start.SKILLS_WITH_DIVINE_RATE.formatted(Math.round(rate)))
+          .orElse(Constants.Start.SKILLS);
+    } catch (Exception ignored) {
+      return Constants.Start.SKILLS;
+    }
   }
 
   public SendMessage onClickSettings(Message message) {

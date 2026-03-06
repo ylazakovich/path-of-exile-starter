@@ -2,6 +2,7 @@ package io.starter.dao;
 
 import java.util.Objects;
 
+import io.starter.constants.CurrencyDisplay;
 import io.starter.constants.League;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.UserEntity;
@@ -50,6 +51,9 @@ public class UserDao {
                          League setting) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(setting.id);
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = resolveDefaultLeague();
+    }
     userEntity.setLeague(leagueEntity);
     save(userEntity);
   }
@@ -70,9 +74,38 @@ public class UserDao {
     save(entity);
   }
 
+  public int readRecipePage(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    return Objects.requireNonNullElse(entity.getRecipePage(), 1);
+  }
+
+  public void saveRecipePage(User user, int page) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    entity.setRecipePage(page);
+    save(entity);
+  }
+
+  public CurrencyDisplay readCurrency(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    if (entity == null || entity.getCurrencyDisplay() == null) {
+      return CurrencyDisplay.CHAOS;
+    }
+    try {
+      return CurrencyDisplay.valueOf(entity.getCurrencyDisplay());
+    } catch (IllegalArgumentException ignored) {
+      return CurrencyDisplay.CHAOS;
+    }
+  }
+
+  public void saveCurrency(User user, CurrencyDisplay currencyDisplay) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    entity.setCurrencyDisplay(currencyDisplay.name());
+    save(entity);
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
-    LeagueEntity leagueEntity = leagueRepository.findById(9L);
+    LeagueEntity leagueEntity = resolveDefaultLeague();
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
       userEntity.setLeague(leagueEntity);
@@ -81,7 +114,23 @@ public class UserDao {
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
       userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       userEntity.setSkillPage(1);
+      userEntity.setRecipePage(1);
+      userEntity.setCurrencyDisplay(CurrencyDisplay.CHAOS.name());
       save(userEntity);
     }
+  }
+
+  private LeagueEntity resolveDefaultLeague() {
+    LeagueEntity leagueEntity = leagueRepository.findById(League.STANDARD.id);
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = leagueRepository.findByName("Standard");
+    }
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = leagueRepository.findAll().stream().findFirst().orElse(null);
+    }
+    if (Objects.isNull(leagueEntity)) {
+      throw new IllegalStateException("No leagues are present in DB, cannot initialize user");
+    }
+    return leagueEntity;
   }
 }

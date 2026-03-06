@@ -13,4 +13,6 @@ public interface VendorRecipeRepository extends JpaRepository<VendorRecipeEntity
   List<VendorRecipeEntity> findAllByLeague(LeagueEntity league);
 
   Optional<VendorRecipeEntity> findByLeagueAndName(LeagueEntity league, String name);
+
+  void deleteByLeagueAndName(LeagueEntity league, String name);
 }

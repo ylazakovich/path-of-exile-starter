@@ -1,22 +1,21 @@
 package io.starter.controller;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
-import io.starter.entity.UniqueJewelEntity;
-import io.starter.model.ninja.UniqueJewel;
-import io.starter.recipes.AnimaStoneRecipe;
+import io.starter.entity.VendorRecipeEntity;
 import io.starter.service.DataAccessService;
+import io.starter.service.VendorRecipeCalculatorService;
 import io.starter.service.VendorRecipeService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -26,45 +25,55 @@ import org.springframework.web.bind.annotation.RestController;
 public class VendorRecipeController {
 
   private final DataAccessService dataAccessService;
+  private final VendorRecipeCalculatorService vendorRecipeCalculatorService;
   private final VendorRecipeService vendorRecipeService;
 
-  @PostMapping("/anima-stone/load")
-  public void loadUniqueAnimaStones() {
-    dataAccessService.findLeagues().forEach(this::loadUniqueAnimaStones);
+  @GetMapping
+  public List<VendorRecipeEntity> getVendorRecipesByLeague(@RequestParam("league") String league) {
+    LeagueEntity leagueEntity = dataAccessService.findLeagueByName(league);
+    if (leagueEntity == null) {
+      return List.of();
+    }
+    return dataAccessService.findVendorRecipesByLeague(leagueEntity);
   }
 
-  private void loadUniqueAnimaStones(LeagueEntity league) {
-    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
-        .ifPresent(jewel -> {
-          List<UniqueJewelEntity> ingredients = Stream.of(
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
-              ).flatMap(Optional::stream)
-              .toList();
-          AnimaStoneRecipe animaStoneRecipe = new AnimaStoneRecipe(jewel.getName(), league, jewel.getChaosEquivalent());
-          vendorRecipeService.saveAnimaStoneRecipe(animaStoneRecipe, ingredients);
-          log.info("Anima Stone recipe saved successfully for league '{}'", league.getName());
-        });
+  @GetMapping("/diagnostics")
+  public List<VendorRecipeCalculatorService.RecipeDiagnostic> getVendorRecipeDiagnostics(@RequestParam("league") String league) {
+    LeagueEntity leagueEntity = dataAccessService.findLeagueByName(league);
+    if (leagueEntity == null) {
+      return List.of();
+    }
+    return vendorRecipeCalculatorService.diagnoseRecipesForLeague(leagueEntity);
+  }
+
+  @PostMapping("/load")
+  public void loadVendorRecipes() {
+    dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
   }
 
   @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
-  public void updateAnimaStoneRecipes() {
-    dataAccessService.findLeagues().forEach(this::updateAnimaStoneRecipe);
+  public void updateVendorRecipes() {
+    dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
   }
 
-  private void updateAnimaStoneRecipe(LeagueEntity league) {
-    dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.ANIMA_STONE.value, league)
-        .ifPresent(jewel -> {
-          List<UniqueJewelEntity> ingredients = Stream.of(
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_EMINENCE.value, league),
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_HARMONY.value, league),
-                  dataAccessService.findUniqueJewelByLeague(UniqueJewel.ResolvedName.PRIMORDIAL_MIGHT.value, league)
-              ).flatMap(Optional::stream)
-              .toList();
-          AnimaStoneRecipe animaStoneRecipe = new AnimaStoneRecipe(jewel.getName(), league, jewel.getChaosEquivalent());
-          vendorRecipeService.updateAnimaStoneRecipe(animaStoneRecipe, ingredients);
-          log.info("Anima Stone recipe updated for league '{}'", league.getName());
-        });
+  private void loadVendorRecipesForLeague(LeagueEntity league) {
+    List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
+    vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
+    int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
+    if (persistedRecipes == 0) {
+      log.warn(
+          "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+          league.getName(),
+          calculatedRecipes.size(),
+          persistedRecipes
+      );
+      return;
+    }
+    log.info(
+        "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
+        league.getName(),
+        calculatedRecipes.size(),
+        persistedRecipes
+    );
   }
 }

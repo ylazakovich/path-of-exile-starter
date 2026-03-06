@@ -1,0 +1,2 @@
+ALTER TABLE users
+    ADD COLUMN recipe_page INT NOT NULL DEFAULT 1;

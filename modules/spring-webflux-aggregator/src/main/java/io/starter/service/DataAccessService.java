@@ -53,7 +53,7 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public Optional<RateEntity> findRateByNameAndLeague(String name, LeagueEntity league) {
-    return Optional.ofNullable(ratesRepository.findByNameAndLeague(name, league));
+    return findRatesByNameAndLeague(name, league).stream().findFirst();
   }
 
   @Transactional(readOnly = true)
@@ -68,7 +68,17 @@ public class DataAccessService {
 
   @Transactional(readOnly = true)
   public Optional<UniqueJewelEntity> findUniqueJewelByLeague(String name, LeagueEntity league) {
-    return uniqueJewelsRepository.findByNameAndLeague(name, league);
+    return findUniqueJewelsByNameAndLeague(name, league).stream().findFirst();
+  }
+
+  @Transactional(readOnly = true)
+  public List<UniqueJewelEntity> findUniqueJewelsByNameAndLeague(String name, LeagueEntity league) {
+    return uniqueJewelsRepository.findAllByNameAndLeague(name, league);
+  }
+
+  @Transactional(readOnly = true)
+  public List<RateEntity> findRatesByNameAndLeague(String name, LeagueEntity league) {
+    return ratesRepository.findAllByNameAndLeague(name, league);
   }
 
   @Transactional(readOnly = true)
@@ -79,6 +89,11 @@ public class DataAccessService {
   @Transactional(readOnly = true)
   public Optional<VendorRecipeEntity> findVendorRecipeByNameAndLeague(String value, LeagueEntity league) {
     return vendorRecipeRepository.findByLeagueAndName(league, value);
+  }
+
+  @Transactional(readOnly = true)
+  public List<VendorRecipeEntity> findVendorRecipesByLeague(LeagueEntity league) {
+    return vendorRecipeRepository.findAllByLeague(league);
   }
 
   @Transactional(readOnly = true)
@@ -116,6 +131,11 @@ public class DataAccessService {
   @Transactional
   public void saveVendorRecipe(VendorRecipeEntity entity) {
     vendorRecipeRepository.save(entity);
+  }
+
+  @Transactional
+  public void deleteVendorRecipeByNameAndLeague(String name, LeagueEntity league) {
+    vendorRecipeRepository.deleteByLeagueAndName(league, name);
   }
 
   @Transactional

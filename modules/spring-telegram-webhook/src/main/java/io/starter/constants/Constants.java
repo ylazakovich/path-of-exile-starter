@@ -15,8 +15,9 @@ public class Constants {
 
   public static class Start {
     public static final String SKILLS_GUIDE_LINK =
-        "https://github.com/ylazakovich/path-of-exile-starter/blob/main/docs/guides/how_to_interact_with_skills.md";
+        "https://ylazakovich.github.io/path-of-exile-starter/guides/how_to_interact_with_skills/";
     public static final String SKILLS = "Skills";
+    public static final String SKILLS_WITH_DIVINE_RATE = "Skills (1 div = %d c)";
     public static final String VENDOR_RECIPES = "Vendor Recipes";
   }
 
@@ -31,19 +32,26 @@ public class Constants {
 
     // TODO: Later need to make a feature for bot to show current user league dynamically
     public static final String ANSWER_FORMAT = """
-        If you want change league
+        If you want change settings
         please select one of available options
-        
-        ⭐ - Your Current League
-        
+
+        ⭐ - Current selection
+
+        League:
         ➡️ Standard %s
         ➡️ League %s
         ➡️ Hardcore %s
-        ➡️ League Hardcore %s""";
+        ➡️ League Hardcore %s
+
+        Currency:
+        ➡️ Chaos Orbs %s
+        ➡️ Divine Orbs %s""";
     public static final String STANDARD = "Standard";
     public static final String HARDCORE = "Hardcore";
     public static final String LEAGUE = "League";
     public static final String LEAGUE_HARDCORE = "League Hardcore";
+    public static final String CURRENCY_CHAOS = "Chaos Orbs";
+    public static final String CURRENCY_DIVINE = "Divine Orbs";
 
     public static final String SETTINGS_UPDATED = "Your settings has been updated";
   }

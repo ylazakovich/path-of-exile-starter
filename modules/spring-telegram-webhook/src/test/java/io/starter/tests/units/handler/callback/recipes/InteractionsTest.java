@@ -12,8 +12,10 @@ import io.starter.tests.units.handler.callback.BaseCallbackTest;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.testng.annotations.Test;
+import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -57,18 +59,33 @@ public class InteractionsTest extends BaseCallbackTest {
 
   @Test(description = "Bot should react on clicking button 'Vendor Recipes'")
   void testUserInteractionInVendorRecipesMenu() {
+    LeagueEntity leagueEntity = mock(LeagueEntity.class);
     UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
     TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
     String callbackQueryId = String.valueOf(faker.number().positive());
+    VendorRecipeEntity cheap = new VendorRecipeEntity("Cheap Recipe", 10.0, 3.0);
+    VendorRecipeEntity expensive = new VendorRecipeEntity("Expensive Recipe", 100.0, 20.0);
 
+    when(leagueEntity.getName()).thenReturn("Testing League");
     when(callbackQuery.getData()).thenReturn(CallbackState.VENDOR_RECIPES.value);
     when(callbackQuery.getId()).thenReturn(callbackQueryId);
+    when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    when(userDao.readRecipePage(user)).thenReturn(1);
+    doNothing().when(userDao).saveRecipePage(user, 1);
+    when(dataAccessService.findAllVendorRecipes(leagueEntity)).thenReturn(java.util.List.of(cheap, expensive));
+    when(a8rService.getVendorRecipeDiagnostics("Testing League")).thenReturn(Mono.just(java.util.List.of()));
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     EditMessageText expected = callbackAnswerService.onClickVendorRecipes(callbackQuery);
     EditMessageText actual = (EditMessageText) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
-    assertThat(actual.getText()).contains("Select a vendor recipe");
+    assertThat(actual.getText()).contains("Cheap Recipe");
+    assertThat(actual.getText()).contains("Ingredients");
+    assertThat(actual.getText()).doesNotContain("Recipe:");
+    assertThat(actual.getText()).contains(":");
+    assertThat(actual.getText()).doesNotContain("Craft cost");
+    assertThat(actual.getText()).doesNotContain("Profit");
+    assertThat(actual.getText()).doesNotContain("Result price");
     assertThat(actual).isEqualTo(expected);
   }
 }

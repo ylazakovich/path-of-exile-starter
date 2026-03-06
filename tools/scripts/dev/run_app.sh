@@ -4,6 +4,16 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../lib/logging.sh"
 export COMPOSE_PROJECT_NAME="path-of-exile-starter"
+ROOT_DIR="$(cd -- "$SCRIPT_DIR/../../.." && pwd)"
+ENV_FILE="$ROOT_DIR/.env"
+
+if [[ -f "$ENV_FILE" ]]; then
+  set -a
+  # shellcheck disable=SC1090
+  source "$ENV_FILE"
+  set +a
+  info "Loaded environment from $ENV_FILE"
+fi
 
 if [[ "${CI:-}" == "true" ]]; then
   export GRADLE_OPTS="-Dorg.gradle.console=plain"

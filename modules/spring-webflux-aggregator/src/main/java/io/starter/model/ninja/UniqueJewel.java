@@ -20,6 +20,8 @@ public class UniqueJewel {
 
   @JsonProperty("name")
   private String name;
+  @JsonProperty("links")
+  private Integer links;
   @JsonProperty("chaosValue")
   private double chaosEquivalent;
 

@@ -1,0 +1,2 @@
+ALTER TABLE users
+    ADD COLUMN currency_display VARCHAR(32) NOT NULL DEFAULT 'CHAOS';

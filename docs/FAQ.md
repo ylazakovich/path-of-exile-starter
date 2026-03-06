@@ -1,100 +1,39 @@
-# 📢 FAQ
+# FAQ
 
-#### Q: Does Telegram bot work over Webhook ?
+## Does Telegram bot work over Webhook?
 
-Yes, bot uses webhooks implementation \
-Application is realized over `Spring` framework
+Yes. The bot uses Spring webhook integration.
 
-#### Q: Which resources do you use for checking actual prices ?
+## Which source is used for market prices?
 
-Currently, bot check prices over https://poe.ninja/
+The project uses [poe.ninja](https://poe.ninja/) as the primary market data source.
 
-#### Q: How to up bot locally ?
+## How to run the bot locally?
 
-So, for that purpose I would recommend you to use ngrok \
-Then go into [BotConfiguration.class](https://github.com/ylazakovich/path-of-exile-starter/blob/main/modules/telegram/src/main/java/io/starter/telegram/config/BotConfiguration.java)
-
-- webhook - links from ngrok
-- token - BotFather provide this token
-
-<details>
-<summary>Example</summary>
-
-```java
-
-@Key("TELEGRAM_BOT_WEBHOOK")
-@DefaultValue("https://1234-567-890-00-111.ngrok-free.app")
-String webHook();
-
-@Key("TELEGRAM_BOT_TOKEN")
-@DefaultValue("1234567890:AABBCC-DDDDD")
-String token();
-```
-
-</details>
-
-Then
-
-**Option 1**
-
-1. run `docker-compose.yml`
-2. start application from aggregator module
-3. start application from telegram module
-
-**Option 2**
-
-Run via console
+Use helper scripts:
 
 ```bash
-./run_app.sh
+bash tools/scripts/dev/run_app.sh
 ```
 
-When want to restart your app
-
-1. stop application via console
+Stop services with:
 
 ```bash
-./stop_app.sh
+bash tools/scripts/dev/stop_app.sh
 ```
 
-2. start application via console
+## Do I need to call Telegram API manually to register webhook?
 
-Then \
-Bot is ready for working
+No. Webhook subscription is handled by the application startup flow.
 
-#### Q: Should I run api call for assigning webhook ?
+## Which database is used?
 
-No, you don't need to do it \
-Bot has controller which assign webhook to bot after starting application
+MariaDB with Flyway migrations.
 
-#### Q: Which database you have decided to use ?
+## How is project stability controlled?
 
-I decided to use `mariadb` \
-Also application use migrations flow over flyway mechanism
+GitHub Actions pipelines run checks on pull requests and on `main` branch.
 
-#### Q: Are you planning to make a documentation ?
+## Are dependency versions updated automatically?
 
-It is possible, but at the moment I have no a lot of free time \
-I haven't finished yet `1.0.0` version
-
-#### Q: Are you controlling library versions ?
-
-Repository is connected to renovate with \
-regular checking and managing \
-new versions of libs
-
-#### Q: How do you control stability of your app ?
-
-Repository is connected to github actions
-
-1. Each pull request/merge into `main` triggers unit tests
-2. Integrations tests are in progress now and later will be done
-
-- Every release should run pipeline with running these tests
-- Nightly builds will have a rule for running these tests only manually
-
-#### Q: Are you planning to make a chat for communicate about this project ?
-
-Yes, I have a plan for that in future \
-Currently, I would recommend you to stay your feedback \
-over `issues` or `discussion`
+Yes. The repository uses Renovate for automated dependency updates.

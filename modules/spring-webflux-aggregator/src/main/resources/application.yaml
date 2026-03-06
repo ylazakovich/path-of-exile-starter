@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: classpath:vendor-recipes.yaml
+
   datasource:
     url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/mariadb
     username: root
