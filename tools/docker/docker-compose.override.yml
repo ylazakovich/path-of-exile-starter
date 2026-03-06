@@ -31,6 +31,8 @@ services:
       DATABASE_HOST: mariadb
       DATABASE_PORT: 3306
       A8R_BASE_URL: http://spring-webflux-aggregator:8080
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_BOT_WEBHOOK: ${TELEGRAM_BOT_WEBHOOK}
 
   mariadb:
     ports: ["3306:3306"]

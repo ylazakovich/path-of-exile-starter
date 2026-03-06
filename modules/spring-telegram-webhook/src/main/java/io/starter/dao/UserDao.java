@@ -50,6 +50,9 @@ public class UserDao {
                          League setting) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(setting.id);
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = resolveDefaultLeague();
+    }
     userEntity.setLeague(leagueEntity);
     save(userEntity);
   }
@@ -83,7 +86,7 @@ public class UserDao {
 
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
-    LeagueEntity leagueEntity = leagueRepository.findById(9L);
+    LeagueEntity leagueEntity = resolveDefaultLeague();
     if (Objects.isNull(userEntity)) {
       userEntity = new UserEntity();
       userEntity.setLeague(leagueEntity);
@@ -95,5 +98,19 @@ public class UserDao {
       userEntity.setRecipePage(1);
       save(userEntity);
     }
+  }
+
+  private LeagueEntity resolveDefaultLeague() {
+    LeagueEntity leagueEntity = leagueRepository.findById(League.STANDARD.id);
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = leagueRepository.findByName("Standard");
+    }
+    if (Objects.isNull(leagueEntity)) {
+      leagueEntity = leagueRepository.findAll().stream().findFirst().orElse(null);
+    }
+    if (Objects.isNull(leagueEntity)) {
+      throw new IllegalStateException("No leagues are present in DB, cannot initialize user");
+    }
+    return leagueEntity;
   }
 }
