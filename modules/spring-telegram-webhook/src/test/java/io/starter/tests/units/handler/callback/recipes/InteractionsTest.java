@@ -12,6 +12,7 @@ import io.starter.tests.units.handler.callback.BaseCallbackTest;
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.testng.annotations.Test;
+import reactor.core.publisher.Mono;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -72,13 +73,16 @@ public class InteractionsTest extends BaseCallbackTest {
     when(userDao.readRecipePage(user)).thenReturn(1);
     doNothing().when(userDao).saveRecipePage(user, 1);
     when(dataAccessService.findAllVendorRecipes(leagueEntity)).thenReturn(java.util.List.of(cheap, expensive));
+    when(a8rService.getVendorRecipeDiagnostics("Testing League")).thenReturn(Mono.just(java.util.List.of()));
     BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
 
     EditMessageText expected = callbackAnswerService.onClickVendorRecipes(callbackQuery);
     EditMessageText actual = (EditMessageText) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
     assertThat(actual.getText()).contains("Cheap Recipe");
-    assertThat(actual.getText()).contains("Expensive Recipe");
+    assertThat(actual.getText()).contains("Craft cost");
+    assertThat(actual.getText()).contains("Result price");
+    assertThat(actual.getText()).contains("Profit");
     assertThat(actual).isEqualTo(expected);
   }
 }
