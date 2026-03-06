@@ -23,6 +23,7 @@ import io.starter.model.aggregator.VendorRecipeDiagnostic;
 import io.starter.model.aggregator.VendorRecipeItemDiagnostic;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
@@ -34,6 +35,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CallbackAnswerService {
 
   private static final int TABLE_WIDTH = 52;
@@ -243,15 +245,37 @@ public class CallbackAnswerService {
       diagnostics = Optional.ofNullable(a8rService.getVendorRecipeDiagnostics(leagueName)
               .onErrorReturn(List.of())
               .toFuture()
-              .get(3, TimeUnit.SECONDS))
+              .get(10, TimeUnit.SECONDS))
           .orElse(List.of());
     } catch (Exception exception) {
+      log.warn(
+          "Failed to load vendor diagnostics for league='{}', recipe='{}'. Ingredients will be unavailable.",
+          leagueName,
+          recipeName,
+          exception
+      );
       diagnostics = List.of();
     }
-    return diagnostics.stream()
+    VendorRecipeDiagnostic matchedDiagnostic = diagnostics.stream()
         .filter(diagnostic -> diagnostic != null && recipeName.equalsIgnoreCase(diagnostic.recipeName()))
         .findFirst()
         .orElse(null);
+    if (matchedDiagnostic == null) {
+      matchedDiagnostic = diagnostics.stream()
+          .filter(diagnostic -> diagnostic != null
+              && normalizeName(recipeName).equals(normalizeName(diagnostic.recipeName())))
+          .findFirst()
+          .orElse(null);
+    }
+    if (matchedDiagnostic == null) {
+      log.warn(
+          "Vendor diagnostics recipe is not matched: league='{}', recipe='{}', diagnosticsCount={}",
+          leagueName,
+          recipeName,
+          diagnostics.size()
+      );
+    }
+    return matchedDiagnostic;
   }
 
   private int checkAndSyncPage(int page, int itemsCount, int itemsPerPage) {
@@ -276,8 +300,11 @@ public class CallbackAnswerService {
     return value.replace("`", "'");
   }
 
-  private String formatChaosValue(double value) {
-    return "%d c".formatted(Math.round(value));
+  private String normalizeName(String value) {
+    if (value == null) {
+      return StringUtils.EMPTY;
+    }
+    return value.trim().replaceAll("\\s+", " ").toLowerCase();
   }
 
   private String formatDisplayedValue(double chaosValue, CurrencyDisplay currencyDisplay, Double divineRate) {
