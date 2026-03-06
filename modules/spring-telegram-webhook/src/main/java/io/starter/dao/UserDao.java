@@ -2,6 +2,7 @@ package io.starter.dao;
 
 import java.util.Objects;
 
+import io.starter.constants.CurrencyDisplay;
 import io.starter.constants.League;
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.UserEntity;
@@ -84,6 +85,24 @@ public class UserDao {
     save(entity);
   }
 
+  public CurrencyDisplay readCurrency(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    if (entity == null || entity.getCurrencyDisplay() == null) {
+      return CurrencyDisplay.CHAOS;
+    }
+    try {
+      return CurrencyDisplay.valueOf(entity.getCurrencyDisplay());
+    } catch (IllegalArgumentException ignored) {
+      return CurrencyDisplay.CHAOS;
+    }
+  }
+
+  public void saveCurrency(User user, CurrencyDisplay currencyDisplay) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    entity.setCurrencyDisplay(currencyDisplay.name());
+    save(entity);
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = resolveDefaultLeague();
@@ -96,6 +115,7 @@ public class UserDao {
       userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       userEntity.setSkillPage(1);
       userEntity.setRecipePage(1);
+      userEntity.setCurrencyDisplay(CurrencyDisplay.CHAOS.name());
       save(userEntity);
     }
   }

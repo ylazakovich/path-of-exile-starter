@@ -22,3 +22,6 @@ shared/bin
 # Local resources
 modules/**/local_resources/
 *.env
+
+# Documentation build output
+public

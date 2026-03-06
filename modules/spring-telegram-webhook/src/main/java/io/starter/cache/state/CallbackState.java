@@ -12,6 +12,8 @@ public enum CallbackState {
   SETTING_LEAGUE("Pressing button with 'League'"),
   SETTING_HARDCORE("Pressing button with 'Hardcore'"),
   SETTING_LEAGUE_HARDCORE("Pressing button with 'League Hardcore'"),
+  SETTING_CURRENCY_CHAOS("Pressing button with 'Chaos Orbs'"),
+  SETTING_CURRENCY_DIVINE("Pressing button with 'Divine Orbs'"),
   SKILLS("Pressing button with 'Skills'"),
   REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
   VENDOR_RECIPES("Pressing button with 'Vendor Recipes'"),

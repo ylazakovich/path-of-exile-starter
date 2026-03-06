@@ -4,6 +4,7 @@ import io.starter.cache.CallbackCache;
 import io.starter.cache.MessageCache;
 import io.starter.dao.UserDao;
 import io.starter.service.CallbackAnswerService;
+import io.starter.service.DataAccessService;
 import io.starter.service.MessageAnswerService;
 import io.starter.service.SettingsService;
 import io.starter.tests.BaseTest;
@@ -22,12 +23,17 @@ public abstract class BaseMessageTest extends BaseTest {
 
   protected final CallbackAnswerService callbackAnswerService = mock(CallbackAnswerService.class);
   protected final SettingsService settingsService = mock(SettingsService.class);
+  protected final DataAccessService dataAccessService = mock(DataAccessService.class);
   protected final UserDao userDao = mock(UserDao.class);
   protected final Message message = mock(Message.class);
   protected final Update update = mock(Update.class);
   protected final User user = mock(User.class);
 
-  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(settingsService));
+  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(
+      settingsService,
+      userDao,
+      dataAccessService
+  ));
   protected final CallbackCache callbackCache = spy(CallbackCache.class);
   protected final MessageCache messageCache = spy(MessageCache.class);
 

@@ -48,7 +48,12 @@ public class UpdateHandler {
     userDao.saveWhenNotExist(user);
     userDao.saveLastMessageId(user, message);
     return switch (state) {
-      case SETTING_STANDARD, SETTING_LEAGUE, SETTING_HARDCORE, SETTING_LEAGUE_HARDCORE
+      case SETTING_STANDARD,
+          SETTING_LEAGUE,
+          SETTING_HARDCORE,
+          SETTING_LEAGUE_HARDCORE,
+          SETTING_CURRENCY_CHAOS,
+          SETTING_CURRENCY_DIVINE
           -> callbackAnswerService.onClickSetting(callback);
       case SKILLS, REFRESH_SKILLS, SKILLS_PREVIOUS, SKILLS_NEXT -> callbackAnswerService.onClickSkills(callback);
       case VENDOR_RECIPES, REFRESH_VENDOR_RECIPES, VENDOR_RECIPES_PREVIOUS, VENDOR_RECIPES_NEXT

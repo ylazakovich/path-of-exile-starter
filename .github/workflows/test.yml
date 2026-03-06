@@ -86,18 +86,21 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
+          destination_dir: allure
+          keep_files: true
       - name: 🌐 Publish Allure PR preview to GitHub Pages
         if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1' && github.event.pull_request.head.repo.full_name == github.repository
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
-          destination_dir: pr-${{ github.event.pull_request.number }}
+          destination_dir: allure/pr-${{ github.event.pull_request.number }}
+          keep_files: true
       - name: 📝 Add Allure report link to PR
         if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         env:
-          ALLURE_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/pr-${{ github.event.pull_request.number }}/
+          ALLURE_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/allure/pr-${{ github.event.pull_request.number }}/
         with:
           script: |
             const body = `Allure report: ${process.env.ALLURE_REPORT_URL}`;

@@ -22,7 +22,9 @@ public class CallbackHandlerProvider {
         {CallbackState.SETTING_STANDARD},
         {CallbackState.SETTING_LEAGUE},
         {CallbackState.SETTING_HARDCORE},
-        {CallbackState.SETTING_LEAGUE_HARDCORE}
+        {CallbackState.SETTING_LEAGUE_HARDCORE},
+        {CallbackState.SETTING_CURRENCY_CHAOS},
+        {CallbackState.SETTING_CURRENCY_DIVINE}
     };
   }
 }

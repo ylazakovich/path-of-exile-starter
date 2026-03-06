@@ -5,10 +5,12 @@ import java.util.Optional;
 
 import io.starter.entity.LeagueEntity;
 import io.starter.entity.ProcessedSkillEntity;
+import io.starter.entity.RateEntity;
 import io.starter.entity.UniqueJewelEntity;
 import io.starter.entity.VendorRecipeEntity;
 import io.starter.model.aggregator.Skill;
 import io.starter.repo.ProcessedSkillsRepository;
+import io.starter.repo.RateRepository;
 import io.starter.repo.UniqueJewelsRepository;
 import io.starter.repo.VendorRecipeRepository;
 
@@ -19,17 +21,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class DataAccessService {
 
+  private static final String DIVINE_ORB = "Divine Orb";
+
   private final ProcessedSkillsRepository processedSkillsRepository;
   private final VendorRecipeRepository vendorRecipeRepository;
   private final UniqueJewelsRepository uniqueJewelsRepository;
+  private final RateRepository rateRepository;
 
   @Autowired
   public DataAccessService(ProcessedSkillsRepository processedSkillsRepository,
                            VendorRecipeRepository vendorRecipeRepository,
-                           UniqueJewelsRepository uniqueJewelsRepository) {
+                           UniqueJewelsRepository uniqueJewelsRepository,
+                           RateRepository rateRepository) {
     this.processedSkillsRepository = processedSkillsRepository;
     this.vendorRecipeRepository = vendorRecipeRepository;
     this.uniqueJewelsRepository = uniqueJewelsRepository;
+    this.rateRepository = rateRepository;
   }
 
   public List<Skill> findAllSkills(LeagueEntity league) {
@@ -60,5 +67,10 @@ public class DataAccessService {
 
   public Optional<UniqueJewelEntity> findUniqueJewelByNameAndLeague(String name, LeagueEntity league) {
     return uniqueJewelsRepository.findByNameAndLeague(name, league);
+  }
+
+  public Optional<Double> findDivineOrbChaosRate(LeagueEntity league) {
+    return rateRepository.findByNameAndLeague(DIVINE_ORB, league)
+        .map(RateEntity::getChaosEquivalent);
   }
 }

@@ -37,7 +37,11 @@ public abstract class BaseCallbackTest extends BaseTest {
       userDao,
       settingsService,
       a8rService));
-  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(settingsService));
+  protected final MessageAnswerService messageAnswerService = spy(new MessageAnswerService(
+      settingsService,
+      userDao,
+      dataAccessService
+  ));
   protected final CallbackCache callbackCache = spy(CallbackCache.class);
   protected final MessageCache messageCache = spy(MessageCache.class);
 

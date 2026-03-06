@@ -2,12 +2,12 @@ package io.starter.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import io.starter.cache.state.CallbackState;
 import io.starter.constants.Constants;
+import io.starter.constants.CurrencyDisplay;
 import io.starter.constants.Emoji;
 import io.starter.constants.League;
 import io.starter.dao.UserDao;
@@ -48,8 +48,15 @@ public class CallbackAnswerService {
   private final A8rService a8rService;
 
   public EditMessageText onClickSetting(CallbackQuery callbackQuery) {
-    League league = League.byCallbackState(CallbackState.byData(callbackQuery.getData()));
-    userDao.saveLeague(callbackQuery.getFrom(), Objects.requireNonNull(league));
+    CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
+    League league = League.byCallbackState(callbackState);
+    if (league != null) {
+      userDao.saveLeague(callbackQuery.getFrom(), league);
+    }
+    CurrencyDisplay currencyDisplay = CurrencyDisplay.byCallbackState(callbackState);
+    if (currencyDisplay != null) {
+      userDao.saveCurrency(callbackQuery.getFrom(), currencyDisplay);
+    }
     InlineKeyboardMarkup inlineKeyboard = settingsService.generateKeyboard();
     return EditMessageGenerator.generate(
         callbackQuery.getMessage(),
@@ -61,20 +68,22 @@ public class CallbackAnswerService {
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
     List<Skill> skills = dataAccessService.findAllSkills(leagueEntity);
+    CurrencyDisplay currencyDisplay = resolveCurrency(userDao.readCurrency(from));
+    Double divineRate = readDivineRate(leagueEntity);
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
     int page = checkAndSyncPage(userDao.readSkillPage(from), skills.size(), SKILLS_PER_PAGE);
     int totalPages = calculateTotalPages(skills.size(), SKILLS_PER_PAGE);
     String inlineMessage = StringUtils.EMPTY;
     if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
-      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity, currencyDisplay, divineRate);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {
       page = checkAndSyncPage(++page, skills.size(), SKILLS_PER_PAGE);
-      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity, currencyDisplay, divineRate);
     }
     if (callbackState == CallbackState.SKILLS_PREVIOUS) {
       page = checkAndSyncPage(--page, skills.size(), SKILLS_PER_PAGE);
-      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity, currencyDisplay, divineRate);
     }
     userDao.saveSkillPage(from, page);
     InlineKeyboardMarkup keyboard = onClickSkills(page, totalPages);
@@ -84,6 +93,8 @@ public class CallbackAnswerService {
   public EditMessageText onClickVendorRecipes(CallbackQuery callbackQuery) {
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
+    CurrencyDisplay currencyDisplay = resolveCurrency(userDao.readCurrency(from));
+    Double divineRate = readDivineRate(leagueEntity);
     List<VendorRecipeEntity> recipes = dataAccessService.findAllVendorRecipes(leagueEntity);
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
     int page = userDao.readRecipePage(from);
@@ -103,7 +114,15 @@ public class CallbackAnswerService {
       }
       VendorRecipeEntity selectedRecipe = recipes.get(page - 1);
       VendorRecipeDiagnostic recipeDiagnostic = findVendorRecipeDiagnostic(leagueEntity.getName(), selectedRecipe.getName());
-      inlineMessage = toDetailedVendorRecipeMessage(page, totalPages, leagueEntity, selectedRecipe, recipeDiagnostic);
+      inlineMessage = toDetailedVendorRecipeMessage(
+          page,
+          totalPages,
+          leagueEntity,
+          selectedRecipe,
+          recipeDiagnostic,
+          currencyDisplay,
+          divineRate
+      );
     }
     userDao.saveRecipePage(from, page);
     InlineKeyboardMarkup keyboard = onClickVendorRecipes(page, totalPages, recipes.isEmpty());
@@ -113,9 +132,11 @@ public class CallbackAnswerService {
   public EditMessageText onClickAnimaStone(CallbackQuery callbackQuery) {
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
+    CurrencyDisplay currencyDisplay = resolveCurrency(userDao.readCurrency(from));
+    Double divineRate = readDivineRate(leagueEntity);
     Optional<VendorRecipeEntity> recipe = dataAccessService
         .findVendorRecipeByNameAndLeague(Constants.Recipes.ANIMA_STONE, leagueEntity);
-    String inlineMessage = toAnimaStoneMessage(leagueEntity, recipe);
+    String inlineMessage = toAnimaStoneMessage(leagueEntity, recipe, currencyDisplay, divineRate);
     InlineKeyboardMarkup keyboard = onClickAnimaStone();
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
@@ -137,16 +158,19 @@ public class CallbackAnswerService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  private String toPaginatedSkillMessage(int page, List<Skill> skills, LeagueEntity league) {
+  private String toPaginatedSkillMessage(int page,
+                                         List<Skill> skills,
+                                         LeagueEntity league,
+                                         CurrencyDisplay currencyDisplay,
+                                         Double divineRate) {
     int start = (page - 1) * SKILLS_PER_PAGE;
     int end = Math.min(start + SKILLS_PER_PAGE, skills.size());
     final StringBuilder builder = new StringBuilder();
     builder.append("```").append("\n");
     builder.append(formatTopBorder(league.getName())).append("\n");
     for (int i = start; i < end; i++) {
-      long chaosEquivalentProfit = Math.round(skills.get(i).getChaosEquivalentProfit());
-      String line = String.format("│ %-38s : %5d c │", skills.get(i).getName(), chaosEquivalentProfit);
-      builder.append(line).append("\n");
+      String displayValue = formatDisplayedValue(skills.get(i).getChaosEquivalentProfit(), currencyDisplay, divineRate);
+      builder.append(formatVendorLine(formatAlignedContentLine(skills.get(i).getName(), displayValue))).append("\n");
     }
     builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
     builder.append("```");
@@ -157,14 +181,13 @@ public class CallbackAnswerService {
                                                int totalPages,
                                                LeagueEntity league,
                                                VendorRecipeEntity recipe,
-                                               VendorRecipeDiagnostic diagnostic) {
-    double fallbackCraftCost = recipe.getChaosEquivalentPrice() - recipe.getChaosEquivalentProfit();
-    double totalIngredientCost = 0.0;
+                                               VendorRecipeDiagnostic diagnostic,
+                                               CurrencyDisplay currencyDisplay,
+                                               Double divineRate) {
     List<String> ingredientLines = new ArrayList<>();
     boolean hasDetailedIngredients = diagnostic != null
         && diagnostic.ingredients() != null
         && !diagnostic.ingredients().isEmpty();
-    boolean hasUnknownIngredientPrices = false;
 
     if (hasDetailedIngredients) {
       for (VendorRecipeItemDiagnostic ingredient : diagnostic.ingredients()) {
@@ -173,21 +196,19 @@ public class CallbackAnswerService {
         }
         int quantity = ingredient.quantity() == null || ingredient.quantity() < 1 ? 1 : ingredient.quantity();
         Double unitPrice = ingredient.selectedChaosEquivalent();
+        String ingredientLabel = "%s x%d".formatted(sanitize(ingredient.name()), quantity);
         if (unitPrice == null) {
-          hasUnknownIngredientPrices = true;
-          ingredientLines.add("%s x%d = n/a".formatted(sanitize(ingredient.name()), quantity));
+          ingredientLines.add(formatAlignedContentLine(ingredientLabel, "n/a"));
           continue;
         }
         double ingredientTotal = unitPrice * quantity;
-        totalIngredientCost += ingredientTotal;
-        ingredientLines.add("%s x%d = %s".formatted(
-            sanitize(ingredient.name()),
-            quantity,
-            formatChaosValue(ingredientTotal)));
+        ingredientLines.add(formatAlignedContentLine(
+            ingredientLabel,
+            formatDisplayedValue(ingredientTotal, currencyDisplay, divineRate)
+        ));
       }
     } else {
       ingredientLines.add("n/a");
-      hasUnknownIngredientPrices = true;
     }
 
     if (ingredientLines.size() > VENDOR_INGREDIENT_ROWS) {
@@ -199,23 +220,18 @@ public class CallbackAnswerService {
       ingredientLines.add(StringUtils.EMPTY);
     }
 
-    String resultItemName = recipe.getName();
-    if (diagnostic != null && diagnostic.result() != null && diagnostic.result().name() != null) {
-      resultItemName = diagnostic.result().name();
-    }
-    double craftCost = hasUnknownIngredientPrices ? fallbackCraftCost : totalIngredientCost;
-
     StringBuilder builder = new StringBuilder();
-    String header = "%s (%d/%d)".formatted(league.getName(), page, totalPages);
+    String header = league.getName();
     builder.append("```").append("\n");
     builder.append(formatTopBorder(header)).append("\n");
-    builder.append(formatVendorLine("Recipe: " + sanitize(recipe.getName()))).append("\n");
-    builder.append(formatVendorLine("Result: " + sanitize(resultItemName))).append("\n");
-    builder.append(formatVendorLine("Result price: " + formatChaosValue(recipe.getChaosEquivalentPrice()))).append("\n");
-    builder.append(formatVendorLine("Craft cost: " + formatChaosValue(craftCost))).append("\n");
-    builder.append(formatVendorLine("Profit: " + formatChaosValueSigned(recipe.getChaosEquivalentProfit()))).append("\n");
+    builder.append(formatVendorLine(formatAlignedContentLine(
+        sanitize(recipe.getName()),
+        formatDisplayedValue(recipe.getChaosEquivalentPrice(), currencyDisplay, divineRate)))).append("\n");
+    builder.append(formatVendorLine(StringUtils.EMPTY)).append("\n");
     builder.append(formatSectionDivider("Ingredients")).append("\n");
+    builder.append(formatVendorLine(StringUtils.EMPTY)).append("\n");
     ingredientLines.forEach(ingredient -> builder.append(formatVendorLine(ingredient)).append("\n"));
+    builder.append(formatVendorLine(StringUtils.EMPTY)).append("\n");
     builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
     builder.append("```");
     return builder.toString();
@@ -264,6 +280,20 @@ public class CallbackAnswerService {
     return "%d c".formatted(Math.round(value));
   }
 
+  private String formatDisplayedValue(double chaosValue, CurrencyDisplay currencyDisplay, Double divineRate) {
+    return formatDisplayedValue(Double.valueOf(chaosValue), currencyDisplay, divineRate);
+  }
+
+  private String formatDisplayedValue(Double chaosValue, CurrencyDisplay currencyDisplay, Double divineRate) {
+    if (chaosValue == null) {
+      return "n/a";
+    }
+    if (currencyDisplay == CurrencyDisplay.DIVINE && divineRate != null && divineRate > 0) {
+      return "%.2f div".formatted(chaosValue / divineRate);
+    }
+    return formatChaosValue(chaosValue);
+  }
+
   private String formatChaosValueSigned(double value) {
     return "%+d c".formatted(Math.round(value));
   }
@@ -288,7 +318,10 @@ public class CallbackAnswerService {
     return "┌" + "─".repeat(leftPad) + " " + safeTitle + " " + "─".repeat(rightPad) + "┐";
   }
 
-  private String toAnimaStoneMessage(LeagueEntity league, Optional<VendorRecipeEntity> recipe) {
+  private String toAnimaStoneMessage(LeagueEntity league,
+                                     Optional<VendorRecipeEntity> recipe,
+                                     CurrencyDisplay currencyDisplay,
+                                     Double divineRate) {
     if (league == null) {
       return "Anima Stone data is not available: league is not selected.";
     }
@@ -306,7 +339,9 @@ public class CallbackAnswerService {
         recipe.get().getChaosEquivalentProfit(),
         might.orElse(null),
         harmony.orElse(null),
-        eminence.orElse(null)
+        eminence.orElse(null),
+        currencyDisplay,
+        divineRate
     );
   }
 
@@ -314,30 +349,43 @@ public class CallbackAnswerService {
                                          Double profit,
                                          UniqueJewelEntity might,
                                          UniqueJewelEntity harmony,
-                                         UniqueJewelEntity eminence) {
+                                         UniqueJewelEntity eminence,
+                                         CurrencyDisplay currencyDisplay,
+                                         Double divineRate) {
     StringBuilder builder = new StringBuilder();
     builder.append("```").append("\n");
     builder.append(formatTopBorder(leagueName)).append("\n");
-    builder.append(formatAnimaStoneLine("Anima Stone profit", formatChaosValue(profit))).append("\n");
+    builder.append(formatVendorLine(formatAlignedContentLine(
+        "Anima Stone profit",
+        formatDisplayedValue(profit, currencyDisplay, divineRate)
+    ))).append("\n");
     builder.append(formatSectionDivider("Ingredients")).append("\n");
-    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_MIGHT, formatChaosValue(might))).append("\n");
-    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_HARMONY, formatChaosValue(harmony))).append("\n");
-    builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_EMINENCE, formatChaosValue(eminence)))
-        .append("\n");
+    builder.append(formatVendorLine(formatAlignedContentLine(
+        Constants.Recipes.PRIMORDIAL_MIGHT,
+        formatDisplayedValue(might == null ? null : might.getChaosEquivalent(), currencyDisplay, divineRate)
+    ))).append("\n");
+    builder.append(formatVendorLine(formatAlignedContentLine(
+        Constants.Recipes.PRIMORDIAL_HARMONY,
+        formatDisplayedValue(harmony == null ? null : harmony.getChaosEquivalent(), currencyDisplay, divineRate)
+    ))).append("\n");
+    builder.append(formatVendorLine(formatAlignedContentLine(
+        Constants.Recipes.PRIMORDIAL_EMINENCE,
+        formatDisplayedValue(eminence == null ? null : eminence.getChaosEquivalent(), currencyDisplay, divineRate)
+    ))).append("\n");
     builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
     builder.append("```");
     return builder.toString();
   }
 
-  private String formatAnimaStoneLine(String label, String value) {
-    return String.format("│ %-38s : %7s │", label, value);
-  }
-
-  private String formatChaosValue(UniqueJewelEntity jewel) {
-    if (jewel == null || jewel.getChaosEquivalent() == null) {
-      return "n/a";
+  private String formatAlignedContentLine(String label, String value) {
+    String safeLabel = label == null ? "n/a" : label;
+    String safeValue = value == null ? "n/a" : value;
+    int maxLabelWidth = 34;
+    int valueWidth = 11;
+    if (safeLabel.length() > maxLabelWidth) {
+      safeLabel = safeLabel.substring(0, maxLabelWidth - 3) + "...";
     }
-    return "%d c".formatted(Math.round(jewel.getChaosEquivalent()));
+    return String.format("%-" + maxLabelWidth + "s : %" + valueWidth + "s", safeLabel, safeValue);
   }
 
   private String formatChaosValue(Double value) {
@@ -353,6 +401,19 @@ public class CallbackAnswerService {
     int leftPad = (innerWidth - titleLength - 2) / 2;
     int rightPad = innerWidth - titleLength - 2 - leftPad;
     return "│" + "─".repeat(leftPad) + " " + title + " " + "─".repeat(rightPad) + "│";
+  }
+
+  private CurrencyDisplay resolveCurrency(CurrencyDisplay currencyDisplay) {
+    return currencyDisplay == null ? CurrencyDisplay.CHAOS : currencyDisplay;
+  }
+
+  private Double readDivineRate(LeagueEntity leagueEntity) {
+    if (leagueEntity == null) {
+      return null;
+    }
+    Optional<Double> maybeRate = Optional.ofNullable(dataAccessService.findDivineOrbChaosRate(leagueEntity))
+        .orElse(Optional.empty());
+    return maybeRate.orElse(null);
   }
 
   private InlineKeyboardMarkup onClickAnimaStone() {

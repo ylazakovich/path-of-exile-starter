@@ -80,9 +80,12 @@ public class InteractionsTest extends BaseCallbackTest {
     EditMessageText actual = (EditMessageText) botApiMethod;
     assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
     assertThat(actual.getText()).contains("Cheap Recipe");
-    assertThat(actual.getText()).contains("Craft cost");
-    assertThat(actual.getText()).contains("Result price");
-    assertThat(actual.getText()).contains("Profit");
+    assertThat(actual.getText()).contains("Ingredients");
+    assertThat(actual.getText()).doesNotContain("Recipe:");
+    assertThat(actual.getText()).contains(":");
+    assertThat(actual.getText()).doesNotContain("Craft cost");
+    assertThat(actual.getText()).doesNotContain("Profit");
+    assertThat(actual.getText()).doesNotContain("Result price");
     assertThat(actual).isEqualTo(expected);
   }
 }

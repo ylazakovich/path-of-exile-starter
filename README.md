@@ -5,12 +5,16 @@
 
 [![Telegram Bot](https://img.shields.io/badge/Telegram-Connect-blue.svg?logo=telegram)](https://t.me/poe_consultant_bot)
 [![Renovate enabled](https://img.shields.io/badge/Renovate-enabled-brightgreen.svg?logo=renovate&style=flat)](https://renovatebot.com/)
+[![Latest Release](https://img.shields.io/github/v/release/ylazakovich/path-of-exile-starter?sort=semver)](https://github.com/ylazakovich/path-of-exile-starter/releases)
+[![Latest Tag](https://img.shields.io/github/v/tag/ylazakovich/path-of-exile-starter?sort=semver)](https://github.com/ylazakovich/path-of-exile-starter/tags)
+[![GitHub Stars](https://img.shields.io/github/stars/ylazakovich/path-of-exile-starter?style=flat)](https://github.com/ylazakovich/path-of-exile-starter/stargazers)
 
 ## 📚 Overview
 
 - [Quick start](#-quick-start)
 - [Features](#-features)
-- [FAQ](docs/FAQ.md#-faq)
+- [Documentation](https://ylazakovich.github.io/path-of-exile-starter/)
+- [FAQ](docs/FAQ.md#faq)
 
 ## 🚀 Features
 
