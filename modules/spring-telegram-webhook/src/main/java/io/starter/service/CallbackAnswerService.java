@@ -1,5 +1,6 @@
 package io.starter.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +36,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 @AllArgsConstructor
 public class CallbackAnswerService {
 
+  private static final int TABLE_WIDTH = 52;
+  private static final int SKILLS_PER_PAGE = 10;
+  private static final int VENDOR_RECIPES_PER_PAGE = 1;
+  private static final int VENDOR_INGREDIENT_ROWS = 5;
+  private static final int BOX_LINE_CONTENT_WIDTH = TABLE_WIDTH - 4;
+
   private final DataAccessService dataAccessService;
   private final UserDao userDao;
   private final SettingsService settingsService;
@@ -55,32 +62,32 @@ public class CallbackAnswerService {
     LeagueEntity leagueEntity = userDao.readLeague(from);
     List<Skill> skills = dataAccessService.findAllSkills(leagueEntity);
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
-    int page = userDao.readSkillPage(from);
+    int page = checkAndSyncPage(userDao.readSkillPage(from), skills.size(), SKILLS_PER_PAGE);
+    int totalPages = calculateTotalPages(skills.size(), SKILLS_PER_PAGE);
     String inlineMessage = StringUtils.EMPTY;
     if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
       inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {
-      page = checkAndSyncPage(++page, skills.size(), 10);
+      page = checkAndSyncPage(++page, skills.size(), SKILLS_PER_PAGE);
       inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_PREVIOUS) {
-      page = checkAndSyncPage(--page, skills.size(), 10);
+      page = checkAndSyncPage(--page, skills.size(), SKILLS_PER_PAGE);
       inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     userDao.saveSkillPage(from, page);
-    InlineKeyboardMarkup keyboard = onClickSkills(page);
+    InlineKeyboardMarkup keyboard = onClickSkills(page, totalPages);
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
   public EditMessageText onClickVendorRecipes(CallbackQuery callbackQuery) {
-    final int itemsPerPage = 1;
     User from = callbackQuery.getFrom();
     LeagueEntity leagueEntity = userDao.readLeague(from);
     List<VendorRecipeEntity> recipes = dataAccessService.findAllVendorRecipes(leagueEntity);
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
     int page = userDao.readRecipePage(from);
-    int totalPages = calculateTotalPages(recipes.size(), itemsPerPage);
+    int totalPages = calculateTotalPages(recipes.size(), VENDOR_RECIPES_PER_PAGE);
     String inlineMessage;
     if (recipes.isEmpty()) {
       inlineMessage = "Vendor recipes are not available for league '%s'.".formatted(leagueEntity.getName());
@@ -88,11 +95,11 @@ public class CallbackAnswerService {
       totalPages = 1;
     } else {
       if (callbackState == CallbackState.VENDOR_RECIPES_NEXT) {
-        page = checkAndSyncPage(++page, recipes.size(), itemsPerPage);
+        page = checkAndSyncPage(++page, recipes.size(), VENDOR_RECIPES_PER_PAGE);
       } else if (callbackState == CallbackState.VENDOR_RECIPES_PREVIOUS) {
-        page = checkAndSyncPage(--page, recipes.size(), itemsPerPage);
+        page = checkAndSyncPage(--page, recipes.size(), VENDOR_RECIPES_PER_PAGE);
       } else {
-        page = checkAndSyncPage(page, recipes.size(), itemsPerPage);
+        page = checkAndSyncPage(page, recipes.size(), VENDOR_RECIPES_PER_PAGE);
       }
       VendorRecipeEntity selectedRecipe = recipes.get(page - 1);
       VendorRecipeDiagnostic recipeDiagnostic = findVendorRecipeDiagnostic(leagueEntity.getName(), selectedRecipe.getName());
@@ -113,14 +120,14 @@ public class CallbackAnswerService {
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
-  private InlineKeyboardMarkup onClickSkills(int page) {
+  private InlineKeyboardMarkup onClickSkills(int page, int totalPages) {
     InlineKeyboardButton linkToGuide =
         InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
     linkToGuide.setUrl(Constants.Start.SKILLS_GUIDE_LINK);
     List<InlineKeyboardButton> headerButtons = List.of(linkToGuide);
     List<InlineKeyboardButton> bodyButtons = List.of(
         InlineKeyboardButtonGenerator.generate(Emoji.LEFT.value, CallbackState.SKILLS_PREVIOUS.value),
-        InlineKeyboardButtonGenerator.generate(String.valueOf(page), CallbackState.CURRENT.value),
+        InlineKeyboardButtonGenerator.generate("%d/%d".formatted(page, totalPages), CallbackState.CURRENT.value),
         InlineKeyboardButtonGenerator.generate(Emoji.RIGHT.value, CallbackState.SKILLS_NEXT.value)
     );
     List<InlineKeyboardButton> footerButtons = List.of(
@@ -131,25 +138,17 @@ public class CallbackAnswerService {
   }
 
   private String toPaginatedSkillMessage(int page, List<Skill> skills, LeagueEntity league) {
-    final int itemsPerPage = 10;
-    int start = (page - 1) * itemsPerPage;
-    int end = Math.min(start + itemsPerPage, skills.size());
+    int start = (page - 1) * SKILLS_PER_PAGE;
+    int end = Math.min(start + SKILLS_PER_PAGE, skills.size());
     final StringBuilder builder = new StringBuilder();
-    String leagueName = league.getName();
-    int totalWidth = 52;
-    int nameLength = leagueName.length();
-    int innerWidth = totalWidth - 2;
-    int leftPad = (innerWidth - nameLength - 2) / 2;
-    int rightPad = innerWidth - nameLength - 2 - leftPad;
-    String topBorder = "┌" + "─".repeat(leftPad) + " " + leagueName + " " + "─".repeat(rightPad) + "┐";
     builder.append("```").append("\n");
-    builder.append(topBorder).append("\n");
+    builder.append(formatTopBorder(league.getName())).append("\n");
     for (int i = start; i < end; i++) {
       long chaosEquivalentProfit = Math.round(skills.get(i).getChaosEquivalentProfit());
       String line = String.format("│ %-38s : %5d c │", skills.get(i).getName(), chaosEquivalentProfit);
       builder.append(line).append("\n");
     }
-    builder.append("└").append("─".repeat(totalWidth - 2)).append("┘").append("\n");
+    builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
     builder.append("```");
     return builder.toString();
   }
@@ -159,21 +158,9 @@ public class CallbackAnswerService {
                                                LeagueEntity league,
                                                VendorRecipeEntity recipe,
                                                VendorRecipeDiagnostic diagnostic) {
-    StringBuilder builder = new StringBuilder();
-    builder.append("League: ")
-        .append(league.getName())
-        .append(" (")
-        .append(page)
-        .append("/")
-        .append(totalPages)
-        .append(")")
-        .append("\n");
-    builder.append("Recipe: `").append(sanitize(recipe.getName())).append("`").append("\n");
-    builder.append("\n");
-    builder.append("Ingredients:").append("\n");
-
     double fallbackCraftCost = recipe.getChaosEquivalentPrice() - recipe.getChaosEquivalentProfit();
     double totalIngredientCost = 0.0;
+    List<String> ingredientLines = new ArrayList<>();
     boolean hasDetailedIngredients = diagnostic != null
         && diagnostic.ingredients() != null
         && !diagnostic.ingredients().isEmpty();
@@ -188,28 +175,28 @@ public class CallbackAnswerService {
         Double unitPrice = ingredient.selectedChaosEquivalent();
         if (unitPrice == null) {
           hasUnknownIngredientPrices = true;
-          builder.append("- `")
-              .append(sanitize(ingredient.name()))
-              .append(" x")
-              .append(quantity)
-              .append("` = `n/a`")
-              .append("\n");
+          ingredientLines.add("%s x%d = n/a".formatted(sanitize(ingredient.name()), quantity));
           continue;
         }
         double ingredientTotal = unitPrice * quantity;
         totalIngredientCost += ingredientTotal;
-        builder.append("- `")
-            .append(sanitize(ingredient.name()))
-            .append(" x")
-            .append(quantity)
-            .append("` = `")
-            .append(formatChaosValue(ingredientTotal))
-            .append("`")
-            .append("\n");
+        ingredientLines.add("%s x%d = %s".formatted(
+            sanitize(ingredient.name()),
+            quantity,
+            formatChaosValue(ingredientTotal)));
       }
     } else {
-      builder.append("- `n/a`").append("\n");
+      ingredientLines.add("n/a");
       hasUnknownIngredientPrices = true;
+    }
+
+    if (ingredientLines.size() > VENDOR_INGREDIENT_ROWS) {
+      int hiddenIngredients = ingredientLines.size() - (VENDOR_INGREDIENT_ROWS - 1);
+      ingredientLines = new ArrayList<>(ingredientLines.subList(0, VENDOR_INGREDIENT_ROWS - 1));
+      ingredientLines.add("... +%d more".formatted(hiddenIngredients));
+    }
+    while (ingredientLines.size() < VENDOR_INGREDIENT_ROWS) {
+      ingredientLines.add(StringUtils.EMPTY);
     }
 
     String resultItemName = recipe.getName();
@@ -217,11 +204,20 @@ public class CallbackAnswerService {
       resultItemName = diagnostic.result().name();
     }
     double craftCost = hasUnknownIngredientPrices ? fallbackCraftCost : totalIngredientCost;
-    builder.append("\n");
-    builder.append("Craft cost: `").append(formatChaosValue(craftCost)).append("`").append("\n");
-    builder.append("Result item: `").append(sanitize(resultItemName)).append("`").append("\n");
-    builder.append("Result price: `").append(formatChaosValue(recipe.getChaosEquivalentPrice())).append("`").append("\n");
-    builder.append("Profit: `").append(formatChaosValueSigned(recipe.getChaosEquivalentProfit())).append("`");
+
+    StringBuilder builder = new StringBuilder();
+    String header = "%s (%d/%d)".formatted(league.getName(), page, totalPages);
+    builder.append("```").append("\n");
+    builder.append(formatTopBorder(header)).append("\n");
+    builder.append(formatVendorLine("Recipe: " + sanitize(recipe.getName()))).append("\n");
+    builder.append(formatVendorLine("Result: " + sanitize(resultItemName))).append("\n");
+    builder.append(formatVendorLine("Result price: " + formatChaosValue(recipe.getChaosEquivalentPrice()))).append("\n");
+    builder.append(formatVendorLine("Craft cost: " + formatChaosValue(craftCost))).append("\n");
+    builder.append(formatVendorLine("Profit: " + formatChaosValueSigned(recipe.getChaosEquivalentProfit()))).append("\n");
+    builder.append(formatSectionDivider("Ingredients")).append("\n");
+    ingredientLines.forEach(ingredient -> builder.append(formatVendorLine(ingredient)).append("\n"));
+    builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
+    builder.append("```");
     return builder.toString();
   }
 
@@ -272,6 +268,26 @@ public class CallbackAnswerService {
     return "%+d c".formatted(Math.round(value));
   }
 
+  private String formatVendorLine(String content) {
+    String sanitized = content == null ? StringUtils.EMPTY : content;
+    if (sanitized.length() > BOX_LINE_CONTENT_WIDTH) {
+      sanitized = sanitized.substring(0, BOX_LINE_CONTENT_WIDTH - 3) + "...";
+    }
+    return String.format("│ %-" + BOX_LINE_CONTENT_WIDTH + "s │", sanitized);
+  }
+
+  private String formatTopBorder(String title) {
+    String safeTitle = title == null ? StringUtils.EMPTY : title;
+    int innerWidth = TABLE_WIDTH - 2;
+    int maxTitleLength = innerWidth - 2;
+    if (safeTitle.length() > maxTitleLength) {
+      safeTitle = safeTitle.substring(0, maxTitleLength - 3) + "...";
+    }
+    int leftPad = (innerWidth - safeTitle.length() - 2) / 2;
+    int rightPad = innerWidth - safeTitle.length() - 2 - leftPad;
+    return "┌" + "─".repeat(leftPad) + " " + safeTitle + " " + "─".repeat(rightPad) + "┐";
+  }
+
   private String toAnimaStoneMessage(LeagueEntity league, Optional<VendorRecipeEntity> recipe) {
     if (league == null) {
       return "Anima Stone data is not available: league is not selected.";
@@ -299,22 +315,16 @@ public class CallbackAnswerService {
                                          UniqueJewelEntity might,
                                          UniqueJewelEntity harmony,
                                          UniqueJewelEntity eminence) {
-    final int totalWidth = 52;
-    int nameLength = leagueName.length();
-    int innerWidth = totalWidth - 2;
-    int leftPad = (innerWidth - nameLength - 2) / 2;
-    int rightPad = innerWidth - nameLength - 2 - leftPad;
-    String topBorder = "┌" + "─".repeat(leftPad) + " " + leagueName + " " + "─".repeat(rightPad) + "┐";
     StringBuilder builder = new StringBuilder();
     builder.append("```").append("\n");
-    builder.append(topBorder).append("\n");
+    builder.append(formatTopBorder(leagueName)).append("\n");
     builder.append(formatAnimaStoneLine("Anima Stone profit", formatChaosValue(profit))).append("\n");
     builder.append(formatSectionDivider("Ingredients")).append("\n");
     builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_MIGHT, formatChaosValue(might))).append("\n");
     builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_HARMONY, formatChaosValue(harmony))).append("\n");
     builder.append(formatAnimaStoneLine(Constants.Recipes.PRIMORDIAL_EMINENCE, formatChaosValue(eminence)))
         .append("\n");
-    builder.append("└").append("─".repeat(totalWidth - 2)).append("┘").append("\n");
+    builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
     builder.append("```");
     return builder.toString();
   }
@@ -338,8 +348,7 @@ public class CallbackAnswerService {
   }
 
   private String formatSectionDivider(String title) {
-    final int totalWidth = 52;
-    int innerWidth = totalWidth - 2;
+    int innerWidth = TABLE_WIDTH - 2;
     int titleLength = title.length();
     int leftPad = (innerWidth - titleLength - 2) / 2;
     int rightPad = innerWidth - titleLength - 2 - leftPad;
