@@ -10,6 +10,14 @@ tags:
 [![Latest Tag](https://img.shields.io/github/v/tag/ylazakovich/path-of-exile-starter?sort=semver)](https://github.com/ylazakovich/path-of-exile-starter/tags)
 [![GitHub Stars](https://img.shields.io/github/stars/ylazakovich/path-of-exile-starter?style=flat)](https://github.com/ylazakovich/path-of-exile-starter/stargazers)
 
+<div class="poe-hero" markdown>
+
+### Atlas Companion for Exiles
+
+Track profitable positions, review vendor recipes, and operate your Telegram bot flow from one place.
+
+</div>
+
 A practical guide for users and contributors of the Path of Exile Telegram assistant.
 
 !!! tip "What you will find here"

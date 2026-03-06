@@ -3,11 +3,11 @@ package io.starter.tests.units.handler.callback;
 import io.starter.cache.CallbackCache;
 import io.starter.cache.MessageCache;
 import io.starter.dao.UserDao;
+import io.starter.service.A8rService;
 import io.starter.service.CallbackAnswerService;
 import io.starter.service.DataAccessService;
 import io.starter.service.MessageAnswerService;
 import io.starter.service.SettingsService;
-import io.starter.service.A8rService;
 import io.starter.tests.BaseTest;
 
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;

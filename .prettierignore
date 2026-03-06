@@ -1,0 +1,6 @@
+# Zensical documentation sources
+docs/
+zensical.toml
+
+# Zensical build output
+public/
