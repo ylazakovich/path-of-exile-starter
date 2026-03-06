@@ -1,6 +1,9 @@
 package io.starter.service;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import io.starter.dao.RatesDao;
 import io.starter.dao.UniqueJewelsDao;
@@ -133,16 +136,32 @@ public class NinjaDataSyncService {
 
   public void addNewJewels(Lines<UniqueJewel> lines, LeagueEntity league) {
     List<UniqueJewelEntity> existingEntities = dataAccessService.findUniqueJewelsByLeague(league);
-    List<UniqueJewelEntity> newEntities = safeLines(lines).stream()
+    List<UniqueJewel> uniqueByNameAndLinks = safeLines(lines).stream()
+        .filter(jewel -> jewel.getName() != null && !jewel.getName().isBlank())
+        .collect(Collectors.toMap(
+            this::uniqueKey,
+            Function.identity(),
+            (left, right) -> Comparator.comparingDouble(UniqueJewel::getChaosEquivalent).compare(left, right) <= 0 ? left : right,
+            java.util.LinkedHashMap::new
+        ))
+        .values()
+        .stream()
+        .toList();
+    List<UniqueJewelEntity> newEntities = uniqueByNameAndLinks.stream()
         .filter(jewel -> existingEntities.stream().noneMatch(entity -> uniqueJewelMapper.matches(jewel, entity)))
         .map(jewel -> {
           UniqueJewelEntity entity = new UniqueJewelEntity();
           entity.setName(jewel.getName());
+          entity.setLinks(jewel.getLinks());
           entity.setChaosEquivalent(jewel.getChaosEquivalent());
           entity.setLeague(league);
           return entity;
         })
         .toList();
     dataAccessService.saveUniqueJewels(newEntities);
+  }
+
+  private String uniqueKey(UniqueJewel jewel) {
+    return jewel.getName() + "|" + (jewel.getLinks() == null ? "null" : jewel.getLinks());
   }
 }

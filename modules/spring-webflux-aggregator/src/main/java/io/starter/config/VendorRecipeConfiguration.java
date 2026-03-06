@@ -18,7 +18,27 @@ public class VendorRecipeConfiguration {
   public static class RecipeDefinition {
     private String id;
     private String name;
-    private String resultItemName;
-    private List<String> ingredients = new ArrayList<>();
+    private ResultDefinition result;
+    private List<IngredientDefinition> ingredients = new ArrayList<>();
+  }
+
+  @Data
+  public static class IngredientDefinition {
+    private String name;
+    private Integer quantity = 1;
+    private PriceSource priceSource = PriceSource.AUTO;
+  }
+
+  @Data
+  public static class ResultDefinition {
+    private String name;
+    private PriceSource priceSource = PriceSource.AUTO;
+  }
+
+  public enum PriceSource {
+    AUTO,
+    UNIQUE_ITEM,
+    CURRENCY,
+    SKILL_GEM
   }
 }

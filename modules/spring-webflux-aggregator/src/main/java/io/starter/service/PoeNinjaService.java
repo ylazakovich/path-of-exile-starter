@@ -37,7 +37,11 @@ public class PoeNinjaService extends AbstractWebClientService {
   }
 
   public Mono<ResponseEntity<Lines<UniqueJewel>>> getUniqueJewels(String league) {
-    return fetch(ITEMS, league, "UniqueJewel", UniqueJewelTypeReference::new);
+    return getUniqueItems(league, "UniqueJewel");
+  }
+
+  public Mono<ResponseEntity<Lines<UniqueJewel>>> getUniqueItems(String league, String type) {
+    return fetch(ITEMS, league, type, UniqueJewelTypeReference::new);
   }
 
   public Mono<ResponseEntity<Lines<Currency>>> getRates(String league) {
@@ -53,4 +57,3 @@ public class PoeNinjaService extends AbstractWebClientService {
     return get(path, Map.of("league", league, "type", type), typeRefFactory.get());
   }
 }
-

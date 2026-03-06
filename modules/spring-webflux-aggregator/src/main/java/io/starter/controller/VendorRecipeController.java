@@ -37,6 +37,15 @@ public class VendorRecipeController {
     return dataAccessService.findVendorRecipesByLeague(leagueEntity);
   }
 
+  @GetMapping("/diagnostics")
+  public List<VendorRecipeCalculatorService.RecipeDiagnostic> getVendorRecipeDiagnostics(@RequestParam("league") String league) {
+    LeagueEntity leagueEntity = dataAccessService.findLeagueByName(league);
+    if (leagueEntity == null) {
+      return List.of();
+    }
+    return vendorRecipeCalculatorService.diagnoseRecipesForLeague(leagueEntity);
+  }
+
   @PostMapping("/load")
   public void loadVendorRecipes() {
     dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
@@ -48,7 +57,23 @@ public class VendorRecipeController {
   }
 
   private void loadVendorRecipesForLeague(LeagueEntity league) {
-    vendorRecipeService.syncVendorRecipes(vendorRecipeCalculatorService.calculateRecipesForLeague(league), league);
-    log.info("Vendor recipes updated for league '{}'", league.getName());
+    List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
+    vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
+    int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
+    if (persistedRecipes == 0) {
+      log.warn(
+          "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+          league.getName(),
+          calculatedRecipes.size(),
+          persistedRecipes
+      );
+      return;
+    }
+    log.info(
+        "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
+        league.getName(),
+        calculatedRecipes.size(),
+        persistedRecipes
+    );
   }
 }

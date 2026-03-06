@@ -1,6 +1,7 @@
 package io.starter.mapper;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import io.starter.entity.UniqueJewelEntity;
@@ -15,11 +16,18 @@ public class UniqueJewelMapper implements Function<Lines<UniqueJewel>, List<Uniq
   @Override
   public List<UniqueJewelEntity> apply(Lines<UniqueJewel> data) {
     return data.getLines().stream()
-        .map(skill -> new UniqueJewelEntity(skill.getName(), skill.getChaosEquivalent()))
+        .map(jewel -> {
+          UniqueJewelEntity entity = new UniqueJewelEntity();
+          entity.setName(jewel.getName());
+          entity.setLinks(jewel.getLinks());
+          entity.setChaosEquivalent(jewel.getChaosEquivalent());
+          return entity;
+        })
         .toList();
   }
 
   public boolean matches(UniqueJewel jewel, UniqueJewelEntity entity) {
-    return jewel.getName().equals(entity.getName());
+    return jewel.getName().equals(entity.getName())
+        && Objects.equals(jewel.getLinks(), entity.getLinks());
   }
 }

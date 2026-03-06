@@ -2,6 +2,9 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: classpath:vendor-recipes.yaml
+
   datasource:
     url: jdbc:mariadb://${DATABASE_HOST:localhost}:${DATABASE_PORT:3306}/mariadb
     username: root
@@ -24,13 +27,3 @@ spring:
 
   mustache:
     check-template-location: false
-
-vendor-recipes:
-  definitions:
-    - id: anima_stone
-      name: The Anima Stone
-      result-item-name: The Anima Stone
-      ingredients:
-        - Primordial Might
-        - Primordial Harmony
-        - Primordial Eminence

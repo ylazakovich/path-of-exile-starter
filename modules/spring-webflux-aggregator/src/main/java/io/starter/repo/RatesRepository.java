@@ -11,5 +11,7 @@ public interface RatesRepository extends JpaRepository<RateEntity, Long> {
 
   List<RateEntity> findAllByLeague(LeagueEntity league);
 
+  List<RateEntity> findAllByNameAndLeague(String name, LeagueEntity league);
+
   RateEntity findByNameAndLeague(String name, LeagueEntity league);
 }

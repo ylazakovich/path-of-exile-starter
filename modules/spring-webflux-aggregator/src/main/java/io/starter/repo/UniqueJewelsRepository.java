@@ -12,5 +12,7 @@ public interface UniqueJewelsRepository extends JpaRepository<UniqueJewelEntity,
 
   List<UniqueJewelEntity> findAllByLeague(LeagueEntity league);
 
+  List<UniqueJewelEntity> findAllByNameAndLeague(String name, LeagueEntity league);
+
   Optional<UniqueJewelEntity> findByNameAndLeague(String name, LeagueEntity league);
 }

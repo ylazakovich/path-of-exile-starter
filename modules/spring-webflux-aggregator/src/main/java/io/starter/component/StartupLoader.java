@@ -1,7 +1,9 @@
 package io.starter.component;
 
 import java.time.Duration;
+import java.util.List;
 
+import io.starter.entity.VendorRecipeEntity;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
@@ -19,6 +21,14 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class StartupLoader {
 
+  private static final List<String> UNIQUE_ITEM_TYPES = List.of(
+      "UniqueJewel",
+      "UniqueArmour",
+      "UniqueAccessory",
+      "UniqueWeapon",
+      "UniqueFlask",
+      "UniqueMap"
+  );
   private final DataAccessService dataAccessService;
   private final NinjaDataSyncService ninjaDataSyncService;
   private final PoeNinjaService poeNinjaService;
@@ -57,12 +67,13 @@ public class StartupLoader {
 
   private void stageUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
-        poeNinjaService.getUniqueJewels(league.getName()).subscribe(response -> {
-          ninjaDataSyncService.loadUniqueJewels(response.getBody(), league);
-          log.info("{} - Unique Jewel - Loaded {} units",
+        UNIQUE_ITEM_TYPES.forEach(type -> poeNinjaService.getUniqueItems(league.getName(), type).subscribe(response -> {
+          ninjaDataSyncService.addNewJewels(response.getBody(), league);
+          log.info("{} - {} - Loaded {} units",
               league.getName(),
+              type,
               dataAccessService.findUniqueJewelsByLeague(league).size());
-        }));
+        })));
 
   }
 
@@ -87,8 +98,24 @@ public class StartupLoader {
 
   private void stageVendorRecipes() {
     dataAccessService.findLeagues().forEach(league -> {
-      vendorRecipeService.syncVendorRecipes(vendorRecipeCalculatorService.calculateRecipesForLeague(league), league);
-      log.info("Vendor recipes loaded successfully for league '{}'", league.getName());
+      List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
+      vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
+      int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
+      if (persistedRecipes == 0) {
+        log.warn(
+            "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+            league.getName(),
+            calculatedRecipes.size(),
+            persistedRecipes
+        );
+        return;
+      }
+      log.info(
+          "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
+          league.getName(),
+          calculatedRecipes.size(),
+          persistedRecipes
+      );
     });
   }
 }
