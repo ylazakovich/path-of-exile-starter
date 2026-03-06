@@ -149,8 +149,11 @@ public abstract class AbstractWebClientService {
     WebClient.Builder builder = WebClient.builder()
         .baseUrl(baseUrl)
         .clientConnector(new org.springframework.http.client.reactive.ReactorClientHttpConnector(httpClient))
-        .filter(logExchange())
         .exchangeStrategies(exchangeStrategies);
+
+    if (log.isDebugEnabled()) {
+      builder.filter(logExchange());
+    }
 
     if (isMockServerUrl(baseUrl) && org.apache.commons.lang3.StringUtils.isNotBlank(realUrl)) {
       builder.defaultHeader(HttpHeaders.HOST, URI.create(realUrl).getHost());

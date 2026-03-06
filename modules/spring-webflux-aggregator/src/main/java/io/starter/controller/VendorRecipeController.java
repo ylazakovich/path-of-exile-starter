@@ -51,7 +51,7 @@ public class VendorRecipeController {
     dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_VENDOR_RECIPES_UPDATE_CRON)
   public void updateVendorRecipes() {
     dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
   }

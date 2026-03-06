@@ -53,14 +53,14 @@ public class UniqueJewelController {
         });
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_UNIQUE_JEWELS_UPDATE_CRON)
   public void updateUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
         UNIQUE_ITEM_TYPES.forEach(type -> syncUniqueItems(league, type, true))
     );
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_UNIQUE_JEWELS_ADD_CRON)
   public void addNewUniqueJewels() {
     dataAccessService.findLeagues().forEach(league ->
         UNIQUE_ITEM_TYPES.forEach(type -> syncUniqueItems(league, type, false))

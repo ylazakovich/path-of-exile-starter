@@ -28,7 +28,7 @@ public class SkillController  {
     dataAccessService.findLeagues().forEach(this::loadSkills);
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_SKILLS_UPDATE_CRON)
   public void updateSkills() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName())
@@ -39,7 +39,7 @@ public class SkillController  {
     );
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_SKILLS_ADD_CRON)
   public void addNewSkills() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getSkills(league.getName())

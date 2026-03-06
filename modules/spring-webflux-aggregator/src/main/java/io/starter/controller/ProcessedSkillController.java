@@ -30,14 +30,14 @@ public class ProcessedSkillController {
     });
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_PROCESSED_SKILLS_ADD_CRON)
   private void addNewProcessedSkills() {
     dataAccessService.findLeagues().forEach(league ->
         dataAccessService.addNewProcessedSkill(league, skillDeltaService.analyzeSkills(league.getName()))
     );
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_UPDATE_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_PROCESSED_SKILLS_UPDATE_CRON)
   private void updateProcessedSkills() {
     dataAccessService.findLeagues().forEach(league ->
         dataAccessService.updateProcessedSkills(league, skillDeltaService.analyzeSkills(league.getName()))

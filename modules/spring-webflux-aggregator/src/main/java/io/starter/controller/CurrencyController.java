@@ -28,7 +28,7 @@ public class CurrencyController {
     dataAccessService.findLeagues().forEach(this::loadCurrencies);
   }
 
-  @Scheduled(cron = ScheduleConfig.A8R_ADD_CRON)
+  @Scheduled(cron = ScheduleConfig.A8R_CURRENCIES_UPDATE_CRON)
   public void updateCurrencies() {
     dataAccessService.findLeagues().forEach(league ->
         poeNinjaService.getRates(league.getName())
