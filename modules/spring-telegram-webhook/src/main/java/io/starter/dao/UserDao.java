@@ -70,6 +70,17 @@ public class UserDao {
     save(entity);
   }
 
+  public int readRecipePage(User user) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    return Objects.requireNonNullElse(entity.getRecipePage(), 1);
+  }
+
+  public void saveRecipePage(User user, int page) {
+    UserEntity entity = userRepository.findByUserId(user.getId());
+    entity.setRecipePage(page);
+    save(entity);
+  }
+
   public void saveWhenNotExist(User user) {
     UserEntity userEntity = userRepository.findByUserId(user.getId());
     LeagueEntity leagueEntity = leagueRepository.findById(9L);
@@ -81,6 +92,7 @@ public class UserDao {
       userEntity.setUserName(Objects.requireNonNullElse(user.getUserName(), StringUtils.EMPTY));
       userEntity.setLastName(Objects.requireNonNullElse(user.getLastName(), StringUtils.EMPTY));
       userEntity.setSkillPage(1);
+      userEntity.setRecipePage(1);
       save(userEntity);
     }
   }

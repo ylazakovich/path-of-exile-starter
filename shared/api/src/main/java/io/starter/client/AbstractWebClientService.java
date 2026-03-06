@@ -39,11 +39,21 @@ public abstract class AbstractWebClientService {
   protected final WebClient client;
   protected final JsonMapper jsonMapper;
   protected final RequestExecutor executor;
+  protected final RequestExecutor fallbackExecutor;
+  protected final boolean mockFallbackEnabled;
 
-  protected AbstractWebClientService(JsonMapper jsonMapper, boolean useProxy, String baseUrl, String realUrl) {
+  protected AbstractWebClientService(JsonMapper jsonMapper,
+                                     boolean useProxy,
+                                     boolean useMockServerAsFallback,
+                                     String baseUrl,
+                                     String realUrl) {
     this.jsonMapper = jsonMapper;
     this.client = buildWebClient(useProxy, baseUrl, realUrl);
     this.executor = new RequestExecutor(client);
+    this.mockFallbackEnabled = shouldEnableMockFallback(useProxy, useMockServerAsFallback, baseUrl);
+    this.fallbackExecutor = mockFallbackEnabled
+        ? new RequestExecutor(buildWebClient(false, mockServerBaseUrl(), realUrl))
+        : null;
   }
 
   protected <T> Mono<ResponseEntity<T>> get(String path,
@@ -56,7 +66,38 @@ public abstract class AbstractWebClientService {
                                             Map<String, String> queryParams,
                                             Map<String, String> headers,
                                             ParameterizedTypeReference<T> responseType) {
-    return executor.get(path, queryParams, headers, responseType);
+    Mono<ResponseEntity<T>> primaryRequest = executor.get(path, queryParams, headers, responseType);
+    if (!mockFallbackEnabled || fallbackExecutor == null) {
+      return primaryRequest;
+    }
+    return primaryRequest.onErrorResume(primaryError -> {
+      log.warn(
+          "Primary request failed for path='{}' query='{}'. Trying MockServer fallback at '{}'",
+          path,
+          queryParams,
+          mockServerBaseUrl(),
+          primaryError
+      );
+      return fallbackExecutor.get(path, queryParams, headers, responseType)
+          .doOnSuccess(response -> log.info(
+              "MockServer fallback response received for path='{}' status={}",
+              path,
+              response.getStatusCode().value()))
+          .doOnError(fallbackError -> log.error(
+              "MockServer fallback failed for path='{}' query='{}'",
+              path,
+              queryParams,
+              fallbackError
+          ));
+    });
+  }
+
+  private boolean shouldEnableMockFallback(boolean useProxy, boolean useMockServerAsFallback, String baseUrl) {
+    return useMockServerAsFallback && !useProxy && !isMockServerUrl(baseUrl);
+  }
+
+  private static String mockServerBaseUrl() {
+    return "http://%s:%d".formatted(mockServerHost(), mockServerPort());
   }
 
   private static String mockServerHost() {

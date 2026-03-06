@@ -24,4 +24,5 @@ public class UserEntity extends WithJoinLeague {
   public String lastName;
   public Integer lastMessageId;
   public @NotNull Integer skillPage;
+  public @NotNull Integer recipePage;
 }

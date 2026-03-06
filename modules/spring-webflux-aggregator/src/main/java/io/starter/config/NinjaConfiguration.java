@@ -21,4 +21,8 @@ public interface NinjaConfiguration extends Config {
   @Key("NINJA_USE_MOCK_SERVER_AS_PROXY")
   @DefaultValue("false")
   Boolean useMockServerAsProxy();
+
+  @Key("NINJA_USE_MOCK_SERVER_AS_FALLBACK")
+  @DefaultValue("true")
+  Boolean useMockServerAsFallback();
 }

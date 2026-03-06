@@ -1,5 +1,6 @@
 package io.starter.service;
 
+import java.util.List;
 import java.util.Map;
 
 import io.starter.client.AbstractWebClientService;
@@ -13,6 +14,7 @@ import io.starter.type.SkillTypeReference;
 import io.starter.type.TypeRefFactory;
 import io.starter.type.UniqueJewelTypeReference;
 
+import lombok.extern.log4j.Log4j2;
 import org.aeonbits.owner.ConfigFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,7 @@ import reactor.core.publisher.Mono;
 import tools.jackson.databind.json.JsonMapper;
 
 @Service
+@Log4j2
 public class PoeNinjaService extends AbstractWebClientService {
 
   private static final NinjaConfiguration CONFIG =
@@ -29,7 +32,13 @@ public class PoeNinjaService extends AbstractWebClientService {
   private static final String CURRENCIES = "/api/data/currencyoverview";
 
   public PoeNinjaService(JsonMapper jsonMapper) {
-    super(jsonMapper, CONFIG.useMockServerAsProxy(), CONFIG.baseUrl(), CONFIG.realUrl());
+    super(
+        jsonMapper,
+        CONFIG.useMockServerAsProxy(),
+        CONFIG.useMockServerAsFallback(),
+        CONFIG.baseUrl(),
+        CONFIG.realUrl()
+    );
   }
 
   public Mono<ResponseEntity<Lines<Skill>>> getSkills(String league) {
@@ -54,6 +63,16 @@ public class PoeNinjaService extends AbstractWebClientService {
       String type,
       TypeRefFactory<T> typeRefFactory
   ) {
-    return get(path, Map.of("league", league, "type", type), typeRefFactory.get());
+    return get(path, Map.of("league", league, "type", type), typeRefFactory.get())
+        .onErrorResume(error -> {
+          log.warn(
+              "Unable to load Poe Ninja data (path='{}', league='{}', type='{}'). Returning empty lines.",
+              path,
+              league,
+              type,
+              error
+          );
+          return Mono.just(ResponseEntity.ok(new Lines<>(List.of())));
+        });
   }
 }

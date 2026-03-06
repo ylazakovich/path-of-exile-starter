@@ -54,15 +54,15 @@ public class CallbackAnswerService {
     int page = userDao.readSkillPage(from);
     String inlineMessage = StringUtils.EMPTY;
     if (callbackState == CallbackState.SKILLS || callbackState == CallbackState.REFRESH_SKILLS) {
-      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_NEXT) {
-      page = checkAndSyncPage(++page, skills);
-      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
+      page = checkAndSyncPage(++page, skills.size(), 10);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     if (callbackState == CallbackState.SKILLS_PREVIOUS) {
-      page = checkAndSyncPage(--page, skills);
-      inlineMessage = toPaginatedMessage(page, skills, leagueEntity);
+      page = checkAndSyncPage(--page, skills.size(), 10);
+      inlineMessage = toPaginatedSkillMessage(page, skills, leagueEntity);
     }
     userDao.saveSkillPage(from, page);
     InlineKeyboardMarkup keyboard = onClickSkills(page);
@@ -70,8 +70,27 @@ public class CallbackAnswerService {
   }
 
   public EditMessageText onClickVendorRecipes(CallbackQuery callbackQuery) {
-    InlineKeyboardMarkup keyboard = onClickVendorRecipes();
-    String inlineMessage = "Select a vendor recipe:";
+    User from = callbackQuery.getFrom();
+    LeagueEntity leagueEntity = userDao.readLeague(from);
+    List<VendorRecipeEntity> recipes = dataAccessService.findAllVendorRecipes(leagueEntity);
+    CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
+    int page = userDao.readRecipePage(from);
+    String inlineMessage;
+    if (recipes.isEmpty()) {
+      inlineMessage = "Vendor recipes are not available for league '%s'.".formatted(leagueEntity.getName());
+      page = 1;
+    } else {
+      if (callbackState == CallbackState.VENDOR_RECIPES_NEXT) {
+        page = checkAndSyncPage(++page, recipes.size(), 10);
+      } else if (callbackState == CallbackState.VENDOR_RECIPES_PREVIOUS) {
+        page = checkAndSyncPage(--page, recipes.size(), 10);
+      } else {
+        page = checkAndSyncPage(page, recipes.size(), 10);
+      }
+      inlineMessage = toPaginatedVendorRecipesMessage(page, recipes, leagueEntity);
+    }
+    userDao.saveRecipePage(from, page);
+    InlineKeyboardMarkup keyboard = onClickVendorRecipes(page, recipes.isEmpty());
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
@@ -102,7 +121,7 @@ public class CallbackAnswerService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  private String toPaginatedMessage(int page, List<Skill> skills, LeagueEntity league) {
+  private String toPaginatedSkillMessage(int page, List<Skill> skills, LeagueEntity league) {
     final int itemsPerPage = 10;
     int start = (page - 1) * itemsPerPage;
     int end = Math.min(start + itemsPerPage, skills.size());
@@ -126,9 +145,50 @@ public class CallbackAnswerService {
     return builder.toString();
   }
 
-  private int checkAndSyncPage(int page, List<Skill> skills) {
+  private String toPaginatedVendorRecipesMessage(int page, List<VendorRecipeEntity> recipes, LeagueEntity league) {
     final int itemsPerPage = 10;
-    int totalPages = (int) Math.ceil((double) skills.size() / itemsPerPage);
+    int start = (page - 1) * itemsPerPage;
+    int end = Math.min(start + itemsPerPage, recipes.size());
+    final StringBuilder builder = new StringBuilder();
+    String leagueName = league.getName();
+    int totalWidth = 52;
+    int nameLength = leagueName.length();
+    int innerWidth = totalWidth - 2;
+    int leftPad = (innerWidth - nameLength - 2) / 2;
+    int rightPad = innerWidth - nameLength - 2 - leftPad;
+    String topBorder = "┌" + "─".repeat(leftPad) + " " + leagueName + " " + "─".repeat(rightPad) + "┐";
+    builder.append("```").append("\n");
+    builder.append(topBorder).append("\n");
+    for (int i = start; i < end; i++) {
+      VendorRecipeEntity recipe = recipes.get(i);
+      long chaosEquivalentPrice = Math.round(recipe.getChaosEquivalentPrice());
+      long chaosEquivalentProfit = Math.round(recipe.getChaosEquivalentProfit());
+      String line = String.format(
+          "│ %-22s | %6d c | %+6d c │",
+          abbreviate(recipe.getName(), 22),
+          chaosEquivalentPrice,
+          chaosEquivalentProfit
+      );
+      builder.append(line).append("\n");
+    }
+    builder.append("└").append("─".repeat(totalWidth - 2)).append("┘").append("\n");
+    builder.append("```");
+    return builder.toString();
+  }
+
+  private String abbreviate(String value, int maxLength) {
+    if (value == null) {
+      return "n/a";
+    }
+    if (maxLength < 2 || value.length() <= maxLength) {
+      return value;
+    }
+    return value.substring(0, maxLength - 1) + "…";
+  }
+
+  private int checkAndSyncPage(int page, int itemsCount, int itemsPerPage) {
+    int totalPages = (int) Math.ceil((double) itemsCount / itemsPerPage);
+    totalPages = Math.max(totalPages, 1);
     if (page < 1) {
       page = totalPages;
     }
@@ -220,11 +280,23 @@ public class CallbackAnswerService {
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
-  private InlineKeyboardMarkup onClickVendorRecipes() {
-    InlineKeyboardButton animaStone = InlineKeyboardButtonGenerator
-        .generate(Constants.Recipes.ANIMA_STONE, CallbackState.ANIMA_STONE.value);
-    List<InlineKeyboardButton> row = List.of(animaStone);
-    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row);
+  private InlineKeyboardMarkup onClickVendorRecipes(int page, boolean isEmpty) {
+    List<InlineKeyboardButton> bodyButtons;
+    if (isEmpty) {
+      bodyButtons = List.of(
+          InlineKeyboardButtonGenerator.generate(String.valueOf(page), CallbackState.CURRENT.value)
+      );
+    } else {
+      bodyButtons = List.of(
+          InlineKeyboardButtonGenerator.generate(Emoji.LEFT.value, CallbackState.VENDOR_RECIPES_PREVIOUS.value),
+          InlineKeyboardButtonGenerator.generate(String.valueOf(page), CallbackState.CURRENT.value),
+          InlineKeyboardButtonGenerator.generate(Emoji.RIGHT.value, CallbackState.VENDOR_RECIPES_NEXT.value)
+      );
+    }
+    List<InlineKeyboardButton> footerButtons = List.of(
+        InlineKeyboardButtonGenerator.generate(Emoji.REPEAT.value, CallbackState.REFRESH_VENDOR_RECIPES.value)
+    );
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(bodyButtons, footerButtons);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 }

@@ -53,6 +53,11 @@ public class DataAccessService {
     return vendorRecipeRepository.findByLeagueAndName(league, name);
   }
 
+  public List<VendorRecipeEntity> findAllVendorRecipes(LeagueEntity league) {
+    final String column = "chaosEquivalentPrice";
+    return vendorRecipeRepository.findAllByLeague(league, Sort.by(Sort.Direction.ASC, column));
+  }
+
   public Optional<UniqueJewelEntity> findUniqueJewelByNameAndLeague(String name, LeagueEntity league) {
     return uniqueJewelsRepository.findByNameAndLeague(name, league);
   }

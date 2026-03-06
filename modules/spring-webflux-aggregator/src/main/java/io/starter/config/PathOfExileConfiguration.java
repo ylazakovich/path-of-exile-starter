@@ -21,4 +21,8 @@ public interface PathOfExileConfiguration extends Config {
   @Key("PATH_OF_EXILE_USE_MOCK_SERVER_AS_PROXY")
   @DefaultValue("false")
   Boolean useMockServerAsProxy();
+
+  @Key("PATH_OF_EXILE_USE_MOCK_SERVER_AS_FALLBACK")
+  @DefaultValue("true")
+  Boolean useMockServerAsFallback();
 }
