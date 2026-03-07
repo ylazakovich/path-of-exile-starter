@@ -1,6 +1,7 @@
 package io.starter.controller;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 public class VendorRecipeController {
 
+  private final AtomicBoolean updateVendorRecipesRunning = new AtomicBoolean(false);
   private final DataAccessService dataAccessService;
   private final VendorRecipeCalculatorService vendorRecipeCalculatorService;
   private final VendorRecipeService vendorRecipeService;
@@ -53,27 +55,44 @@ public class VendorRecipeController {
 
   @Scheduled(cron = ScheduleConfig.A8R_VENDOR_RECIPES_UPDATE_CRON)
   public void updateVendorRecipes() {
-    dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague);
+    runScheduledJob("vendor-recipes-update", updateVendorRecipesRunning, () ->
+        dataAccessService.findLeagues().forEach(this::loadVendorRecipesForLeague));
   }
 
   private void loadVendorRecipesForLeague(LeagueEntity league) {
-    List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
-    vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
-    int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
-    if (persistedRecipes == 0) {
-      log.warn(
-          "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+    try {
+      List<VendorRecipeEntity> calculatedRecipes = vendorRecipeCalculatorService.calculateRecipesForLeague(league);
+      vendorRecipeService.syncVendorRecipes(calculatedRecipes, league);
+      int persistedRecipes = dataAccessService.findVendorRecipesByLeague(league).size();
+      if (persistedRecipes == 0) {
+        log.warn(
+            "Vendor recipes sync completed for league '{}': no recipes available (calculated={}, persisted={})",
+            league.getName(),
+            calculatedRecipes.size(),
+            persistedRecipes
+        );
+        return;
+      }
+      log.info(
+          "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
           league.getName(),
           calculatedRecipes.size(),
           persistedRecipes
       );
+    } catch (Exception e) {
+      log.error("{} - Vendor recipes sync failed", league.getName(), e);
+    }
+  }
+
+  private void runScheduledJob(String jobName, AtomicBoolean lock, Runnable scheduledAction) {
+    if (!lock.compareAndSet(false, true)) {
+      log.warn("Skipping '{}' run because previous execution is still in progress", jobName);
       return;
     }
-    log.info(
-        "Vendor recipes sync completed for league '{}': calculated={}, persisted={}",
-        league.getName(),
-        calculatedRecipes.size(),
-        persistedRecipes
-    );
+    try {
+      scheduledAction.run();
+    } finally {
+      lock.set(false);
+    }
   }
 }
