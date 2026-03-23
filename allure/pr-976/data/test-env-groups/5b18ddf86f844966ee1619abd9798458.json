@@ -1,0 +1,1 @@
+{"id":"5b18ddf86f844966ee1619abd9798458","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotCommandExpandOptions","name":"Bot should send message about selecting next command","status":"passed","testResultsByEnv":{"default":"34ebd4d5096f75a3a943a8d27fbf58e3"}}
