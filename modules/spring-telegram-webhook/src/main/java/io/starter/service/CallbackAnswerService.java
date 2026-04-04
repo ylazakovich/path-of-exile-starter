@@ -3,7 +3,9 @@ package io.starter.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import io.starter.cache.state.CallbackState;
 import io.starter.constants.Constants;
@@ -32,6 +34,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
+import reactor.core.publisher.Mono;
 
 @Service
 @AllArgsConstructor
@@ -43,11 +46,15 @@ public class CallbackAnswerService {
   private static final int VENDOR_RECIPES_PER_PAGE = 1;
   private static final int VENDOR_INGREDIENT_ROWS = 5;
   private static final int BOX_LINE_CONTENT_WIDTH = TABLE_WIDTH - 4;
+  private static final Duration VENDOR_DIAGNOSTICS_REQUEST_TIMEOUT = Duration.ofSeconds(2);
+  private static final Duration VENDOR_DIAGNOSTICS_CACHE_TTL = Duration.ofMinutes(2);
 
   private final DataAccessService dataAccessService;
   private final UserDao userDao;
   private final SettingsService settingsService;
   private final A8rService a8rService;
+  private final ConcurrentMap<String, CachedVendorDiagnostics> vendorDiagnosticsCache = new ConcurrentHashMap<>();
+  private final ConcurrentMap<String, Boolean> vendorDiagnosticsRefreshInFlight = new ConcurrentHashMap<>();
 
   public EditMessageText onClickSetting(CallbackQuery callbackQuery) {
     CallbackState callbackState = CallbackState.byData(callbackQuery.getData());
@@ -240,22 +247,8 @@ public class CallbackAnswerService {
   }
 
   private VendorRecipeDiagnostic findVendorRecipeDiagnostic(String leagueName, String recipeName) {
-    List<VendorRecipeDiagnostic> diagnostics;
-    try {
-      diagnostics = Optional.ofNullable(a8rService.getVendorRecipeDiagnostics(leagueName)
-              .onErrorReturn(List.of())
-              .toFuture()
-              .get(10, TimeUnit.SECONDS))
-          .orElse(List.of());
-    } catch (Exception exception) {
-      log.warn(
-          "Failed to load vendor diagnostics for league='{}', recipe='{}'. Ingredients will be unavailable.",
-          leagueName,
-          recipeName,
-          exception
-      );
-      diagnostics = List.of();
-    }
+    refreshVendorRecipeDiagnosticsAsync(leagueName, recipeName);
+    List<VendorRecipeDiagnostic> diagnostics = getCachedVendorRecipeDiagnostics(leagueName);
     VendorRecipeDiagnostic matchedDiagnostic = diagnostics.stream()
         .filter(diagnostic -> diagnostic != null && recipeName.equalsIgnoreCase(diagnostic.recipeName()))
         .findFirst()
@@ -276,6 +269,42 @@ public class CallbackAnswerService {
       );
     }
     return matchedDiagnostic;
+  }
+
+  private List<VendorRecipeDiagnostic> getCachedVendorRecipeDiagnostics(String leagueName) {
+    String cacheKey = normalizeName(leagueName);
+    CachedVendorDiagnostics cached = vendorDiagnosticsCache.get(cacheKey);
+    if (cached != null) {
+      return cached.diagnostics();
+    }
+    return List.of();
+  }
+
+  private void refreshVendorRecipeDiagnosticsAsync(String leagueName, String recipeName) {
+    String cacheKey = normalizeName(leagueName);
+    long now = System.currentTimeMillis();
+    CachedVendorDiagnostics cached = vendorDiagnosticsCache.get(cacheKey);
+    boolean isCacheFresh = cached != null && now - cached.loadedAtMillis() <= VENDOR_DIAGNOSTICS_CACHE_TTL.toMillis();
+    if (isCacheFresh || vendorDiagnosticsRefreshInFlight.putIfAbsent(cacheKey, Boolean.TRUE) != null) {
+      return;
+    }
+
+    a8rService.getVendorRecipeDiagnostics(leagueName)
+        .timeout(VENDOR_DIAGNOSTICS_REQUEST_TIMEOUT)
+        .onErrorResume(exception -> {
+          log.warn(
+              "Failed to refresh vendor diagnostics for league='{}', recipe='{}'.",
+              leagueName,
+              recipeName,
+              exception
+          );
+          return Mono.just(List.of());
+        })
+        .doFinally(signalType -> vendorDiagnosticsRefreshInFlight.remove(cacheKey))
+        .subscribe(diagnostics -> {
+          List<VendorRecipeDiagnostic> safeDiagnostics = diagnostics == null ? List.of() : List.copyOf(diagnostics);
+          vendorDiagnosticsCache.put(cacheKey, new CachedVendorDiagnostics(safeDiagnostics, System.currentTimeMillis()));
+        });
   }
 
   private int checkAndSyncPage(int page, int itemsCount, int itemsPerPage) {
@@ -441,6 +470,9 @@ public class CallbackAnswerService {
     Optional<Double> maybeRate = Optional.ofNullable(dataAccessService.findDivineOrbChaosRate(leagueEntity))
         .orElse(Optional.empty());
     return maybeRate.orElse(null);
+  }
+
+  private record CachedVendorDiagnostics(List<VendorRecipeDiagnostic> diagnostics, long loadedAtMillis) {
   }
 
   private InlineKeyboardMarkup onClickAnimaStone() {
