@@ -1,5 +1,6 @@
 package io.starter.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,7 +71,14 @@ public class DataAccessService {
   }
 
   public Optional<Double> findDivineOrbChaosRate(LeagueEntity league) {
-    return rateRepository.findByNameAndLeague(DIVINE_ORB, league)
-        .map(RateEntity::getChaosEquivalent);
+    return findRateChaosEquivalentByName(DIVINE_ORB, league);
+  }
+
+  public Optional<Double> findRateChaosEquivalentByName(String name, LeagueEntity league) {
+    return rateRepository.findAllByNameAndLeague(name, league)
+        .stream()
+        .map(RateEntity::getChaosEquivalent)
+        .filter(value -> value != null && value > 0)
+        .min(Comparator.naturalOrder());
   }
 }

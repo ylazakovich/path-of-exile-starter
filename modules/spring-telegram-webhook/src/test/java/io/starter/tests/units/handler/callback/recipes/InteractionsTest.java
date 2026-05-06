@@ -7,6 +7,7 @@ import io.starter.entity.UniqueJewelEntity;
 import io.starter.entity.VendorRecipeEntity;
 import io.starter.handler.UpdateHandler;
 import io.starter.model.telegram.TelegramFacade;
+import io.starter.service.DivinationRecipeService;
 import io.starter.tests.units.handler.callback.BaseCallbackTest;
 
 import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
@@ -86,6 +87,41 @@ public class InteractionsTest extends BaseCallbackTest {
     assertThat(actual.getText()).doesNotContain("Craft cost");
     assertThat(actual.getText()).doesNotContain("Profit");
     assertThat(actual.getText()).doesNotContain("Result price");
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test(description = "Bot should react on clicking button 'Divination Recipes'")
+  void testUserInteractionInDivinationRecipesMenu() {
+    LeagueEntity leagueEntity = mock(LeagueEntity.class);
+    UpdateHandler handler = spy(new UpdateHandler(messageAnswerService, callbackAnswerService, userDao));
+    TelegramFacade bot = spy(new TelegramFacade(handler, callbackCache, messageCache));
+    String callbackQueryId = String.valueOf(faker.number().positive());
+    DivinationRecipeService.DivinationRecipeProjection recipe = new DivinationRecipeService.DivinationRecipeProjection(
+        "the_sephirot",
+        "The Sephirot",
+        11,
+        "Divine Orb",
+        10,
+        149.0,
+        170.0,
+        1639.0,
+        1700.0,
+        61.0,
+        3.72
+    );
+
+    when(leagueEntity.getName()).thenReturn("Mirage");
+    when(callbackQuery.getData()).thenReturn(CallbackState.DIVINATION_RECIPES.value);
+    when(callbackQuery.getId()).thenReturn(callbackQueryId);
+    when(userDao.readLeague(user)).thenReturn(leagueEntity);
+    when(divinationRecipeService.findProfitableRecipes(leagueEntity)).thenReturn(java.util.List.of(recipe));
+    BotApiMethod<?> botApiMethod = bot.handleOnUpdate(update);
+
+    EditMessageText expected = callbackAnswerService.onClickDivinationRecipes(callbackQuery);
+    EditMessageText actual = (EditMessageText) botApiMethod;
+    assertThat(botApiMethod.getMethod()).isEqualTo(EditMessageText.PATH);
+    assertThat(actual.getText()).contains("The Sephirot");
+    assertThat(actual.getText()).contains("Best Recipe");
     assertThat(actual).isEqualTo(expected);
   }
 }

@@ -1,9 +1,15 @@
 package io.starter.component;
 
 import java.time.Duration;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import io.starter.entity.LeagueEntity;
 import io.starter.entity.VendorRecipeEntity;
+import io.starter.model.ninja.Currency;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.UniqueJewel;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PathOfExileService;
@@ -15,6 +21,7 @@ import io.starter.service.VendorRecipeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 @RequiredArgsConstructor
@@ -57,12 +64,13 @@ public class StartupLoader {
 
   private void stageCurrencies() {
     dataAccessService.findLeagues().forEach(league ->
-        poeNinjaService.getRates(league.getName()).subscribe(response -> {
-          ninjaDataSyncService.loadCurrency(response.getBody(), league);
-          log.info("{} - Currency - Loaded {} units",
-              league.getName(),
-              dataAccessService.findRatesByLeague(league).size());
-        }));
+        loadCombinedRatesForLeague(league)
+            .subscribe(mergedRates -> {
+              ninjaDataSyncService.loadCurrency(mergedRates, league);
+              log.info("{} - Currency+Divination - Loaded {} units",
+                  league.getName(),
+                  dataAccessService.findRatesByLeague(league).size());
+            }));
   }
 
   private void stageUniqueJewels() {
@@ -117,5 +125,33 @@ public class StartupLoader {
           persistedRecipes
       );
     });
+  }
+
+  private Mono<Lines<Currency>> loadCombinedRatesForLeague(LeagueEntity league) {
+    return Mono.zip(
+        poeNinjaService.getRates(league.getName()),
+        poeNinjaService.getUniqueItems(league.getName(), "DivinationCard")
+    ).map(tuple -> mergeRates(tuple.getT1().getBody(), tuple.getT2().getBody()));
+  }
+
+  private Lines<Currency> mergeRates(Lines<Currency> rates, Lines<UniqueJewel> divinationCards) {
+    Map<String, Double> merged = new LinkedHashMap<>();
+    if (rates != null && rates.getLines() != null) {
+      rates.getLines().forEach(currency -> mergeRate(merged, currency.getName(), currency.getChaosEquivalent()));
+    }
+    if (divinationCards != null && divinationCards.getLines() != null) {
+      divinationCards.getLines().forEach(card -> mergeRate(merged, card.getName(), card.getChaosEquivalent()));
+    }
+    List<Currency> lines = merged.entrySet().stream()
+        .map(entry -> Currency.builder().name(entry.getKey()).chaosEquivalent(entry.getValue()).build())
+        .toList();
+    return new Lines<>(lines);
+  }
+
+  private void mergeRate(Map<String, Double> target, String name, double chaosEquivalent) {
+    if (name == null || name.isBlank() || chaosEquivalent <= 0) {
+      return;
+    }
+    target.merge(name, chaosEquivalent, Math::min);
   }
 }

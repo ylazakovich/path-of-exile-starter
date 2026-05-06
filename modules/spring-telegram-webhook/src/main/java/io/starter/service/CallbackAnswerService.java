@@ -1,9 +1,9 @@
 package io.starter.service;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.time.Duration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -45,11 +45,13 @@ public class CallbackAnswerService {
   private static final int SKILLS_PER_PAGE = 10;
   private static final int VENDOR_RECIPES_PER_PAGE = 1;
   private static final int VENDOR_INGREDIENT_ROWS = 5;
+  private static final int MAX_DIVINATION_ROWS = 6;
   private static final int BOX_LINE_CONTENT_WIDTH = TABLE_WIDTH - 4;
   private static final Duration VENDOR_DIAGNOSTICS_REQUEST_TIMEOUT = Duration.ofSeconds(2);
   private static final Duration VENDOR_DIAGNOSTICS_CACHE_TTL = Duration.ofMinutes(2);
 
   private final DataAccessService dataAccessService;
+  private final DivinationRecipeService divinationRecipeService;
   private final UserDao userDao;
   private final SettingsService settingsService;
   private final A8rService a8rService;
@@ -122,7 +124,10 @@ public class CallbackAnswerService {
         page = checkAndSyncPage(page, recipes.size(), VENDOR_RECIPES_PER_PAGE);
       }
       VendorRecipeEntity selectedRecipe = recipes.get(page - 1);
-      VendorRecipeDiagnostic recipeDiagnostic = findVendorRecipeDiagnostic(leagueEntity.getName(), selectedRecipe.getName());
+      VendorRecipeDiagnostic recipeDiagnostic = findVendorRecipeDiagnostic(
+          leagueEntity.getName(),
+          selectedRecipe.getName()
+      );
       inlineMessage = toDetailedVendorRecipeMessage(
           page,
           totalPages,
@@ -150,6 +155,18 @@ public class CallbackAnswerService {
     return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
   }
 
+  public EditMessageText onClickDivinationRecipes(CallbackQuery callbackQuery) {
+    User from = callbackQuery.getFrom();
+    LeagueEntity leagueEntity = userDao.readLeague(from);
+    CurrencyDisplay currencyDisplay = resolveCurrency(userDao.readCurrency(from));
+    Double divineRate = readDivineRate(leagueEntity);
+    List<DivinationRecipeService.DivinationRecipeProjection> recipes =
+        divinationRecipeService.findProfitableRecipes(leagueEntity);
+    String inlineMessage = toDivinationRecipesMessage(leagueEntity, recipes, currencyDisplay, divineRate);
+    InlineKeyboardMarkup keyboard = onClickDivinationRecipes();
+    return EditMessageGenerator.generate(callbackQuery.getMessage(), inlineMessage, keyboard);
+  }
+
   private InlineKeyboardMarkup onClickSkills(int page, int totalPages) {
     InlineKeyboardButton linkToGuide =
         InlineKeyboardButtonGenerator.generate("Link to guide", CallbackState.NO_CMD.value);
@@ -164,6 +181,14 @@ public class CallbackAnswerService {
         InlineKeyboardButtonGenerator.generate(Emoji.REPEAT.value, CallbackState.REFRESH_SKILLS.value)
     );
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(headerButtons, bodyButtons, footerButtons);
+    return InlineKeyboardGenerator.withRows(keyboard);
+  }
+
+  private InlineKeyboardMarkup onClickDivinationRecipes() {
+    InlineKeyboardButton refresh = InlineKeyboardButtonGenerator
+        .generate(Emoji.REPEAT.value, CallbackState.REFRESH_DIVINATION_RECIPES.value);
+    List<InlineKeyboardButton> row = List.of(refresh);
+    List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row);
     return InlineKeyboardGenerator.withRows(keyboard);
   }
 
@@ -246,6 +271,53 @@ public class CallbackAnswerService {
     return builder.toString();
   }
 
+  private String toDivinationRecipesMessage(LeagueEntity leagueEntity,
+                                            List<DivinationRecipeService.DivinationRecipeProjection> recipes,
+                                            CurrencyDisplay currencyDisplay,
+                                            Double divineRate) {
+    if (leagueEntity == null) {
+      return "Divination recipes are not available: league is not selected.";
+    }
+    if (recipes == null || recipes.isEmpty()) {
+      return "Profitable divination recipes are not available for league '%s'.".formatted(leagueEntity.getName());
+    }
+
+    DivinationRecipeService.DivinationRecipeProjection bestRecipe = recipes.get(0);
+    StringBuilder builder = new StringBuilder();
+    builder.append("```").append("\n");
+    builder.append(formatTopBorder(leagueEntity.getName())).append("\n");
+    builder.append(formatSectionDivider("Top Profits")).append("\n");
+    recipes.stream()
+        .limit(MAX_DIVINATION_ROWS)
+        .forEach(recipe -> builder.append(formatVendorLine(formatAlignedContentLine(
+            sanitize(recipe.cardName()),
+            formatDisplayedValue(recipe.profitChaos(), currencyDisplay, divineRate)
+        ))).append("\n"));
+    if (recipes.size() > MAX_DIVINATION_ROWS) {
+      builder.append(formatVendorLine("... +%d more".formatted(recipes.size() - MAX_DIVINATION_ROWS))).append("\n");
+    }
+    builder.append(formatVendorLine(StringUtils.EMPTY)).append("\n");
+    builder.append(formatSectionDivider("Best Recipe")).append("\n");
+    builder.append(formatVendorLine("%s x%d -> %s x%d".formatted(
+        sanitize(bestRecipe.cardName()),
+        bestRecipe.stackSize(),
+        sanitize(bestRecipe.resultName()),
+        bestRecipe.resultQuantity()
+    ))).append("\n");
+    builder.append(formatVendorLine("Card price: %s".formatted(
+        formatDisplayedValue(bestRecipe.cardPriceChaos(), currencyDisplay, divineRate)))).append("\n");
+    builder.append(formatVendorLine("Result price: %s".formatted(
+        formatDisplayedValue(bestRecipe.resultUnitPriceChaos(), currencyDisplay, divineRate)))).append("\n");
+    builder.append(formatVendorLine("Cost: %s".formatted(
+        formatDisplayedValue(bestRecipe.costChaos(), currencyDisplay, divineRate)))).append("\n");
+    builder.append(formatVendorLine("Result value: %s".formatted(
+        formatDisplayedValue(bestRecipe.resultChaos(), currencyDisplay, divineRate)))).append("\n");
+    builder.append(formatVendorLine("Margin: %.2f %%".formatted(bestRecipe.marginPercent()))).append("\n");
+    builder.append("└").append("─".repeat(TABLE_WIDTH - 2)).append("┘").append("\n");
+    builder.append("```");
+    return builder.toString();
+  }
+
   private VendorRecipeDiagnostic findVendorRecipeDiagnostic(String leagueName, String recipeName) {
     refreshVendorRecipeDiagnosticsAsync(leagueName, recipeName);
     List<VendorRecipeDiagnostic> diagnostics = getCachedVendorRecipeDiagnostics(leagueName);
@@ -303,7 +375,10 @@ public class CallbackAnswerService {
         .doFinally(signalType -> vendorDiagnosticsRefreshInFlight.remove(cacheKey))
         .subscribe(diagnostics -> {
           List<VendorRecipeDiagnostic> safeDiagnostics = diagnostics == null ? List.of() : List.copyOf(diagnostics);
-          vendorDiagnosticsCache.put(cacheKey, new CachedVendorDiagnostics(safeDiagnostics, System.currentTimeMillis()));
+          vendorDiagnosticsCache.put(
+              cacheKey,
+              new CachedVendorDiagnostics(safeDiagnostics, System.currentTimeMillis())
+          );
         });
   }
 

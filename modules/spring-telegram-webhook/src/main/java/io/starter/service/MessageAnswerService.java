@@ -52,7 +52,9 @@ public class MessageAnswerService {
         .generate(skillsButtonText, CallbackState.SKILLS.value);
     InlineKeyboardButton button2 = InlineKeyboardButtonGenerator
         .generate(Constants.Start.VENDOR_RECIPES, CallbackState.VENDOR_RECIPES.value);
-    List<InlineKeyboardButton> row1 = List.of(button1, button2);
+    InlineKeyboardButton button3 = InlineKeyboardButtonGenerator
+        .generate(Constants.Start.DIVINATION_RECIPES, CallbackState.DIVINATION_RECIPES.value);
+    List<InlineKeyboardButton> row1 = List.of(button1, button2, button3);
     List<InlineKeyboardRow> keyboard = InlineKeyboardRowGenerator.generate(row1);
     return InlineKeyboardGenerator.withRows(keyboard);
   }

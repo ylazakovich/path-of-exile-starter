@@ -1,7 +1,9 @@
 package io.starter.service;
 
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -41,10 +43,7 @@ public class NinjaDataSyncService {
   }
 
   public void loadCurrency(Lines<Currency> lines, LeagueEntity league) {
-    List<Currency> currencyLines = safeLines(lines);
-    if (dataAccessService.findRatesByLeague(league).isEmpty() && !currencyLines.isEmpty()) {
-      ratesDao.saveAll(lines, league.getId());
-    }
+    upsertRates(lines, league);
   }
 
   public void loadUniqueJewels(Lines<UniqueJewel> lines, LeagueEntity league) {
@@ -70,14 +69,46 @@ public class NinjaDataSyncService {
   }
 
   public void updateCurrencies(Lines<Currency> lines, LeagueEntity league) {
-    List<Currency> currencyLines = safeLines(lines);
+    upsertRates(lines, league);
+  }
+
+  private void upsertRates(Lines<Currency> lines, LeagueEntity league) {
+    Map<String, Double> incomingRates = toRatesByName(lines);
+    if (incomingRates.isEmpty()) {
+      return;
+    }
+
     List<RateEntity> entitiesOnUpdate = dataAccessService.findRatesByLeague(league);
-    entitiesOnUpdate.forEach(entity -> currencyLines.stream()
-        .filter(currency -> currency.getName().equals(entity.getName()))
-        .findFirst()
-        .ifPresent(currency -> entity.setChaosEquivalent(currency.getChaosEquivalent()))
-    );
-    ratesDao.saveAll(entitiesOnUpdate, league.getId());
+    entitiesOnUpdate.forEach(entity -> {
+      Double updatedValue = incomingRates.remove(entity.getName());
+      if (updatedValue != null) {
+        entity.setChaosEquivalent(updatedValue);
+      }
+    });
+    if (!entitiesOnUpdate.isEmpty()) {
+      ratesDao.saveAll(entitiesOnUpdate, league.getId());
+    }
+
+    if (!incomingRates.isEmpty()) {
+      List<RateEntity> newEntities = incomingRates.entrySet().stream()
+          .map(rate -> new RateEntity(rate.getKey(), rate.getValue()))
+          .toList();
+      ratesDao.saveAll(newEntities, league.getId());
+    }
+  }
+
+  private Map<String, Double> toRatesByName(Lines<Currency> lines) {
+    Map<String, Double> rates = new LinkedHashMap<>();
+    safeLines(lines).forEach(currency -> {
+      if (currency == null || currency.getName() == null || currency.getName().isBlank()) {
+        return;
+      }
+      if (currency.getChaosEquivalent() <= 0) {
+        return;
+      }
+      rates.merge(currency.getName(), currency.getChaosEquivalent(), Math::min);
+    });
+    return rates;
   }
 
   public void updateSkills(Lines<Skill> lines, LeagueEntity league) {
