@@ -1,0 +1,7 @@
+divination-recipes:
+  definitions:
+    - id: the_sephirot
+      card-name: The Sephirot
+      stack-size: 11
+      result-name: Divine Orb
+      result-quantity: 10

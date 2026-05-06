@@ -19,6 +19,7 @@ public class Constants {
     public static final String SKILLS = "Skills";
     public static final String SKILLS_WITH_DIVINE_RATE = "Skills (1 div = %d c)";
     public static final String VENDOR_RECIPES = "Vendor Recipes";
+    public static final String DIVINATION_RECIPES = "Divination Recipes";
   }
 
   public static class Recipes {

@@ -1,25 +1,15 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:best-practices", "mergeConfidence:all-badges"],
-  "ignorePaths": [],
+  "extends": [
+    "github>ylazakovich/renovate-config//presets/gradle/default",
+    "github>ylazakovich/renovate-config//presets/docker/default"
+  ],
   "packageRules": [
     {
+      "description": "Pin mariadb below 11.3 (project Docker compatibility constraint)",
       "matchManagers": ["docker-compose", "dockerfile"],
-      "allowedVersions": "<11.3",
-      "matchPackageNames": ["mariadb"]
-    },
-    {
-      "matchPackageNames": ["com.puppycrawl.tools:checkstyle"],
-      "changelogUrl": "https://checkstyle.org/releasenotes.html",
-      "matchManagers": ["maven"]
-    },
-    {
-      "matchPackageNames": ["org.apache.httpcomponents.core5:httpcore5"],
-      "changelogUrl": "https://downloads.apache.org/httpcomponents/httpcore/RELEASE_NOTES-5.3.x.txt",
-      "matchManagers": ["maven"]
+      "matchPackageNames": ["mariadb"],
+      "allowedVersions": "<11.3"
     }
-  ],
-  "commitMessageTopic": "{{depName}}",
-  "labels": ["dependencies"],
-  "dependencyDashboardApproval": true
+  ]
 }

@@ -58,6 +58,7 @@ public class CommandsTest extends BaseMessageTest {
     assertThat(botApiMethod.getMethod()).isEqualTo(SendMessage.PATH);
     assertThat(actual.getText()).isEqualTo(Constants.General.QUESTION);
     assertThat(actual.getReplyMarkup().toString()).contains("1 div = 188 c");
+    assertThat(actual.getReplyMarkup().toString()).contains(Constants.Start.DIVINATION_RECIPES);
     assertThat(actual).isEqualTo(expected);
   }
 

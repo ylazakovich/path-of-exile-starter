@@ -6,6 +6,7 @@ import io.starter.dao.UserDao;
 import io.starter.service.A8rService;
 import io.starter.service.CallbackAnswerService;
 import io.starter.service.DataAccessService;
+import io.starter.service.DivinationRecipeService;
 import io.starter.service.MessageAnswerService;
 import io.starter.service.SettingsService;
 import io.starter.tests.BaseTest;
@@ -25,6 +26,7 @@ public abstract class BaseCallbackTest extends BaseTest {
 
   protected final SettingsService settingsService = mock(SettingsService.class);
   protected final DataAccessService dataAccessService = mock(DataAccessService.class);
+  protected final DivinationRecipeService divinationRecipeService = mock(DivinationRecipeService.class);
   protected final A8rService a8rService = mock(A8rService.class);
   protected final UserDao userDao = mock(UserDao.class);
   protected final MaybeInaccessibleMessage message = mock(MaybeInaccessibleMessage.class);
@@ -34,6 +36,7 @@ public abstract class BaseCallbackTest extends BaseTest {
 
   protected final CallbackAnswerService callbackAnswerService = spy(new CallbackAnswerService(
       dataAccessService,
+      divinationRecipeService,
       userDao,
       settingsService,
       a8rService));

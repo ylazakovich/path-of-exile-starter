@@ -1,10 +1,16 @@
 package io.starter.controller;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
 import io.starter.config.ScheduleConfig;
 import io.starter.entity.LeagueEntity;
+import io.starter.model.ninja.Currency;
+import io.starter.model.ninja.Lines;
+import io.starter.model.ninja.UniqueJewel;
 import io.starter.service.DataAccessService;
 import io.starter.service.NinjaDataSyncService;
 import io.starter.service.PoeNinjaService;
@@ -43,26 +49,54 @@ public class CurrencyController {
   }
 
   private void loadCurrencies(LeagueEntity league) {
-    poeNinjaService.getRates(league.getName())
-        .subscribe(response -> {
-          ninjaDataSyncService.loadCurrency(response.getBody(), league);
-          log.info("{} - Currency - Loaded {} units",
+    loadCombinedRatesForLeague(league)
+        .subscribe(mergedRates -> {
+          ninjaDataSyncService.loadCurrency(mergedRates, league);
+          log.info("{} - Currency+Divination - Loaded {} units",
               league.getName(),
               dataAccessService.findRatesByLeague(league).size());
         });
   }
 
   private Mono<Void> updateCurrenciesForLeague(LeagueEntity league) {
-    return poeNinjaService.getRates(league.getName())
-        .doOnNext(response -> {
-          ninjaDataSyncService.updateCurrencies(response.getBody(), league);
-          log.info("{} - Currency - Schedule updating", league.getName());
+    return loadCombinedRatesForLeague(league)
+        .doOnNext(mergedRates -> {
+          ninjaDataSyncService.updateCurrencies(mergedRates, league);
+          log.info("{} - Currency+Divination - Schedule updating", league.getName());
         })
         .then()
         .onErrorResume(e -> {
-          log.error("{} - Currency - Schedule updating failed", league.getName(), e);
+          log.error("{} - Currency+Divination - Schedule updating failed", league.getName(), e);
           return Mono.empty();
         });
+  }
+
+  private Mono<Lines<Currency>> loadCombinedRatesForLeague(LeagueEntity league) {
+    return Mono.zip(
+        poeNinjaService.getRates(league.getName()),
+        poeNinjaService.getUniqueItems(league.getName(), "DivinationCard")
+    ).map(tuple -> mergeRates(tuple.getT1().getBody(), tuple.getT2().getBody()));
+  }
+
+  private Lines<Currency> mergeRates(Lines<Currency> rates, Lines<UniqueJewel> divinationCards) {
+    Map<String, Double> merged = new LinkedHashMap<>();
+    if (rates != null && rates.getLines() != null) {
+      rates.getLines().forEach(currency -> mergeRate(merged, currency.getName(), currency.getChaosEquivalent()));
+    }
+    if (divinationCards != null && divinationCards.getLines() != null) {
+      divinationCards.getLines().forEach(card -> mergeRate(merged, card.getName(), card.getChaosEquivalent()));
+    }
+    List<Currency> lines = merged.entrySet().stream()
+        .map(entry -> Currency.builder().name(entry.getKey()).chaosEquivalent(entry.getValue()).build())
+        .toList();
+    return new Lines<>(lines);
+  }
+
+  private void mergeRate(Map<String, Double> target, String name, double chaosEquivalent) {
+    if (name == null || name.isBlank() || chaosEquivalent <= 0) {
+      return;
+    }
+    target.merge(name, chaosEquivalent, Math::min);
   }
 
   private void runScheduledJob(String jobName, AtomicBoolean lock, Supplier<Mono<Void>> scheduledAction) {

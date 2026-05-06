@@ -18,6 +18,8 @@ public enum CallbackState {
   REFRESH_SKILLS("Pressing button with 'Refresh' in Menu with 'Skills'"),
   VENDOR_RECIPES("Pressing button with 'Vendor Recipes'"),
   REFRESH_VENDOR_RECIPES("Pressing button with 'Refresh' in Menu with 'Vendor Recipes'"),
+  DIVINATION_RECIPES("Pressing button with 'Divination Recipes'"),
+  REFRESH_DIVINATION_RECIPES("Pressing button with 'Refresh' in Menu with 'Divination Recipes'"),
   ANIMA_STONE("Pressing button with 'Anima Stone'"),
   REFRESH_ANIMA_STONE("Pressing button with 'Refresh' in Menu with 'Anima Stone'"),
   CURRENT("Pressing on current page"),
