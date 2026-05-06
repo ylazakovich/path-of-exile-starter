@@ -1,5 +1,5 @@
 # ---------- Build stage ----------
-FROM --platform=$BUILDPLATFORM eclipse-temurin:25.0.2_10-jdk@sha256:bee2e23ab444ed60daf8123e36478bc4a286ba7835bec6f9daf9eba1d50a86a2 AS builder
+FROM --platform=$BUILDPLATFORM eclipse-temurin:25.0.3_9-jdk@sha256:c3a5cfd77c9a43dd95269a266290d365b79b174381d8336a3f76a7ae117beefa AS builder
 
 ARG MODULE
 ARG GRADLE_OPTS
@@ -19,7 +19,7 @@ RUN ./gradlew modules:${MODULE}:bootJar --no-daemon --build-cache -x test
 FROM busybox:1.37.0@sha256:1487d0af5f52b4ba31c7e465126ee2123fe3f2305d638e7827681e7cf6c83d5e AS bb
 
 # ---------- Runtime stage ----------
-FROM eclipse-temurin:25.0.2_10-jre@sha256:a9980cb3777d2b7b0d513800c3debc034c101530b96db4aadccb845f867fca9e
+FROM eclipse-temurin:25.0.3_9-jre@sha256:671061ae5a8f0d6827816e15bc39d21e224c43ff96998a97cd0d3989c4d17815
 
 ARG MODULE
 ARG PORT
