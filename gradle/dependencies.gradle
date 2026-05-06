@@ -26,7 +26,7 @@ ext {
     bouncy_castle = '1.84'
     spotbug = '4.9.8'
     jakarta_persistence_api= '3.2.0'
-    jackson = '3.1.1'
+    jackson = '3.1.3'
 }
 
 subprojects {
