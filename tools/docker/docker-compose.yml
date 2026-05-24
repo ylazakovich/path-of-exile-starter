@@ -50,7 +50,7 @@ services:
     command: http host.docker.internal:5050
 
   mock-server:
-    image: mockserver/mockserver:5.15.0@sha256:0f9ef78c94894ac3e70135d156193b25e23872575d58e2228344964273b4af6b
+    image: mockserver/mockserver:6.0.0@sha256:f8e83858019cc48102c2920cf860d3c730854d839d89a9efbeac6f872323445b
     profiles: ["mock"]
     command: >
       -logLevel DEBUG 
