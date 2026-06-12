@@ -1,1 +1,1 @@
-{"id":"588abd7622fbec2fc45b77bfce66cc73","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotCommandSettings","name":"Bot should send message with Settings","status":"passed","testResultsByEnv":{"default":"4fe80b3f0bb73fa4ec3ea36226bc452b"}}
+{"id":"588abd7622fbec2fc45b77bfce66cc73","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotCommandSettings","name":"Bot should send message with Settings","status":"passed","testResultsByEnv":{"default":"2547c647a482b99344603dca8216973a"}}
