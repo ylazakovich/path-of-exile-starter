@@ -1,1 +1,1 @@
-{"id":"56fe4dd5f65250ab237b35b643ea3bc3","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotUnknownCommand","name":"Bot should ignore not supporting messages","status":"passed","testResultsByEnv":{"default":"73b309f8d7c5602d5d35969386d6b5e2"}}
+{"id":"56fe4dd5f65250ab237b35b643ea3bc3","fullName":"io.starter.tests.units.handler.message.commands.CommandsTest.testWhenBotGotUnknownCommand","name":"Bot should ignore not supporting messages","status":"passed","testResultsByEnv":{"default":"9d5e98491b254114b6183ffa223be978"}}
