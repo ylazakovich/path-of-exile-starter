@@ -76,7 +76,7 @@ jobs:
           echo "found=1" >> "$GITHUB_OUTPUT"
       - name: 🌐 Publish Allure report to GitHub Pages
         if: always() && github.ref == 'refs/heads/main' && steps.allure-generate.outputs.found == '1'
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
@@ -84,7 +84,7 @@ jobs:
           keep_files: true
       - name: 🌐 Publish Allure PR preview to GitHub Pages
         if: always() && github.event_name == 'pull_request' && steps.allure-generate.outputs.found == '1' && github.event.pull_request.head.repo.full_name == github.repository
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
