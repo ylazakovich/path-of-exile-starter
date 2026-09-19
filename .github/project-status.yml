@@ -1,0 +1,13 @@
+schema_version: 1
+project: path-of-exile-starter
+maturity: active-development
+implementation: active
+production_readiness: not-certified
+supported_runtime:
+  application: Java / Gradle / Spring
+  integration: Telegram Bot API
+current_release: unreleased
+known_gaps:
+  - Deployment runtime and operational support contract are not certified.
+  - The bot remains an active-development project with external Path of Exile and Telegram dependencies.
+next_milestone: Verify supported runtime/deployment and publish the next tagged release baseline.
