@@ -1,0 +1,16 @@
+_commit: v2.21.5
+_src_path: https://github.com/quokkify/project-toolkit.git
+allure_report: false
+components:
+  - type: java
+    path: .
+docker: false
+project_name: Path of Exile Starter
+release_please: true
+renovate: true
+renovate_config_repository: quokkify/renovate-presets
+renovate_presets:
+  - default
+  - github-actions
+  - java
+toolkit_version: v2.21.5

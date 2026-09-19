@@ -6,9 +6,9 @@ tags:
 
 # Path of Exile Starter
 
-[![Latest Release](https://img.shields.io/github/v/release/ylazakovich/path-of-exile-starter?sort=semver)](https://github.com/ylazakovich/path-of-exile-starter/releases)
-[![Latest Tag](https://img.shields.io/github/v/tag/ylazakovich/path-of-exile-starter?sort=semver)](https://github.com/ylazakovich/path-of-exile-starter/tags)
-[![GitHub Stars](https://img.shields.io/github/stars/ylazakovich/path-of-exile-starter?style=flat)](https://github.com/ylazakovich/path-of-exile-starter/stargazers)
+[![Latest Release](https://img.shields.io/github/v/release/quokkify/path-of-exile-starter?sort=semver)](https://github.com/quokkify/path-of-exile-starter/releases)
+[![Latest Tag](https://img.shields.io/github/v/tag/quokkify/path-of-exile-starter?sort=semver)](https://github.com/quokkify/path-of-exile-starter/tags)
+[![GitHub Stars](https://img.shields.io/github/stars/quokkify/path-of-exile-starter?style=flat)](https://github.com/quokkify/path-of-exile-starter/stargazers)
 
 <div class="poe-hero" markdown>
 
@@ -63,5 +63,5 @@ A practical guide for users and contributors of the Path of Exile Telegram assis
 
 ## Project Links
 
-- Repository: [path-of-exile-starter](https://github.com/ylazakovich/path-of-exile-starter)
+- Repository: [path-of-exile-starter](https://github.com/quokkify/path-of-exile-starter)
 - Telegram bot: [@poe_consultant_bot](https://t.me/poe_consultant_bot)
