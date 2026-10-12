@@ -22,12 +22,12 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out full repository history
-        uses: quokkify/ci-kit/actions/checkout@v3.1.1
+        uses: quokkify/ci-kit/actions/checkout@v3.2.1
         with:
           fetch-depth: 0
 
       - name: Set up Python and Copier
-        uses: quokkify/ci-kit/actions/setup-python@v3.1.1
+        uses: quokkify/ci-kit/actions/setup-python@v3.2.1
         with:
           python-version: "3.14"
           package-manager: pip
@@ -132,6 +132,18 @@ jobs:
             printf 'Copier produced conflict files:\n' >&2
             printf '  %s\n' "${rejected[@]}" >&2
             exit 1
+          fi
+
+          if compgen -G '.copier-answers.*.yml' >/dev/null; then
+            base="$(git rev-parse HEAD)"
+            git add --all
+            if ! git diff --cached --quiet; then
+              git -c user.name="quokkify-copier[bot]" -c user.email="quokkify-copier[bot]@users.noreply.github.com" \
+                commit -q -m "chore(template): pending legacy update"
+            fi
+            python -m pip install "git+https://github.com/quokkify/ci-kit@${ref}"
+            ci-kit update --repo . --to "$ref" --skip-legacy
+            git reset --soft "$base"
           fi
 
           # Stage before checking for changes so Copier-created untracked files
