@@ -30,7 +30,7 @@ jobs:
       security-events: write
     steps:
       - name: Check out repository
-        uses: quokkify/ci-kit/actions/checkout@v3.5.0
+        uses: quokkify/ci-kit/actions/checkout@v3.6.0
         with:
           fetch-depth: 2
           persist-credentials: false

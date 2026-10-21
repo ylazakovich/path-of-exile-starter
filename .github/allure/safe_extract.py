@@ -21,6 +21,9 @@ MAX_SINGLE_FILE = 256 * 1024 * 1024
 MAX_CENTRAL_DIRECTORY = 64 * 1024 * 1024
 MAX_FILES = 20_000
 MAX_ARTIFACTS = 50
+# Mirrors the source scan of quokkify/allure-report-action@22a17ce8c0545f1afbe7e69182d80761e6be784b (v0.5.3).
+SCAN_SKIPPED_DIRECTORIES = frozenset({".git", ".gradle", ".idea", ".venv", "allure-report", "dist", "node_modules", "venv"})
+RESERVED_ARTIFACT_NAMES = SCAN_SKIPPED_DIRECTORIES | {"allure-results"}
 EOCD_SIGNATURE = b"PK\x05\x06"
 EOCD_STRUCT = struct.Struct("<4s4H2LH")
 
@@ -243,6 +246,11 @@ def main() -> None:
     output_root = Path(os.environ["OUTPUT_ROOT"])
     materialize_value = os.environ.get("MATERIALIZE_ROOT")
     materialize_root = Path(materialize_value) if materialize_value else None
+    layout = os.environ.get("MATERIALIZE_LAYOUT") or "merged"
+    if layout not in {"merged", "per-artifact"}:
+        fail(f"unsupported MATERIALIZE_LAYOUT: {layout}")
+    if layout == "per-artifact" and (conflicts := names & RESERVED_ARTIFACT_NAMES):
+        fail(f"artifact names conflict with the per-artifact layout: {', '.join(sorted(conflicts))}")
     fixture_archives = os.environ.get("ARTIFACT_ARCHIVE_DIR")
     workspace = Path(os.environ["GITHUB_WORKSPACE"])
     if not workspace.is_absolute():
@@ -290,10 +298,31 @@ def main() -> None:
             except (OSError, zipfile.BadZipFile) as error:
                 fail(f"invalid artifact ZIP for {artifact_name}: {error}")
             opened.append((artifact_name, bundle))
-            for info in bundle.infolist():
-                relative = safe_relative(artifact_name, info)
-                if relative is None:
-                    continue
+            members = [
+                (info, relative)
+                for info in bundle.infolist()
+                if (relative := safe_relative(artifact_name, info)) is not None
+            ]
+            if layout == "per-artifact":
+                roots: dict[PurePosixPath, int | None] = {}
+                for _, relative in members:
+                    directories = relative.parts[:-1]
+                    if "allure-results" in directories:
+                        index = directories.index("allure-results")
+                        roots[relative] = None if SCAN_SKIPPED_DIRECTORIES.intersection(directories[:index]) else index
+                if roots and all(index is None for index in roots.values()):
+                    fail(f"artifact {artifact_name} has no scannable allure-results directory")
+                for _, relative in members:
+                    index = roots.get(relative) if roots else -1
+                    if index is not None and len(relative.parts) != index + 2:
+                        fail(
+                            f"artifact {artifact_name}: only regular files directly under allure-results are read: {relative}"
+                        )
+                    if index is None and relative.name.endswith(("-result.json", "-container.json")):
+                        fail(f"artifact {artifact_name} has Allure results outside a scannable allure-results directory: {relative}")
+                prefix = PurePosixPath(artifact_name, *(() if roots else ("allure-results",)))
+                members = [(info, prefix / relative) for info, relative in members]
+            for info, relative in members:
                 if relative in seen:
                     fail(f"duplicate artifact path: {relative}")
                 seen.add(relative)
@@ -311,9 +340,9 @@ def main() -> None:
         actual_bytes = 0
         for artifact_name, bundle, info, relative in entries:
             destination = output_root.joinpath(*relative.parts)
-            destination.parent.mkdir(parents=True, exist_ok=True)
             written = 0
             try:
+                destination.parent.mkdir(parents=True, exist_ok=True)
                 with bundle.open(info) as source, destination.open("xb") as output:
                     while chunk := source.read(1024 * 1024):
                         written += len(chunk)
@@ -323,6 +352,8 @@ def main() -> None:
                         output.write(chunk)
             except zipfile.BadZipFile as error:
                 fail(f"artifact ZIP failed CRC validation: {artifact_name}/{info.filename}: {error}")
+            except OSError as error:
+                fail(f"artifact entry conflicts with another extracted path: {artifact_name}/{info.filename}: {error}")
             if written != info.file_size:
                 fail(f"artifact entry size mismatch: {artifact_name}/{info.filename}")
         if materialize_root is not None:
@@ -330,8 +361,11 @@ def main() -> None:
             for _, _, _, relative in entries:
                 source = output_root.joinpath(*relative.parts)
                 destination = materialize_root.joinpath(*relative.parts)
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copyfile(source, destination)
+                try:
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copyfile(source, destination)
+                except OSError as error:
+                    fail(f"cannot materialize validated artifact entry {relative}: {error}")
     finally:
         for _, bundle in opened:
             bundle.close()
