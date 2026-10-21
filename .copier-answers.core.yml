@@ -1,5 +1,5 @@
-_commit: v3.3.0
+_commit: v3.4.0
 _src_path: https://github.com/quokkify/ci-kit.git
 module: core
-toolkit_version: v3.3.0
+toolkit_version: v3.4.0
 project_name: my-project

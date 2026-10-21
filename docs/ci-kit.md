@@ -1,6 +1,6 @@
 # ci-kit onboarding
 
-This repository is managed by the [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) Copier template at `v3.3.0`. This file is toolkit-owned: `copier update` rewrites it, so keep project notes elsewhere.
+This repository is managed by the [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) Copier template at `v3.4.0`. This file is toolkit-owned: `copier update` rewrites it, so keep project notes elsewhere.
 
 ## What this project received
 
