@@ -1,13 +1,12 @@
 # ci-kit onboarding
 
-This repository is managed by the [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) Copier template at `v3.7.0`. This file is toolkit-owned: `copier update` rewrites it, so keep project notes elsewhere.
+This repository is managed by the [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) Copier template at `v3.9.0`. This file is toolkit-owned: `copier update` rewrites it, so keep project notes elsewhere.
 
 ## What this project received
 
 | Path                                                     | Purpose                                               | Owner   |
 | -------------------------------------------------------- | ----------------------------------------------------- | ------- |
 | `.copier-answers.yml`                                    | Copier answers; required for `copier update`          | toolkit |
-| `.github/workflows/validate.yml`                         | `Validate` workflow                                   | toolkit |
 | `.github/workflows/copier-update.yml`                    | Template update automation                            | toolkit |
 | `.github/pull_request_template.md`                       | Pull request template                                 | project |
 | `README.md`                                              | Starter README                                        | project |
