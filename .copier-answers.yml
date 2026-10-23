@@ -29,6 +29,11 @@ allure_source: external
 module: legacy
 handed_off:
   - validate
+  - base
+  - security
+  - release
+  - allure
+  - renovate
 codeql_aggregate: true
 gitleaks_job_name: Scan Git history and current tree
 gitleaks_scan: history

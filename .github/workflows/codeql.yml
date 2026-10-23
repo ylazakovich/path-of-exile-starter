@@ -16,42 +16,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ["actions", "java-kotlin"]
+  codeql:
     permissions:
       actions: read
       contents: read
       security-events: write
-    steps:
-      - name: Check out repository
-        uses: quokkify/ci-kit/actions/checkout@v3.11.0
-        with:
-          fetch-depth: 2
-          persist-credentials: false
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
-        with:
-          languages: ${{ matrix.language }}
-          build-mode: none
-      - name: Perform CodeQL analysis
-        uses: github/codeql-action/analyze@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4
-        with:
-          category: "/language:${{ matrix.language }}"
+    uses: quokkify/ci-kit/.github/workflows/codeql-analysis.yml@v3.11.0
+    with:
+      languages-override: "[\"actions\", \"java-kotlin\"]"
 
   complete:
     name: CodeQL
     if: always()
-    needs: analyze
+    needs: codeql
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Require every CodeQL analysis to pass
         env:
-          ANALYZE_RESULT: ${{ needs.analyze.result }}
+          ANALYZE_RESULT: ${{ needs.codeql.result }}
         run: test "$ANALYZE_RESULT" = success

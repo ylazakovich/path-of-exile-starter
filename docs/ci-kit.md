@@ -1,49 +1,42 @@
 # ci-kit onboarding
 
-This repository is managed by the [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) Copier template at `v3.11.0`. This file is toolkit-owned: `copier update` rewrites it, so keep project notes elsewhere.
+This repository is managed by [`quokkify/ci-kit`](https://github.com/quokkify/ci-kit) at `v3.11.0`. This file is toolkit-owned: `ci-kit update` rewrites it, so keep project notes elsewhere.
 
-## What this project received
+## Modules
 
-| Path                                                     | Purpose                                               | Owner   |
-| -------------------------------------------------------- | ----------------------------------------------------- | ------- |
-| `.copier-answers.yml`                                    | Copier answers; required for `copier update`          | toolkit |
-| `.github/workflows/copier-update.yml`                    | Template update automation                            | toolkit |
-| `.github/pull_request_template.md`                       | Pull request template                                 | project |
-| `README.md`                                              | Starter README                                        | project |
-| `docs/ci-kit.md`                                         | This guide                                            | toolkit |
-| `.github/workflows/codeql.yml`                           | CodeQL code scanning                                  | toolkit |
-| `.github/workflows/gitleaks.yml`                         | Secret scanning                                       | toolkit |
-| `.github/workflows/allure-report.yml`, `.github/allure/` | Allure 3 pull-request report                          | toolkit |
-| `.github/workflows/release.yml`, `.github/scripts/`      | Release Please (single)                               | toolkit |
-| `.github/release-please/`                                | Release Please config and manifest                    | project |
-| `.github/renovate.json`                                  | Renovate config extending `quokkify/renovate-presets` | project |
+ci-kit is installed as a set of modules. Every module has its own Copier answers file, `.copier-answers.<module>.yml`, and a declaration, `.ci/modules/<module>.yml`. A module owns the files it renders: they are replaced on every update, so change them in ci-kit, not here. Starter files (`README.md`, `.github/pull_request_template.md`, and the starters of other modules) are written once and then belong to the project.
 
-Toolkit-owned files are replaced by `copier update`; change them in ci-kit, not here. Project-owned files are written once and never overwritten.
+`core` is always installed. It owns the `Validate` workflow, the template update workflow `.github/workflows/copier-update.yml`, and this guide. The other modules, the files each one renders, and their questions are listed in [`docs/modules.md`](https://github.com/quokkify/ci-kit/blob/v3.11.0/docs/modules.md).
 
-## First-day checklist
+## Check the installation
 
-- [ ] `.copier-answers.yml` is committed.
-- [ ] Test runners write Allure results as described in the `README.md` Allure section.
-- [ ] Code scanning is available for this repository (GitHub Advanced Security for private repositories).
-- [ ] The Renovate GitHub App has access to this repository.
-- [ ] The first pull request passes `Validate`; then mark its checks as required in branch protection.
+```bash
+pip install "git+https://github.com/quokkify/ci-kit@v3.11.0"
+ci-kit doctor --repo .
+```
+
+`ci-kit doctor` reports missing or conflicting answers files, invalid module declarations, and files that differ from the template render. Each finding names an error code with a runbook in [`docs/errors/`](https://github.com/quokkify/ci-kit/tree/v3.11.0/docs/errors).
 
 ## Update to a newer toolkit release
+
+Run the `Update project template` workflow; it updates every module to the latest release and pushes a branch for review. To update by hand:
 
 ```bash
 git switch main && git pull --ff-only
 export TOOLKIT_REF="$(gh release view --repo quokkify/ci-kit --json tagName --jq .tagName)"
 git switch -c "chore/update-ci-kit-${TOOLKIT_REF}"
-copier update --vcs-ref "$TOOLKIT_REF" --data "toolkit_version=$TOOLKIT_REF" --trust
-git diff --check
-git add -A
-git commit -m "chore: update ci-kit to ${TOOLKIT_REF}"
+pip install "git+https://github.com/quokkify/ci-kit@${TOOLKIT_REF}"
+ci-kit update --repo . --to "$TOOLKIT_REF"
 git push -u origin HEAD
 gh pr create --fill
 ```
 
-Resolve any Copier conflict markers (`<<<<<<<`) before committing. Renovate updates workflow version references between template updates.
+`ci-kit update` commits one update per module and stops on the first Copier conflict.
 
-## Change answers
+## Add a module
 
-Re-run `copier update` with `--data <question>=<value>`, for example `--data gitleaks=false`. Prefer this over editing `.copier-answers.yml` by hand. Question names and allowed values are defined in [`copier.yml`](https://github.com/quokkify/ci-kit/blob/main/copier.yml).
+```bash
+copier copy --trust --vcs-ref v3.11.0 -a .copier-answers.<module>.yml -d module=<module> gh:quokkify/ci-kit .
+```
+
+Change a module's answers by re-running `copier update -a .copier-answers.<module>.yml --data <question>=<value>`. Question names and allowed values are defined in [`copier.yml`](https://github.com/quokkify/ci-kit/blob/v3.11.0/copier.yml).
