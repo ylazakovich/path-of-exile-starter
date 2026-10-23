@@ -1,4 +1,4 @@
-_commit: v3.10.0
+_commit: v3.11.0
 _src_path: https://github.com/quokkify/ci-kit.git
 allure_categories_file: ""
 allure_external_artifact_max_count: 50
@@ -24,8 +24,16 @@ renovate_presets:
   - default
   - github-actions
   - java
-toolkit_version: v3.10.0
+toolkit_version: v3.11.0
 allure_source: external
 module: legacy
 handed_off:
   - validate
+codeql_aggregate: false
+gitleaks_job_name: gitleaks
+gitleaks_scan: history
+gitleaks_aggregate: false
+allure_group_by:
+  - epic
+  - feature
+  - story
