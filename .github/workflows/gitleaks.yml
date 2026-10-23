@@ -29,7 +29,6 @@ jobs:
       - name: Materialize trusted Gitleaks policy
         env:
           TRUSTED_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
-          LEGACY_FINGERPRINT: d20bf6afbb8e05f93222d0d6a44f1c188492d648:src/main/resources/application.properties:telegram-bot-api-token:5
         run: |
           if [[ ! "$TRUSTED_REF" =~ ^[0-9a-f]{40}$ || "$TRUSTED_REF" =~ ^0+$ ]]; then
             TRUSTED_REF="$GITHUB_SHA"
@@ -44,12 +43,6 @@ jobs:
           fi
           if git cat-file -e "$TRUSTED_REF:.gitleaksignore" 2>/dev/null; then
             git show "$TRUSTED_REF:.gitleaksignore" > "$RUNNER_TEMP/gitleaksignore"
-          fi
-          # The ignore is committed in this PR, but pull_request policy is
-          # intentionally loaded from the trusted base. Seed only this exact
-          # reviewed legacy fingerprint until the file reaches main.
-          if ! grep -Fxq "$LEGACY_FINGERPRINT" "$RUNNER_TEMP/gitleaksignore"; then
-            printf '%s\n' "$LEGACY_FINGERPRINT" >> "$RUNNER_TEMP/gitleaksignore"
           fi
       - name: Install checksum-verified Gitleaks
         env:
@@ -71,16 +64,12 @@ jobs:
 
   complete:
     name: Gitleaks
+    if: always()
     needs: scan
-    if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Validate scan result
+      - name: Require the secret scan to pass
         env:
           SCAN_RESULT: ${{ needs.scan.result }}
-        run: |
-          if [[ "$SCAN_RESULT" != "success" ]]; then
-            echo "Gitleaks scan did not succeed: $SCAN_RESULT" >&2
-            exit 1
-          fi
+        run: test "$SCAN_RESULT" = success

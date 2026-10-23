@@ -46,16 +46,12 @@ jobs:
 
   complete:
     name: CodeQL
+    if: always()
     needs: analyze
-    if: ${{ always() }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: Validate analysis result
+      - name: Require every CodeQL analysis to pass
         env:
           ANALYZE_RESULT: ${{ needs.analyze.result }}
-        run: |
-          if [[ "$ANALYZE_RESULT" != "success" ]]; then
-            echo "CodeQL analysis did not succeed: $ANALYZE_RESULT" >&2
-            exit 1
-          fi
+        run: test "$ANALYZE_RESULT" = success
