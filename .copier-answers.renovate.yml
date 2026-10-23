@@ -1,0 +1,8 @@
+_commit: v3.11.0
+_src_path: https://github.com/quokkify/ci-kit.git
+module: renovate
+renovate_config_repository: quokkify/renovate-presets
+renovate_presets:
+  - default
+  - github-actions
+  - java

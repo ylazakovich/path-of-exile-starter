@@ -69,7 +69,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          python - <<'PY'
+          # Repositories still on the legacy template update it first; module-only
+          # repositories have no .copier-answers.yml and skip this step.
+          legacy=false
+          if [[ -f .copier-answers.yml ]]; then
+            legacy=true
+            python - <<'PY'
           from pathlib import Path
           import yaml
 
@@ -88,40 +93,9 @@ jobs:
               )
           PY
 
-          command=(copier update --trust --defaults --conflict=rej --skip-tasks --vcs-ref "$ref")
-          if [[ "$ref" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            command=(copier update --trust --defaults --conflict=rej --skip-tasks --vcs-ref "$ref")
             command+=(--data "toolkit_version=$ref")
-          fi
-          "${command[@]}" .
-
-          # Copier deliberately preserves files with local edits, even when the
-          # answers already name this ref. Verify the executable release helper
-          # against the selected template revision on every run, including a
-          # same-ref update. Do not overwrite a consumer customization here.
-          helper=".github/scripts/enrich_release_notes.py"
-          release_please="$(python - <<'PY'
-          from pathlib import Path
-          import yaml
-
-          answers = yaml.safe_load(Path('.copier-answers.yml').read_text())
-          print('true' if isinstance(answers, dict) and answers.get('release_please') is True else 'false')
-          PY
-          )"
-          if [[ "$release_please" == "true" && ! -f "$helper" ]]; then
-            printf 'Refusing template update: %s is missing while release_please is enabled. Restore the helper, then rerun.\n' "$helper" >&2
-            exit 1
-          fi
-          if [[ -f "$helper" ]]; then
-            template_helper="$(mktemp)"
-            trap 'rm -f "$template_helper"' EXIT
-            git fetch --quiet --depth=1 https://github.com/quokkify/ci-kit.git \
-              "refs/tags/$ref"
-            git show "FETCH_HEAD:template/.github/scripts/enrich_release_notes.py.jinja" \
-              > "$template_helper"
-            if ! cmp -s "$template_helper" "$helper"; then
-              printf 'Refusing template update: %s differs from ci-kit %s. Reconcile this project-owned/customized helper with the template, then rerun.\n' "$helper" "$ref" >&2
-              exit 1
-            fi
+            "${command[@]}" .
           fi
 
           # A partial update is never pushed. Conflicts fail the run the same way the fleet
@@ -134,16 +108,55 @@ jobs:
             exit 1
           fi
 
-          if compgen -G '.copier-answers.*.yml' >/dev/null; then
-            base="$(git rev-parse HEAD)"
+          # ci-kit update commits every module it updates; the commits are squashed
+          # back into the single update commit below.
+          base="$(git rev-parse HEAD)"
+          update_args=(--repo . --to "$ref")
+          if [[ "$legacy" == true ]]; then
             git add --all
             if ! git diff --cached --quiet; then
               git -c user.name="quokkify-copier[bot]" -c user.email="quokkify-copier[bot]@users.noreply.github.com" \
                 commit -q -m "chore(template): pending legacy update"
             fi
-            python -m pip install "git+https://github.com/quokkify/ci-kit@${ref}"
-            ci-kit update --repo . --to "$ref" --skip-legacy
-            git reset --soft "$base"
+            update_args+=(--skip-legacy)
+          fi
+          python -m pip install "git+https://github.com/quokkify/ci-kit@${ref}"
+          ci-kit update "${update_args[@]}"
+          git reset --soft "$base"
+
+          # Copier deliberately preserves files with local edits, even when the
+          # answers already name this ref. Verify the executable release helper
+          # against the selected template revision on every run, including a
+          # same-ref update. Do not overwrite a consumer customization here.
+          helper=".github/scripts/enrich_release_notes.py"
+          release=false
+          if [[ -f .copier-answers.release.yml ]]; then
+            release=true
+          elif [[ "$legacy" == true ]]; then
+            release="$(python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          answers = yaml.safe_load(Path('.copier-answers.yml').read_text())
+          print('true' if isinstance(answers, dict) and answers.get('release_please') is True else 'false')
+          PY
+          )"
+          fi
+          if [[ "$release" == "true" && ! -f "$helper" ]]; then
+            printf 'Refusing template update: %s is missing while the release module is installed. Restore the helper, then rerun.\n' "$helper" >&2
+            exit 1
+          fi
+          if [[ -f "$helper" ]]; then
+            template_helper="$(mktemp)"
+            trap 'rm -f "$template_helper"' EXIT
+            git fetch --quiet --depth=1 https://github.com/quokkify/ci-kit.git \
+              "refs/tags/$ref"
+            git show "FETCH_HEAD:modules/release/template/.github/scripts/enrich_release_notes.py.jinja" \
+              > "$template_helper"
+            if ! cmp -s "$template_helper" "$helper"; then
+              printf 'Refusing template update: %s differs from ci-kit %s. Reconcile this project-owned/customized helper with the template, then rerun.\n' "$helper" "$ref" >&2
+              exit 1
+            fi
           fi
 
           # Stage before checking for changes so Copier-created untracked files
