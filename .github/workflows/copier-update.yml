@@ -22,12 +22,12 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Check out full repository history
-        uses: quokkify/ci-kit/actions/checkout@v3.11.2
+        uses: quokkify/ci-kit/actions/checkout@v4.0.1
         with:
           fetch-depth: 0
 
       - name: Set up Python and Copier
-        uses: quokkify/ci-kit/actions/setup-python@v3.11.2
+        uses: quokkify/ci-kit/actions/setup-python@v4.0.1
         with:
           python-version: "3.14"
           package-manager: pip
@@ -69,33 +69,34 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # Repositories still on the legacy template update it first; module-only
-          # repositories have no .copier-answers.yml and skip this step.
-          legacy=false
+          # ci-kit v4 has no legacy template. Legacy answers that hand every area off render
+          # nothing: their deletion is a commit of its own, and the module update follows on the
+          # same branch. Legacy answers that still render files are refused without changes
+          # (CIK-CORE-030).
+          dropped=false
           if [[ -f .copier-answers.yml ]]; then
-            legacy=true
-            python - <<'PY'
+            left="$(python - <<'PY'
           from pathlib import Path
           import yaml
 
-          answers = yaml.safe_load(Path('.copier-answers.yml').read_text())
-          components = answers.get('components') if isinstance(answers, dict) else None
-          missing = [
-              str(component.get('path', index))
-              for index, component in enumerate(components or [])
-              if isinstance(component, dict)
-              and ('id' not in component or 'name' not in component)
-          ]
-          if missing:
-              raise SystemExit(
-                  'Breaking component migration requires explicit id and name for: '
-                  + ', '.join(missing)
-              )
+          areas = ('validate', 'base', 'security', 'release', 'allure', 'renovate')
+          try:
+              answers = yaml.safe_load(Path('.copier-answers.yml').read_text())
+          except (OSError, UnicodeDecodeError, yaml.YAMLError):
+              answers = None
+          handed = answers.get('handed_off') if isinstance(answers, dict) else None
+          if not isinstance(handed, list) or not all(isinstance(area, str) for area in handed):
+              handed = []
+          print(', '.join(area for area in areas if area not in handed))
           PY
-
-            command=(copier update --trust --defaults --conflict=rej --skip-tasks --vcs-ref "$ref")
-            command+=(--data "toolkit_version=$ref")
-            "${command[@]}" .
+          )"
+            if [[ -n "$left" ]]; then
+              printf 'Refusing template update: CIK-CORE-030 legacy answers still render files; migrate with ci-kit v3.11.x (not handed off: %s). See https://github.com/quokkify/ci-kit/blob/main/docs/errors/CIK-CORE-030.md\n' "$left" >&2
+              exit 1
+            fi
+            git rm -q .copier-answers.yml
+            git commit -q -m "chore(ci-kit): drop empty legacy answers"
+            dropped=true
           fi
 
           # A partial update is never pushed. Conflicts fail the run the same way the fleet
@@ -111,17 +112,8 @@ jobs:
           # ci-kit update commits every module it updates; the commits are squashed
           # back into the single update commit below.
           base="$(git rev-parse HEAD)"
-          update_args=(--repo . --to "$ref")
-          if [[ "$legacy" == true ]]; then
-            git add --all
-            if ! git diff --cached --quiet; then
-              git -c user.name="quokkify-copier[bot]" -c user.email="quokkify-copier[bot]@users.noreply.github.com" \
-                commit -q -m "chore(template): pending legacy update"
-            fi
-            update_args+=(--skip-legacy)
-          fi
           python -m pip install "git+https://github.com/quokkify/ci-kit@${ref}"
-          ci-kit update "${update_args[@]}"
+          ci-kit update --repo . --to "$ref"
           git reset --soft "$base"
 
           # Copier deliberately preserves files with local edits, even when the
@@ -132,15 +124,6 @@ jobs:
           release=false
           if [[ -f .copier-answers.release.yml ]]; then
             release=true
-          elif [[ "$legacy" == true ]]; then
-            release="$(python - <<'PY'
-          from pathlib import Path
-          import yaml
-
-          answers = yaml.safe_load(Path('.copier-answers.yml').read_text())
-          print('true' if isinstance(answers, dict) and answers.get('release_please') is True else 'false')
-          PY
-          )"
           fi
           if [[ "$release" == "true" && ! -f "$helper" ]]; then
             printf 'Refusing template update: %s is missing while the release module is installed. Restore the helper, then rerun.\n' "$helper" >&2
@@ -162,13 +145,13 @@ jobs:
           # Stage before checking for changes so Copier-created untracked files
           # are included in the no-op decision.
           git add --all
-          if git diff --cached --quiet; then
+          if ! git diff --cached --quiet; then
+            git diff --cached --check
+            git commit -m "chore(template): update shared project template"
+          elif [[ "$dropped" != true ]]; then
             printf 'Already up to date with %s; nothing to push.\n' "$ref" >> "$GITHUB_STEP_SUMMARY"
             exit 0
           fi
-
-          git diff --cached --check
-          git commit -m "chore(template): update shared project template"
 
           remote="$(git ls-remote --heads origin "refs/heads/$BRANCH" | cut -f1)"
           if [[ -n "$remote" ]]; then
